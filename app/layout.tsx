@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import clsx from "clsx";
+import { Layout } from "@/components/layout";
 
 export const metadata: Metadata = {
   title: {
@@ -37,9 +38,7 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <main className="container flex-grow">
-            {children}
-          </main>
+          <Layout>{children}</Layout>
         </Providers>
       </body>
     </html>
