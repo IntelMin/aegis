@@ -1,44 +1,40 @@
+# Next.js & NextUI Template
 
-# AEGIS AI
+This is a template for creating applications using Next.js 13 (app directory) and NextUI (v2).
 
-### Structure
+## Technologies Used
 
-```
-├── components
-│   ├── accounts            # Accounts components
-│   ├── charts              # Charts components
-│   ├── breadcrumb          # component
-|   ├── home                # Home components
-|   ├── layout              # Layout components
-|   ├── navbar              # Navbar components
-|   ├── sidebar             # Sidebar components
-|   ├── table               # Table components
-|   ├── styles              # Some reusable components
-|   ├── icons               # Icons
-|   ├── hooks               #  Hooks
-├── pages                   # Documentation files 
-│   ├──  _app.tsx           # Entry point for the app
-│   ├──  index.tsx          # Home page
-│   ├── accounts.tsx        # Accounts Page
-│   ├── more...             # Soon
-└──
+- [Next.js 13](https://nextjs.org/docs/getting-started)
+- [NextUI v2](https://nextui.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Tailwind Variants](https://tailwind-variants.org)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [next-themes](https://github.com/pacocoursey/next-themes)
 
-```
-## For Run
+## How to Use
 
-Install dependencies
 
-    
+### Use the template with create-next-app
+
+To create a new project based on this template using `create-next-app`, run the following command:
+
 ```bash
-pnpm install
+npx create-next-app -e https://github.com/nextui-org/next-app-template
 ```
 
-Start the server
+### Install dependencies
 
-    
-        
 ```bash
-pnpm run dev
+npm install
 ```
 
-Now you can visit https://localhost:3000 in your browser.
+### Run the development server
+
+```bash
+npm run dev
+```
+
+## License
+
+Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
