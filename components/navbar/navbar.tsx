@@ -16,7 +16,7 @@ interface Props {
 
 export const NavbarWrapper = ({ children }: Props) => {
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden p-6 pl-2 pr-2">
       <Navbar
         isBordered
         className="w-full"
@@ -24,21 +24,13 @@ export const NavbarWrapper = ({ children }: Props) => {
           wrapper: "w-full max-w-full",
         }}
       >
+        <NavbarContent>
+          <p className="text-3xl font-bold">Dashboard</p>
+        </NavbarContent>
         <NavbarContent className="md:hidden">
           <BurguerButton />
         </NavbarContent>
-        <NavbarContent className="w-full max-md:hidden">
-          <Input
-            startContent={<SearchIcon />}
-            isClearable
-            className="w-full"
-            classNames={{
-              input: "w-full",
-              mainWrapper: "w-full",
-            }}
-            placeholder="Search..."
-          />
-        </NavbarContent>
+
         <NavbarContent
           justify="end"
           className="w-fit data-[justify=end]:flex-grow-0"
@@ -54,15 +46,7 @@ export const NavbarWrapper = ({ children }: Props) => {
             <SupportIcon />
           </div>
 
-          <Link
-            href="https://github.com/Siumauricio/nextui-dashboard-template"
-            target={"_blank"}
-          >
-            <GithubIcon />
-          </Link>
-          <NavbarContent>
-            <UserDropdown />
-          </NavbarContent>
+          <NavbarContent></NavbarContent>
         </NavbarContent>
       </Navbar>
       {children}
