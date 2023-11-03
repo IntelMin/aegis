@@ -5,7 +5,7 @@ type Props = {};
 
 const Security = (props: Props) => {
   return (
-    <div className="py-4 px-5 w-full h-full flex flex-col gap-4">
+    <div className="py-4 px-5 w-full h-full flex flex-col gap-4 bg-[#2121219f]">
       <ComingSoon />
     </div>
   );
