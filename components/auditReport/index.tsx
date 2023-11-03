@@ -33,12 +33,12 @@ const AuditReport = (props: Props) => {
         <p>{shortenText(originalAudit)}</p>
       </div>
       <div className="w-full flex flex-col gap-3 items-center justify-center">
-        <p className="font-[500] uppercase text-[24px] tracking-[5px]">
+        <p className="font-[500] uppercase text-[16px] md:text-[24px] tracking-[5px] text-center">
           Unlock Full Audit Report with Premium.
         </p>
         <button
           type="button"
-          className="flex gap-3 items-center border p-2 rounded-lg font-[400] text-[20px] uppercase"
+          className="flex gap-3 items-center border p-2 rounded-lg font-[400] text-[16px] md:text-[20px] uppercase"
         >
           <AiOutlineLock /> Locked
         </button>

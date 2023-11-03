@@ -11,11 +11,11 @@ type Props = {
 const GoToOtherType = (props: Props) => {
   return (
     <div
-      className="flex flex-col items-center justify-center border px-12 rounded-md h-full"
+      className="flex flex-col w-full pb-7 md:pb-2 items-center justify-center border px-12 rounded-md h-full bg-opacity-50"
       style={{
-        backgroundColor: "#000000",
+        backgroundColor: "#1414149e",
         backgroundImage:
-          "linear-gradient(220deg, rgb(87, 87, 87) 0%, rgba(9, 9, 9, 0) 60%, rgba(9, 9, 9, 0) 100%)",
+          "linear-gradient(220deg, rgb(87, 87, 87) 0%, rgba(9, 9, 9, 0) 20%, rgba(9, 9, 9, 0) 100%)",
       }}
     >
       <Image alt="imageType" src={`/${props?.iconName ? props.iconName : "code"}.gif`} width={120} height={120} />

@@ -24,11 +24,11 @@ export const NavbarWrapper = ({ children }: Props) => {
           wrapper: "w-full max-w-full",
         }}
       >
-        <NavbarContent>
-          <p className="text-3xl font-bold">Dashboard</p>
-        </NavbarContent>
         <NavbarContent className="md:hidden">
           <BurguerButton />
+        </NavbarContent>
+        <NavbarContent>
+          <p className="text-3xl font-bold">Dashboard</p>
         </NavbarContent>
         <NavbarContent className="w-full max-w-[600px] max-md:hidden">
           <Input
