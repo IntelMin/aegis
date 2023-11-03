@@ -99,7 +99,11 @@ export default function Home() {
         </Card>
       </section>
 
+      <Card className="bg-opacity-50 ">
+      <div className="glassCard">
       <Steam />
+      </div>
+      </Card>
     </>
   );
 }
