@@ -13,7 +13,7 @@ const ApexChart = (props: props) => {
   const options: Props["options"] = {
     chart: {
       width: 280,
-      type: "donut",
+      type: "radialBar",
     },
     plotOptions: {
       pie: {

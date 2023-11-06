@@ -33,7 +33,9 @@ export const SidebarWrapper = () => {
         }, )}
       >
         <div className={Sidebar.Header()}>
-          <h1 className="font-bold text-[20px] tracking-[10px]">LOGO</h1>
+          <h1 className="font-bold text-[20px] tracking-[10px]">
+            <img className="h-[70px] mx-auto" src="/aegis-logo.png" alt="AEGIS AI"  />
+            AEGIS AI</h1>
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>

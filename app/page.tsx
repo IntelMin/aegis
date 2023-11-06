@@ -4,6 +4,7 @@ import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
 import ApexChart from "@/components/pieChart";
 import Title from "@/components/title";
+import RadialChart from "@/components/radialChart";
 
 import { Card } from "@nextui-org/react";
 
