@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: url(/lime.png);
+  background-size: cover;
+}
+
+.glassCard {
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.141);
+}
+.apexcharts-toolbar {
+  display: none !important;
+}
+
+.apexcharts-legend-text{
+  color: white !important;
+}
