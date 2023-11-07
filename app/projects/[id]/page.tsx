@@ -3,8 +3,6 @@ import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import TokenHeader from "@/components/projects/tokenDetail/tokenHeader";
 import TokenDetail from "@/components/projects/tokenDetail/TokenDetail";
-import RadialChart from "@/components/radialChart";
-import ApexChart from "@/components/pieChart";
 import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 
 type Props = {};
