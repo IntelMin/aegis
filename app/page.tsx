@@ -39,8 +39,8 @@ export default function Home() {
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
               <img
-                className="mr-4"
-                src="https://bankco-next.vercel.app/_next/static/media/total-earn.c13de7d2.svg"
+                className="mr-4 h-[40px] w-[40px]"
+                src="/secure.png"
               />
             </span>
 
@@ -60,8 +60,9 @@ export default function Home() {
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
               <img
-                className="mr-4"
-                src="https://bankco-next.vercel.app/_next/static/media/total-earn.c13de7d2.svg"
+
+                className="mr-4 h-[40px] w-[40px]"
+                src="/analtics.png"
               />
             </span>
 

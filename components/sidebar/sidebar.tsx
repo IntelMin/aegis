@@ -33,9 +33,8 @@ export const SidebarWrapper = () => {
         }, )}
       >
         <div className={Sidebar.Header()}>
-          <h1 className="font-bold text-[20px] tracking-[10px]">
             <img className="h-[70px] mx-auto" src="/aegis-logo.png" alt="AEGIS AI"  />
-            AEGIS AI</h1>
+            
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
@@ -94,7 +93,7 @@ export const SidebarWrapper = () => {
           </div>
           <div className={Sidebar.Footer()}>
             <Button
-              className="bg-primary-200 uppercase font-semibold w-[90%]"
+              className="bg-success-200 uppercase font-semibold w-[90%]"
               onPress={() => {
                 handleOpen();
                 setCollapsed();
