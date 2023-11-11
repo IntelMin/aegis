@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, {useState} from "react";
 import { useLockedBody } from "../hooks/useBodyLock";
 import { NavbarWrapper } from "../navbar/navbar";
 import { SidebarWrapper } from "../sidebar/sidebar";
-import { SidebarContext } from "./layout-context";
+import { SidebarContext, PageTitleContext } from "./layout-context";
+import { Toaster } from 'sonner'
 
 interface Props {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ export const Layout = ({ children }: Props) => {
     setLocked(!sidebarOpen);
   };
 
+  const [pageTitle, setPageTitle] = useState(<div></div>);
+
   return (
     <SidebarContext.Provider
       value={{
@@ -26,8 +29,12 @@ export const Layout = ({ children }: Props) => {
       }}
     >
       <section className="flex">
+        <Toaster richColors />
         <SidebarWrapper />
-        <NavbarWrapper>{children}</NavbarWrapper>
+        <NavbarWrapper pageTitle={pageTitle}>
+          {children}
+          {/* {React.cloneElement(children, { setPageName })} */}
+        </NavbarWrapper>
       </section>
     </SidebarContext.Provider>
   );

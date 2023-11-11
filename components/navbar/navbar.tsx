@@ -8,13 +8,14 @@ import { SearchIcon } from "../icons/searchicon";
 import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
 
-interface Props {
+interface NavbarWrapperProps {
+  pageTitle: JSX.Element; 
   children: React.ReactNode;
 }
 
-export const NavbarWrapper = ({ children }: Props) => {
+export const NavbarWrapper = ({ pageTitle, children }: NavbarWrapperProps) => {
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden p-6 pl-2 pr-2">
+    <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
       <Navbar
         isBordered
         className="w-full"
@@ -26,7 +27,7 @@ export const NavbarWrapper = ({ children }: Props) => {
           <BurguerButton />
         </NavbarContent>
         <NavbarContent className="w-full max-w-[600px] max-md:hidden">
-          <Input
+          {/* <Input
             startContent={<SearchIcon />}
             isClearable
             className="w-full"
@@ -35,7 +36,7 @@ export const NavbarWrapper = ({ children }: Props) => {
               mainWrapper: "w-full",
             }}
             placeholder="Search..."
-          />
+          /> */}
         </NavbarContent>
         <NavbarContent
           justify="end"

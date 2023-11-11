@@ -15,3 +15,9 @@ export const SidebarContext = createContext<SidebarContext>({
 export const useSidebarContext = () => {
   return useContext(SidebarContext);
 };
+
+export const PageTitleContext = createContext({
+  pageTitle: <div></div>,
+  setPageTitle: () => {},
+});
+

@@ -14,7 +14,7 @@ const AuditReport = (props: Props) => {
     }
   }
   const originalAudit =
-    "The audit encompassed a detailed assessment of security vulnerabilities, code quality, documentation, and compliance. The findings revealed several security vulnerabilities, while the code exhibited satisfactory compliance with requirements. Code quality and documentation areas were also identified for improvement. This report presents recommendations for addressing the identified issues to enhance the contract code's overall robustness and reliability.";
+  "A comprehensive audit report that includes a detailed analysis of the code, a list of all the vulnerabilities found, and recommendations on how to fix them.";
 
   return (
     <div
@@ -26,14 +26,14 @@ const AuditReport = (props: Props) => {
         background: `linear-gradient(to top, #37693a 0%, rgb(0 0 0 / 70%) 70%);`,
       }}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Title title="AI Audit Report" icon iconName="report" />
       </div>
       <div className="py-4">
         <p>{shortenText(originalAudit)}</p>
       </div>
-      <div className="w-full flex flex-col gap-3 items-center justify-center">
-        <p className="font-[500] uppercase text-[16px] md:text-[24px] tracking-[5px] text-center">
+      <div className="flex flex-col items-center justify-center w-full gap-3">
+        <p className="font-[500] uppercase text-[12px] md:text-[22px] tracking-[5px] text-center">
           Unlock Full Audit Report with Premium.
         </p>
         <button

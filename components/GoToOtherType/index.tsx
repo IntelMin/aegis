@@ -11,7 +11,7 @@ type Props = {
 const GoToOtherType = (props: Props) => {
   return (
     <div
-      className="flex flex-col w-full pb-7 md:pb-2 items-center justify-center border px-12 rounded-md h-full bg-opacity-50"
+      className="flex flex-col items-center justify-center w-full h-full px-12 bg-opacity-50 rounded-md pb-7 md:pb-2"
       style={{
         backgroundColor: "#1414149e",
         backgroundImage:
