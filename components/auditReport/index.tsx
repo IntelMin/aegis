@@ -18,7 +18,7 @@ const AuditReport = (props: Props) => {
 
   return (
     <div
-      className="border bg-[#14141480] border-[#737373] p-5 pt-6 rounded-lg"
+      className="border border-[#737373] p-5 pt-6 rounded-lg"
       style={{
         overflow: "hidden",
         backdropFilter: "blur(30px)",

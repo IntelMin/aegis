@@ -1,11 +1,10 @@
 "use client";
 
-import { Button, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
 import AuditReport from "../auditReport";
 import GoToOtherType from "../GoToOtherType";
 import Editor from "@monaco-editor/react";
-import { Card, Skeleton } from "@nextui-org/react";
+import { Button, Card, Skeleton } from "@nextui-org/react";
 import { toast } from "sonner";
 
 type Props = {};
@@ -43,66 +42,69 @@ const CodeAuditForm = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-black">
-      <div className="flex flex-col items-center justify-between w-full h-full md:flex-row md:gap-5">
-        <div className="z-[1] w-full md:min-w-[800px] flex flex-col items-center justify-center p-6 rounded-lg relative h-full">
-          <h1 className="w-full text-success font-[600] mb-4">Contract code</h1>
-          <Editor
-            height="100%"
-            theme="vs-dark"
-            defaultLanguage="solidity"
-            defaultValue=""
-            options={{
-              minimap: {
-                enabled: true,
-              },
-              fontSize: 14,
-              cursorStyle: "block",
-              wordWrap: "on",
-            }}
-            onChange={(newValue: any) => setContractCode(newValue)}
-          />
+    <>
+      <div className="flex h-screen bg-black">
+        {/* <!-- Editor Container --> */}
+        <div className="flex flex-col flex-1">
+          <div className="p-4 text-white">
+            <h1 className="text-xl font-bold">Contract code</h1>
+          </div>
+          {/* <!-- Editor Area --> */}
+          <div className="flex-1 p-4 bg-[#141414]">
+            <Editor
+              height="calc(100%)"
+              theme="vs-dark"
+              language="solidity"
+              defaultLanguage="solidity"
+              defaultValue=""
+              options={{
+                minimap: {
+                  enabled: true,
+                },
+                fontSize: 14,
+                cursorStyle: "block",
+                wordWrap: "on",
+              }}
+              onChange={(newValue: any) => setContractCode(newValue)}
+            />
+          </div>
         </div>
-        {/* <GoToOtherType
-          iconName="address"
-          pathName="addressAudit"
-          btnName="Address"
-        /> */}
-        <div className="z-[1] w-fullflex flex-col items-center justify-center pt-4 rounded-lg relative h-full">
-          <h1 className="w-full text-success font-[600] mb-4">Findings</h1>
 
-          <div className="w-full mb-5 border bg-[#14141480] border-[#737373] p-5 pt-5 rounded-lg">
-            <div>
-              <Card className="w-full p-4 mb-5 space-y-5" radius="lg">
-                <Skeleton className="rounded-lg">
-                  <div className="h-24 rounded-lg bg-default-300"></div>
-                </Skeleton>
-                <div className="space-y-3">
-                  <Skeleton className="w-3/5 rounded-lg">
-                    <div className="w-3/5 h-3 rounded-lg bg-default-200"></div>
-                  </Skeleton>
-                  <Skeleton className="w-4/5 rounded-lg">
-                    <div className="w-4/5 h-3 rounded-lg bg-default-200"></div>
-                  </Skeleton>
-                  <Skeleton className="w-2/5 rounded-lg">
-                    <div className="w-2/5 h-3 rounded-lg bg-default-300"></div>
-                  </Skeleton>
-                </div>
-              </Card>
+        {/* <!-- Findings and Reports Container --> */}
+        <div className="flex flex-col w-1/3">
+          {/* <!-- Findings Area --> */}
+          <div className="flex flex-col flex-1 p-4">
+            {/* <!-- Header for Findings --> */}
+            <div className="mb-4 text-white">
+              <h1 className="text-xl font-bold">Findings</h1>
             </div>
             <Button
               onClick={handleSubmit}
-              type="submit"
-              className="bg-[#1ac260a5] w-full"
+              className="p-2 mb-4 text-white bg-[#1ac260a5] rounded"
             >
               Audit your code
             </Button>
+            {/* <!-- Placeholder for Findings Content --> */}
+            <div className="flex-1 bg-[#141414]">
+              <div className="max-w-[300px] p-5 w-full flex items-center gap-3">
+                <div>
+                  <Skeleton className="flex w-12 h-12 rounded-full" />
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <Skeleton className="w-3/5 h-3 rounded-lg" />
+                  <Skeleton className="w-4/5 h-3 rounded-lg" />
+                </div>
+              </div>
+            </div>
+            {/* <!-- Audit Button --> */}
           </div>
-
-          <AuditReport />
         </div>
       </div>
-    </div>
+
+      <div className="p-4">
+        <AuditReport />
+      </div>
+    </>
   );
 };
 

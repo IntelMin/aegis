@@ -8,9 +8,9 @@ type Props = {};
 
 const TokenHeader = (props: Props) => {
   return (
-    <div className="flex justify-between w-full flex-wrap gap-3">
-      <div className="flex gap-4 items-center">
-        <Title title="Token Name" icon iconName="nft" />
+    <div className="flex flex-wrap justify-between w-full gap-3">
+      <div className="flex items-center gap-4">
+        <Title title="Token Name 3" icon iconName="nft" />
         <Chip  color="success" className=" rounded-lg py-[3px] px-[6px] text-[12px] font-bold uppercase">
           tkn
         </Chip>
