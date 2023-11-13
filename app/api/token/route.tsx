@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { parse, visit, ParserError } from '@solidity-parser/parser';
 
-type DataType = "info" | "stats" | "code" | "viz";
+type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies";
 
 type Handlers = {
   [key in DataType]: (address: string) => Promise<Response>;
@@ -18,7 +19,26 @@ async function fetchTokenStats(address: string) {
 }
 
 async function fetchTokenCode(address: string) {
-  const url = `https://eth.blockscout.com/api/v2/tokens/${address}/code`;
+  console.log("fetchTokenCode");
+  // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+  const url = `http://localhost:9898/describe/${address}`;
+
+  return fetchAndRespond(url);
+}
+
+async function fetchTokenFunctions(address: string) {
+  console.log("fetchTokenFunctions");
+  // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+  const url = `http://localhost:9898/markdown/${address}`;
+
+  return fetchAndRespond(url);
+}
+
+async function fetchDependencies(address: string) {
+  console.log("fetchDependencies");
+  // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+  const url = `http://localhost:9898/dependency/${address}`;
+
   return fetchAndRespond(url);
 }
 
@@ -69,6 +89,8 @@ export async function POST(req: Request, res: NextResponse) {
     stats: fetchTokenStats,
     code: fetchTokenCode,
     viz: fetchTokenViz,
+    functions: fetchTokenFunctions,
+    dependencies: fetchDependencies,
   };
 
   // Get the handler function based on the data type.
