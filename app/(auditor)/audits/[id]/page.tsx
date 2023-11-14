@@ -14,8 +14,22 @@ import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 type Props = {};
 
 type ProjectData = {
-  // Define the properties and types that match the expected data
+  name: string;
+  symbol: string;
+  address: string;
+  circulating_market_cap: string;
+  decimals: string;
+  exchange_rate: string;
+  holders: string;
+  icon_url: string;
+  total_supply: string;
+  type: string;
 };
+type CodeData ={
+  tree: any;
+  code: string | null;
+  findings: any;
+}
 
 const ProjectPage = (props: Props) => {
   const params = useParams();
@@ -24,7 +38,7 @@ const ProjectPage = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState("overview");
 
   const [infoData, setInfoData] = useState<ProjectData | null>(null);
-  const [codeData, setCodeData] = useState(null);
+  const [codeData, setCodeData] = useState<CodeData | null>(null);
   const [functionData, setFunctionData] = useState(null);
   const [functionTableData, setFunctionTableData] = useState<DataProps | null>(
     null
@@ -117,10 +131,10 @@ const ProjectPage = (props: Props) => {
       >
         <Tab key="overview" title="Overview">
           <AuditDetail {...infoData} />
-          <CodeSecurity {...infoData} />
+          <CodeSecurity />
         </Tab>
         <Tab key="code" title="Code">
-          <CodeViewer {...(codeData as any)} />
+          <CodeViewer {...codeData } />
         </Tab>
         <Tab key="functions" title="Functions">
               {/* <TokenMarkdown markdown={functionData} /> */}

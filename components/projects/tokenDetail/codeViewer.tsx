@@ -6,10 +6,17 @@ import TreeView from "@/components/treeview";
 import { Button, Card, Skeleton, Chip } from "@nextui-org/react";
 import { toast } from "sonner";
 
+
+type Finding = {
+  severity: 'LOW' | 'MEDIUM' | 'HIGH'; 
+  title: string;
+  mitigation: string;
+};
+
 type Props = {
-  tree: any;
-  code: any;
-  findings: any;
+  tree: any[] ;
+  code: string | null;
+  findings: Finding[] | null;
 };
 
 const CodeViewer = (data: Props) => {
@@ -25,6 +32,7 @@ const CodeViewer = (data: Props) => {
   const editorRef = useRef<any>(null);
 
   useEffect(() => {
+    
     if (data.tree) {
       console.log(data.tree);
       setTreeViewData(data.tree);
