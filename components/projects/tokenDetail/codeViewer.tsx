@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import TreeView from "@/components/treeview";
-import { Button, Card, Skeleton } from "@nextui-org/react";
+import { Button, Card, Skeleton, Chip } from "@nextui-org/react";
 import { toast } from "sonner";
 
 type Props = {
@@ -108,28 +108,31 @@ const CodeViewer = (data: Props) => {
               <h1 className="font-bold text-md">Findings</h1>
             </div>
             {/* <!-- Placeholder for Findings Content --> */}
-            <div className="flex-1 bg-[#141414]">
+            <div className="flex-1 h-screen overflow-y-auto">
               {findings.map((item: any, index: any) => (
                 <div
                   key={index}
-                  className="max-w-[300px] p-5 w-full flex items-center gap-3"
+                  className="max-w-sm mx-auto overflow-hidden rounded-lg shadow-md bg-[#141414] cursor-pointer mb-4"
+                  onClick={() => toggleMitigation(index)}
                 >
-                  <div>
-                    <div className="flex w-12 h-12 rounded-full" />{" "}
-                    {/* Replace with actual content */}
-                  </div>
-                  <div className="flex flex-col w-full gap-2">
-                    <div className="w-3/5 h-3 rounded-lg">
-                      {item.title} - {item.severity}
+                  <div className="p-5">
+                    <div className="flex items-center">
+                      <Chip
+                        variant="dot"
+                        color={item.severity == "MEDIUM" ? "warning" : "danger"}
+                        className="text-sm font-bold uppercase"
+                      >
+                        {item.severity}
+                      </Chip>
                     </div>
-                    <div
-                      className="w-4/5 h-3 rounded-lg cursor-pointer"
-                      onClick={() => toggleMitigation(index)}
-                    >
-                      {visibleMitigation === index && (
-                        <div>{item.mitigation}</div>
-                      )}
-                    </div>
+                    <p className="mt-4 text-xs font-bold text-gray-300">
+                      {item.title}
+                    </p>
+                    {visibleMitigation === index && (
+                      <div className="mt-4 text-sm text-gray-400">
+                        {item.mitigation}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
