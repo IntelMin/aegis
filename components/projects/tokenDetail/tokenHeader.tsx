@@ -21,7 +21,7 @@ const TokenHeader = (props: any) => {
   console.log(props);
 
   return (
-    <div className="flex flex-wrap justify-between w-full gap-3">
+    <div className="flex flex-wrap justify-between w-full gap-3 md:absolute top-[22px] left-[25px] ">
       <div className="flex items-center gap-4">
         <Title title={props?.name} icon iconName={props?.icon_url} />
         <Chip
@@ -37,16 +37,6 @@ const TokenHeader = (props: any) => {
           {props.type}
         </Chip>
       </div>
-      {/* <div className="flex gap-4 items-center md:ml-[40px]">
-        <div className="bg-[#0068345f] px-3 py-[6px] rounded-lg">
-          <h1 className="font-semibold text-[15px] text-default-500">
-            {"Security Score"}
-          </h1>
-          <h3 className="font-semibold text-[18px]">
-            87.7 <span className="text-warning">AA</span>
-          </h3>
-        </div>
-      </div> */}
     </div>
   );
 };
