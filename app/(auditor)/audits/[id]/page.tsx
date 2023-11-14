@@ -9,6 +9,7 @@ import TokenMarkdown from "@/components/projects/tokenDetail/tokenMarkdown";
 import InheritanceGraph from "@/components/projects/tokenDetail/inheritanceGraph";
 import CodeViewer from "@/components/projects/tokenDetail/codeViewer";
 import AuditFunctionTable, { DataProps } from "@/components/auditFunctionTable";
+import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 
 type Props = {};
 
@@ -106,7 +107,7 @@ const ProjectPage = (props: Props) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full gap-4 px-5 py-4 relative">
+    <div className="relative flex flex-col w-full h-full gap-4 px-5 py-4">
       <TokenHeader {...infoData} />
       <Tabs
         aria-label="Sections"
@@ -115,7 +116,7 @@ const ProjectPage = (props: Props) => {
         className="flex items-center justify-center w-full gap-4"
       >
         <Tab key="overview" title="Overview">
-          {/* <AuditDetail {...infoData} /> */}
+          <AuditDetail {...infoData} />
           <CodeSecurity {...infoData} />
         </Tab>
         <Tab key="code" title="Code">
@@ -123,15 +124,11 @@ const ProjectPage = (props: Props) => {
         </Tab>
         <Tab key="functions" title="Functions">
               {/* <TokenMarkdown markdown={functionData} /> */}
-              <AuditFunctionTable {...functionTableData} />
+              <AuditFunctionTable data={functionTableData} />
         </Tab>
         <Tab key="dependencies" title="Dependency">
           <Card>
-            <CardBody>
               <InheritanceGraph data={dependencyData} />
-
-              {/* <TokenMarkdown markdown={functionData} /> */}
-            </CardBody>
           </Card>
         </Tab>
       </Tabs>
