@@ -37,7 +37,7 @@ const TokenHeader = (props: Props) => {
           {props.type}
         </Chip>
       </div>
-      <div className="flex gap-4 items-center md:ml-[40px]">
+      {/* <div className="flex gap-4 items-center md:ml-[40px]">
         <div className="bg-[#0068345f] px-3 py-[6px] rounded-lg">
           <h1 className="font-semibold text-[15px] text-default-500">
             {"Security Score"}
@@ -46,7 +46,7 @@ const TokenHeader = (props: Props) => {
             87.7 <span className="text-warning">AA</span>
           </h3>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

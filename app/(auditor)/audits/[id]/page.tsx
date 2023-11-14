@@ -1,17 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { BsArrowLeft } from "react-icons/bs";
-import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import TokenHeader from "@/components/projects/tokenDetail/tokenHeader";
-import TokenDetail from "@/components/projects/tokenDetail/TokenDetail";
-import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 import CodeSecurity from "@/components/projects/tokenDetail/codeSecurity";
 import TokenMarkdown from "@/components/projects/tokenDetail/tokenMarkdown";
 import InheritanceGraph from "@/components/projects/tokenDetail/inheritanceGraph";
 import CodeViewer from "@/components/projects/tokenDetail/codeViewer";
+import AuditFunctionTable, { DataProps } from "@/components/auditFunctionTable";
 
 type Props = {};
 
@@ -28,6 +25,9 @@ const ProjectPage = (props: Props) => {
   const [infoData, setInfoData] = useState<ProjectData | null>(null);
   const [codeData, setCodeData] = useState(null);
   const [functionData, setFunctionData] = useState(null);
+  const [functionTableData, setFunctionTableData] = useState<DataProps | null>(
+    null
+  );
   const [dependencyData, setDependencyData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +85,7 @@ const ProjectPage = (props: Props) => {
           const [infoData, codeData, functionData, dependencyData] =
             await Promise.all(dataPromises);
 
+          setFunctionTableData(functionData?.table?.slice(1));
           setInfoData(infoData);
           setCodeData(codeData);
           setFunctionData(functionData.report);
@@ -130,7 +131,8 @@ const ProjectPage = (props: Props) => {
         <Tab key="functions" title="Functions">
           <Card>
             <CardBody>
-              <TokenMarkdown markdown={functionData} />
+              {/* <TokenMarkdown markdown={functionData} /> */}
+              <AuditFunctionTable data={functionTableData} />
             </CardBody>
           </Card>
         </Tab>
