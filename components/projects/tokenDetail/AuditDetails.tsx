@@ -18,7 +18,7 @@ type Props = {
   type: string;
 };
 
-const AuditDetail = (props: Props) => {
+const AuditDetail = (props: any) => {
   const formatLargeNumber = (numberStr: string) => {
     let [integerPart, fractionalPart] = numberStr.split('.');
     fractionalPart = fractionalPart || '0';

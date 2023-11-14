@@ -130,7 +130,7 @@ const ProjectPage = (props: Props) => {
         </Tab>
         <Tab key="functions" title="Functions">
               {/* <TokenMarkdown markdown={functionData} /> */}
-              <AuditFunctionTable data={functionTableData} />
+              <AuditFunctionTable {...functionTableData} />
         </Tab>
         <Tab key="dependencies" title="Dependency">
           <Card>

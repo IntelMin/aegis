@@ -42,7 +42,7 @@ type Props = {
   data: DataProps[] | null;
 };
 
-const AuditFunctionTable = (props: Props) => {
+const AuditFunctionTable = (props: any) => {
   const [filterValue, setFilterValue] = React.useState("");
   const hasSearchFilter = Boolean(filterValue);
 

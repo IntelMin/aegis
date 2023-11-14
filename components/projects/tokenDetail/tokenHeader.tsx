@@ -16,7 +16,7 @@ type Props = {
   type: string;
 };
 
-const TokenHeader = (props: Props) => {
+const TokenHeader = (props: any) => {
   console.log("TokenHeader");
   console.log(props);
 

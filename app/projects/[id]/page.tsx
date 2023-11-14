@@ -9,7 +9,7 @@ type Props = {};
 
 const ProjectPage = (props: Props) => {
   return (
-    <div className="py-4 px-5 w-full h-full flex flex-col gap-4">
+    <div className="flex flex-col w-full h-full gap-4 px-5 py-4">
       <Link
         href={"/projects"}
         className="flex items-center gap-4 font-[600] mb-6"
@@ -18,7 +18,7 @@ const ProjectPage = (props: Props) => {
         Go back
       </Link>
       <TokenHeader />
-      <AuditDetail />
+      {/* <AuditDetail /> */}
       <TokenDetail />
 
       
