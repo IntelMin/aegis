@@ -71,23 +71,23 @@ export const SidebarWrapper = () => {
               />
             </SidebarMenu>
 
-            <SidebarMenu title="Diligence Tools">
+            <SidebarMenu title="Audits">
               <SidebarItem
-                isActive={pathname === "/audit"}
-                title="Exchange Audit"
+                isActive={pathname === "/codeAudit"}
+                title="Code Audit"
                 icon={
                   <GiStabbedNote className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="audit"
+                href="codeAudit"
               />
 
               <SidebarItem
-                isActive={pathname === "/smartmoney"}
-                title="Smart Money"
+                isActive={pathname === "/addressAudit"}
+                title="Token Audit"
                 icon={
                   <BiWalletAlt className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="smartmoney"
+                href="addressAudit"
               />
             </SidebarMenu>
           </div>

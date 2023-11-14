@@ -7,10 +7,13 @@ import Title from "@/components/title";
 import RadialChart from "@/components/radialChart";
 
 import { Card } from "@nextui-org/react";
+import { NavbarWrapper } from "@/components/navbar/navbar";
+import { useState } from "react";
 
 export default function Home() {
+  const [pageTitle, setPageTitle] = useState(<div></div>);
   return (
-    <>
+    <NavbarWrapper pageTitle={pageTitle}>
       <div className="px-6 mt-4">
         <Title title="Dashboard" icon />
       </div>
@@ -38,10 +41,7 @@ export default function Home() {
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
-              <img
-                className="mr-4 h-[40px] w-[40px]"
-                src="/secure.png"
-              />
+              <img className="mr-4 h-[40px] w-[40px]" src="/secure.png" />
             </span>
 
             <div>
@@ -59,11 +59,7 @@ export default function Home() {
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
-              <img
-
-                className="mr-4 h-[40px] w-[40px]"
-                src="/analtics.png"
-              />
+              <img className="mr-4 h-[40px] w-[40px]" src="/analtics.png" />
             </span>
 
             <div className="w-full">
@@ -106,6 +102,6 @@ export default function Home() {
           <Steam />
         </div>
       </Card>
-    </>
+    </NavbarWrapper>
   );
 }

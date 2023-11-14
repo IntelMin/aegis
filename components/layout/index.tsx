@@ -31,10 +31,10 @@ export const Layout = ({ children }: Props) => {
       <section className="flex">
         <Toaster richColors />
         <SidebarWrapper />
-        <NavbarWrapper pageTitle={pageTitle}>
+        {/* <NavbarWrapper pageTitle={pageTitle}> */}
           {children}
           {/* {React.cloneElement(children, { setPageName })} */}
-        </NavbarWrapper>
+        {/* </NavbarWrapper> */}
       </section>
     </SidebarContext.Provider>
   );
