@@ -13,8 +13,8 @@ type Finding = {
   mitigation: string;
 };
 
-type Props = {
-  tree: any[] ;
+type CodeData = {
+  tree?: string[] | null;
   code: string | null;
   findings: Finding[] | null;
 };
@@ -55,7 +55,7 @@ const CodeViewer = (data: Props) => {
     }
   };
 
-  const handleLineSelectClick = (line: any) => {
+  const handleLineSelectClick = (line: number) => {
     console.log("Line number: " + line);
     goToLine(line);
   };

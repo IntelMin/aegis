@@ -13,6 +13,12 @@ import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 
 type Props = {};
 
+type Finding = {
+  severity: 'LOW' | 'MEDIUM' | 'HIGH'; 
+  title: string;
+  mitigation: string;
+};
+
 type ProjectData = {
   name: string;
   symbol: string;
@@ -25,11 +31,11 @@ type ProjectData = {
   total_supply: string;
   type: string;
 };
-type CodeData ={
-  tree: any;
+type CodeData = {
+  tree?: string[] | null;
   code: string | null;
-  findings: any;
-}
+  findings: Finding[] | null;
+};
 
 const ProjectPage = (props: Props) => {
   const params = useParams();
