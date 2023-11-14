@@ -6,6 +6,7 @@ import TreeView from "@/components/treeview";
 import { Button, Card, Skeleton, Chip } from "@nextui-org/react";
 import { toast } from "sonner";
 
+type Props = {};
 
 type Finding = {
   severity: 'LOW' | 'MEDIUM' | 'HIGH'; 
