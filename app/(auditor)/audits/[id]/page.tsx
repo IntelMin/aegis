@@ -11,6 +11,7 @@ import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 import CodeSecurity from "@/components/projects/tokenDetail/codeSecurity";
 import TokenMarkdown from "@/components/projects/tokenDetail/tokenMarkdown";
 import InheritanceGraph from "@/components/projects/tokenDetail/inheritanceGraph";
+import CodeViewer from "@/components/projects/tokenDetail/codeViewer";
 
 type Props = {};
 
@@ -74,20 +75,16 @@ const ProjectPage = (props: Props) => {
             dependencyRequest,
           ]);
 
-          // Await the json() promise for each response
           const dataPromises = responses.map(async (response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); // Call json() only once
+            return response.json();
           });
 
-          // Now wait for all the dataPromises to resolve
-          const [infoData, codeData, functionData, dependencyData] = await Promise.all(
-            dataPromises
-          );
+          const [infoData, codeData, functionData, dependencyData] =
+            await Promise.all(dataPromises);
 
-          // Update state for each tab's content
           setInfoData(infoData);
           setCodeData(codeData);
           setFunctionData(functionData.report);
@@ -128,14 +125,7 @@ const ProjectPage = (props: Props) => {
           <CodeSecurity {...infoData} />
         </Tab>
         <Tab key="code" title="Code">
-          <Card>
-            <CardBody>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur.
-            </CardBody>
-          </Card>
+          <CodeViewer {...(codeData as any)} />
         </Tab>
         <Tab key="functions" title="Functions">
           <Card>
@@ -147,7 +137,7 @@ const ProjectPage = (props: Props) => {
         <Tab key="dependencies" title="Dependency">
           <Card>
             <CardBody>
-                <InheritanceGraph data={dependencyData} />
+              <InheritanceGraph data={dependencyData} />
 
               {/* <TokenMarkdown markdown={functionData} /> */}
             </CardBody>

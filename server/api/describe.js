@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const fetchData = require("../utils");
+const {fetchData} = require("../utils");
 const parser = require("@solidity-parser/parser");
 
 router.get("/:address", async (req, res) => {

@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const fetchData = require("../utils");
+const {fetchData} = require("../utils");
 const { linearize } = require('c3-linearization');
 const parser = require("@solidity-parser/parser");
 

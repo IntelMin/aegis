@@ -55,7 +55,7 @@ const CodeAuditForm = (props: Props) => {
               height="calc(100%)"
               theme="vs-dark"
               language="solidity"
-              defaultLanguage="solidity"
+              defaultLanguage="javascript"
               defaultValue=""
               options={{
                 minimap: {
