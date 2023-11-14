@@ -2,6 +2,8 @@
 import Title from "@/components/title";
 import React from "react";
 import { Chip } from "@nextui-org/react";
+import { IoIosArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 
 type Props = {
   name: string;
@@ -23,6 +25,9 @@ const TokenHeader = (props: any) => {
   return (
     <div className="flex flex-wrap justify-between w-full gap-3 md:absolute top-[22px] left-[25px] ">
       <div className="flex items-center gap-4">
+        <Link href="/codeAudit">
+          <IoIosArrowRoundBack className="text-[28px] cursor-pointer md:hidden block ml-2" />
+        </Link>
         <Title title={props?.name} icon iconName={props?.icon_url} />
         <Chip
           color="success"
