@@ -51,7 +51,7 @@ export const SidebarWrapper = () => {
                 icon={
                   <MdOutlineSecurity className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="security"
+                href="/security"
               />
               <SidebarItem
                 isActive={pathname === "/bugBounty"}
@@ -59,7 +59,7 @@ export const SidebarWrapper = () => {
                 icon={
                   <TbTargetArrow className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="bugBounty"
+                href="/bugBounty"
               />
               <SidebarItem
                 isActive={pathname === "/projects"}
@@ -67,7 +67,7 @@ export const SidebarWrapper = () => {
                 icon={
                   <GoWorkflow className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="projects"
+                href="/projects"
               />
             </SidebarMenu>
 
@@ -78,7 +78,7 @@ export const SidebarWrapper = () => {
                 icon={
                   <GiStabbedNote className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="codeAudit"
+                href="/codeAudit"
               />
 
               <SidebarItem
@@ -87,7 +87,7 @@ export const SidebarWrapper = () => {
                 icon={
                   <BiWalletAlt className="text-[#969696] text-[22px] ml-[2px]" />
                 }
-                href="addressAudit"
+                href="/addressAudit"
               />
             </SidebarMenu>
           </div>
