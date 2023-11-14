@@ -87,13 +87,26 @@ const CodeViewer = (data: Props) => {
               defaultValue={sourceCode}
               onMount={handleEditorDidMount}
               options={{
+                autoIndent: "full",
+                contextmenu: true,
+                fontFamily: "monospace",
+                fontSize: 13,
+                lineHeight: 24,
+                wordWrap: "on",
+                cursorStyle: "block",
+                hideCursorInOverviewRuler: true,
+                matchBrackets: "always",
                 minimap: {
                   enabled: true,
                 },
-                fontSize: 12,
-                cursorStyle: "block",
-                wordWrap: "on",
-                language: "solidity",
+                scrollbar: {
+                  horizontalSliderSize: 4,
+                  verticalSliderSize: 18,
+                },
+                selectOnLineNumbers: true,
+                roundedSelection: false,
+                readOnly: true,
+                automaticLayout: true,
               }}
             />
           </div>
@@ -102,41 +115,39 @@ const CodeViewer = (data: Props) => {
         {/* <!-- Findings and Reports Container --> */}
         <div className="flex flex-col w-[20%]">
           {/* <!-- Findings Area --> */}
-          <div className="flex flex-col flex-1 p-4">
-            {/* <!-- Header for Findings --> */}
-            <div className="mb-4 text-white">
-              <h1 className="font-bold text-md">Findings</h1>
-            </div>
-            {/* <!-- Placeholder for Findings Content --> */}
-            <div className="flex-1 h-screen overflow-y-auto">
-              {findings.map((item: any, index: any) => (
-                <div
-                  key={index}
-                  className="max-w-sm mx-auto overflow-hidden rounded-lg shadow-md bg-[#141414] cursor-pointer mb-4"
-                  onClick={() => toggleMitigation(index)}
-                >
-                  <div className="p-5">
-                    <div className="flex items-center">
-                      <Chip
-                        variant="dot"
-                        color={item.severity == "MEDIUM" ? "warning" : "danger"}
-                        className="text-sm font-bold uppercase"
-                      >
-                        {item.severity}
-                      </Chip>
-                    </div>
-                    <p className="mt-4 text-xs font-bold text-gray-300">
-                      {item.title}
-                    </p>
-                    {visibleMitigation === index && (
-                      <div className="mt-4 text-sm text-gray-400">
-                        {item.mitigation}
-                      </div>
-                    )}
+          {/* <!-- Header for Findings --> */}
+          <div className="mt-4 mb-4 text-white">
+            <h1 className="ml-5 font-bold text-md">Findings</h1>
+          </div>
+          {/* <!-- Placeholder for Findings Content --> */}
+          <div className="flex-1 h-screen p-4 overflow-y-auto">
+            {findings.map((item: any, index: any) => (
+              <div
+                key={index}
+                className="max-w-sm mx-auto overflow-hidden rounded-lg shadow-md bg-[#141414] cursor-pointer mb-4"
+                onClick={() => toggleMitigation(index)}
+              >
+                <div className="p-5">
+                  <div className="flex items-center">
+                    <Chip
+                      variant="dot"
+                      color={item.severity == "MEDIUM" ? "warning" : "danger"}
+                      className="text-sm font-bold uppercase"
+                    >
+                      {item.severity}
+                    </Chip>
                   </div>
+                  <p className="mt-4 text-xs font-bold text-gray-300">
+                    {item.title}
+                  </p>
+                  {visibleMitigation === index && (
+                    <div className="mt-4 text-sm text-gray-400">
+                      {item.mitigation}
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

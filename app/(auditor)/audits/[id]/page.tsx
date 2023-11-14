@@ -129,12 +129,8 @@ const ProjectPage = (props: Props) => {
           <CodeViewer {...(codeData as any)} />
         </Tab>
         <Tab key="functions" title="Functions">
-          <Card>
-            <CardBody>
               {/* <TokenMarkdown markdown={functionData} /> */}
               <AuditFunctionTable data={functionTableData} />
-            </CardBody>
-          </Card>
         </Tab>
         <Tab key="dependencies" title="Dependency">
           <Card>

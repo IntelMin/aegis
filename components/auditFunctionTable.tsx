@@ -89,7 +89,7 @@ const AuditFunctionTable = (props: Props) => {
       <Table aria-label="Audit Function Table">
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
+            <TableColumn key={column.key}>{column.label.toUpperCase()}</TableColumn>
           )}
         </TableHeader>
         <TableBody items={rows}>
