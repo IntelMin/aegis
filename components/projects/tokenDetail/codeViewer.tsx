@@ -58,8 +58,6 @@ const CodeViewer = (data: Props) => {
     setVisibleMitigation(visibleMitigation === index ? null : index);
   };
 
-
-
   return (
     <>
       <div className="flex h-screen bg-black">
@@ -111,24 +109,31 @@ const CodeViewer = (data: Props) => {
             </div>
             {/* <!-- Placeholder for Findings Content --> */}
             <div className="flex-1 bg-[#141414]">
-
-      {findings.map((item:any, index:any) => (
-        <div key={index} className="max-w-[300px] p-5 w-full flex items-center gap-3">
-          <div>
-            <div className="flex w-12 h-12 rounded-full" /> {/* Replace with actual content */}
-          </div>
-          <div className="flex flex-col w-full gap-2">
-            <div className="w-3/5 h-3 rounded-lg">{item.title} - {item.severity}</div>
-            <div className="w-4/5 h-3 rounded-lg cursor-pointer" onClick={() => toggleMitigation(index)}>
-              {visibleMitigation === index && <div>{item.mitigation}</div>}
+              {findings.map((item: any, index: any) => (
+                <div
+                  key={index}
+                  className="max-w-[300px] p-5 w-full flex items-center gap-3"
+                >
+                  <div>
+                    <div className="flex w-12 h-12 rounded-full" />{" "}
+                    {/* Replace with actual content */}
+                  </div>
+                  <div className="flex flex-col w-full gap-2">
+                    <div className="w-3/5 h-3 rounded-lg">
+                      {item.title} - {item.severity}
+                    </div>
+                    <div
+                      className="w-4/5 h-3 rounded-lg cursor-pointer"
+                      onClick={() => toggleMitigation(index)}
+                    >
+                      {visibleMitigation === index && (
+                        <div>{item.mitigation}</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        </div>
-      ))}
-
-
-            </div>
-
           </div>
         </div>
       </div>

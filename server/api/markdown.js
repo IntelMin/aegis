@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const {fetchData} = require("../utils");
+const { fetchData } = require("../utils");
 const parser = require("@solidity-parser/parser");
 
 router.get("/:address", async (req, res) => {
@@ -47,6 +47,8 @@ router.get("/:address", async (req, res) => {
     var modifiers = [];
     var added = [];
 
+    let tableRows = [];
+
     let filesTable = `
   |  File Name  |  SHA-1 Hash  |
   |-------------|--------------|
@@ -62,9 +64,9 @@ router.get("/:address", async (req, res) => {
     var doesModifierExist = false;
     var isConstructor = false;
     var options = {
-        deepness: 1,
-        negModifiers: false,
-      };
+      deepness: 1,
+      negModifiers: false,
+    };
 
     parser.visit(ast, {
       ModifierInvocation: function ModifierInvocation(node) {
@@ -100,6 +102,15 @@ router.get("/:address", async (req, res) => {
         contractsTable += `||||||
   | **${name}** | ${specs} | ${bases} |||
   `;
+        let row = {
+          type: "contract",
+          name: name,
+          spec: specs,
+          mutating: null,
+          payable: null,
+        };
+
+        tableRows.push(row);
       },
 
       FunctionDefinition(node) {
@@ -142,6 +153,16 @@ router.get("/:address", async (req, res) => {
         }
 
         contractsTable += `| └ | ${name} | ${spec} | ${mutating} ${payable} |`;
+
+        let row = {
+          type: "func",
+          name: name,
+          spec: spec,
+          mutating: mutating,
+          payable: payable,
+        };
+
+        tableRows.push(row);
       },
 
       "FunctionDefinition:exit": function (node) {
@@ -190,7 +211,8 @@ router.get("/:address", async (req, res) => {
     // console.log("reportContents: ", reportContents);
 
     res.status(200).send({
-        report: reportContents,
+      report: reportContents,
+      table: tableRows
     });
   } catch (error) {
     res.status(500).send("Error: " + error.message);
