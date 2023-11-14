@@ -107,13 +107,13 @@ const ProjectPage = (props: Props) => {
   }
 
   return (
-      <div className="relative flex flex-col w-full h-full gap-4 max-md:px-5 max-md:py-4 overflow-x-hidden">
+      <div className="relative flex flex-col w-full h-full gap-4 px-5 py-4 pt-0 overflow-x-hidden">
         <TokenHeader {...infoData} />
         <Tabs
           aria-label="Sections"
           color="success"
           variant="bordered"
-          className="flex items-center justify-center w-full gap-4 bg-[black] md:py-4 md:px-5"
+          className="flex items-center justify-center w-full gap-4 md:py-4 md:px-5"
         >
           <Tab key="overview" title="Overview">
             <AuditDetail {...infoData} />
