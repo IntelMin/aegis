@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = {
   title: string;
-  icon: boolean;
+  icon?: boolean;
   subHeader?: boolean;
   iconName?: string;
 };
