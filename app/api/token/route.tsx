@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 const { AEGIS_SRV } = process.env;
 
-type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies";
+type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies" | "rugpull";
 
 type Handlers = {
   [key in DataType]: (address: string) => Promise<Response>;
@@ -15,6 +15,11 @@ async function fetchTokenInfo(address: string) {
 
 async function fetchTokenStats(address: string) {
   const url = `https://eth.blockscout.com/api/v2/tokens/${address}/stats`;
+  return fetchAndRespond(url);
+}
+
+async function fetchRugpull(address: string) {
+  const url = `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`;
   return fetchAndRespond(url);
 }
 
@@ -90,6 +95,7 @@ export async function POST(req: Request, res: NextResponse) {
     viz: fetchTokenViz,
     functions: fetchTokenFunctions,
     dependencies: fetchDependencies,
+    rugpull: fetchRugpull,
   };
 
   const handler = handlers[data.type as DataType];

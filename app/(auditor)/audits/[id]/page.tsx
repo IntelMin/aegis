@@ -137,10 +137,10 @@ const ProjectPage = (props: Props) => {
       >
         <Tab key="overview" title="Overview">
           <AuditDetail {...infoData} />
-          <CodeSecurity {...infoData} />
+          <CodeSecurity />
         </Tab>
         <Tab key="code" title="Code">
-          <CodeViewer {...codeData } />
+          <CodeViewer {...codeData as any } />
         </Tab>
         <Tab key="functions" title="Functions">
               {/* <TokenMarkdown markdown={functionData} /> */}

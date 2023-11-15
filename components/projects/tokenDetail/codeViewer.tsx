@@ -16,11 +16,11 @@ type Finding = {
 
 type CodeData = {
   tree?: string[] | null;
-  code: string | null;
+  code: string | "";
   findings: Finding[] | null;
 };
 
-const CodeViewer = (data: Props) => {
+const CodeViewer = (data: CodeData) => {
   const [contractCode, setContractCode] = useState<string>("");
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContractCode(event.target.value);
