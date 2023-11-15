@@ -4,16 +4,13 @@ import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
 import ApexChart from "@/components/pieChart";
 import Title from "@/components/title";
-import RadialChart from "@/components/radialChart";
 
-import { Card } from "@nextui-org/react";
 import { NavbarWrapper } from "@/components/navbar/navbar";
-import { useState } from "react";
+import { Card } from "@nextui-org/react";
 
 export default function Home() {
-  const [pageTitle, setPageTitle] = useState(<div></div>);
   return (
-    <NavbarWrapper pageTitle={pageTitle}>
+    <NavbarWrapper pageTitle={<div></div>}>
       <div className="px-6 mt-4">
         <Title title="Dashboard" icon />
       </div>
@@ -96,12 +93,13 @@ export default function Home() {
           </div>
         </Card>
       </section>
-
-      <Card className="bg-opacity-50 ">
-        <div className="glassCard">
-          <Steam />
-        </div>
-      </Card>
+      <section className="p-6">
+        <Card className="bg-opacity-50">
+          <div className="glassCard">
+            <Steam />
+          </div>
+        </Card>
+      </section>
     </NavbarWrapper>
   );
 }
