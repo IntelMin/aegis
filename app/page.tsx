@@ -4,13 +4,13 @@ import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
 import ApexChart from "@/components/pieChart";
 import Title from "@/components/title";
-import RadialChart from "@/components/radialChart";
 
+import { NavbarWrapper } from "@/components/navbar/navbar";
 import { Card } from "@nextui-org/react";
 
 export default function Home() {
   return (
-    <>
+    <NavbarWrapper pageTitle={<div></div>}>
       <div className="px-6 mt-4">
         <Title title="Dashboard" icon />
       </div>
@@ -38,10 +38,7 @@ export default function Home() {
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
-              <img
-                className="mr-4 h-[40px] w-[40px]"
-                src="/secure.png"
-              />
+              <img className="mr-4 h-[40px] w-[40px]" src="/secure.png" />
             </span>
 
             <div>
@@ -59,11 +56,7 @@ export default function Home() {
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
-              <img
-
-                className="mr-4 h-[40px] w-[40px]"
-                src="/analtics.png"
-              />
+              <img className="mr-4 h-[40px] w-[40px]" src="/analtics.png" />
             </span>
 
             <div className="w-full">
@@ -100,12 +93,13 @@ export default function Home() {
           </div>
         </Card>
       </section>
-
-      <Card className="bg-opacity-50 ">
-        <div className="glassCard">
-          <Steam />
-        </div>
-      </Card>
-    </>
+      <section className="p-6">
+        <Card className="bg-opacity-50">
+          <div className="glassCard">
+            <Steam />
+          </div>
+        </Card>
+      </section>
+    </NavbarWrapper>
   );
 }

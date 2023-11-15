@@ -92,9 +92,10 @@ const CodeViewer = (data: Props) => {
             <Editor
               height="calc(100%)"
               theme="vs-dark"
-              defaultLanguage="solidity"
-              defaultValue={sourceCode}
+              value={sourceCode}
+              language="sol"
               onMount={handleEditorDidMount}
+              
               options={{
                 autoIndent: "full",
                 contextmenu: true,

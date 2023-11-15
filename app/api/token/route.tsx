@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { parse, visit, ParserError } from '@solidity-parser/parser';
+const { AEGIS_SRV } = process.env;
 
 type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies";
 
@@ -21,7 +21,7 @@ async function fetchTokenStats(address: string) {
 async function fetchTokenCode(address: string) {
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://localhost:9898/code/${address}`;
+  const url = `http://${AEGIS_SRV}/code/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -29,7 +29,7 @@ async function fetchTokenCode(address: string) {
 async function fetchTokenFunctions(address: string) {
   console.log("fetchTokenFunctions");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://localhost:9898/markdown/${address}`;
+  const url = `http://${AEGIS_SRV}/markdown/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -37,7 +37,7 @@ async function fetchTokenFunctions(address: string) {
 async function fetchDependencies(address: string) {
   console.log("fetchDependencies");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://localhost:9898/dependency/${address}`;
+  const url = `http://${AEGIS_SRV}/dependency/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -47,7 +47,6 @@ async function fetchTokenViz(address: string) {
   return fetchAndRespond(url);
 }
 
-// Common function to perform the fetch and return a response.
 async function fetchAndRespond(url: string) {
   try {
     const response = await fetch(url, {
@@ -93,7 +92,6 @@ export async function POST(req: Request, res: NextResponse) {
     dependencies: fetchDependencies,
   };
 
-  // Get the handler function based on the data type.
   const handler = handlers[data.type as DataType];
 
   if (handler) {
