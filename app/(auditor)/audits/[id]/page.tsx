@@ -13,8 +13,28 @@ import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
 
 type Props = {};
 
+type Finding = {
+  severity: 'LOW' | 'MEDIUM' | 'HIGH'; 
+  title: string;
+  mitigation: string;
+};
+
 type ProjectData = {
-  // Define the properties and types that match the expected data
+  name: string;
+  symbol: string;
+  address: string;
+  circulating_market_cap: string;
+  decimals: string;
+  exchange_rate: string;
+  holders: string;
+  icon_url: string;
+  total_supply: string;
+  type: string;
+};
+type CodeData = {
+  tree?: string[] | null;
+  code: string | null;
+  findings: Finding[] | null;
 };
 
 const ProjectPage = (props: Props) => {
@@ -24,7 +44,7 @@ const ProjectPage = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState("overview");
 
   const [infoData, setInfoData] = useState<ProjectData | null>(null);
-  const [codeData, setCodeData] = useState(null);
+  const [codeData, setCodeData] = useState<CodeData | null>(null);
   const [functionData, setFunctionData] = useState(null);
   const [functionTableData, setFunctionTableData] = useState<DataProps | null>(
     null
@@ -107,27 +127,27 @@ const ProjectPage = (props: Props) => {
   }
 
   return (
-      <div className="relative flex flex-col w-full h-full gap-4 px-5 py-4 pt-0 overflow-x-hidden">
-        <TokenHeader {...infoData} />
-        <Tabs
-          aria-label="Sections"
-          color="success"
-          variant="bordered"
-          className="flex items-center justify-center w-full gap-4 md:py-4 md:px-5"
-        >
-          <Tab key="overview" title="Overview">
-            <AuditDetail {...infoData} />
-            <CodeSecurity {...infoData} />
-          </Tab>
-          <Tab key="code" title="Code">
-            <CodeViewer {...(codeData as any)} />
-          </Tab>
-          <Tab key="functions" title="Functions">
-            {/* <TokenMarkdown markdown={functionData} /> */}
-            <AuditFunctionTable data={functionTableData} />
-          </Tab>
-          <Tab key="dependencies" title="Dependency">
-            <Card>
+    <div className="relative flex flex-col w-full h-full gap-4 px-5 py-4 pt-0 overflow-x-hidden">
+      <TokenHeader {...infoData} />
+      <Tabs
+        aria-label="Sections"
+        color="success"
+        variant="bordered"
+        className="flex items-center justify-center w-full gap-4 md:py-4 md:px-5"
+      >
+        <Tab key="overview" title="Overview">
+          <AuditDetail {...infoData} />
+          <CodeSecurity {...infoData} />
+        </Tab>
+        <Tab key="code" title="Code">
+          <CodeViewer {...codeData } />
+        </Tab>
+        <Tab key="functions" title="Functions">
+              {/* <TokenMarkdown markdown={functionData} /> */}
+              <AuditFunctionTable data={functionTableData} />
+        </Tab>
+        <Tab key="dependencies" title="Dependency">
+          <Card>
               <InheritanceGraph data={dependencyData} />
             </Card>
           </Tab>
