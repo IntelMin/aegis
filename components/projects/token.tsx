@@ -11,7 +11,7 @@ const Token = (props: Props) => {
   return (
     <Link
       href={`/projects/${props?.id}`}
-      className="overflow-hidden col-span-4 md:col-span-1 w-full border border-[#9e9d9d6d] bg-gradient-to-r from-[black] via-[#353535d7] to-gray-700 hover:border-[#686868] transition-all hover:scale-[1.04] rounded-md py-4 bg-[#8080807d]"
+      className="overflow-hidden col-span-4 md:col-span-1 w-full border border-[#9e9d9d6d] bg-gradient-to-tr from-[#0c0c0cfe] via-[#222222da] to-gray-700 hover:border-[#686868] transition-all hover:scale-[1.04] rounded-md py-4 bg-[#8080807d]"
     >
       <div className="flex items-center justify-between px-4">
         <div className="flex w-full items-center gap-3">
@@ -31,7 +31,7 @@ const Token = (props: Props) => {
       <div className="w-full flex items-center justify-between mt-2">
         <div className="flex items-center py-[2px]  mt-3 rounded-lg border border-[#eeededd2] px-3 ml-4">
           <h1 className="font-bold text-success text-[17px] ">
-            91.<span className="text-[14px]">14</span>
+            91.<span className="text-[14px] font-semibold">14</span>
           </h1>
         </div>
         <div className="px-3 mt-3 w-fit rounded-md py-[4px] bg-[#8080804b] flex items-center mr-4">
