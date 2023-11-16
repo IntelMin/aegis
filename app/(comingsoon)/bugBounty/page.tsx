@@ -12,7 +12,7 @@ const BugBounty = (props: Props) => {
       <div className="py-4 px-5 w-full h-full flex flex-col gap-4">
         <Title title="Bug Bounty Leaderboard" />
         <TrendingCards />
-        <SecurityLeaderBoard />
+        <SecurityLeaderBoard search />
       </div>
     </NavbarWrapper>
   )

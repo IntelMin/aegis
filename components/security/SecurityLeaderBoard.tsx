@@ -92,6 +92,7 @@ const SecurityLeaderBoard = (props: Props) => {
           startContent={<SearchIcon />}
           value={filterValue}
           onClear={() => onClear()}
+          isDisabled={props.search ? true : false}
           onValueChange={onSearchChange}
         />
         <button
@@ -104,7 +105,7 @@ const SecurityLeaderBoard = (props: Props) => {
       <div className="p-2 relative">
         <button
           disabled
-          className="absolute top-1/2 left-1/2 w-[full] -translate-x-1/2 -translate-y-1/2 h-[full] z-[999] bg-[#215a21] rounded-lg p-3 px-6 flex items-center justify-center gap-4"
+          className="absolute top-1/2 left-1/2 w-[full] -translate-x-1/2 -translate-y-1/2 h-[full] z-[999] bg-gradient-to-r from-[#1a1a1ad0] via-[#383838] to-gray-700 rounded-lg p-3 px-6 flex items-center justify-center gap-4"
         >
           Exclusive Feature
           <AiOutlineLock />

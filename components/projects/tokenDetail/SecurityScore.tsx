@@ -8,15 +8,11 @@ type Props = {};
 const SecurityScore = (props: Props) => {
   return (
     <div
-      className="col-span-3 md:col-span-2 bg-[#2d2d2d8d] rounded-lg flex flex-col justify-between items-stretch h-full"
-      style={{
-        background:
-          "linear-gradient(47deg, rgba(13,21,11,1) 0%, rgba(53,59,46,1) 56%, rgba(36,93,71,1) 100%)",
-      }}
+      className="col-span-3 md:col-span-2 bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 rounded-lg flex flex-col justify-between items-stretch h-full"
     >
       <div className="px-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-[#3ab93a] font-bold text-[22px]">
+          <h1 className="text-[white] font-bold text-[22px]">
             Security Score
           </h1>
           <span className="text-[32px] font-[700]">#3</span>

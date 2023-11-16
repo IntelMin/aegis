@@ -93,7 +93,7 @@ const AuditDetail = (props: any) => {
           <p className="text-[12px] text-success">+11.35%</p>
         </div>
       </div>
-      <Card className="flex flex-col w-full col-span-3 mr-4 bg-opacity-50 rounded-lg md:w-1/2 md:col-span-2 justify-left">
+      <Card className="flex flex-col w-full col-span-3 bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 mr-4 bg-opacity-50 rounded-lg md:w-1/2 md:col-span-2 justify-left">
         <div className="p-2 pt-4 rounded-md glassCard">
           <div className="px-4">
             <div className="flex items-center justify-between">
@@ -107,8 +107,8 @@ const AuditDetail = (props: any) => {
         </div>
       </Card>
 
-      <Card className="w-full bg-opacity-50 md:w-1/3">
-        <div className="flex p-4 bg-red-500 rounded-md glassCard items-top">
+      <Card className="w-full bg-opacity-50 md:w-1/3 bg-gradient-to-tr from-[#191b1e] via-[#1b1b1bbd] to-gray-700">
+        <div className="flex p-4 rounded-md items-top">
           <span>
             <img
               className="mr-4"
@@ -116,7 +116,7 @@ const AuditDetail = (props: any) => {
             />
           </span>
 
-          <div className="w-full">
+          <div className="w-full bg-transparent">
             Audit Details
             <p className="justify-end mt-4 text-4xl font-bold"></p>
             <p className="text-[13px]">

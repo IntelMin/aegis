@@ -29,22 +29,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-//   return (
-//     <html lang="en" suppressHydrationWarning>
-//       <head />
-//       <body
-//         className={clsx(
-//           "min-h-screen bg-background font-sans antialiased",
-//           fontSans.variable
-//         )}
-//       >
-//         <NextTopLoader color="#245d47" />
-//         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-//           <Layout>{children}</Layout>
-//         </Providers>
-//       </body>
-//     </html>
-//   );
+  // return (
+  //   <html lang="en" suppressHydrationWarning>
+  //     <head />
+  //     <body
+  //       className={clsx(
+  //         "min-h-screen bg-black font-sans antialiased",
+  //         fontSans.variable
+  //       )}
+  //     >
+  //       <NextTopLoader color="#b0b0b0" />
+  //       <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+  //         <Layout>{children}</Layout>
+  //       </Providers>
+  //     </body>
+  //   </html>
+  // );
 
   return (
     <html lang="en" suppressHydrationWarning>

@@ -15,11 +15,11 @@ const GoToOtherType = (props: Props) => {
       style={{
         backgroundColor: "#1414149e",
         backgroundImage:
-          "linear-gradient(220deg, rgb(87, 87, 87) 0%, rgba(9, 9, 9, 0) 20%, rgba(9, 9, 9, 0) 100%)",
+          "linear-gradient(220deg, rgb(87, 87, 87) 0%, rgba(9, 9, 9, 0) 40%, rgba(9, 9, 9, 0) 100%)",
       }}
     >
       <Image alt="imageType" src={`/${props?.iconName ? props.iconName : "code"}.gif`} width={120} height={120} />
-      <Link href={`/${props?.pathName ? props?.pathName : 'codeAudit'}`} className="bg-[#51a757] p-2 rounded-lg">
+      <Link href={`/${props?.pathName ? props?.pathName : 'codeAudit'}`} className="bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700 p-2 rounded-lg">
         Go To {props?.btnName ? props?.btnName : "Code"} Audit
       </Link>
     </div>

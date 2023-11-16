@@ -80,7 +80,7 @@ const CodeAuditForm = (props: Props) => {
             </div>
             <Button
               onClick={handleSubmit}
-              className="p-2 mb-4 text-white bg-[#1ac260a5] rounded"
+              className="p-2 mb-4 text-white bg-gradient-to-r from-[#141414] via-[#14141496] to-gray-700 rounded"
             >
               Audit your code
             </Button>

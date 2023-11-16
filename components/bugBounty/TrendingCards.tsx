@@ -2,7 +2,9 @@ import React from "react";
 import Title from "../title";
 import BountyCard from "./bountyCard";
 
-type Props = {};
+type Props = {
+  noBlur?: boolean
+};
 
 const TrendingCards = (props: Props) => {
   return (
@@ -16,6 +18,7 @@ const TrendingCards = (props: Props) => {
           lastUpdated="Aug 23"
           assests="1"
           imgUrl="/webmix.jpeg"
+          noBlur={props?.noBlur}
         />
         <BountyCard
           name="Decimal"
@@ -24,6 +27,7 @@ const TrendingCards = (props: Props) => {
           lastUpdated="Sept 19"
           assests="1"
           imgUrl="/decimal.jpeg"
+          noBlur={props?.noBlur}
         />
       </div>
     </div>

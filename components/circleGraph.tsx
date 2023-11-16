@@ -52,14 +52,14 @@ const CircleGraph = () => {
           name: {
             offsetY: -10,
             show: true,
-            color: "#66ffe8",
+            color: "#dbd9d9",
             fontSize: "17px",
           },
           value: {
             formatter: function (val: any) {
               return parseInt(val).toString();
             },
-            color: "#66ffe8",
+            color: "#dbd9d9",
             fontSize: "36px",
             show: true,
           },
@@ -72,7 +72,7 @@ const CircleGraph = () => {
         shade: "dark",
         type: "horizontal",
         shadeIntensity: 0.5,
-        gradientToColors: ["#ABE5A1"],
+        gradientToColors: ["#dbd9d9"],
         inverseColors: true,
         opacityFrom: 1,
         opacityTo: 1,
