@@ -48,7 +48,7 @@ const AddressAuditForm = (props: Props) => {
             errorMessage={error || ""}
           />
           <div className="flex justify-start w-full">
-            <Button type="submit" className="bg-[#1ac260a5]">
+            <Button type="submit" className="bg-gradient-to-r from-[#141414] via-[#14141496] to-gray-700">
               Submit
             </Button>
           </div>

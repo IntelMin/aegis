@@ -23,7 +23,7 @@ const AuditReport = (props: Props) => {
         overflow: "hidden",
         backdropFilter: "blur(30px)",
         boxShadow: "0px -10px 15px rgba(0, 0, 0, 0.1) inset",
-        background: `linear-gradient(to top, #37693a 0%, rgb(0 0 0 / 70%) 70%);`,
+        background: `linear-gradient(to top, #414141 0%, #000000 70%);`,
       }}
     >
       <div className="flex items-center justify-between">

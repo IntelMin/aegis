@@ -135,7 +135,7 @@ const ProjectPage = (props: Props) => {
         variant="bordered"
         className="flex items-center justify-center w-full gap-4 md:py-4 md:px-5"
       >
-        <Tab key="overview" title="Overview">
+        <Tab key="overview" title="Overview" >
           <AuditDetail {...infoData} />
           <CodeSecurity />
         </Tab>

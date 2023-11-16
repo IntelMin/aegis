@@ -11,7 +11,7 @@ const CodeSecurity = (props: Props) => {
     <div className="mt-3 rounded-lg">
       <div className="flex flex-col justify-start gap-2 md:flex-row md:justify-between md:items-center">
         <Title title="Code Security" icon={false} /> 
-        <p className="text-[14px] text-success-400 font-semibold">
+        <p className="text-[14px] text-[#b0b0b0] font-semibold">
             Last Audit: 8th Oct, 2023
           </p>
       </div>

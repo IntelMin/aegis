@@ -29,16 +29,10 @@ const TokenHeader = (props: any) => {
           <IoIosArrowRoundBack className="text-[28px] cursor-pointer md:hidden block ml-2" />
         </Link>
         <Title title={props?.name} icon iconName={props?.icon_url} />
-        <Chip
-          color="success"
-          className=" rounded-lg py-[3px] px-[6px] text-[12px] font-bold uppercase"
-        >
+        <Chip className=" rounded-lg py-[3px] px-[6px] text-[12px] font-bold uppercase bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
           {props.symbol}
         </Chip>
-        <Chip
-          color="success"
-          className="rounded-lg py-[3px] px-[6px] text-[12px] font-bold"
-        >
+        <Chip className="rounded-lg py-[3px] px-[6px] text-[12px] font-bold bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
           {props.type}
         </Chip>
       </div>

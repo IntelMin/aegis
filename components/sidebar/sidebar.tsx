@@ -41,7 +41,7 @@ export const SidebarWrapper = () => {
                 isActive={pathname === "/codeAudit"}
                 title="Code Audit"
                 icon={
-                  <GiStabbedNote className="text-[#969696] text-[22px] ml-[2px]" />
+                  <GiStabbedNote className="text-[#c5c5c5] text-[22px] ml-[2px]" />
                 }
                 href="/codeAudit"
               />
@@ -50,7 +50,7 @@ export const SidebarWrapper = () => {
                 isActive={pathname === "/addressAudit"}
                 title="Token Audit"
                 icon={
-                  <GiToken className="text-[#969696] text-[22px] ml-[2px]" />
+                  <GiToken className="text-[#c5c5c5] text-[22px] ml-[2px]" />
                 }
                 href="/addressAudit"
               />
@@ -60,7 +60,7 @@ export const SidebarWrapper = () => {
                 isActive={pathname === "/liveMonitoring"}
                 title="Live Monitoring"
                 icon={
-                  <LuTable className="text-[#969696] text-[22px] ml-[2px]" />
+                  <LuTable className="text-[#c5c5c5] text-[22px] ml-[2px]" />
                 }
                 href="/liveMonitoring"
               />
@@ -68,7 +68,7 @@ export const SidebarWrapper = () => {
                 isActive={pathname === "/security"}
                 title="Security Score"
                 icon={
-                  <MdSecurity className="text-[#969696] text-[22px] ml-[2px]" />
+                  <MdSecurity className="text-[#c5c5c5] text-[22px] ml-[2px]" />
                 }
                 href="/security"
               />
@@ -76,7 +76,7 @@ export const SidebarWrapper = () => {
                 isActive={pathname === "/bugBounty"}
                 title="Bug Bounty"
                 icon={
-                  <TbTargetArrow className="text-[#969696] text-[22px] ml-[2px]" />
+                  <TbTargetArrow className="text-[#c5c5c5] text-[22px] ml-[2px]" />
                 }
                 href="/bugBounty"
               />
