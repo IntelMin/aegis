@@ -12,7 +12,7 @@ type Props = {
 
 const BountyCard = (props: Props) => {
   return (
-    <div className="p-3 bg-[#80808058] rounded-lg col-span-1">
+    <div className="p-3 blur-[2px] bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 rounded-lg col-span-1">
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <Image
@@ -25,7 +25,7 @@ const BountyCard = (props: Props) => {
           <h2 className="font-[600] uppercase text-[20px]">{props?.name}</h2>
         </div>
         <div>
-          <h1 className="bg-[#0080005a] px-2 py-[5px] rounded-md w-fit font-bold">
+          <h1 className="bg-[#6d6c6c5a] px-2 py-[5px] rounded-md w-fit font-bold">
             {props?.security}
           </h1>
         </div>
@@ -38,7 +38,7 @@ const BountyCard = (props: Props) => {
             Last Updated <span className="font-semibold">{props?.lastUpdated}</span>
           </h1>
         </div>
-        <div className="flex gap-2 items-center bg-[#779d7755] p-2 rounded-md">
+        <div className="flex gap-2 items-center text-success-foreground p-2 rounded-md">
           <h1 className="text-[14px]">Assets</h1>
           <p className="text-[16px] font-semibold">{props?.assests}</p>
         </div>
