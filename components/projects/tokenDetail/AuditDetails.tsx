@@ -4,6 +4,7 @@ import React from "react";
 import CircleGraph from "@/components/circleGraph";
 import RadialChart from "@/components/radialChart";
 import { Card } from "@nextui-org/react";
+import { RiPagesLine } from "react-icons/ri";
 
 type Props = {
   name: string;
@@ -110,10 +111,7 @@ const AuditDetail = (props: any) => {
       <Card className="w-full bg-opacity-50 md:w-1/3 bg-gradient-to-tr from-[#191b1e] via-[#1b1b1bbd] to-gray-700">
         <div className="flex p-4 rounded-md items-top">
           <span>
-            <img
-              className="mr-4"
-              src="https://bankco-next.vercel.app/_next/static/media/total-earn.c13de7d2.svg"
-            />
+          <RiPagesLine className="text-white mr-1  mt-1 text-xl"/>
           </span>
 
           <div className="w-full bg-transparent">

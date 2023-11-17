@@ -32,7 +32,7 @@ const RadialChart = () => {
         },
       },
     },
-    colors: ['#1aeae0', '#00d1ab', '#00ac81', '#008a71', '#005243'],
+    colors: ['#f2f2f2', '#d9d9d9', '#bfbfbf', '#808080', '#404040'],
     labels: ['Health', 'Security', 'Strength', 'Stability', 'Trust'],
     legend: {
       show: true,

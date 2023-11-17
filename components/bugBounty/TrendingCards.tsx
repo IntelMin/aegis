@@ -29,6 +29,15 @@ const TrendingCards = (props: Props) => {
           imgUrl="/decimal.jpeg"
           noBlur={props?.noBlur}
         />
+        <BountyCard
+          name="Decimal"
+          security="92.02"
+          maxReward="$100,000"
+          lastUpdated="Sept 19"
+          assests="1"
+          imgUrl="/decimal.jpeg"
+          noBlur={props?.noBlur}
+        />
       </div>
     </div>
   );
