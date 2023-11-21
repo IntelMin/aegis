@@ -49,7 +49,7 @@ const ProjectPage = (props: Props) => {
   const [functionTableData, setFunctionTableData] = useState<DataProps | null>(
     null
   );
-  const [dependencyData, setDependencyData] = useState(null);
+  const [dependencyData, setDependencyData] = useState<any>([null]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const ProjectPage = (props: Props) => {
       >
         <Tab key="overview" title="Overview" >
           <AuditDetail {...infoData} />
-          <CodeSecurity />
+          <CodeSecurity {...infoData} />
         </Tab>
         <Tab key="code" title="Code">
           <CodeViewer {...codeData as any } />

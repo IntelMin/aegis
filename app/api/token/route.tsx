@@ -1,20 +1,31 @@
 import { NextResponse } from "next/server";
 const { AEGIS_SRV } = process.env;
 
-type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies" | "rugpull";
+type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies" | "rugpull" | "token_security";
 
 type Handlers = {
   [key in DataType]: (address: string) => Promise<Response>;
 };
 
 async function fetchTokenInfo(address: string) {
-  console.log("fetchTokenInfo");
-  const url = `https://eth.blockscout.com/api/v2/tokens/${address}`;
+  // console.log("fetchTokenInfo");
+  // const url = `https://eth.blockscout.com/api/v2/tokens/${address}`;
+  // // return fetchAndRespond(url);
+
+  console.log("fetchTokenCode");
+  // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+  const url = `http://${AEGIS_SRV}/info/${address}`;
+
   return fetchAndRespond(url);
 }
 
 async function fetchTokenStats(address: string) {
   const url = `https://eth.blockscout.com/api/v2/tokens/${address}/stats`;
+  return fetchAndRespond(url);
+}
+
+async function fetchTokenSecurity(address: string) {
+  const url = `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`;
   return fetchAndRespond(url);
 }
 
@@ -96,6 +107,7 @@ export async function POST(req: Request, res: NextResponse) {
     functions: fetchTokenFunctions,
     dependencies: fetchDependencies,
     rugpull: fetchRugpull,
+    token_security: fetchTokenSecurity,
   };
 
   const handler = handlers[data.type as DataType];

@@ -18,35 +18,43 @@ type Props = {
   type: string;
 };
 
-const AuditDetail = (props: any) => {
-  const formatLargeNumber = (numberStr: string) => {
-    let [integerPart, fractionalPart] = numberStr.split('.');
-    fractionalPart = fractionalPart || '0';
-    const shift = fractionalPart.length;
-    const shiftedNumberStr = integerPart + fractionalPart;
-    const number = BigInt(shiftedNumberStr); // This is now a whole number
-  
-    const scales = [
-      { value: BigInt(1e3), symbol: "thousand" },
-      { value: BigInt(1e6), symbol: "million" },
-      { value: BigInt(1e9), symbol: "billion" },
-      { value: BigInt(1e12), symbol: "trillion" },
-      { value: BigInt(1e15), symbol: "quadrillion" },
-      { value: BigInt(1e18), symbol: "quintillion" },
-      { value: BigInt(1e21), symbol: "sextillion" },
-      { value: BigInt(1e24), symbol: "septillion" },
-    ];
+const formatLargeNumber = (numberStr: string) => {
 
-    for (let i = scales.length - 1; i >= 0; i--) {
-      const scale = scales[i];
-      if (number >= scale.value * BigInt(10 ** shift)) {
-        const scaledNumber = number / (scale.value * BigInt(10 ** shift));
-        return `${scaledNumber.toString()} ${scale.symbol}`;
-      }
-    }
-    
-    return numberStr;
+  if (typeof numberStr !== 'string') {
+    // Return a default value or handle the error
+    return '0'; // or any other default/fallback value
   }
+    
+  let [integerPart, fractionalPart] = numberStr.split(".");
+  fractionalPart = fractionalPart || "0";
+  const shift = fractionalPart.length;
+  const shiftedNumberStr = integerPart + fractionalPart;
+  const number = BigInt(shiftedNumberStr); // This is now a whole number
+
+  const scales = [
+    { value: BigInt(1e3), symbol: "thousand" },
+    { value: BigInt(1e6), symbol: "million" },
+    { value: BigInt(1e9), symbol: "billion" },
+    { value: BigInt(1e12), symbol: "trillion" },
+    { value: BigInt(1e15), symbol: "quadrillion" },
+    { value: BigInt(1e18), symbol: "quintillion" },
+    { value: BigInt(1e21), symbol: "sextillion" },
+    { value: BigInt(1e24), symbol: "septillion" },
+  ];
+
+  for (let i = scales.length - 1; i >= 0; i--) {
+    const scale = scales[i];
+    if (number >= scale.value * BigInt(10 ** shift)) {
+      const scaledNumber = number / (scale.value * BigInt(10 ** shift));
+      return `${scaledNumber.toString()} ${scale.symbol}`;
+    }
+  }
+
+  return numberStr;
+};
+
+const AuditDetail = (props: any) => {
+
 
   const total_supply = formatLargeNumber(props.total_supply);
   const market_cap = formatLargeNumber(props.circulating_market_cap);

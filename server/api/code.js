@@ -215,11 +215,12 @@ async function getFindings(codeSegments) {
 
     const chatCompletion = await getFinding(segment);
 
-    console.log(chatCompletion);
+    // console.log(chatCompletion);
 
     try {
       // Attempt to parse the chatCompletion
       const parsedData = JSON.parse(chatCompletion);
+      console.log("Code segment: ", segment);
       console.log("Valid JSON:", parsedData);
 
       findings.push(parsedData);

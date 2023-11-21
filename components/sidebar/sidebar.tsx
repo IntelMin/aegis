@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { GiStabbedNote, GiToken } from "react-icons/gi";
 import { MdSecurity } from "react-icons/md";
-import { LuTable } from "react-icons/lu";
+import { LuTable, LuRocket } from "react-icons/lu";
 import { TbTargetArrow } from "react-icons/tb";
 import { HomeIcon } from "../icons/sidebar/home-icon";
 import { useSidebarContext } from "../layout/layout-context";
@@ -22,11 +22,14 @@ export const SidebarWrapper = () => {
       <div
         className={Sidebar({
           collapsed: collapsed,
-        }, )}
+        })}
       >
         <div className={Sidebar.Header()}>
-            <img className="h-[70px] mx-auto" src="/aegis-logo.png" alt="AEGIS AI"  />
-            
+          <img
+            className="h-[70px] mx-auto"
+            src="/aegis-logo.png"
+            alt="AEGIS AI"
+          />
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
@@ -56,6 +59,14 @@ export const SidebarWrapper = () => {
               />
             </SidebarMenu>
             <SidebarMenu title="Leaderboards">
+              <SidebarItem
+                isActive={pathname === "/trending"}
+                title="Trending"
+                icon={
+                  <LuRocket className="text-[#c5c5c5] text-[22px] ml-[2px]" />
+                }
+                href="/trending"
+              />
               <SidebarItem
                 isActive={pathname === "/liveMonitoring"}
                 title="Live Monitoring"
