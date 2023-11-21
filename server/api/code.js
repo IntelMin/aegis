@@ -271,7 +271,7 @@ router.get("/:address", async (req, res) => {
       generateTree,
       source_code
     );
-    console.log("treeJson: ", treeJson);
+    // console.log("treeJson: ", treeJson);
 
     let codeSegments = parseSolidity(source_code);
     // console.log("codeSegments: ", codeSegments);
