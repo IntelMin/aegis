@@ -137,7 +137,7 @@ const ProjectPage = (props: Props) => {
       >
         <Tab key="overview" title="Overview" >
           <AuditDetail {...infoData} />
-          <CodeSecurity {...infoData} />
+          {/* <CodeSecurity {...infoData} /> */}
         </Tab>
         <Tab key="code" title="Code">
           <CodeViewer {...codeData as any } />

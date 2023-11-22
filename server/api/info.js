@@ -16,7 +16,7 @@ async function apiRequest(url, params) {
 
 const path = require("path");
 const { get } = require("http");
-const expiry = 600000; // 10 minutes in milliseconds
+const expiry = 3600000; // 10 minutes in milliseconds
 
 async function fetchAndCacheData(type, endpoint, address) {
   const filename = path.join(__dirname, `../data/${address}/${type}.json`);
@@ -34,6 +34,11 @@ async function fetchAndCacheData(type, endpoint, address) {
     const response_data = await apiRequest(endpoint, request_data);
 
     console.log(`Fetched ${type} from API: `, response_data);
+
+    // don't cache if there is no data
+    if (!response_data) {
+      return null;
+    }
 
     const data = {
       time: currentTime,
@@ -130,6 +135,7 @@ router.get("/:address", async (req, res) => {
       `https://eth.blockscout.com/api/v2/tokens/${address}`,
       address
     );
+
     // const token_stats = await fetchAndCacheData("stats", `https://eth.blockscout.com/api/v2/tokens/${address}/stats`, address);
     const token_security = await fetchAndCacheData(
       "security",
@@ -144,12 +150,12 @@ router.get("/:address", async (req, res) => {
 
     const metadata = await getMetadata(address);
 
-    console.log("metadata: ", metadata);
+    const keys = Object.keys(token_security.result);
+    const parse_security = token_security.result[keys[0]];
+    let parse_rugpull = token_rugpull["result"];
+    let parse_meta = metadata["tokens"][0];
 
-    parse_security = token_security["result"][address];
-    parse_rugpull = token_rugpull["result"];
-    parse_meta = metadata["tokens"][0];
-
+    console.log("Security: ", parse_security);
 
     const responseData = {
       token: token_info,

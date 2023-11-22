@@ -14,7 +14,7 @@ async function fetchTokenInfo(address: string) {
 
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/info/${address}`;
+  const url = `http://${AEGIS_SRV}/info/${address}?_=${new Date().getTime()}`;
 
   return fetchAndRespond(url);
 }

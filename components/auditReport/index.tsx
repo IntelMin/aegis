@@ -1,9 +1,9 @@
 import React from "react";
 import Title from "../title";
 import { AiOutlineLock } from "react-icons/ai";
+import { LuCoins, LuFile } from "react-icons/lu";
 
 type Props = {};
-
 
 const AuditReport = (props: Props) => {
   function shortenText(text: string) {
@@ -14,7 +14,7 @@ const AuditReport = (props: Props) => {
     }
   }
   const originalAudit =
-  "A comprehensive audit report that includes a detailed analysis of the code, a list of all the vulnerabilities found, and recommendations on how to fix them.";
+    "A comprehensive audit report that includes a detailed analysis of the code, a list of all the vulnerabilities found, and recommendations on how to fix them.";
 
   return (
     <div
@@ -27,7 +27,10 @@ const AuditReport = (props: Props) => {
       }}
     >
       <div className="flex items-center justify-between">
-        <Title title="AI Audit Report" icon iconName="report" />
+        <h1 className="text-[20px] font-semibold text-[#e3e1e1] w-fit flex items-center gap-3">
+          <LuFile className="text-[#c5c5c5] text-[22px] ml-[2px]" />
+          Audit Report
+        </h1>
       </div>
       <div className="py-4">
         <p>{shortenText(originalAudit)}</p>

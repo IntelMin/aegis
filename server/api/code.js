@@ -175,7 +175,7 @@ async function getFinding(code) {
         role: "system",
         content: `For the provided code segment provided above, report any vulnerabilities found in JSON format.
 
-        If no vulnerabilities are found, return a json object with the following format:
+        Important: if there are no vulnerabilities are found, return a json object with the following format:
         {
           "status": "None",
         }
@@ -287,10 +287,36 @@ router.get("/:address", async (req, res) => {
 
     // console.log(findingsJson);
 
+    // remove abi, constructor_args, 
+
+    const solidity = filedata;
+    delete solidity["abi"];
+    delete solidity["creation_bytecode"];
+    delete solidity["source_code"];
+    delete solidity["deployed_bytecode"];
+    delete solidity["decoded_constructor_args"];
+    delete solidity["sourcify_repo_url"];
+    
+    // "additional_sources": [
+    //   {
+    //     "file_path": "contracts/Dependencies/CheckContract.sol",
+    //     "source_code": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.6.11;\n\n\ncontract CheckContract {\n    /**\n     * Check that the account is an already deployed non-destroyed contract.\n     * See: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Address.sol#L12\n     */\n    function checkContract(address _account) internal view {\n        require(_account != address(0), \"Account cannot be zero address\");\n\n        uint256 size;\n        // solhint-disable-next-line no-inline-assembly\n        assembly { size := extcodesize(_account) }\n        require(size > 0, \"Account code size cannot be zero\");\n    }\n}\n"
+    //   },
+
+    const files = []
+    for (let i = 0; i < solidity["additional_sources"].length; i++) {
+      files.push(solidity["additional_sources"][i]["file_path"])
+    }
+
+    delete solidity["additional_sources"];
+
+
     res.status(200).send({
       tree: treeJson,
       code: source_code,
       findings: findings,
+      files: files,
+      solidity: solidity,
     });
   } catch (error) {
     console.log("Error: ", error);

@@ -22,7 +22,7 @@ const TokenHeader = (props: any) => {
   console.log("TokenHeader");
   console.log(props);
   
-  const data = props.token;
+  const data = props.metadata;
 
   return (
     <div className="flex flex-wrap justify-between w-full gap-3 md:absolute top-[22px] left-[25px] ">
@@ -30,12 +30,12 @@ const TokenHeader = (props: any) => {
         <Link href="/codeAudit">
           <IoIosArrowRoundBack className="text-[28px] cursor-pointer md:hidden block ml-2" />
         </Link>
-        <Title title={data?.name} icon iconName={data?.icon_url} />
+        <Title title={data?.info.name} icon iconName={data?.info.imageThumbUrl} />
         <Chip className=" rounded-lg py-[3px] px-[6px] text-[12px] font-bold uppercase bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
-          {data.symbol}
+          {data.info.symbol}
         </Chip>
         <Chip className="rounded-lg py-[3px] px-[6px] text-[12px] font-bold bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
-          {data.type}
+          {data.explorerData.tokenType}
         </Chip>
       </div>
     </div>
