@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { Input, Button } from "@nextui-org/react";
 import { BsFillSendFill } from "react-icons/bs";
 import axios from "axios";
+
+const { AEGIS_SRV } = process.env;
+
 const editorOptions = {
   minimap: {
     enabled: true,
@@ -17,29 +20,27 @@ const editorOptions = {
 
 const Deployer = () => {
   const [code, setCode] = useState('');
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState();
   const [prompt, setPrompt] = useState('');
 
   useEffect(() => {
-    axios.get('/deployer/code')
+    axios.get(`http://${AEGIS_SRV}/deployer/code`)
       .then(response => {
         setCode(response.data.code);
         setStatus(response.data.status);
       });
   }, []);
-  const handleSend = () => {
-    axios.post('/deployer/update-code', { prompt })
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((e) => {
+    e.preventDefault()
+
+    axios.post(`http://${AEGIS_SRV}/deployer/update-code`, { prompt, code })
       .then(response => {
         setCode(response.data.code);
         setStatus(response.data.status);
       });
-  };
+  }, [prompt, code])
 
-  const handleKeyPress = (event:any) => {
-    if (event.key === 'Enter') {
-      handleSend();
-    }
-  };
   return (
     <div className="grid grid-rows-1 grid-cols-[1fr,auto] gap-4 h-full">
       <div className="grid grid-rows-[1fr,auto] gap-4">
@@ -49,26 +50,35 @@ const Deployer = () => {
           language="solidity"
           defaultLanguage="javascript"
           defaultValue=""
-          code = {code}
+          value={code}
           options={editorOptions}
         />
         <div className="grid grid-rows-[1fr,auto] h-64 p-2 gap-2 rounded-md bg-zinc-700">
           <div></div>
-          <Input
-            size="sm"
-            value={prompt}
-            onChange={e => setPrompt(e.target.value)}
-            onKeyDown={handleKeyPress}
-            endContent={
-              <Button color="primary" variant="light" size="sm" isIconOnly onClick={handleSend}>
-                <BsFillSendFill />
-              </Button>  
-            }
-          />
+          <form onSubmit={handleSubmit}>
+            <Input
+              size="sm"
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+              endContent={
+                <Button
+                  color="primary"
+                  variant="light"
+                  size="sm"
+                  isIconOnly
+                  type="submit"
+                >
+                  <BsFillSendFill />
+                </Button>  
+              }
+            />
+          </form>
         </div>
       </div>
       <div className="grid grid-rows-[1fr,auto] gap-4">
-        <div className="p-4 rounded-md bg-zinc-700">s</div>
+        <div className="p-4 rounded-md bg-zinc-700">
+          {JSON.stringify(status)}
+        </div>
         <Button className="w-64">Deploy</Button>
       </div>
     </div>
