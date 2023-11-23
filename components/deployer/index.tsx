@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { Input, Button } from "@nextui-org/react";
 import { BsFillSendFill } from "react-icons/bs";
 import axios from "axios";
 
-const { AEGIS_SRV } = process.env;
+const AEGIS_SRV = 'localhost:9898' // process.env.AEGIS_SRV
 
 const editorOptions = {
   minimap: {
     enabled: true,
   },
-  readonly:true,
+  readOnly: true,
   fontSize: 14,
   cursorStyle: "block",
   wordWrap: "on",
@@ -20,8 +20,10 @@ const editorOptions = {
 
 const Deployer = () => {
   const [code, setCode] = useState('');
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState<Record<string, string>>({});
   const [prompt, setPrompt] = useState('');
+  const [history, setHistory] = useState<string[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     axios.get(`http://${AEGIS_SRV}/deployer/code`)
@@ -34,11 +36,20 @@ const Deployer = () => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((e) => {
     e.preventDefault()
 
+    if (!prompt) {
+      return
+    }
+
     axios.post(`http://${AEGIS_SRV}/deployer/update-code`, { prompt, code })
       .then(response => {
         setCode(response.data.code);
         setStatus(response.data.status);
       });
+
+    setHistory(prev => prev.concat(prompt))
+    setPrompt('')
+
+    inputRef.current?.focus()
   }, [prompt, code])
 
   return (
@@ -54,11 +65,16 @@ const Deployer = () => {
           options={editorOptions}
         />
         <div className="grid grid-rows-[1fr,auto] h-64 p-2 gap-2 rounded-md bg-zinc-700">
-          <div></div>
+          <div>
+            {history.map((chat, key) => (
+              <p key={key}>{chat}</p>
+            ))}
+          </div>
           <form onSubmit={handleSubmit}>
             <Input
               size="sm"
               value={prompt}
+              ref={inputRef}
               onChange={e => setPrompt(e.target.value)}
               endContent={
                 <Button
@@ -77,7 +93,12 @@ const Deployer = () => {
       </div>
       <div className="grid grid-rows-[1fr,auto] gap-4">
         <div className="p-4 rounded-md bg-zinc-700">
-          {JSON.stringify(status)}
+          {Object.keys(status).map(key => (
+            <div key={key} className="mb-4">
+              <p className="text-gray-500">{key}</p>
+              <p className="text-white">{status[key]}</p>
+            </div>
+          ))}
         </div>
         <Button className="w-64">Deploy</Button>
       </div>
