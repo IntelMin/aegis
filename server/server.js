@@ -7,6 +7,7 @@ const describeRoute = require('./api/describe');
 const markdownRoute = require('./api/markdown');
 const dependencyRoute = require('./api/dependencies');
 const codeRoute = require('./api/code');
+const dashboardRoute = require('./api/dashboard');
 
 const trendingTokens = require('./api/trending');
 // const graphRoute = require('./routes/graph');
@@ -16,6 +17,7 @@ app.use('/describe', describeRoute);
 app.use('/markdown', markdownRoute);
 app.use('/dependency', dependencyRoute);
 app.use('/code', codeRoute);
+app.use('/dashboard', dashboardRoute);
 
 app.use('/trending', trendingTokens);
 // app.use('/graph', graphRoute);
