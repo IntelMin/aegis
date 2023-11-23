@@ -5,7 +5,7 @@ import Title from "@/components/title";
 
 type Props = {};
 
-const Security = (props: Props) => {
+const DeployerPage = (props: Props) => {
   return (
     <NavbarWrapper pageTitle={<div></div>}>
       <div className="py-4 px-5 w-full h-full flex flex-col gap-4">
@@ -16,4 +16,4 @@ const Security = (props: Props) => {
   );
 };
 
-export default Security;
+export default DeployerPage;
