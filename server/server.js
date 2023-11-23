@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser')
 const port = 9898;
 
 const infoRoute = require('./api/info');
@@ -12,6 +13,12 @@ const dashboardRoute = require('./api/dashboard');
 
 const trendingTokens = require('./api/trending');
 // const graphRoute = require('./routes/graph');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use('/info', infoRoute);
 app.use('/describe', describeRoute);
