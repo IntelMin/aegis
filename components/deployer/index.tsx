@@ -16,6 +16,7 @@ const editorOptions = {
 }
 
 const Deployer = () => {
+  const [address, setAddress] = useState('');
   const [code, setCode] = useState('');
   const [status, setStatus] = useState({});
   const [prompt, setPrompt] = useState('');
@@ -38,6 +39,17 @@ const Deployer = () => {
   const handleKeyPress = (event:any) => {
     if (event.key === 'Enter') {
       handleSend();
+    }
+  };
+  const handleDeploy = async () => {
+    try {
+      const response = await axios.post('/deployer/deploy');
+      setAddress(response.data.address)
+      // setModalContent(`Contract deployed at address: ${response.data.address}`);
+      // setIsModalOpen(true);
+    } catch (error) {
+      // setModalContent('Failed to deploy contract');
+      // setIsModalOpen(true);
     }
   };
   return (
@@ -69,7 +81,7 @@ const Deployer = () => {
       </div>
       <div className="grid grid-rows-[1fr,auto] gap-4">
         <div className="p-4 rounded-md bg-zinc-700">s</div>
-        <Button className="w-64">Deploy</Button>
+        <Button className="w-64" onClick={handleDeploy} >Deploy</Button>
       </div>
     </div>
   )
