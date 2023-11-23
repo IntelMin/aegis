@@ -21,9 +21,9 @@ const calculateStats = () => {
     stats.audits = directories.length;
 
     directories.forEach(dir => {
-        const findingsPath = path.join(__dirname,`../data/${dir}/findings.json`);
-        const treePath = path.join(__dirname,`../data/${dir}/tree.json`);
-        const securityPath = path.join(__dirname,`../data/${dir}/security.json`);
+        const findingsPath = path.join(__dirname,`/../data/${dir}/findings.json`);
+        const treePath = path.join(__dirname,`/../data/${dir}/tree.json`);
+        const securityPath = path.join(__dirname,`/../data/${dir}/security.json`);
         console.log(findingsPath);
         if (fs.existsSync(findingsPath)) {
 
