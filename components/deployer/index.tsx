@@ -4,9 +4,13 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { Input, Button } from "@nextui-org/react";
 import { BsFillSendFill } from "react-icons/bs";
+import * as ethers from "ethers"
 import axios from "axios";
 
 const AEGIS_SRV = 'localhost:9898' // process.env.AEGIS_SRV
+
+// TODO: connect metamask and send tx using byte code to deploy
+// TODO: button caption change
 
 const editorOptions = {
   minimap: {
@@ -55,8 +59,10 @@ const Deployer = () => {
 
   const handleDeployClick = useCallback(() => {
     try {
-      const response = axios.post(`http://${AEGIS_SRV}/deployer/deploy`);
-      setAddress(response.data.address)
+      const response = axios.post(`http://${AEGIS_SRV}/deployer/compile`, { code })
+        .then(response => {
+          response.bytecode
+        })
       // setModalContent(`Contract deployed at address: ${response.data.address}`);
       // setIsModalOpen(true);
     } catch (error) {
