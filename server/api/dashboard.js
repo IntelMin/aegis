@@ -50,7 +50,7 @@ const calculateStats = () => {
 
 cron.schedule('0 * * * *', calculateStats);
 
-router.get('/:address', (req, res) => {
+router.get('/', (req, res) => {
     const stats = statsCache.get('stats');
 
     if (stats === undefined) {
