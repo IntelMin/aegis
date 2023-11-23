@@ -5,6 +5,14 @@ const solc = require('solc');
 
 const router = express.Router();
 
+const getStatus = (code) => {
+  return {
+    name: 'ABC',
+    symbol: 'SYM',
+    supply: 10000
+  }
+}
+
 router.post('/compile', (req, res) => {
   const input = {
     language: 'Solidity',
@@ -28,7 +36,10 @@ router.post('/compile', (req, res) => {
 });
 
 router.get('/code', (req, res) => {
-  res.status(200).json({ main })
+  res.status(200).json({
+    code: main,
+    status: getStatus(main)
+  })
 });
 
 module.exports = router;

@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
+const cors = require('cors')
+
 const port = 9898;
 
 const infoRoute = require('./api/info');
@@ -13,6 +15,8 @@ const dashboardRoute = require('./api/dashboard');
 
 const trendingTokens = require('./api/trending');
 // const graphRoute = require('./routes/graph');
+
+app.use(cors())
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
