@@ -16,7 +16,7 @@ const BountyCard = (props: Props) => {
     <div
       className={`p-3 ${
         props.noBlur ? "" : "blur-[2px]"
-      } bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 rounded-lg col-span-1`}
+      } bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 rounded-lg col-span-3 md:col-span-1 relative`}
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
@@ -51,6 +51,7 @@ const BountyCard = (props: Props) => {
           <p className="text-[16px] font-semibold">{props?.assests}</p>
         </div>
       </div>
+      <div className="absolute top-0 left-0 w-full h-full rounded-lg z-[99]" />
     </div>
   );
 };

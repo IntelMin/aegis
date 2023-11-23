@@ -64,7 +64,7 @@ const LiveMetric = (props: any) => {
           <TableColumn>AUDIT</TableColumn>
         </TableHeader>
         <TableBody>
-          {tokens.map((item: any, i: any) => {
+          {tokens?.slice(0, props.dash ? 4 : tokens.length)?.map((item: any, i: any) => {
             const selectedToken =
               item.newToken === "token0" ? item.token0 : item.token1;
 
