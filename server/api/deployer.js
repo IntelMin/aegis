@@ -1,6 +1,6 @@
 const express = require('express');
-const code = require('../constants/code');
-const dependencies = require('../constants/dependencies');
+const main = require('../codes/main');
+const dependencies = require('../codes/dependencies');
 const solc = require('solc');
 
 const router = express.Router();
@@ -28,7 +28,7 @@ router.post('/compile', (req, res) => {
 });
 
 router.get('/code', (req, res) => {
-  res.status(200).json({ code })
+  res.status(200).json({ main })
 });
 
 module.exports = router;
