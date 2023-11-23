@@ -8,6 +8,7 @@ const cron = require('node-cron');
 const statsCache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 
 const calculateStats = () => {
+    console.log('Calculating stats');
     let stats = {
         audits: 0,
         findings: 0,
@@ -16,7 +17,7 @@ const calculateStats = () => {
         liquidity: 0
     };
 
-    const directories = fs.readdirSync('./data/');
+    const directories = fs.readdirSync(path.join(__dirname, '../data'));
 
     stats.audits = directories.length;
 
