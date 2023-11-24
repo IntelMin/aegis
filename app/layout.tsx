@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import {ClerkProvider} from "@clerk/nextjs";
 import { Metadata } from "next";
 import NextTopLoader from 'nextjs-toploader';
 import { siteConfig } from "@/config/site";
@@ -30,6 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
@@ -44,6 +46,7 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
+    </ClerkProvider>
   );
 
 //   return (

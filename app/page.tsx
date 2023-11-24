@@ -1,5 +1,4 @@
 "use client";
-
 import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
 import { RxDashboard } from "react-icons/rx";
@@ -9,9 +8,32 @@ import { Card } from "@nextui-org/react";
 import { MdOutlineMonitorHeart } from "react-icons/md";
 import TrendingCards from "@/components/bugBounty/TrendingCards";
 import IntroModal from "@/components/intromodal";
-
+import {useUser} from "@clerk/nextjs"
+import { useEffect,useState } from "react";
+import { getWhitelistStatus } from "./utils/supabaseRequests";
+import { UserButton } from "@clerk/nextjs";
 export default function Home() {
-  return (
+  const [whitelistStatus, setWhitelistStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { isSignedIn, user, isLoaded } = useUser();
+  useEffect(() => {
+    console.log("user",user)
+    setIsLoading(true)
+      if(isSignedIn && isLoaded){
+        const settingUpUser = async () => {
+          console.log("fetching",user.id)
+          setWhitelistStatus(await getWhitelistStatus({email:String(user.primaryEmailAddress?.emailAddress),
+            user_id:user.id,
+          }))
+          setIsLoading(false)
+        }
+        settingUpUser()
+        
+    }
+  },[isSignedIn])
+  console.log("whitelistStatus",whitelistStatus)
+  console.log("isLoading",isLoading)
+  return (whitelistStatus && !isLoading)?  (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />
       <div className="px-6 mt-4 flex space-x-3 p-2">
@@ -51,5 +73,14 @@ export default function Home() {
         <Card className="bg-opacity-50"></Card>
       </section>
     </NavbarWrapper>
-  );
+  ):
+  (
+    <div className="bg-white">
+      <h1 className="text-red-900">
+        Please Get Whitelisted To view the page
+      </h1>
+      <UserButton afterSignOutUrl="/" />
+    </div>
+  )
+  ;
 }
