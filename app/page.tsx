@@ -13,9 +13,11 @@ import LiveMetric from "@/components/liveMonitoring/LiveMetric";
 import { CiLocationArrow1 } from "react-icons/ci";
 import Link from "next/link";
 import { useNewTokens } from "@/utils/useNewTokens";
+import { useDashboardData } from "@/utils/useDashboard";
 
 export default function Home() {
   const newTokens = useNewTokens();
+  const dashboardData = useDashboardData();
   return (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />
