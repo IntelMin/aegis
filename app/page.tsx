@@ -82,7 +82,7 @@ export default function Home() {
       </section>
     </NavbarWrapper>
   ) : (
-    <div className="bg-white flex justify-center items-center min-h-screen w-full">
+    <div className="bg-white flex justify-center items-center min-h-screen w-full top-0 z-50 loading-screen">
       <h1 className="text-red-900 font-bold text-3xl">
         Please Get Whitelisted To view the page
       </h1>

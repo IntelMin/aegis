@@ -25,8 +25,8 @@ else    {const supabase = await supabaseClient();
 const { data,error } = await supabase.from('aegis').select('whitelisted').eq('email', props.email).single()
 if(error) {console.log(error) 
     return false}
-console.log(data)
-return Boolean(data)
+console.log("data is",data)
+return Boolean(data.whitelisted)
 }}
 
 export const updateUser = async (props:UserProps) => {
