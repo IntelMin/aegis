@@ -7,6 +7,7 @@ const describeRoute = require('./api/describe');
 const markdownRoute = require('./api/markdown');
 const dependencyRoute = require('./api/dependencies');
 const codeRoute = require('./api/code');
+const dashboardRoute = require('./api/dashboard');
 
 const trendingTokens = require('./api/trending');
 // const graphRoute = require('./routes/graph');
