@@ -26,12 +26,13 @@ export default function Home() {
         <RxDashboard className="text-[#dbd9d9] text-3xl " />
         <Title title="Dashboard" />
       </div>
-      <div className="ml-6 mb-4">
-      <div className="mt-2 mb-4 flex">
-    {Object.entries(dashboardData).map(([key, value]) => (
-        <DashboardStatsCard key={key} data={{ [key]: value }} />
-    ))}
-</div>
+      <div className="ml-5 mt-4 mb-4">
+        <Title subHeader title="Statistics" />
+        <div className="mt-2 mb-2 ml-2 flex">
+          {Object.entries(dashboardData).map(([key, value]) => (
+            <DashboardStatsCard key={key} data={{ [key]: value }} />
+          ))}
+        </div>
       </div>
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 liveDash">
         <Title subHeader title="Live Monitoring" />
