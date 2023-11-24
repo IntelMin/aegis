@@ -6,6 +6,8 @@ import { Input, Button } from "@nextui-org/react";
 import { BsFillSendFill } from "react-icons/bs";
 import * as ethers from "ethers"
 import axios from "axios";
+import { useAccount, useWalletClient } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const AEGIS_SRV = 'localhost:9898' // process.env.AEGIS_SRV
 
@@ -18,16 +20,16 @@ const editorOptions = {
   },
   readOnly: true,
   fontSize: 14,
-  cursorStyle: "block",
-  wordWrap: "on",
+  cursorStyle: "block" as "block" | "line" | "underline" | "line-thin" | "block-outline" | "underline-thin" | undefined,
+  wordWrap: "on" as "on" | "off" | "wordWrapColumn" | "bounded" | undefined,
 }
 
 const Deployer = () => {
-  const [address, setAddress] = useState('');
-  const [code, setCode] = useState('');
-  const [status, setStatus] = useState<Record<string, string>>({});
-  const [prompt, setPrompt] = useState('');
-  const [history, setHistory] = useState<string[]>([])
+const {isConnected}= useAccount()
+const [code, setCode] = useState('');
+const [status, setStatus] = useState<Record<string, string>>({});
+const [prompt, setPrompt] = useState('');
+const [history, setHistory] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -56,12 +58,18 @@ const Deployer = () => {
 
     inputRef.current?.focus()
   }, [prompt, code])
+  const { data: walletClient } = useWalletClient({ chainId: 5 }); // replace with your chainId
 
   const handleDeployClick = useCallback(() => {
     try {
       const response = axios.post(`http://${AEGIS_SRV}/deployer/compile`, { code })
-        .then(response => {
-          response.bytecode
+      .then(async (response) => {
+        response.data.bytecode
+        const hash = await walletClient?.deployContract({
+          abi: [], // replace with your abi
+          bytecode: response.data.bytecode,
+          args: [], // replace with your constructor arguments
+        });
         })
       // setModalContent(`Contract deployed at address: ${response.data.address}`);
       // setIsModalOpen(true);
@@ -85,6 +93,7 @@ const Deployer = () => {
         />
         <div className="grid grid-rows-[1fr,auto] h-64 p-2 gap-2 rounded-md bg-zinc-700">
           <div>
+            
             {history.map((chat, key) => (
               <p key={key}>{chat}</p>
             ))}
@@ -112,6 +121,7 @@ const Deployer = () => {
       </div>
       <div className="grid grid-rows-[1fr,auto] gap-4">
         <div className="p-4 rounded-md bg-zinc-700">
+
           {Object.keys(status).map(key => (
             <div key={key} className="mb-4">
               <p className="text-gray-500">{key}</p>
@@ -119,9 +129,17 @@ const Deployer = () => {
             </div>
           ))}
         </div>
+        {
+          isConnected?(
         <Button className="w-64" onClick={handleDeployClick}>
           Deploy
         </Button>
+
+          ):
+          (
+            <ConnectButton />
+          )
+        }
       </div>
     </div>
   )
