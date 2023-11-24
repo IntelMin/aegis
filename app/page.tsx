@@ -2,12 +2,11 @@
 
 import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
-import { MdOutlineMonitorHeart } from "react-icons/md";
+import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import Title from "@/components/title";
 import { NavbarWrapper } from "@/components/navbar/navbar";
 import { Button, Card } from "@nextui-org/react";
-import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import TrendingCards from "@/components/bugBounty/TrendingCards";
 import IntroModal from "@/components/intromodal";
 import Link from "next/link";
@@ -25,17 +24,17 @@ export default function Home() {
       <div className="px-6 mt-4 flex space-x-3 p-2">
         <RxDashboard className="text-[#dbd9d9] text-3xl " />
         <Title title="Dashboard" />
-      </div>  
-      <Card className="bg-opacity-10 w-full md:w-full  pl-3 pt-2 px-4 ">
-      <Link href="/bugBounty  ">
-        <TrendingCards noBlur />
-        </Link>
-      </Card>
+      </div>
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 liveDash">
         <Title subHeader title="Live Monitoring" />
         <div className="relative">
           <div className="absolute top-0 left-0 w-full h-full z-[5] liveOverLay">
-            <Link href="liveMonitoring" className="flex items-center gap-2 text-white font-[500] rounded-lg p-2 pl-4 bg-gradient-to-r from-[#1a1a1ad0] via-[#383838] to-gray-700">Show More <CiLocationArrow1 className="font-[500]" /></Link>
+            <Link
+              href="liveMonitoring"
+              className="flex items-center gap-2 text-white font-[500] rounded-lg p-2 pl-4 bg-gradient-to-r from-[#1a1a1ad0] via-[#383838] to-gray-700"
+            >
+              Show More <CiLocationArrow1 className="font-[500]" />
+            </Link>
           </div>
           <LiveMetric data={newTokens} dash />
         </div>
@@ -58,25 +57,25 @@ export default function Home() {
               </p>
             </div>
           </div>
-          </Link>
-          <CircleGraph value={91} height={280}/>
+          <CircleGraph value={91} height={280} />
           <div className="px-8 flex justify-center items-center mt-5 ">
-          <Link href="/security"><Button className="bg-transparent border-white border-1 hover:bg-white hover:text-black">View More</Button></Link>
+            <Link href="/security">
+              <Button className="bg-transparent border-white border-1 hover:bg-white hover:text-black">
+                View More
+              </Button>
+            </Link>
           </div>
         </Card>
 
-        <Card className=" bg-opacity-50 w-full md:w-[80%] bg-gradient-to-tl from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700" >
+        <Card className=" bg-opacity-50 w-full md:w-[80%] bg-gradient-to-tl from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700">
           <Link href="/liveMonitoring">
-          <span className="flex px-2 pt-4  text-lg ">
-            <MdOutlineMonitorHeart className="text-white mr-4 h-[40px] w-[40px]" />
-            <p className=" mt-1 ml-1">Live Monitoring</p>
-          </span>
-          <Steam />
+            <span className="flex px-2 pt-4  text-lg ">
+              <MdOutlineMonitorHeart className="text-white mr-4 h-[40px] w-[40px]" />
+              <p className=" mt-1 ml-1">Live Monitoring</p>
+            </span>
+            <Steam />
           </Link>
         </Card>
-      </section>
-      <section className="p-6">
-        <Card className="bg-opacity-50"></Card>
       </section>
     </NavbarWrapper>
   );
