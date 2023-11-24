@@ -5,7 +5,7 @@ import CircleGraph from "@/components/circleGraph";
 import { RxDashboard } from "react-icons/rx";
 import Title from "@/components/title";
 import { NavbarWrapper } from "@/components/navbar/navbar";
-import { Card } from "@nextui-org/react";
+import { Button, Card } from "@nextui-org/react";
 import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import TrendingCards from "@/components/bugBounty/TrendingCards";
 import IntroModal from "@/components/intromodal";
@@ -41,7 +41,10 @@ export default function Home() {
             </div>
           </div>
           </Link>
-          <CircleGraph />
+          <CircleGraph value={91} height={280}/>
+          <div className="px-8 flex justify-center items-center mt-5 ">
+          <Link href="/security"><Button className="bg-transparent border-white border-1 hover:bg-white hover:text-black">View More</Button></Link>
+          </div>
         </Card>
 
         <Card className=" bg-opacity-50 w-full md:w-[80%] bg-gradient-to-tl from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700" >
