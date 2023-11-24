@@ -14,6 +14,7 @@ import LiveMetric from "@/components/liveMonitoring/LiveMetric";
 import { CiLocationArrow1 } from "react-icons/ci";
 import { useNewTokens } from "@/utils/useNewTokens";
 import { useDashboardData } from "@/utils/useDashboard";
+import DashboardStatsCard from "@/components/Dashboard/DashboarStastCard";
 
 export default function Home() {
   const newTokens = useNewTokens();
@@ -24,6 +25,13 @@ export default function Home() {
       <div className="px-6 mt-4 flex space-x-3 p-2">
         <RxDashboard className="text-[#dbd9d9] text-3xl " />
         <Title title="Dashboard" />
+      </div>
+      <div className="ml-6 mb-4">
+      <div className="mt-2 mb-4 flex">
+    {Object.entries(dashboardData).map(([key, value]) => (
+        <DashboardStatsCard key={key} data={{ [key]: value }} />
+    ))}
+</div>
       </div>
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 liveDash">
         <Title subHeader title="Live Monitoring" />
