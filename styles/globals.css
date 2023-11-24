@@ -27,3 +27,7 @@ body {
   background-color: #000000;
   background-image: linear-gradient(315deg, #676767 0%, #dad9d9 74%);
 }
+.loading-screen{
+  position: absolute !important;
+  z-index: 9999 !important;
+}
