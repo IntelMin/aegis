@@ -32,13 +32,14 @@ return Boolean(data)
 export const updateUser = async (props:UserProps) => {
     const userExists = await emailExists(props);
     const supabase = await supabaseClient();
-
+        console.log("props at updateUser",props)
     if(!userExists) {
+        console.log("Inserting new user")
         const { data,error } = await supabase.from('aegis').insert(
             {
             email: props.email,
             whitelisted: false,
-            user_d: props.user_id,
+            user_id: String(props.user_id),
             }
         )
         if(error){
@@ -47,6 +48,7 @@ export const updateUser = async (props:UserProps) => {
     
     }
     else{
+        console.log("Updating existing user")
 
         const { data,error } = await supabase.from('aegis').upsert(
             {

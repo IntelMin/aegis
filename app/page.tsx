@@ -12,9 +12,10 @@ import {useUser} from "@clerk/nextjs"
 import { useEffect,useState } from "react";
 import { getWhitelistStatus } from "./utils/supabaseRequests";
 import { UserButton } from "@clerk/nextjs";
+
 export default function Home() {
-  const [whitelistStatus, setWhitelistStatus] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [whitelistStatus, setWhitelistStatus] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isSignedIn, user, isLoaded } = useUser();
   useEffect(() => {
     console.log("user",user)
@@ -31,9 +32,16 @@ export default function Home() {
         
     }
   },[isSignedIn])
-  console.log("whitelistStatus",whitelistStatus)
   console.log("isLoading",isLoading)
-  return (whitelistStatus && !isLoading)?  (
+  console.log("isLoaded",isLoaded)
+
+  return (isLoading) ?(
+    <div className="bg-white flex justify-center items-center min-h-screen w-full absolute top-0 z-50">
+      <h1 className="text-red-900 font-bold text-3xl">
+        Loading...
+      </h1>
+    </div>
+  ) : whitelistStatus ? (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />
       <div className="px-6 mt-4 flex space-x-3 p-2">
@@ -75,8 +83,8 @@ export default function Home() {
     </NavbarWrapper>
   ):
   (
-    <div className="bg-white">
-      <h1 className="text-red-900">
+    <div className="bg-white flex justify-center items-center min-h-screen w-full">
+      <h1 className="text-red-900 font-bold text-3xl">
         Please Get Whitelisted To view the page
       </h1>
       <UserButton afterSignOutUrl="/" />
