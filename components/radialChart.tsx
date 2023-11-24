@@ -3,8 +3,11 @@ import { Props } from "react-apexcharts";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const RadialChart = () => {
-  const series = [76, 67, 61, 90, 96];
+const RadialChart = (series_data: any) => {
+
+  const series = Object.keys(series_data).map((key) => series_data[key as any]);
+
+  console.log("series:", series);
   const options: Props["options"] = {
     chart: {
       height: 390,

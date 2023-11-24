@@ -1,7 +1,6 @@
 import React from "react";
-import { AiOutlineAudit } from "react-icons/ai";
-import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import Link from 'next/link';
+import { Button } from '@nextui-org/react';
 import {
   Table,
   TableHeader,
@@ -11,7 +10,7 @@ import {
   TableCell,
 } from "@nextui-org/react";
 
-const LiveMetric = (props: any) => {
+const TrendingTable = (props: any) => {
   const [tokens, setTokens] = React.useState([]);
 
   React.useEffect(() => {
@@ -58,8 +57,8 @@ const LiveMetric = (props: any) => {
         <TableHeader>
           <TableColumn>TOKEN</TableColumn>
           <TableColumn>PRICE</TableColumn>
-          <TableColumn>CHANGE</TableColumn>
           <TableColumn>LIQUIDITY</TableColumn>
+          <TableColumn>MCAP</TableColumn>
           <TableColumn>CREATED</TableColumn>
           <TableColumn>AUDIT</TableColumn>
         </TableHeader>
@@ -68,25 +67,20 @@ const LiveMetric = (props: any) => {
             const selectedToken =
               item.newToken === "token0" ? item.token0 : item.token1;
 
-            const truncatedName =
-              selectedToken.name.length > 20
-                ? selectedToken.name.substring(0, 20) + "..."
-                : selectedToken.name;
+            console.log(item);
 
             return (
               <TableRow key={i}>
-                <TableCell>{truncatedName}</TableCell>
+                <TableCell>{selectedToken.name}</TableCell>
                 <TableCell>{formatDecimal(item.priceChange)}</TableCell>
                 <TableCell>{formatDecimal(item.priceChange)}%</TableCell>
                 <TableCell>
                   {formatDecimal(parseFloat(item.liquidity))}
                 </TableCell>
                 <TableCell>{formatTime(item.liquidAt)}</TableCell>
-                <TableCell>
-                  <Link href={`/audits/${selectedToken.address}`} passHref>
-                    <Button size="sm">View</Button>
-                  </Link>
-                </TableCell>
+                <TableCell><Link href={`/audits/${selectedToken.address}`} passHref>
+                  <Button size="sm">View</Button>
+                </Link></TableCell>
               </TableRow>
             );
           })}
@@ -96,4 +90,4 @@ const LiveMetric = (props: any) => {
   );
 };
 
-export default LiveMetric;
+export default TrendingTable;

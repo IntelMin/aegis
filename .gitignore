@@ -5,6 +5,17 @@
 /.pnp
 .pnp.js
 
+# Ignore everything in these directories
+contracts/*
+data/*
+
+# Except the directories themselves, by negating the ignore with a '!'
+!contracts/
+!data/
+
+# But do not ignore .gitkeep files, so the directories are kept in the repository
+!.gitkeep
+
 # testing
 /coverage
 

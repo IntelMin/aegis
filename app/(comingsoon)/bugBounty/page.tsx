@@ -9,8 +9,8 @@ type Props = {}
 const BugBounty = (props: Props) => {
   return (
     <NavbarWrapper pageTitle={<div></div>}>
-      <div className="py-4 px-5 w-full h-full flex flex-col gap-4">
-        <Title title="Bug Bounty Leaderboard" />
+      <div className="flex flex-col w-full h-full gap-4 px-5 py-4">
+        <Title title="Bug Bounties" />
         <TrendingCards />
         <SecurityLeaderBoard search />
       </div>
