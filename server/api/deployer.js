@@ -28,70 +28,10 @@ async function callOpenAI(query) {
 function validateString(input) {
   const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>]/;
   const startsWithNumberRegex = /^\d/;
-  const keywords = [
-    "address",
-    "bool",
-    "string",
-    "int",
-    "uint",
-    "byte",
-    "bytes",
-    "wei",
-    "gwei",
-    "szabo",
-    "finney",
-    "ether",
-    "pure",
-    "view",
-    "payable",
-    "constant",
-    "anonymous",
-    "indexed",
-    "if",
-    "else",
-    "for",
-    "while",
-    "break",
-    "continue",
-    "return",
-    "throw",
-    "function",
-    "returns",
-    "constructor",
-    "contract",
-    "library",
-    "interface",
-    "event",
-    "msg",
-    "block",
-    "tx",
-    "now",
-    "suicide",
-    "selfdestruct",
-    "require",
-    "revert",
-    "assert",
-    "addmod",
-    "mulmod",
-    "keccak256",
-    "sha256",
-    "sha3",
-    "ripemd160",
-    "storage",
-    "memory",
-    "calldata",
-    "this",
-    "super",
-    "enum",
-    "mapping",
-    "struct",
-    "var",
-  ];
 
   return (
     specialCharsRegex.test(input) |
     startsWithNumberRegex.test(input) |
-    keywords.includes(input) |
     input.includes(" ")
   );
 }
@@ -153,7 +93,7 @@ function updateCode(code, prompt) {
   }
 }
 
-router.post("/", async (req, res) => {
+router.post("/update-code", async (req, res) => {
   if (req.body === undefined) res.status(400).send("Bad request");
 
   const { prompt, code } = req.body;
@@ -165,14 +105,15 @@ router.post("/", async (req, res) => {
   try {
     const response = await callOpenAI(prompt);
     const newCode = updateCode(code, response);
-    res.status(200).send(newCode);
+    res.status(200).send({
+      code: newCode,
+      status: getStatus(newCode)
+    });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).send("Error: " + error.message);
   }
 });
-
-module.exports = router;
 
 const defaultPrompt = `
 Given the following request, return key / val formatted json string like
@@ -180,63 +121,6 @@ Given the following request, return key / val formatted json string like
 'key' is what user wants to update, 'val' is target value.
 ---------------------------------------
 `;
-
-/* 
- const ast = parser.parse(code, { loc: true });
-    ast.children.forEach((child) => {
-      if (child.type === "ContractDefinition") {
-        child.subNodes.forEach((base) => {
-          if (base.type === "StateVariableDeclaration") {
-            for (const [key, val] of Object.entries(prompt)) {
-              switch (key) {
-                case "name":
-                  if (
-                    !validateString(val) &&
-                    base.variables[0].name === "_name"
-                  ) {
-                    base.initialValue.value = val;
-                    base.variables[0].expression.value = val;
-                  }
-                  break;
-
-                case "symbol":
-                  if (base.variables[0].name === "_symbol") {
-                    base.initialValue.value = val;
-                    base.variables[0].expression.value = val;
-                  }
-                  break;
-
-                case "supply":
-                  if (base.variables[0].name === "_tTotal") {
-                    base.initialValue.left.number = val;
-                    base.variables[0].expression.left.number = val;
-                  }
-                  break;
-
-                case "buy_tax":
-                  if (base.variables[0].name === "_taxFeeOnBuy") {
-                    base.initialValue.number = val;
-                    base.variables[0].expression.number = val;
-                  }
-                  break;
-
-                case "sell_tax":
-                  if (base.variables[0].name === "_taxFeeOnSell") {
-                    base.initialValue.number = val;
-                    base.variables[0].expression.number = val;
-                  }
-                  break;
-
-                default:
-                  break;
-              }
-            }
-          }
-        });
-      }
-    });
-    return JSON.stringify(ast);
-*/
 
 function regex() {
   const nameRegex = /string private constant _name\s*=\s*"(.*?)";/;
@@ -255,6 +139,7 @@ function regex() {
 }
 
 const getStatus = (code) => {
+  // TODO: extract name, symbol, supply, buy_tax, sell_tax from code
   return {
     name: 'ABC',
     symbol: 'SYM',
