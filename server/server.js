@@ -17,6 +17,8 @@ app.use('/markdown', markdownRoute);
 app.use('/dependency', dependencyRoute);
 app.use('/code', codeRoute);
 
+app.use('/', dashboardRoute);
+
 app.use('/trending', trendingTokens);
 // app.use('/graph', graphRoute);
 
