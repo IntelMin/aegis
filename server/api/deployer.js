@@ -14,7 +14,6 @@ const getStatus = (code) => {
 }
 
 router.post('/compile', (req, res) => {
-  console.log(req.body.code)
   const input = {
     language: 'Solidity',
     sources: {
