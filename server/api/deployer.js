@@ -14,11 +14,12 @@ const getStatus = (code) => {
 }
 
 router.post('/compile', (req, res) => {
+  console.log(req.body.code)
   const input = {
     language: 'Solidity',
     sources: {
       'ABC.sol': {
-        content: dependencies.concat(req.body.code)
+        content: dependencies.concat(JSON.parse(req.body.code))
       }
     },
     settings: {

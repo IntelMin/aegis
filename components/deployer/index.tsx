@@ -62,9 +62,9 @@ const [history, setHistory] = useState<string[]>([])
 
   const handleDeployClick = useCallback(() => {
     try {
-      const response = axios.post(`http://${AEGIS_SRV}/deployer/compile`, { code })
+      const response = axios.post(`http://${AEGIS_SRV}/deployer/compile`, { code:JSON.stringify(code) })
       .then(async (response) => {
-        response.data.bytecode
+        console.log(response.data.bytecode)
         const hash = await walletClient?.deployContract({
           abi: [], // replace with your abi
           bytecode: response.data.bytecode,
