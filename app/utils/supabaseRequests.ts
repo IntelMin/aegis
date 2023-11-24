@@ -14,7 +14,7 @@ type UserProps ={
     return false;
 }
 export const getWhitelistStatus = async (props:UserProps):Promise<boolean>=> {
-    console.log("props at getWhitelistStatus",props) 
+    // console.log("props at getWhitelistStatus",props) 
     const userExists = await emailExists(props);
     if(!userExists) {
         await updateUser(props)
@@ -25,16 +25,16 @@ else    {const supabase = await supabaseClient();
 const { data,error } = await supabase.from('aegis').select('whitelisted').eq('email', props.email).single()
 if(error) {console.log(error) 
     return false}
-console.log("data is",data)
+// console.log("data is",data)
 return Boolean(data.whitelisted)
 }}
 
 export const updateUser = async (props:UserProps) => {
     const userExists = await emailExists(props);
     const supabase = await supabaseClient();
-        console.log("props at updateUser",props)
+        // console.log("props at updateUser",props)
     if(!userExists) {
-        console.log("Inserting new user")
+        // console.log("Inserting new user")
         const { data,error } = await supabase.from('aegis').insert(
             {
             email: props.email,
@@ -48,7 +48,7 @@ export const updateUser = async (props:UserProps) => {
     
     }
     else{
-        console.log("Updating existing user")
+        // console.log("Updating existing user")
 
         const { data,error } = await supabase.from('aegis').upsert(
             {

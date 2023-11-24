@@ -18,7 +18,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isSignedIn, user, isLoaded } = useUser();
   useEffect(() => {
-    console.log("user", user);
+    // console.log("user", user);
     setIsLoading(true);
     if (isSignedIn && isLoaded) {
       const settingUpUser = async () => {
@@ -34,8 +34,8 @@ export default function Home() {
       settingUpUser();
     }
   }, [isSignedIn]);
-  console.log("isLoading", isLoading);
-  console.log("isLoaded", isLoaded);
+  // console.log("isLoading", isLoading);
+  // console.log("isLoaded", isLoaded);
 
   return isLoading ? (
     <div className="bg-black flex justify-center items-center min-h-screen w-full top-0 z-50 loading-screen">
