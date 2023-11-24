@@ -14,6 +14,9 @@ body {
 .apexcharts-toolbar {
   display: none !important;
 }
+/* .apexcharts-legend-marker{
+  display: none !important;
+} */
 
 .apexcharts-legend-text {
   color: white !important;

@@ -6,12 +6,13 @@ import { MdOutlineMonitorHeart } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import Title from "@/components/title";
 import { NavbarWrapper } from "@/components/navbar/navbar";
-import { Card } from "@nextui-org/react";
+import { Button, Card } from "@nextui-org/react";
+import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import TrendingCards from "@/components/bugBounty/TrendingCards";
 import IntroModal from "@/components/intromodal";
+import Link from "next/link";
 import LiveMetric from "@/components/liveMonitoring/LiveMetric";
 import { CiLocationArrow1 } from "react-icons/ci";
-import Link from "next/link";
 import { useNewTokens } from "@/utils/useNewTokens";
 import { useDashboardData } from "@/utils/useDashboard";
 
@@ -24,7 +25,12 @@ export default function Home() {
       <div className="px-6 mt-4 flex space-x-3 p-2">
         <RxDashboard className="text-[#dbd9d9] text-3xl " />
         <Title title="Dashboard" />
-      </div>
+      </div>  
+      <Card className="bg-opacity-10 w-full md:w-full  pl-3 pt-2 px-4 ">
+      <Link href="/bugBounty  ">
+        <TrendingCards noBlur />
+        </Link>
+      </Card>
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 liveDash">
         <Title subHeader title="Live Monitoring" />
         <div className="relative">
@@ -37,11 +43,11 @@ export default function Home() {
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 cursor-pointer">
         <TrendingCards />
       </Card>
-      {/* <section className="flex p-6 flex-col gap-4 md:flex-row ">
+      <section className="flex p-6 flex-col gap-4 md:flex-row ">
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
-              <img className="mr-4 h-[40px] w-[40px]" src="/secure.png" />
+              <MdSecurity className="mr-4 h-[40px] w-[40px]" />
             </span>
             <div>
               Security Score
@@ -52,20 +58,26 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <CircleGraph />
+          </Link>
+          <CircleGraph value={91} height={280}/>
+          <div className="px-8 flex justify-center items-center mt-5 ">
+          <Link href="/security"><Button className="bg-transparent border-white border-1 hover:bg-white hover:text-black">View More</Button></Link>
+          </div>
         </Card>
 
-        <Card className=" bg-opacity-50 w-full md:w-[80%]">
-          <span className="flex px-2 pt-4  text-xl ">
-            <MdOutlineMonitorHeart className="text-green-400 text-4xl " />
+        <Card className=" bg-opacity-50 w-full md:w-[80%] bg-gradient-to-tl from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700" >
+          <Link href="/liveMonitoring">
+          <span className="flex px-2 pt-4  text-lg ">
+            <MdOutlineMonitorHeart className="text-white mr-4 h-[40px] w-[40px]" />
             <p className=" mt-1 ml-1">Live Monitoring</p>
           </span>
           <Steam />
+          </Link>
         </Card>
       </section>
       <section className="p-6">
         <Card className="bg-opacity-50"></Card>
-      </section> */}
+      </section>
     </NavbarWrapper>
   );
 }

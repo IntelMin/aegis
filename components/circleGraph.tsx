@@ -3,8 +3,13 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { Props } from "react-apexcharts";
 
-const CircleGraph = () => {
-  const series = [92];
+type props = {
+  value: number;
+  height?: number;
+};
+
+const CircleGraph = (props: props) => {
+  const series = [props.value];
 
   const options: Props["options"] = {
     chart: {
@@ -67,33 +72,34 @@ const CircleGraph = () => {
       },
     },
     fill: {
-      type: "gradient",
+      colors: ["#ffffff"],
+      opacity: 0.9,
+      type: 'solid',
       gradient: {
-        shade: "dark",
-        type: "horizontal",
-        shadeIntensity: 0.5,
-        gradientToColors: ["#dbd9d9"],
-        inverseColors: true,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 100],
+          shade: 'dark',
+          type: "horizontal",
+          shadeIntensity: 0.5,
+          gradientToColors: undefined,
+          inverseColors: true,
+          stops: [0, 50, 100],
+          opacityFrom: [0.2, 0.8],
       },
     },
     stroke: {
       lineCap: "round",
     },
-    labels: ["Audit Score"],
+    labels: ["Security Score"],
     // download: false,
   };
 
   return (
-    <div id="card">
+    <div id="card" className="bg-transparent">
       <div id="chart">
         <Chart
           options={options}
           series={series}
           type="radialBar"
-          height={280}
+          height={props.height}
         />
       </div>
     </div>

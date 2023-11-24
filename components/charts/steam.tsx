@@ -15,10 +15,16 @@ const state: Props["series"] = [
 ];
 
 const options: Props["options"] = {
+  legend: {
+    show: false,
+  },
+  fill: {
+    colors: ["#ffffff", "#ffffff"],
+  },
   chart: {
     type: "area",
     animations: {
-      easing: "linear",
+      easing: "easeinout",
       speed: 300,
     },
     sparkline: {
@@ -29,7 +35,7 @@ const options: Props["options"] = {
     },
     id: "basic-bar",
     fontFamily: "Inter, sans-serif",
-    foreColor: "hsl(var(--nextui-default-800))",
+    foreColor: "white",
     stacked: true,
     toolbar: {
       show: false,
@@ -39,7 +45,7 @@ const options: Props["options"] = {
   xaxis: {
     categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
     labels: {
-      // show: false,
+      show: false,
       style: {
         colors: "hsl(var(--nextui-default-800))",
         fontFamily: "Inter, sans-serif",
@@ -71,11 +77,13 @@ const options: Props["options"] = {
     position: "back",
   },
   stroke: {
-    curve: "smooth",
-    fill: {
-      colors: ["red"],
-    },
-  },
+    show: true,
+    curve: 'smooth',
+    lineCap: 'butt',
+    colors: ["#ffffff"],
+    width: 2,
+    dashArray: 0, 
+},
   // @ts-ignore
   markers: false,
 };
@@ -85,7 +93,7 @@ export const Steam = () => {
     <>
       <div className="w-full z-20">
         <div id="chart">
-          <Chart options={options} series={state} type="area" height={425} />
+          <Chart options={options} series={state} type="area" height={425}  />
         </div>
       </div>
     </>
