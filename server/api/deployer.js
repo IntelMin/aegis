@@ -84,7 +84,7 @@ function updateCode(code, prompt) {
           break;
       }
     }
-    return JSON.stringify(newCode);
+    return newCode;
   } catch (e) {
     if (e instanceof parser.ParserError) {
       console.error("Parse error: ", e.errors);
