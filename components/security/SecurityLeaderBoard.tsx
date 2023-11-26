@@ -250,7 +250,7 @@ const SecurityLeaderBoard = (props: Props) => {
   return (
 
     <div>
-      <div className={`flex gap-2 ${props?.search ? "blur-[0px]" : ""}`}>
+      <div className={`flex gap-2 ${props?.search ? "blur-[2px]" : ""}`}>
         <Input
           isClearable
           className="w-full sm:max-w-[44%] mb-2 ml-2 "
@@ -261,7 +261,7 @@ const SecurityLeaderBoard = (props: Props) => {
           onValueChange={onSearchChange}
         />
       </div>
-      <div className="p-2 relative">
+      <div className="p-2 relative blur-[2px]">
         <Table aria-label="Audit Function Table" className="blur-[0px]">
           <TableHeader columns={columns}>
             {(column) => (
@@ -304,7 +304,7 @@ const SecurityMeter: React.FC<{ value: number }> = ({ value }) => {
     <div className="flex items-start">
     <span className="mr-4">{value}%</span>
     <div className="w-full bg-gray-200 rounded-md h-4">
-    <Tooltip content={<CircleGraph value={value} height={240}/>}>
+    <Tooltip className=" blur-[8px]" content={<CircleGraph value={value} height={240}/>}>
         <div
           className={`bg-${bgColor} rounded-md h-full w-${value} transition-all duration-300`}
         />
