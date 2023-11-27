@@ -169,9 +169,9 @@ router.post("/compile", (req, res) => {
   const input = {
     language: "Solidity",
     sources: {
-      "ABC.sol": {
-        content: dependencies.concat(req.body.code),
-      },
+      'ABC.sol': {
+        content: dependencies.concat(JSON.parse(req.body.code))
+      }
     },
     settings: {
       outputSelection: {
@@ -184,9 +184,10 @@ router.post("/compile", (req, res) => {
 
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  res
-    .status(200)
-    .json({ bytecode: output.contracts["ABC.sol"].ABC.evm.bytecode.object });
+  res.status(200).json({
+    bytecode: output.contracts['ABC.sol'].ABC.evm.bytecode.object,
+    abi: output.contracts['ABC.sol'].ABC.abi
+  })
 });
 
 router.get("/code", (req, res) => {
