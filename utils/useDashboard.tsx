@@ -9,7 +9,7 @@ export function useDashboardData() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${config.server}/dashboard`);
+        const response = await fetch(`http://${config.server}/dashboard`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

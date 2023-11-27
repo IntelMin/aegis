@@ -6,6 +6,7 @@ import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import clsx from "clsx";
 import { Layout } from "@/components/layout";
+import '@rainbow-me/rainbowkit/styles.css';
 
 export const metadata: Metadata = {
   title: {

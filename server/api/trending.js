@@ -40,7 +40,7 @@ async function definedRequest(graphql) {
     });
 
   // console.log("response: ", response.data);
-  return response.data; 
+  return response.data;
 }
 
 router.get("/:type", async (req, res) => {
