@@ -1,63 +1,23 @@
 "use client";
+import DashboardStatsCard from "@/components/Dashboard/DashboarStastCard";
+import TrendingCards from "@/components/bugBounty/TrendingCards";
 import { Steam } from "@/components/charts/steam";
 import CircleGraph from "@/components/circleGraph";
+import IntroModal from "@/components/intromodal";
+import LiveMetric from "@/components/liveMonitoring/LiveMetric";
+import { NavbarWrapper } from "@/components/navbar/navbar";
+import Title from "@/components/title";
+import { Button, Card } from "@nextui-org/react";
+import Link from "next/link";
+import { CiLocationArrow1 } from "react-icons/ci";
 import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
-import Title from "@/components/title";
-import { NavbarWrapper } from "@/components/navbar/navbar";
-import { Button, Card } from "@nextui-org/react";
-import TrendingCards from "@/components/bugBounty/TrendingCards";
-import IntroModal from "@/components/intromodal";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import { getWhitelistStatus } from "./utils/supabaseRequests";
-import { UserButton } from "@clerk/nextjs";
-import Link from "next/link";
-import LiveMetric from "@/components/liveMonitoring/LiveMetric";
-import { CiLocationArrow1 } from "react-icons/ci";
 import { useNewTokens } from "@/utils/useNewTokens";
 import { useDashboardData } from "@/utils/useDashboard";
-import DashboardStatsCard from "@/components/Dashboard/DashboarStastCard";
 
 export default function Home() {
-  const [whitelistStatus, setWhitelistStatus] = useState<boolean>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isSignedIn, user, isLoaded } = useUser();
-
   const newTokens = useNewTokens();
   const dashboardData = useDashboardData();
-
-  useEffect(() => {
-    setIsLoading(true);
-  
-    if (isSignedIn && isLoaded) {
-      getWhitelistStatus({
-        email: String(user.primaryEmailAddress?.emailAddress),
-        user_id: user.id,
-      }).then((ws) => {
-        setWhitelistStatus(ws)
-        setIsLoading(false);
-      })
-    }
-  }, [isSignedIn, isLoaded]);
-
-  if (isLoading) {
-    return (
-      <div className="bg-black flex justify-center items-center min-h-screen w-full top-0 z-50 loading-screen">
-        <h1 className="text-light font-bold text-3xl">Loading...</h1>
-      </div>
-    )    
-  }
-
-  if (!whitelistStatus) {
-    <div className="bg-white flex justify-center items-center min-h-screen w-full top-0 z-50 loading-screen">
-      <h1 className="text-red-900 font-bold text-3xl">
-        Aegis is currently in closed beta
-      </h1>
-      <UserButton afterSignOutUrl="/" />
-    </div>
-  }
-
   return (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />
