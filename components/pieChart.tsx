@@ -1,14 +1,17 @@
 import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { Props } from "react-apexcharts";
 
-type props = {
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
+type Props = {
   detail?: boolean;
 };
 
-const ApexChart = (props: props) => {
+const ApexChart = (props: Props) => {
   const series = [175, 191, 34];
   const customSegmentNames = ["Total", "Success", "Pending"];
+  const colors = ["#CCCCCC", "#999999", "#666666", "#333333", "#000000"];
+
 
   const options: Props["options"] = {
     chart: {
@@ -21,18 +24,13 @@ const ApexChart = (props: props) => {
         endAngle: 270,
       },
     },
-    dataLabels: {
-      enabled: false,
-    },
-    fill: {
-      type: "gradient",
-      // colors:["white"],
-    },
-    legend: {
-      formatter: function (val: any, opts: any) {
-        return val + " - " + opts.w.globals.series[opts.seriesIndex];
-      },
-    },
+    // dataLabels: {
+    //   enabled: false,
+    // },
+    tooltip: {
+      enabled: true,
+    }, 
+    colors: colors,
     title: {
       text: "",
     },
@@ -45,7 +43,9 @@ const ApexChart = (props: props) => {
             width: 240,
           },
           legend: {
+            enabled: false,
             position: "bottom",
+            fontSize: "14px",
           },
         },
       },
@@ -54,12 +54,7 @@ const ApexChart = (props: props) => {
 
   return (
     <div id="chart">
-      <Chart 
-        options={options}
-        series={series}
-        type="donut"
-        width={props?.detail ? 340 : 380}
-      />
+      <Chart options={options} series={series} type="donut" width={props?.detail ? 340 : 380} />
     </div>
   );
 };

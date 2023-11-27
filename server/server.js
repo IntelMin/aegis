@@ -2,19 +2,17 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
-
-const port = 9898;
-
 const codeRoute = require("./api/code");
 const infoRoute = require('./api/info');
 const describeRoute = require('./api/describe');
 const markdownRoute = require('./api/markdown');
-const deployerRoute = require('./api/deployer');
 const dependencyRoute = require('./api/dependencies');
 const dashboardRoute = require('./api/dashboard');
-
 const trendingTokens = require("./api/trending");
-const deployer = require("./api/deployer");
+const deployerRoute = require("./api/deployer");
+
+const port = 9898;
+
 // const graphRoute = require('./routes/graph');
 
 app.use(express.json());
@@ -26,17 +24,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use('/deployer', deployerRoute);
+app.use('/info', infoRoute);
+app.use('/describe', describeRoute);
+app.use('/markdown', markdownRoute);
+app.use('/dependency', dependencyRoute);
+app.use('/code', codeRoute);
 app.use('/dashboard', dashboardRoute);
-
-app.use("/info", infoRoute);
-app.use("/describe", describeRoute);
-app.use("/markdown", markdownRoute);
-app.use("/dependency", dependencyRoute);
-app.use("/code", codeRoute);
-
 app.use("/trending", trendingTokens);
-app.use("/deployer", deployer);
+app.use("/deployer", deployerRoute);
 // app.use('/graph', graphRoute);
 
 app.listen(port, () => {
