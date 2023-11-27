@@ -6,10 +6,10 @@ import { Input, Button } from "@nextui-org/react";
 import { BsFillSendFill } from "react-icons/bs";
 import axios from "axios";
 import { useAccount, useWalletClient } from "wagmi";
+import { waitForTransaction } from "@wagmi/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Title from "@/components/title";
-
-const AEGIS_SRV = 'localhost:9898' // process.env.AEGIS_SRV
+import config from '@/next.config'
 
 const editorOptions = {
   minimap: {
@@ -30,9 +30,10 @@ const Deployer = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [deployed, setDeployed] = useState<string>()
   const [deployError, setDeployError] = useState<string>()
+  const [deploying, setDeploying] = useState(false)
 
   useEffect(() => {
-    axios.get(`http://${AEGIS_SRV}/deployer/code`)
+    axios.get(`http://${config.server}/deployer/code`)
       .then(response => {
         setCode(response.data.code);
         setStatus(response.data.status);
@@ -46,7 +47,7 @@ const Deployer = () => {
       return
     }
 
-    axios.post(`http://${AEGIS_SRV}/deployer/update-code`, { prompt, code })
+    axios.post(`http://${config.server}/deployer/update-code`, { prompt, code })
       .then(response => {
         setCode(response.data.code);
         setStatus(response.data.status);
@@ -61,18 +62,23 @@ const Deployer = () => {
 
   const handleDeployClick = useCallback(async () => {
     try {
-      const { data } = await axios.post(`http://${AEGIS_SRV}/deployer/compile`, { code:JSON.stringify(code) })
+      const { data } = await axios.post(`http://${config.server}/deployer/compile`, { code:JSON.stringify(code) })
       const hash = await walletClient?.deployContract({
         abi: data.abi,
         bytecode: data.bytecode,
         args: [],
       });
 
-      setDeployed(hash)
+      setDeploying(true)
+      const tx = await waitForTransaction({ chainId: 11155111, hash: hash! })
+
+      setDeployed(tx.to as string)
       setDeployError(undefined)
+      setDeploying(false)
     } catch (e) {
       setDeployed(undefined)
       setDeployError(e instanceof Error ? e.shortMessage : JSON.stringify(e))
+      setDeploying(false)
     }
   }, [code, walletClient])
 
@@ -142,7 +148,7 @@ const Deployer = () => {
             ))}
           </div>
           {isConnected?(
-            <Button className="w-64" onClick={handleDeployClick}>
+            <Button className="w-64" onClick={handleDeployClick} isLoading={deploying}>
               Deploy
             </Button>
           ) : (
