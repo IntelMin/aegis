@@ -19,7 +19,7 @@ export const NotificationsDropdown = () => {
       </DropdownTrigger>
       <DropdownMenu className="w-80" aria-label="Avatar Actions">
         <DropdownSection title="Notificacions">
-          <DropdownItem
+          {/* <DropdownItem
             classNames={{
               base: "py-2",
               title: "text-base font-semibold",
@@ -48,7 +48,7 @@ export const NotificationsDropdown = () => {
             description="Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim."
           >
             📣 Edit your information
-          </DropdownItem>
+          </DropdownItem> */}
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>
