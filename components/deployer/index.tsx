@@ -77,7 +77,7 @@ const Deployer = () => {
       setDeploying(false)
     } catch (e) {
       setDeployed(undefined)
-      setDeployError(e instanceof Error ? e.shortMessage : JSON.stringify(e))
+      setDeployError(e instanceof Error ? e.message : JSON.stringify(e))
       setDeploying(false)
     }
   }, [code, walletClient])
@@ -90,10 +90,10 @@ const Deployer = () => {
           <div className="flex items-center">
             <ConnectButton/>
             {deployed && (
-              <p className='text-green-700 ml-2'>Deployed: {deployed}</p>
+              <p className='ml-2 text-green-700'>Deployed: {deployed}</p>
             )}
             {deployError && (
-              <p className='text-red-700 ml-2'>{deployError}</p>
+              <p className='ml-2 text-red-700'>{deployError}</p>
             )}
           </div>
         )}
