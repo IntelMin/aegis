@@ -14,7 +14,7 @@ async function fetchTokenInfo(address: string) {
 
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/info/${address}?_=${new Date().getTime()}`;
+  const url = `${AEGIS_SRV}/info/${address}?_=${new Date().getTime()}`;
 
   return fetchAndRespond(url);
 }
@@ -37,7 +37,7 @@ async function fetchRugpull(address: string) {
 async function fetchTokenCode(address: string) {
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/code/${address}`;
+  const url = `${AEGIS_SRV}/code/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -45,7 +45,7 @@ async function fetchTokenCode(address: string) {
 async function fetchTokenFunctions(address: string) {
   console.log("fetchTokenFunctions");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/markdown/${address}`;
+  const url = `${AEGIS_SRV}/markdown/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -53,7 +53,7 @@ async function fetchTokenFunctions(address: string) {
 async function fetchDependencies(address: string) {
   console.log("fetchDependencies");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/dependency/${address}`;
+  const url = `${AEGIS_SRV}/dependency/${address}`;
 
   return fetchAndRespond(url);
 }
