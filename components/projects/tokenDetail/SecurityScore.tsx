@@ -11,7 +11,7 @@ const SecurityScore = (props: Props) => {
       className="col-span-3 md:col-span-2 bg-gradient-to-tr from-[#1b1b1bbd] via-[#1b1b1bbd] to-gray-700 rounded-lg flex flex-col justify-between items-stretch h-full"
     >
       <div className="px-4">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <h1 className="text-[white] font-bold text-[22px]">
             Security Score
           </h1>
@@ -21,7 +21,7 @@ const SecurityScore = (props: Props) => {
           Percentile: <span className="text-success">Top 10%</span>
         </p>
       </div>
-      <CircleGraph />
+      {/* <CircleGraph {...props} /> */}
     </div>
   );
 };
