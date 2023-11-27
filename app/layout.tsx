@@ -31,7 +31,7 @@ const RootLayout = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <ClerkProvider afterSignInUrl={process.env.REDIRECT_URL}>
+  <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
