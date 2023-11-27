@@ -27,7 +27,7 @@ const Deployer = () => {
   const [status, setStatus] = useState<Record<string, string>>({});
   const [prompt, setPrompt] = useState('');
   const [history, setHistory] = useState<string[]>([])
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>()
   const [deployed, setDeployed] = useState<string>()
   const [deployError, setDeployError] = useState<string>()
   const [deploying, setDeploying] = useState(false)
@@ -120,7 +120,13 @@ const Deployer = () => {
               <Input
                 size="sm"
                 value={prompt}
-                ref={inputRef}
+                placeholder="Ask what you want to update"
+                ref={ref => {
+                  if (ref) {
+                    ref.style.outline = 'none';
+                    inputRef.current = ref
+                  }
+                }}
                 onChange={e => setPrompt(e.target.value)}
                 endContent={
                   <Button
