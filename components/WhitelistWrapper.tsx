@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { getWhitelistStatus } from "./../app/utils/supabaseRequests";
 import { UserButton, SignIn } from "@clerk/nextjs";
-// import { dark } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 import { baseTheme } from "@rainbow-me/rainbowkit/dist/themes/baseTheme";
 export function WhitelistWrapper({
   children,
@@ -64,7 +64,7 @@ export function WhitelistWrapper({
           public beta.
         </h1>
       </div>
-      <UserButton afterSignOutUrl="/" />
+      <UserButton afterSignOutUrl="/" appearance={{baseTheme: dark}} />
     </div>
   );
 }
