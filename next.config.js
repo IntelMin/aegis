@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  server: 'http://localhost:9898'
+}
 
 module.exports = nextConfig

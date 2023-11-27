@@ -1,6 +1,7 @@
 
 
 import { useEffect, useState } from "react";
+import config from "@/next.config";
 
 export function useDashboardData() {
   const [dashboardData, setDashboardData] = useState([]);
@@ -8,7 +9,7 @@ export function useDashboardData() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/dashboard");
+        const response = await fetch(`${config.server}/dashboard`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

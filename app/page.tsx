@@ -51,7 +51,7 @@ export default function Home() {
       <Card className="bg-opacity-10 w-full md:w-full pt-2 px-4 cursor-pointer">
         <TrendingCards />
       </Card>
-      <section className="flex p-6 flex-col gap-4 md:flex-row ">
+      <section className="flex p-6 flex-col gap-4 md:flex-row hidden">
         <Card className=" bg-opacity-50 w-full md:w-1/3">
           <div className="p-4 glassCard rounded-md bg-red-500 flex items-top">
             <span>
