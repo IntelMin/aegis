@@ -32,7 +32,10 @@ router.post('/compile', (req, res) => {
   
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  res.status(200).json({ bytecode: output.contracts['ABC.sol'].ABC.evm.bytecode.object })
+  res.status(200).json({
+    bytecode: output.contracts['ABC.sol'].ABC.evm.bytecode.object,
+    abi: output.contracts['ABC.sol'].ABC.abi
+  })
 });
 
 router.get('/code', (req, res) => {

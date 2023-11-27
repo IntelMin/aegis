@@ -10,11 +10,7 @@ import {
 	RainbowKitProvider,
   } from '@rainbow-me/rainbowkit';
   import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-  import {
-  
-	mainnet,goerli
-  
-  } from 'wagmi/chains';
+import { mainnet, goerli, sepolia } from 'wagmi/chains';
   import { publicProvider } from 'wagmi/providers/public';
 
 export interface ProvidersProps {
@@ -22,7 +18,7 @@ export interface ProvidersProps {
 	themeProps?: ThemeProviderProps;
 }
   const { chains, publicClient } = configureChains(
-	  [ mainnet,goerli],
+	  [ mainnet,goerli, sepolia],
 	  [
 		publicProvider()
 	  ]
