@@ -5,10 +5,12 @@ cache/
 /node_modules
 /.pnp
 .pnp.js
+pnpm-lock.yaml
 
 # Ignore everything in these directories
 contracts/*
 data/*
+cache/*
 
 # Except the directories themselves, by negating the ignore with a '!'
 !contracts/
