@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const parser = require("@solidity-parser/parser");
-const main = require('../codes/main');
-const dependencies = require('../codes/dependencies');
-const solc = require('solc');
+const main = require("../codes/main");
+const dependencies = require("../codes/dependencies");
+const solc = require("solc");
 const OpenAI = require("openai");
 
 const openai = new OpenAI({
@@ -21,6 +21,7 @@ async function callOpenAI(query) {
       .replace(/\n/g, "")
       .replace(/   /g, "")
       .replace(/ /g, "")
+      .replace(/%/g, "")
   );
   return trueResponse;
 }
@@ -39,6 +40,7 @@ function validateString(input) {
 function updateCode(code, prompt) {
   try {
     let newCode = code;
+    let error = null;
     const { nameRegex, symbolRegex, supplyRegex, buyTaxRegex, sellTaxRegex } =
       regex();
     for (const [key, val] of Object.entries(prompt)) {
@@ -81,10 +83,11 @@ function updateCode(code, prompt) {
           break;
 
         default:
+          error = "parameter category not supported";
           break;
       }
     }
-    return newCode;
+    return { newCode, error };
   } catch (e) {
     if (e instanceof parser.ParserError) {
       console.error("Parse error: ", e.errors);
@@ -94,21 +97,32 @@ function updateCode(code, prompt) {
 }
 
 router.post("/update-code", async (req, res) => {
-  if (req.body === undefined) res.status(400).send("Bad request");
+  if (req.body === undefined) {
+    res.status(400).send("Bad request");
+    return;
+  }
 
   const { prompt, code } = req.body;
 
   if (!prompt || !code) {
     res.status(400).send("Bad request");
+    return;
   }
 
   try {
     const response = await callOpenAI(prompt);
-    const newCode = updateCode(code, response);
+
+    const { newCode, error } = updateCode(code, response);
+    if (error) {
+      res.status(404).send({ error });
+      return;
+    }
+
     res.status(200).send({
       code: newCode,
-      status: getStatus(newCode)
+      status: getStatus(newCode),
     });
+    return;
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).send("Error: " + error.message);
@@ -119,6 +133,7 @@ const defaultPrompt = `
 Given the following request, return key / val formatted json string like
 { [key]: [val] }
 'key' is what user wants to update, 'val' is target value.
+if request indicates a buy tax, return key as buy_tax, same for sell_tax.
 ---------------------------------------
 `;
 
@@ -139,41 +154,46 @@ function regex() {
 }
 
 const getStatus = (code) => {
-  // TODO: extract name, symbol, supply, buy_tax, sell_tax from code
+  const { nameRegex, symbolRegex, supplyRegex, buyTaxRegex, sellTaxRegex } =
+    regex();
   return {
-    name: 'ABC',
-    symbol: 'SYM',
-    supply: 10000
-  }
-}
+    name: code.match(nameRegex)[1],
+    symbol: code.match(symbolRegex)[1],
+    supply: code.match(supplyRegex)[1],
+    buy_tax: code.match(buyTaxRegex)[1],
+    sell_tax: code.match(sellTaxRegex)[1],
+  };
+};
 
-router.post('/compile', (req, res) => {
+router.post("/compile", (req, res) => {
   const input = {
-    language: 'Solidity',
+    language: "Solidity",
     sources: {
-      'ABC.sol': {
-        content: dependencies.concat(req.body.code)
-      }
+      "ABC.sol": {
+        content: dependencies.concat(req.body.code),
+      },
     },
     settings: {
       outputSelection: {
-        '*': {
-          '*': ['*']
-        }
-      }
-    }
+        "*": {
+          "*": ["*"],
+        },
+      },
+    },
   };
-  
+
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  res.status(200).json({ bytecode: output.contracts['ABC.sol'].ABC.evm.bytecode.object })
+  res
+    .status(200)
+    .json({ bytecode: output.contracts["ABC.sol"].ABC.evm.bytecode.object });
 });
 
-router.get('/code', (req, res) => {
+router.get("/code", (req, res) => {
   res.status(200).json({
     code: main,
-    status: getStatus(main)
-  })
+    status: getStatus(main),
+  });
 });
 
 module.exports = router;
