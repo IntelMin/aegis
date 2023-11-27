@@ -7,6 +7,7 @@ import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import clsx from "clsx";
 import { Layout } from "@/components/layout";
+import '@rainbow-me/rainbowkit/styles.css';
 
 export const metadata: Metadata = {
   title: {
@@ -50,26 +51,5 @@ export default function RootLayout({
     
   );
 
-//   return (
-//     <html lang="en" suppressHydrationWarning>
-//       <head>
-//         <title>Temporarily Down for Maintenance</title>
-//         <meta name="description" content="Our site is currently down for maintenance. We'll be back shortly." />
-//       </head>
-//       <body
-//         className={clsx(
-//           "min-h-screen bg-background font-sans antialiased text-white",
-//           fontSans.variable
-//         )}
-//       >
-//         <div className="flex items-center justify-center min-h-screen">
-//           <div className="text-center">
-//             <h1 className="text-lg font-semibold">We'll be back soon!</h1>
-//             <p className="mt-4">Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back up shortly!</p>
-//           </div>
-//         </div>
-//       </body>
-//     </html>
-//   );
 
 }

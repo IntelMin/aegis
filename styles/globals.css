@@ -14,6 +14,9 @@ body {
 .apexcharts-toolbar {
   display: none !important;
 }
+/* .apexcharts-legend-marker{
+  display: none !important;
+} */
 
 .apexcharts-legend-text {
   color: white !important;
@@ -27,7 +30,20 @@ body {
   background-color: #000000;
   background-image: linear-gradient(315deg, #676767 0%, #dad9d9 74%);
 }
+
 .loading-screen{
   position: absolute !important;
   z-index: 9999 !important;
+}
+
+.liveOverLay{
+  display: none;
+}
+
+.liveDash:hover .liveOverLay{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(1px);
+  background-color: rgba(0, 0, 0, 0.141);
 }
