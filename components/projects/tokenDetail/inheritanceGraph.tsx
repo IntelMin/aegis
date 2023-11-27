@@ -107,13 +107,22 @@ const InheritanceGraph: React.FC<{ data: GraphData }> = ({ data }) => {
 
   // colors
   const steps = graph.nnodes() - 1;
+  const nodesArray = [];
+  const nodesIterator = graph.nodes();
+  let nodeResult = nodesIterator.next();
+  
+  while (!nodeResult.done) {
+    nodesArray.push(nodeResult.value);
+    nodeResult = nodesIterator.next();
+  }
+  
   const interp = d3.interpolateRainbow;
   const colorMap = new Map(
-    [...graph.nodes()]
+    nodesArray
       .sort((a, b) => a.y - b.y)
       .map((node, i) => [node.data.id, interp(i / steps)])
   );
-
+  
   useEffect(() => {
     // Ensure that the ref current value is available
     if (d3Chart.current) {
@@ -123,7 +132,7 @@ const InheritanceGraph: React.FC<{ data: GraphData }> = ({ data }) => {
         // pad a little for link thickness
         .style("width", width + 100)
         .style("height", height + 100);
-      const trans = svg.transition().duration(750);
+      const trans = d3.transition().duration(750);
 
       // nodes
       svg

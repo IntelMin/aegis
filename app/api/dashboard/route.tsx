@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 const { AEGIS_SRV } = process.env;
 
 export async function GET(req: NextRequest) {
-//   const url = `${AEGIS_SRV}/trending/new`;
 
-  const cacheBuster = new Date().getTime();
-  const url = `${AEGIS_SRV}/trending/top?_=${cacheBuster}`;
+  const url = `${AEGIS_SRV}/dashboard`;
 
   console.log("url:", url);
 

@@ -35,10 +35,8 @@ const RadialChart = (series_data: any) => {
         },
       },
     },
-    // colors: ['#1aeae0', '#00d1ab', '#00ac81', '#008a71', '#005243'],
-    colors: [ '#2b313c', '#191a1c', '#535353'],
-    // labels: ['Health', 'Security', 'Strength', 'Stability', 'Trust'],
-    labels: ['Health', 'Security', 'Trust'],
+    colors: ['#f2f2f2', '#d9d9d9', '#bfbfbf', '#808080', '#404040'],
+    labels: ['Health', 'Security', 'Strength', 'Stability', 'Trust'],
     legend: {
       show: true,
       floating: true,

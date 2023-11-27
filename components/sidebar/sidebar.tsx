@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { GiStabbedNote, GiToken } from "react-icons/gi";
 import { MdSecurity } from "react-icons/md";
 import { LuTable, LuRocket } from "react-icons/lu";
+import { FaCloudUploadAlt } from "react-icons/fa";
 import { TbTargetArrow } from "react-icons/tb";
 import { HomeIcon } from "../icons/sidebar/home-icon";
 import { useSidebarContext } from "../layout/layout-context";
@@ -38,6 +39,14 @@ export const SidebarWrapper = () => {
               icon={<HomeIcon />}
               isActive={pathname === "/"}
               href="/"
+            />
+            <SidebarItem
+              title="Deployer"
+              icon={
+                <FaCloudUploadAlt className="text-[#c5c5c5] text-[22px] ml-[2px]" />
+              }
+              isActive={pathname === "/deployer"}
+              href="/deployer"
             />
             <SidebarMenu title="Audits">
               <SidebarItem

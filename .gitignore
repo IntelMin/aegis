@@ -1,13 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+cache/
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+pnpm-lock.yaml
 
 # Ignore everything in these directories
 contracts/*
 data/*
+cache/*
 
 # Except the directories themselves, by negating the ignore with a '!'
 !contracts/
@@ -39,6 +42,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -46,3 +50,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+yarn.lock
+package-lock.json
+```

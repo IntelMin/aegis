@@ -1,3 +1,5 @@
+"use client";
+
 import Title from "@/components/title";
 import React from "react";
 import { BiSolidDownArrow } from "react-icons/bi";
@@ -27,10 +29,10 @@ const CodeSecurity = (code: any, rugpull: any) => {
             <div>
               <h3 className="text-lg font-semibold">Methods</h3>
               <div className="flex gap-4 mt-3">
-                <Button auto color="primary" rounded>
+                <Button color="primary" radius="md">
                   AI Review
                 </Button>
-                <Button auto color="secondary" rounded>
+                <Button color="secondary" radius="md" >
                   Static Analysis
                 </Button>
               </div>
@@ -49,7 +51,7 @@ const CodeSecurity = (code: any, rugpull: any) => {
                 </div>
                 {/* ... */}
               </div>
-              <Button auto flat color="error" className="mt-3">
+              <Button color="primary" className="mt-3">
                 View 8 Audited Files
               </Button>
             </div>
