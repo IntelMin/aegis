@@ -6,6 +6,7 @@ const parser = require("@solidity-parser/parser");
 const OpenAI = require("openai");
 const path = require("path");
 
+
 const openai = new OpenAI({
   apiKey: "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",
 });
@@ -242,6 +243,10 @@ async function getFindings(codeSegments) {
 
   return findings;
 }
+
+
+
+
 
 router.get("/:address", async (req, res) => {
   const address = req.params.address;

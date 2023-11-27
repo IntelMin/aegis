@@ -2,7 +2,20 @@
 const fs = require("fs").promises;
 const axios = require("axios");
 const path = require("path");
+const { createClient } = require("@supabase/supabase-js");
 
+// Initialize Supabase client
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
+async function isContractOpenSource(address) {
+  const apiKey = 'EYEC357Q2UY267KX88U25HZ57KIPNT4CYB'; // Replace with your Etherscan API key
+  const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
+
+  const response = await axios.get(url);
+  const data = response.data;
+
+  // If the contract is open source, the sourceCode field will not be empty
+  return data.result[0].SourceCode !== '';
+}
 const fetchData = async (file, url) => {
   try {
     try {
@@ -63,4 +76,36 @@ const getCachedOrFreshData = async (
   }
 };
 
-module.exports = { getCachedOrFreshData, readCache, writeCache, fetchData };
+// Function to insert data into a Supabase table
+async function insertData(data) {
+  try {
+    const { data: insertedData, error } = await supabase
+      .from("audit-requests")
+      .insert(data);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return insertedData;
+  } catch (error) {
+    console.error("Error inserting data:", error);
+    throw error;
+  }
+}
+async function modifyRow(address, newStatus) {
+  try {
+    const { data: updatedData, error } = await supabase
+      .from("audit-requests")
+      .update({ status: newStatus })
+      .eq("address", address);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return updatedData;
+  } catch (error) {
+    console.error("Error modifying row:", error);}}
+
+module.exports = { getCachedOrFreshData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow };
