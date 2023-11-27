@@ -26,13 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
-  return (
-    <ClerkProvider>
+}) => (
+  <ClerkProvider afterSignInUrl={process.env.REDIRECT_URL}>
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
@@ -47,9 +46,7 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-    </ClerkProvider>
-    
-  );
+  </ClerkProvider>
+);
 
-
-}
+export default RootLayout
