@@ -8,7 +8,7 @@ import { Providers } from "./providers";
 import clsx from "clsx";
 import { Layout } from "@/components/layout";
 import '@rainbow-me/rainbowkit/styles.css';
-
+import WhitelistWrapper from "@/components/WhitelistWrapper";
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -39,11 +39,12 @@ const RootLayout = ({
           "min-h-screen bg-black font-sans antialiased",
           fontSans.variable
         )}
-      >
+      ><WhitelistWrapper>
         <NextTopLoader color="#b0b0b0" />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Layout>{children}</Layout>
         </Providers>
+        </WhitelistWrapper>
       </body>
     </html>
   </ClerkProvider>
