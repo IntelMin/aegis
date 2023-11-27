@@ -3,6 +3,8 @@
 import React from "react";
 import CircleGraph from "@/components/circleGraph";
 import RadialChart from "@/components/radialChart";
+
+import { RiPagesLine } from "react-icons/ri";
 import { Card, Chip } from "@nextui-org/react";
 import Link from "next/link";
 
@@ -268,10 +270,7 @@ const AuditDetail = (data: any) => {
 
         {/* <div className="flex p-4 rounded-md items-top">
           <span>
-            <img
-              className="mr-4"
-              src="https://bankco-next.vercel.app/_next/static/media/total-earn.c13de7d2.svg"
-            />
+          <RiPagesLine className="text-white mr-1  mt-1 text-xl"/>
           </span>
 
           <div className="w-full bg-transparent">

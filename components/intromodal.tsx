@@ -56,7 +56,7 @@ export default function IntroModal() {
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="success" variant="light" onPress={onClose}>
+                <Button className="border-1 border-white" variant="light" onPress={onClose}>
                   Close
                 </Button>
               </ModalFooter>
