@@ -10,6 +10,7 @@ const dependencyRoute = require('./api/dependencies');
 const dashboardRoute = require('./api/dashboard');
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
+const auditRoute = require("./api/audit");
 const worker = require("./worker");
 
 const port = 9898;
@@ -33,6 +34,7 @@ app.use('/code', codeRoute);
 app.use('/dashboard', dashboardRoute);
 app.use("/trending", trendingTokens);
 app.use("/deployer", deployerRoute);
+app.use("/audit", auditRoute);
 // app.use('/graph', graphRoute);
 
 app.listen(port, () => {
