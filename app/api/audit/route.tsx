@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 const { createClient } = require("@supabase/supabase-js");
 
 // Initialize Supabase client
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
-const { AEGIS_SRV } = process.env;
+const { AEGIS_SRV,SUPABASE_URL,SUPABASE_API_KEY } = process.env;
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 export default async function POST(req: NextRequest, res: NextResponse) {
     const data = await req.json();
     const url = `http://${AEGIS_SRV}/`;
@@ -14,6 +15,7 @@ export default async function POST(req: NextRequest, res: NextResponse) {
     const info = await axios.get(url+`info/${address}`).then(res => res.data);
     if (info.metadata){
         const audit = await axios.get(url+`code/${address}`).then(res => res.data);
+        return NextResponse.json({ audit: audit, info: info });
     }
     if (info.error) {
         return NextResponse.json({ error: info.error });
@@ -22,20 +24,18 @@ export default async function POST(req: NextRequest, res: NextResponse) {
     
 }
 
-// export async function GET(req: NextRequest, res: NextResponse) {
-//     const { address } = req.query;
-//     const data = await req.json();
+export async function GET(req: NextRequest, res: NextResponse,{ params }: { params: { address: string }}) {
 
-//     // Query the Supabase table for the status row based on the address input
-//     const { data, error } = await supabase
-//         .from('your_table_name')
-//         .select('*')
-//         .eq('address', address)
-//         .single();
+    // Query the Supabase table for the status row based on the address input
+    const { data, error } = await supabase
+        .from('audit-requests')
+        .select('*')
+        .eq('address', params.address)
+        .single();
 
-//     if (error) {
-//         return NextResponse.json({ error });
-//     }
+    if (error) {
+        return NextResponse.json({ error });
+    }
 
-//     return NextResponse.json({ data });
-// }
+    return NextResponse.json({ data });
+}

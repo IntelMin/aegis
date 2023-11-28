@@ -1,12 +1,10 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const { fetchData, getCachedOrFreshData } = require("../utils");
+const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase } = require("../utils");
 const parser = require("@solidity-parser/parser");
 const OpenAI = require("openai");
 const path = require("path");
-
-
 const openai = new OpenAI({
   apiKey: "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",
 });
@@ -189,6 +187,38 @@ async function getFinding(code) {
   return chatCompletion.choices[0].message.content;
 }
 
+//GPT code audit part 
+async function worker() {
+  const { data: auditRequests, error } = await supabase
+  .from('audit-requests')
+  .select('*')
+  .eq('status', 'pending');
+  async.eachSeries(auditRequests, async (address) => {
+
+    const findingsCacheFile = path.join(
+      __dirname,
+      `../data/${address}/findings.json`
+    );
+
+  let codeSegments = parseSolidity(source_code);
+  // console.log("codeSegments: ", codeSegments);
+
+  let findings = await getCachedOrFreshData(
+    findingsCacheFile,
+    getFindings,
+    codeSegments
+  );
+  }, (error) => {
+    if (error) {
+      console.error('Error:', error);
+    } else {
+      console.log('All audits completed.');
+    }
+  });
+}
+
+
+
 function parseMarkdownToJSON(textArray) {
   // Join the array into a single string and split by headings
   const sections = textArray.join("\n\n").split("\n# ").slice(1); // slice(1) to skip the first empty element if the text starts with a heading
@@ -248,7 +278,13 @@ async function getFindings(codeSegments) {
 
 
 
+let audit_queue = []
 router.get("/:address", async (req, res) => {
+  const { data: auditRequests, error } = await supabase
+  .from('audit-requests')
+  .select('*')
+  .eq('status', 'pending');
+ audit_queue = auditRequests.map((auditRequest) => auditRequest.address)
   const address = req.params.address;
 
   console.log("code request: ", address);
@@ -256,9 +292,27 @@ router.get("/:address", async (req, res) => {
   if (!address) {
     return res.status(400).send("No address provided");
   }
-
   let filename = `./contracts/${address}.json`;
+  if(!fileExists(filename)){
+    if(isContractOpenSource(address)){
+      if(!audit_queue.includes(address)){
+        audit_queue.push(address)
+        insertData({address: address, status: "pending"})
+      }
+      else{
+        return res.status(200).send("Contract is already in queue, please wait for the audit to finish");
+      }
+    }
+    else{
+
+      return res.status(200).send("Contract is not open source");
+    }
+  }
+
+
   let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+
+
 
   try {
     let filedata = await fetchData(filename, url);
@@ -266,17 +320,17 @@ router.get("/:address", async (req, res) => {
     let source_code = filedata["source_code"];
 
     const treeCacheFile = path.join(__dirname, `../data/${address}/tree.json`);
-    const findingsCacheFile = path.join(
-      __dirname,
-      `../data/${address}/findings.json`
-    );
-
+    
     let treeJson = await getCachedOrFreshData(
       treeCacheFile,
       generateTree,
       source_code
-    );
-    // console.log("treeJson: ", treeJson);
+      );
+      // console.log("treeJson: ", treeJson);
+      const findingsCacheFile = path.join(
+        __dirname,
+        `../data/${address}/findings.json`
+      );
 
     let codeSegments = parseSolidity(source_code);
     // console.log("codeSegments: ", codeSegments);
@@ -286,6 +340,7 @@ router.get("/:address", async (req, res) => {
       getFindings,
       codeSegments
     );
+
     // console.log("findings: ", findings);
 
     // let findingsJson = parseMarkdownToJSON(findings);
@@ -329,4 +384,4 @@ router.get("/:address", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router

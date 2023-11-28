@@ -3,9 +3,9 @@ const fs = require("fs").promises;
 const axios = require("axios");
 const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
-
+const { SUPABASE_URL,SUPABASE_API_KEY } = process.env;
 // Initialize Supabase client
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
+const supabase = createClient("https://uxdlqgwtaprqtuluwuku.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZGxxZ3d0YXBycXR1bHV3dWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwODc2MDAsImV4cCI6MjAxNjY2MzYwMH0.x4Yzp1tpTry7L6XXryXQOVXg3Mo7TlRK6AuRF2MuVzs");
 async function isContractOpenSource(address) {
   const apiKey = 'EYEC357Q2UY267KX88U25HZ57KIPNT4CYB'; // Replace with your Etherscan API key
   const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
@@ -15,6 +15,14 @@ async function isContractOpenSource(address) {
 
   // If the contract is open source, the sourceCode field will not be empty
   return data.result[0].SourceCode !== '';
+}
+function fileExists(filePath) {
+  try {
+    fs.accessSync(filePath, fs.constants.F_OK);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 const fetchData = async (file, url) => {
   try {
@@ -108,4 +116,4 @@ async function modifyRow(address, newStatus) {
   } catch (error) {
     console.error("Error modifying row:", error);}}
 
-module.exports = { getCachedOrFreshData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow };
+module.exports = { fileExists,getCachedOrFreshData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow,supabase };
