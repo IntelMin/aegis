@@ -1,4 +1,4 @@
-const { fetchData, getCachedOrFreshData, supabase, modifyRequestdb } = require("./utils");
+const { fetchData,fetchAndCacheData, getCachedOrFreshData, supabase, modifyRequestdb } = require("./utils");
 const OpenAI = require("openai");
 const async = require("async");
 const path = require("path");
@@ -186,7 +186,6 @@ async function worker() {
       catch(e){
         console.log(e)
       }
-
         modifyRequestdb(address.address,"partial")
     }, (error) => {
       if (error) {

@@ -70,7 +70,37 @@ const writeCache = async (filename, data) => {
   await fs.mkdir(dir, { recursive: true });
   await fs.writeFile(filename, JSON.stringify(data), "utf8");
 };
+async function fetchAndCacheData(type, endpoint, address) {
+  const filename = path.join(__dirname, `../data/${address}/${type}.json`);
+  const currentTime = new Date().getTime();
+  let filedata = await readCache(filename);
 
+  if (filedata && currentTime - filedata.time <= expiry) {
+    console.log(`Fetching ${type} from cache.`);
+    return filedata.data;
+  } else {
+    console.log(`Making request to ${type}.`);
+    const request_data = {
+      /* ... */
+    }; // Customize this based on the endpoint
+    const response_data = await apiRequest(endpoint, request_data);
+
+    console.log(`Fetched ${type} from API: `, response_data);
+
+    // don't cache if there is no data
+    if (!response_data) {
+      return null;
+    }
+
+    const data = {
+      time: currentTime,
+      data: response_data,
+    };
+
+    await writeCache(filename, data);
+    return response_data;
+  }
+}
 const getCachedOrFreshData = async (
   cacheFilename,
   dataFunction,
@@ -155,4 +185,5 @@ module.exports = {
   insertRequestdb,
   modifyRequestdb,
   supabase,
+  fetchAndCacheData
 };
