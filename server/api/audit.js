@@ -15,6 +15,7 @@ router.post("/:address", async (req, res) => {
         if (!audit_queue.includes(address)) {
           audit_queue.push(address);
           insertRequestdb({ address: address, status: "pending" });
+          return res.status(200).send("Contract added to audit queue");
         } else {
             return res
             .status(200)
