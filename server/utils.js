@@ -3,18 +3,22 @@ const fs = require("fs").promises;
 const axios = require("axios");
 const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
-const { SUPABASE_URL,SUPABASE_API_KEY } = process.env;
+const { SUPABASE_URL, SUPABASE_API_KEY } = process.env;
 // Initialize Supabase client
-const supabase = createClient("https://uxdlqgwtaprqtuluwuku.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZGxxZ3d0YXBycXR1bHV3dWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwODc2MDAsImV4cCI6MjAxNjY2MzYwMH0.x4Yzp1tpTry7L6XXryXQOVXg3Mo7TlRK6AuRF2MuVzs");
+const supabase = createClient(
+  "https://uxdlqgwtaprqtuluwuku.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZGxxZ3d0YXBycXR1bHV3dWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwODc2MDAsImV4cCI6MjAxNjY2MzYwMH0.x4Yzp1tpTry7L6XXryXQOVXg3Mo7TlRK6AuRF2MuVzs"
+);
+
 async function isContractOpenSource(address) {
-  const apiKey = 'EYEC357Q2UY267KX88U25HZ57KIPNT4CYB'; // Replace with your Etherscan API key
+  const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
   const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
 
   const response = await axios.get(url);
   const data = response.data;
 
   // If the contract is open source, the sourceCode field will not be empty
-  return data.result[0].SourceCode !== '';
+  return data.result[0].SourceCode !== "";
 }
 function fileExists(filePath) {
   try {
@@ -85,14 +89,22 @@ const getCachedOrFreshData = async (
 };
 
 function getCachedData(cacheFilePath) {
-  let cache = readCache(cacheFilePath)
-  console.log(cache)
+  let cache = readCache(cacheFilePath);
+  console.log(cache);
   if (cache !== null) {
     // const cacheData = fs.readFileSync(cacheFilePath, 'utf8');
     return JSON.parse(cache);
   } else {
     return null;
   }
+}
+async function isERC20Token(token_info) {
+  const token_info = await fetchAndCacheData(
+    "info",
+    `https://eth.blockscout.com/api/v2/tokens/${address}`,
+    address
+  );
+  return token_info.data.type === "ERC-20";
 }
 
 // Function to insert data into a Supabase table
@@ -125,6 +137,20 @@ async function modifyRow(address, newStatus) {
 
     return updatedData;
   } catch (error) {
-    console.error("Error modifying row:", error);}}
+    console.error("Error modifying row:", error);
+  }
+}
 
-module.exports = { fileExists,getCachedOrFreshData,getCachedData, readCache, writeCache, fetchData,isContractOpenSource,insertRequestdb,modifyRow,supabase };
+module.exports = {
+  fileExists,
+  getCachedOrFreshData,
+  isERC20Token,
+  getCachedData,
+  readCache,
+  writeCache,
+  fetchData,
+  isContractOpenSource,
+  insertRequestdb,
+  modifyRow,
+  supabase,
+};
