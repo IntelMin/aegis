@@ -40,6 +40,7 @@ export function WhitelistWrapper({
   }
 
   if (!whitelistStatus) {
+    return (
     <div
       style={{
         backgroundImage: "linear-gradient(27deg, #4d4f55 0%, #000000 79%)",
@@ -63,7 +64,7 @@ export function WhitelistWrapper({
         </h1>
       </div>
       <UserButton afterSignOutUrl="/" appearance={{baseTheme: dark}} />
-    </div>
+    </div>)
   }
 
   return (
