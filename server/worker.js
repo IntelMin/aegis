@@ -1,4 +1,4 @@
-const { fetchData, getCachedOrFreshData, supabase, modifyRow } = require("./utils");
+const { fetchData, getCachedOrFreshData, supabase, modifyRequestdb } = require("./utils");
 const OpenAI = require("openai");
 const async = require("async");
 const path = require("path");
@@ -122,19 +122,77 @@ async function gptauditor(address){
 }
   //GPT code audit part 
 async function worker() {
-    const { data: auditRequests, error } = await supabase
+    const { data: auditPartialRequests, error } = await supabase
     .from('audit-requests')
     .select('*')
     .eq('status', 'partial');
-    console.log("auditRequests: ", auditRequests);
-    async.eachSeries(auditRequests, async (address) => {
+
+    const { data: auditPendingRequests, error:error_pending } = await supabase
+    .from('audit-requests')
+    .select('*')
+    .eq('status', 'pending');
+    
+    async.eachSeries(auditPartialRequests, async (address) => {
         await gptauditor(address.address)
-        modifyRow(address.address,"complete")
+        modifyRequestdb(address.address,"complete")
     }, (error) => {
       if (error) {
         console.error('Error:', error);
       } else {
         console.log('All audits completed.');
+      }
+    });
+    async.eachSeries(auditPendingRequests, async (address) => {
+      try {
+        const token_info = await fetchAndCacheData(
+          "info",
+          `https://eth.blockscout.com/api/v2/tokens/${address}`,
+          address
+        );
+    
+        const token_stats = await fetchAndCacheData("stats", `https://eth.blockscout.com/api/v2/tokens/${address}/stats`, address);
+        const token_security = await fetchAndCacheData(
+          "security",
+          `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
+          address
+        );
+        const token_rugpull = await fetchAndCacheData(
+          "rugpull",
+          `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
+          address
+        );
+        const metadata = await getMetadata(address);
+        const keys = Object.keys(token_security.result);
+        const parse_security = token_security.result[keys[0]];
+        let parse_rugpull = token_rugpull["result"];
+        let parse_meta = metadata["tokens"][0];
+
+        //save token contract 
+
+        let filename = `./contracts/${address}.json`;
+        let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+        let filedata = await fetchData(filename, url);
+
+        let source_code = filedata["source_code"];
+    
+        const treeCacheFile = path.join(__dirname, `../data/${address}/tree.json`);
+        // console.log("treeCacheFile: ", treeCacheFile);
+        let treeJson = await getCachedOrFreshData(
+          treeCacheFile,
+          generateTree,
+          source_code
+          );
+      }
+      catch(e){
+        console.log(e)
+      }
+
+        modifyRequestdb(address.address,"partial")
+    }, (error) => {
+      if (error) {
+        console.error('Error:', error);
+      } else {
+        console.log('Partial audits completed.');
       }
     });
   }

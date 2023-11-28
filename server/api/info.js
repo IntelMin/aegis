@@ -130,7 +130,7 @@ router.get("/:address", async (req, res) => {
   }
 
   try {
-    const token_info = await fetchAndCacheData(
+    const token_iinfo = await fetchAndCacheData(
       "info",
       `https://eth.blockscout.com/api/v2/tokens/${address}`,
       address
@@ -158,7 +158,7 @@ router.get("/:address", async (req, res) => {
     console.log("Security: ", parse_security);
 
     const responseData = {
-      token: token_info,
+      token: token_iinfo,
       metadata: parse_meta,
       // stats: token_stats,
       security: parse_security,

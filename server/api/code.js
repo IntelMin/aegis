@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const { fetchData, getCachedOrFreshData, fileExists, insertRequestdb, isContractOpenSource, supabase, modifyRow, getCachedData } = require("../utils");
+const { fetchData, getCachedOrFreshData, fileExists, insertRequestdb, isContractOpenSource, supabase, modifyRequestdb, getCachedData } = require("../utils");
 const parser = require("@solidity-parser/parser");
 const path = require("path");
 
@@ -206,7 +206,7 @@ router.get("/:address", async (req, res) => {
       source_code
       );
       if(treeJson){
-        modifyRow(address,"partial")
+        modifyRequestdb(address,"partial")
         console.log("Partial audit completed");
       }
       // console.log("treeJson: ", treeJson);

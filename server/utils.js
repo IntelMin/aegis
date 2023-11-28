@@ -20,6 +20,7 @@ async function isContractOpenSource(address) {
   // If the contract is open source, the sourceCode field will not be empty
   return data.result[0].SourceCode !== "";
 }
+
 function fileExists(filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
@@ -28,6 +29,7 @@ function fileExists(filePath) {
     return false;
   }
 }
+
 const fetchData = async (file, url) => {
   try {
     try {
@@ -98,7 +100,7 @@ function getCachedData(cacheFilePath) {
     return null;
   }
 }
-async function isERC20Token(token_info) {
+async function isERC20Token(address) {
   const token_info = await fetchAndCacheData(
     "info",
     `https://eth.blockscout.com/api/v2/tokens/${address}`,
@@ -124,7 +126,7 @@ async function insertRequestdb(data) {
     throw error;
   }
 }
-async function modifyRow(address, newStatus) {
+async function modifyRequestdb(address, newStatus) {
   try {
     const { data: updatedData, error } = await supabase
       .from("audit-requests")
@@ -151,6 +153,6 @@ module.exports = {
   fetchData,
   isContractOpenSource,
   insertRequestdb,
-  modifyRow,
+  modifyRequestdb,
   supabase,
 };

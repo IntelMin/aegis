@@ -30,6 +30,23 @@ router.post("/:address", async (req, res) => {
     }
 }
 });
+async function getMetadata(address) {
+    const filename = path.join(__dirname, `../data/${address}/meta.json`);
+  
+    let filedata = await readCache(filename);
+  
+    if (filedata) {
+      return filedata;
+    } else {
+      const response_data = await definedRequest(address);
+      console.log(`Fetched metadata from API: `, response_data);
+  
+      const data = response_data;
+  
+      await writeCache(filename, data);
+      return response_data;
+    }
+  }
 router.get("/:address", async (req, res) => {
     const address = req.params.address;
     const {data: auditRequests, error} = await supabase.from('audit-requests').select('*').eq('address', address);
