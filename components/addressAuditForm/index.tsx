@@ -32,6 +32,7 @@ const AddressAuditForm = (props: Props) => {
   
       const data = await response.json();
       // Process the response data here
+      console.log(data)
   
     } catch (error) {
       console.error('Error querying audit:', error);
@@ -54,6 +55,7 @@ const AddressAuditForm = (props: Props) => {
   
       const data = await response.json();
       // Process the response data here
+      
       if(data.status == "completed"){
         queryAudit(address)
         Setactiveaudit(false)

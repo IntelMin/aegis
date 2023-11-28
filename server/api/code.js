@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase, modifyRow, getCachedData } = require("../utils");
+const { fetchData, getCachedOrFreshData, fileExists, insertRequestdb, isContractOpenSource, supabase, modifyRow, getCachedData } = require("../utils");
 const parser = require("@solidity-parser/parser");
 const path = require("path");
 
@@ -169,12 +169,14 @@ router.get("/:address", async (req, res) => {
     return res.status(400).send("No address provided");
   }
   let filename = `./contracts/${address}.json`;
+  // move to worker 
+
   if(!fileExists(filename)){
     if(isContractOpenSource(address)){
       if(!audit_queue.includes(address)){
         console.log("Contract is open source, adding to queue");
         audit_queue.push(address)
-        insertData({address: address, status: "pending"})
+        insertRequestdb({address: address, status: "pending"})
       }
       else{
         return res.status(200).send("Contract is already in queue, please wait for the audit to finish");

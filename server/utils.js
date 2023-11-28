@@ -96,7 +96,7 @@ function getCachedData(cacheFilePath) {
 }
 
 // Function to insert data into a Supabase table
-async function insertData(data) {
+async function insertRequestdb(data) {
   try {
     const { data: insertedData, error } = await supabase
       .from("audit-requests")
@@ -127,4 +127,4 @@ async function modifyRow(address, newStatus) {
   } catch (error) {
     console.error("Error modifying row:", error);}}
 
-module.exports = { fileExists,getCachedOrFreshData,getCachedData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow,supabase };
+module.exports = { fileExists,getCachedOrFreshData,getCachedData, readCache, writeCache, fetchData,isContractOpenSource,insertRequestdb,modifyRow,supabase };

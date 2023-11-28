@@ -125,10 +125,9 @@ async function worker() {
     const { data: auditRequests, error } = await supabase
     .from('audit-requests')
     .select('*')
-    .eq('status', 'pending');
+    .eq('status', 'partial');
     console.log("auditRequests: ", auditRequests);
     async.eachSeries(auditRequests, async (address) => {
-  
         await gptauditor(address.address)
         modifyRow(address.address,"complete")
     }, (error) => {
