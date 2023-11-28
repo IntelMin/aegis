@@ -10,6 +10,7 @@ const dependencyRoute = require('./api/dependencies');
 const dashboardRoute = require('./api/dashboard');
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
+const worker = require("./gptauditor");
 
 const port = 9898;
 
@@ -38,4 +39,4 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-// worker().catch(error => console.error('Error:', error));
+worker().catch(error => console.error('Error:', error));
