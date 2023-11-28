@@ -70,6 +70,16 @@ const writeCache = async (filename, data) => {
   await fs.mkdir(dir, { recursive: true });
   await fs.writeFile(filename, JSON.stringify(data), "utf8");
 };
+async function apiRequest(url, params) {
+  try {
+    const response = await axios.get(url, { params });
+    // console.log("Response data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error making the request", error);
+    return null;
+  }
+}
 async function fetchAndCacheData(type, endpoint, address) {
   const filename = path.join(__dirname, `../data/${address}/${type}.json`);
   const currentTime = new Date().getTime();

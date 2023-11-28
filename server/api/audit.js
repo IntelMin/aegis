@@ -1,14 +1,15 @@
 const express = require("express");
 const axios = require("axios");
-const { isERC20Token, isContractOpenSource, readCache } = require("../utils");
+const { isERC20Token,fileExists, isContractOpenSource, readCache,supabase } = require("../utils");
 const router = express.Router();
-
+const path = require("path");
 router.post("/:address", async (req, res) => {
   const { data: auditRequests, error } = await supabase
     .from("audit-requests")
     .select("*");
   audit_queue = auditRequests.map((auditRequest) => auditRequest.address);
   const address = req.params.address;
+  const filename = `./contracts/${address}.json`;
   if (!fileExists(filename)) {
       if (isERC20Token(address)) {
       if (isContractOpenSource(address)) {
