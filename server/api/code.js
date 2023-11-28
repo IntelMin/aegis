@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase } = require("../utils");
+const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase, modifyRow } = require("../utils");
 const parser = require("@solidity-parser/parser");
 const OpenAI = require("openai");
 const path = require("path");
@@ -326,6 +326,9 @@ router.get("/:address", async (req, res) => {
       generateTree,
       source_code
       );
+      if(treeJson.length){
+        modifyRow(address,"partial")
+      }
       // console.log("treeJson: ", treeJson);
       const findingsCacheFile = path.join(
         __dirname,
