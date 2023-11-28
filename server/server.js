@@ -39,4 +39,4 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-worker().catch(error => console.error('Error:', error));
+// worker().catch(error => console.error('Error:', error));

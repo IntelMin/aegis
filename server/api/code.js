@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase, modifyRow } = require("../utils");
+const { fetchData, getCachedOrFreshData, fileExists, insertData, isContractOpenSource, supabase, modifyRow, getCachedData } = require("../utils");
 const parser = require("@solidity-parser/parser");
 const path = require("path");
 
@@ -160,7 +160,6 @@ router.get("/:address", async (req, res) => {
   const { data: auditRequests, error } = await supabase
   .from('audit-requests')
   .select('*')
-  .eq('status', 'pending');
  audit_queue = auditRequests.map((auditRequest) => auditRequest.address)
   const address = req.params.address;
 
@@ -173,6 +172,7 @@ router.get("/:address", async (req, res) => {
   if(!fileExists(filename)){
     if(isContractOpenSource(address)){
       if(!audit_queue.includes(address)){
+        console.log("Contract is open source, adding to queue");
         audit_queue.push(address)
         insertData({address: address, status: "pending"})
       }
@@ -197,21 +197,22 @@ router.get("/:address", async (req, res) => {
     let source_code = filedata["source_code"];
 
     const treeCacheFile = path.join(__dirname, `../data/${address}/tree.json`);
-    
+    console.log("treeCacheFile: ", treeCacheFile);
     let treeJson = await getCachedOrFreshData(
       treeCacheFile,
       generateTree,
       source_code
       );
-      if(treeJson.length){
+      if(treeJson){
         modifyRow(address,"partial")
+        console.log("Partial audit completed");
       }
       // console.log("treeJson: ", treeJson);
-    //   const findingsCacheFile = path.join(
-    //     __dirname,
-    //     `../data/${address}/findings.json`
-    //   );
-
+      const findingsCacheFile = path.join(
+        __dirname,
+        `../data/${address}/findings.json`
+      );
+let findings = await getCachedData(findingsCacheFile)
     // let codeSegments = parseSolidity(source_code);
     // // console.log("codeSegments: ", codeSegments);
 

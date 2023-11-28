@@ -84,6 +84,17 @@ const getCachedOrFreshData = async (
   }
 };
 
+function getCachedData(cacheFilePath) {
+  let cache = readCache(cacheFilePath)
+  console.log(cache)
+  if (cache !== null) {
+    // const cacheData = fs.readFileSync(cacheFilePath, 'utf8');
+    return JSON.parse(cache);
+  } else {
+    return null;
+  }
+}
+
 // Function to insert data into a Supabase table
 async function insertData(data) {
   try {
@@ -116,4 +127,4 @@ async function modifyRow(address, newStatus) {
   } catch (error) {
     console.error("Error modifying row:", error);}}
 
-module.exports = { fileExists,getCachedOrFreshData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow,supabase };
+module.exports = { fileExists,getCachedOrFreshData,getCachedData, readCache, writeCache, fetchData,isContractOpenSource,insertData,modifyRow,supabase };
