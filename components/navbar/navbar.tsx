@@ -7,6 +7,7 @@ import { SupportIcon } from "../icons/navbar/support-icon";
 import { SearchIcon } from "../icons/searchicon";
 import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
+import {UserButton} from "@clerk/nextjs"
 
 interface NavbarWrapperProps {
   pageTitle: JSX.Element; 
@@ -51,6 +52,9 @@ export const NavbarWrapper = ({ pageTitle, children }: NavbarWrapperProps) => {
 
           <div className="max-md:hidden">
             <SupportIcon />
+          </div>
+          <div>
+            <UserButton afterSignOutUrl="/"/>
           </div>
 
           <NavbarContent></NavbarContent>

@@ -7,6 +7,7 @@ const { createClient } = require("@supabase/supabase-js");
 const { AEGIS_SRV,SUPABASE_URL,SUPABASE_API_KEY } = process.env;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+
 export default async function POST(req: NextRequest, res: NextResponse) {
     const data = await req.json();
     const url = `http://${AEGIS_SRV}/`;

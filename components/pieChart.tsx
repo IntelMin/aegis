@@ -3,11 +3,11 @@ import { Props } from "react-apexcharts";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-type Props = {
+type Series = {
   detail?: boolean;
 };
 
-const ApexChart = (props: Props) => {
+const ApexChart = (props: Series) => {
   const series = [175, 191, 34];
   const customSegmentNames = ["Total", "Success", "Pending"];
   const colors = ["#CCCCCC", "#999999", "#666666", "#333333", "#000000"];

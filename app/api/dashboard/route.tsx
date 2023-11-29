@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 const { AEGIS_SRV } = process.env;
 
-export async function GET(res: NextResponse) {
+export async function GET(req: NextRequest) {
 
-  const url = `http://${AEGIS_SRV}/dashboard`;
+  const url = `${AEGIS_SRV}/dashboard`;
 
   console.log("url:", url);
 
