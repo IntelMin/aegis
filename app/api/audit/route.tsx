@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 
-
+const AEGIS_SRV = process.env.AEGIS_SRV || "localhost:9898"
 export async function POST(req: NextRequest) {
 try {
     const data = await req.json();
