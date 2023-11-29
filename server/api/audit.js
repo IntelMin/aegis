@@ -14,36 +14,34 @@ const path = require("path");
 router.post("/", async (req, res) => {
   const { data: auditRequests, error } = await supabase
     .from("audit-requests")
-    .select("address").or('status.eq.pending,status.eq.partial');
-    if(error){
-      return res.status(500).send("Error in fetching data from database");
-    }
+    .select("address")
+    .or("status.eq.pending,status.eq.partial");
+  if (error) {
+    return res.status(500).send("Error in fetching data from database");
+  }
 
-  audit_queue = auditRequests
 
   const { address } = req.body;
   const filename = `./contracts/${address}.json`;
   if (fileExists(filename)) {
     return res.status(200).send("Contract already exists");
   }
-    if (!isERC20Token(address)) {
-      return res.status(200).send("Contract is not an ERC 20");
-    }
+  if (!isERC20Token(address)) {
+    return res.status(200).send("Contract is not an ERC 20");
+  }
 
-      if (!isContractOpenSource(address)) {
-        return res.status(200).send("Contract is not open source");
-      }
+  if (!isContractOpenSource(address)) {
+    return res.status(200).send("Contract is not open source");
+  }
 
-        if (audit_queue.includes(address)) {
-          return res
-            .status(200)
-            .send("Contract is in queue, please wait for the audit to finish");
-        }
-        audit_queue.push(address);
-        insertRequestdb({ address: address, status: "pending" });
-        return res.status(200).send("Contract added to audit queue");
-        
-      })
+  if (auditRequests.includes(address)) {
+    return res
+      .status(200)
+      .send("Contract is in queue, please wait for the audit to finish");
+  }
+  insertRequestdb({ address: address, status: "pending" });
+  return res.status(200).send("Contract added to audit queue");
+});
 router.get("/:address", async (req, res) => {
   const address = req.params.address;
   const { data: auditRequests, error } = await supabase
