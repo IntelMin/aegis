@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import {ClerkProvider} from "@clerk/nextjs";
 import { Metadata } from "next";
 import NextTopLoader from 'nextjs-toploader';
 import { siteConfig } from "@/config/site";
@@ -7,7 +8,7 @@ import { Providers } from "./providers";
 import clsx from "clsx";
 import { Layout } from "@/components/layout";
 import '@rainbow-me/rainbowkit/styles.css';
-
+import WhitelistWrapper from "@/components/WhitelistWrapper";
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -25,12 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
-  return (
+}) => (
+  <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
@@ -38,14 +39,15 @@ export default function RootLayout({
           "min-h-screen bg-black font-sans antialiased",
           fontSans.variable
         )}
-      >
+      ><WhitelistWrapper>
         <NextTopLoader color="#b0b0b0" />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Layout>{children}</Layout>
         </Providers>
+        </WhitelistWrapper>
       </body>
     </html>
-  );
+  </ClerkProvider>
+);
 
-
-}
+export default RootLayout

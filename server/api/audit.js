@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
     .from("audit-requests")
     .select("*");
   audit_queue = auditRequests.map((auditRequest) => auditRequest.address);
-  const address = req.params.address;
+  const {address} = req.body;
   const filename = `./contracts/${address}.json`;
   if (!fileExists(filename)) {
       if (isERC20Token(address)) {
