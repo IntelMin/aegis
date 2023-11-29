@@ -325,8 +325,7 @@ async function worker() {
   const { data: auditRequests, error: error_req } = await supabase
     .from("audit-requests")
     .select("*")
-    .eq("status", "pending")
-    .or("status", "partial");
+    .or("status.eq.pending", "status.eq.partial");
 
   //sorting pending and partial audits
   auditRequests.sort((a, b) => {
