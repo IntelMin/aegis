@@ -1,5 +1,4 @@
 const express = require("express");
-const axios = require("axios");
 const {
   isERC20Token,
   insertRequestdb,

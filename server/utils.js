@@ -2,7 +2,7 @@
 const fs = require("fs").promises;
 const axios = require("axios");
 const path = require("path");
-const { supabaseClient: supabase } = require("../app/utils/supabaseDB");
+const supabase = require("./supabase");
 
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
