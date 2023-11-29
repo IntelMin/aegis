@@ -364,7 +364,7 @@ async function worker() {
 
         //save token contract
 
-        const filename = `./contracts/${address}.json`;
+        const filename = path.join(__dirname, `./contracts/${address}.json`).toString()
         const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
         const filedata = await fetchData(filename, url);
 
