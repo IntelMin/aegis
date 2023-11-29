@@ -11,7 +11,8 @@ pnpm-lock.yaml
 contracts/*
 data/*
 cache/*
-
+server/data/*
+server/contracts/*
 # Except the directories themselves, by negating the ignore with a '!'
 !contracts/
 !data/
@@ -33,7 +34,7 @@ cache/*
 .DS_Store
 *.pem
 /server/data/
-/server/contrats/
+/server/contracts/
 
 # debug
 npm-debug.log*
