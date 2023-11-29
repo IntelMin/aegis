@@ -19,6 +19,11 @@ router.post("/", async (req, res) => {
   if (error) {
     return res.status(500).send("Error in fetching data from database");
   }
+    .select("address")
+    .or("status.eq.pending,status.eq.partial");
+  if (error) {
+    return res.status(500).send("Error in fetching data from database");
+  }
 
 
   const { address } = req.body;

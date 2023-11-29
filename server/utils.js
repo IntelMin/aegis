@@ -81,7 +81,7 @@ async function apiRequest(url, params) {
   }
 }
 async function fetchAndCacheData(type, endpoint, address) {
-  const filename = path.join(__dirname, `./data/${address}/${type}.json`);
+  const filename = path.join(__dirname, `/data/${address}/${type}.json`);
   const currentTime = new Date().getTime();
   let filedata = await readCache(filename);
   const expiry = 3600000;
@@ -195,5 +195,5 @@ module.exports = {
   insertRequestdb,
   modifyRequestdb,
   supabase,
-  fetchAndCacheData
+  fetchAndCacheData,
 };
