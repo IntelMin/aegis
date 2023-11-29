@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { isERC20Token,fileExists, isContractOpenSource, readCache,supabase } = require("../utils");
+const { isERC20Token,insertRequestdb,fileExists, isContractOpenSource, readCache,supabase } = require("../utils");
 const router = express.Router();
 const path = require("path");
 router.post("/:address", async (req, res) => {
@@ -32,27 +32,11 @@ router.post("/:address", async (req, res) => {
     }
 }
 });
-async function getMetadata(address) {
-    const filename = path.join(__dirname, `../data/${address}/meta.json`);
-  
-    let filedata = await readCache(filename);
-  
-    if (filedata) {
-      return filedata;
-    } else {
-      const response_data = await definedRequest(address);
-      console.log(`Fetched metadata from API: `, response_data);
-  
-      const data = response_data;
-  
-      await writeCache(filename, data);
-      return response_data;
-    }
-  }
+
 router.get("/:address", async (req, res) => {
     const address = req.params.address;
     const {data: auditRequests, error} = await supabase.from('audit-requests').select('*').eq('address', address);
-    if(auditRequests[0].status ==="pending"){
+    if(auditRequests[0]?.status ==="pending"){
         return res.status(200).send("Contract is in queue, please wait for the audit to finish");
     }else{
 
@@ -84,14 +68,14 @@ router.get("/:address", async (req, res) => {
     
 
     const files = []
-    for (let i = 0; i < solidity["additional_sources"].length; i++) {
+    for (let i = 0; i < solidity["additional_sources"]?.length; i++) {
       files.push(solidity["additional_sources"][i]["file_path"])
     }
 
     delete solidity["additional_sources"];
 
 
-     if(auditRequests[0].status ==="partial"){
+     if(auditRequests[0]?.status ==="partial"){
         // return res.status(200).send("Contract is Partially complete , please wait for complete audit to finish");
         return   res.status(200).send({
             tree: treeCache,
@@ -106,7 +90,7 @@ router.get("/:address", async (req, res) => {
             stats:statsCache
 
           });
-        } else if(auditRequests[0].status ==="complete"){
+        } else if(auditRequests[0]?.status ==="complete"){
             
             // return res.status(200).send("Contract is complete");
             return   res.status(200).send({

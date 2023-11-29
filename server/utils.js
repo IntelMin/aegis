@@ -81,10 +81,10 @@ async function apiRequest(url, params) {
   }
 }
 async function fetchAndCacheData(type, endpoint, address) {
-  const filename = path.join(__dirname, `../data/${address}/${type}.json`);
+  const filename = path.join(__dirname, `./data/${address}/${type}.json`);
   const currentTime = new Date().getTime();
   let filedata = await readCache(filename);
-
+  const expiry = 3600000;
   if (filedata && currentTime - filedata.time <= expiry) {
     console.log(`Fetching ${type} from cache.`);
     return filedata.data;
@@ -146,7 +146,7 @@ async function isERC20Token(address) {
     `https://eth.blockscout.com/api/v2/tokens/${address}`,
     address
   );
-  return token_info.data.type === "ERC-20";
+  return token_info.type === "ERC-20";
 }
 
 // Function to insert data into a Supabase table
