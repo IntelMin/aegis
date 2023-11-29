@@ -20,13 +20,14 @@ try {
     return NextResponse.json({Newdata});
 } catch (error) {NextResponse.json(error);}
 }
-export async function GET(req: NextApiRequest, res: NextResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     // export async function GET(req: NextRequest, res: NextResponse) {
 
     // Query the Supabase table for the status row based on the address input
    try{
-
-    const {address} =req.query;
+    const {searchParams}= new URL(req.url);
+    console.log(searchParams)
+    const address = searchParams.get('address');
     console.log(address)
     // const address = "0xdac17f958d2ee523a2206206994597c13d831ec7"
     const url = `http://${AEGIS_SRV}/`;
