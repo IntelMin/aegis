@@ -326,7 +326,7 @@ async function worker() {
     }
   });
   console.log("auditRequests: ", auditRequests);
-  auditRequests.map(async (row) => {
+  auditRequests.forEach(async (row) => {
     const address = row.address;
     if(row.status === "pending"){
       try {
@@ -347,11 +347,7 @@ async function worker() {
           address
         );
         const metadata = await getMetadata(address);
-        const keys = Object.keys(token_security.result);
-        const parse_security = token_security.result[keys[0]];
-        let parse_rugpull = token_rugpull["result"];
-        let parse_meta = metadata["tokens"][0];
-
+  
         //save token contract 
 
         let filename = `./contracts/${address}.json`;

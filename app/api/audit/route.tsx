@@ -2,12 +2,8 @@
 import axios from 'axios';
 import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
-const { createClient } = require("@supabase/supabase-js");
 
-// Initialize Supabase client
-const { AEGIS_SRV,SUPABASE_URL,SUPABASE_API_KEY } = process.env;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 export async function POST(req: NextRequest) {
 try {
     const data = await req.json();
