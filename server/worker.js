@@ -343,7 +343,7 @@ async function worker() {
     const address = row.address;
     if (row.status === "pending") {
       try {
-        await new Promise.all([
+        await Promise.all([
           fetchAndCacheData(
             "info",
             `https://eth.blockscout.com/api/v2/tokens/${address}`,
