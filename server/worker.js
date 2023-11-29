@@ -228,7 +228,7 @@ async function gptauditor(address){
 
     const findingsCacheFile = path.join(
     __dirname,
-    `./server/data/${address}/findings.json`
+    `./data/${address}/findings.json`
   );
   
   let codeSegments = parseSolidity(source_code);
@@ -373,9 +373,11 @@ async function worker() {
         console.log(e)
       }
     }
-    else if(row.status === "partial"){
+    if(row.status === "partial"){
       await gptauditor(address)
       modifyRequestdb(address,"complete")
+    }else{
+      return null
     }
   });
 
