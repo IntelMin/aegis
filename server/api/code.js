@@ -152,12 +152,12 @@ function parseMarkdownToJSON(textArray) {
   return jsonResult;
 }
 
-let audit_queue = [];
 router.get("/:address", async (req, res) => {
   const { data: auditRequests, error } = await supabase
     .from("audit-requests")
     .select("*");
-  audit_queue = auditRequests.map((auditRequest) => auditRequest.address);
+
+  const audit_queue = auditRequests.map((auditRequest) => auditRequest.address);
   const address = req.params.address;
 
   console.log("code request: ", address);
@@ -169,21 +169,21 @@ router.get("/:address", async (req, res) => {
   // move to worker
 
   if (!fileExists(filename)) {
-    if (isContractOpenSource(address)) {
-      if (!audit_queue.includes(address)) {
-        console.log("Contract is open source, adding to queue");
-        audit_queue.push(address);
-        insertRequestdb({ address: address, status: "pending" });
-      } else {
-        return res
-          .status(200)
-          .send(
-            "Contract is already in queue, please wait for the audit to finish"
-          );
-      }
-    } else {
+    if (!isContractOpenSource(address)) {
       return res.status(200).send("Contract is not open source");
     }
+
+    if (audit_queue.includes(address)) {
+      return res
+        .status(200)
+        .send(
+          "Contract is already in queue, please wait for the audit to finish"
+        );
+    }
+
+    console.log("Contract is open source, adding to queue");
+
+    insertRequestdb({ address, status: "pending" });
   }
 
   let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
