@@ -311,21 +311,21 @@ async function definedRequest(address) {
 }
   //GPT code audit part 
 async function worker() {
-  const { data: auditRequests, error:error_req } = await supabase
-  .from('audit-requests')
-  .select('*')
+  // const { data: auditRequests, error:error_req } = await supabase
+  // .from('audit-requests')
+  // .select('*')
 
-  //sorting pending and partial audits
-  auditRequests.sort((a, b) => {
-    if (a.status === "pending" && b.status === "partial") {
-      return -1; // a comes before b
-    } else if (a.status === "partial" && b.status === "pending") {
-      return 1; // b comes before a
-    } else {
-      return 0; // no change in order
-    }
-  });
-  console.log("auditRequests: ", auditRequests);
+  // //sorting pending and partial audits
+  // auditRequests.sort((a, b) => {
+  //   if (a.status === "pending" && b.status === "partial") {
+  //     return -1; // a comes before b
+  //   } else if (a.status === "partial" && b.status === "pending") {
+  //     return 1; // b comes before a
+  //   } else {
+  //     return 0; // no change in order
+  //   }
+  // });
+  // console.log("auditRequests: ", auditRequests);
 
   
   
