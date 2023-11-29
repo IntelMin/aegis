@@ -228,7 +228,7 @@ async function gptauditor(address){
 
     const findingsCacheFile = path.join(
     __dirname,
-    `server/data/${address}/findings.json`
+    `./data/${address}/findings.json`
   );
   
   let codeSegments = parseSolidity(source_code);
