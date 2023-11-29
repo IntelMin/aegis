@@ -11,7 +11,6 @@ const dashboardRoute = require('./api/dashboard');
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
 const auditRoute = require("./api/audit");
-const worker = require("./worker");
 
 const port = 9898;
 
@@ -40,5 +39,4 @@ app.use("/audit", auditRoute);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-worker().catch(error => console.error('Error:', error));
 

@@ -3,7 +3,7 @@ const axios = require("axios");
 const { isERC20Token,insertRequestdb,fileExists, isContractOpenSource, readCache,supabase } = require("../utils");
 const router = express.Router();
 const path = require("path");
-router.post("/:address", async (req, res) => {
+router.post("/", async (req, res) => {
   const { data: auditRequests, error } = await supabase
     .from("audit-requests")
     .select("*");

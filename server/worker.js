@@ -311,36 +311,24 @@ async function definedRequest(address) {
 }
   //GPT code audit part 
 async function worker() {
-  // const { data: auditRequests, error:error_req } = await supabase
-  // .from('audit-requests')
-  // .select('*')
-
-  // //sorting pending and partial audits
-  // auditRequests.sort((a, b) => {
-  //   if (a.status === "pending" && b.status === "partial") {
-  //     return -1; // a comes before b
-  //   } else if (a.status === "partial" && b.status === "pending") {
-  //     return 1; // b comes before a
-  //   } else {
-  //     return 0; // no change in order
-  //   }
-  // });
-  // console.log("auditRequests: ", auditRequests);
-
-  
-  
-  
-  
-  
-  
-  
-  const { data: auditPendingRequests, error:error_pending } = await supabase
+  const { data: auditRequests, error:error_req } = await supabase
   .from('audit-requests')
   .select('*')
-  .eq('status', 'pending');
-    async.eachSeries(auditPendingRequests, async (row) => {
-      const address = row.address;
-      console.log("address: ", address);
+
+  //sorting pending and partial audits
+  auditRequests.sort((a, b) => {
+    if (a.status === "pending" && b.status === "partial") {
+      return -1; // a comes before b
+    } else if (a.status === "partial" && b.status === "pending") {
+      return 1; // b comes before a
+    } else {
+      return 0; // no change in order
+    }
+  });
+  console.log("auditRequests: ", auditRequests);
+  auditRequests.map(async (row) => {
+    const address = row.address;
+    if(row.status === "pending"){
       try {
         const token_info = await fetchAndCacheData(
           "info",
@@ -357,8 +345,8 @@ async function worker() {
           "rugpull",
           `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
           address
-          );
-          const metadata = await getMetadata(address);
+        );
+        const metadata = await getMetadata(address);
         const keys = Object.keys(token_security.result);
         const parse_security = token_security.result[keys[0]];
         let parse_rugpull = token_rugpull["result"];
@@ -384,30 +372,15 @@ async function worker() {
       catch(e){
         console.log(e)
       }
-    }, (error) => {
-      if (error) {
-        console.error('Error:', error);
-      } else {
-        console.log('Partial audits completed.');
-      }
-    })
-    const { data: auditPartialRequests, error } = await supabase
-    .from('audit-requests')
-    .select('*')
-    .eq('status', 'partial');
-    console.log("auditPartialRequests: ", auditPartialRequests);
-    console.log("auditPendingRequests: ", auditPendingRequests);
-    async.eachSeries(auditPartialRequests, async (row) => {
-      const address = row.address;
-        await gptauditor(address)
-        modifyRequestdb(address,"complete")
-    }, (error) => {
-      if (error) {
-        console.error('Error:', error);
-      } else {
-        console.log('All audits completed.');
-      }
-    });
+    }
+    else if(row.status === "partial"){
+      await gptauditor(address)
+      modifyRequestdb(address,"complete")
+    }
+  });
+
+
 ;
   }
-  module.exports = worker;
+  // module.exports = worker;
+  setInterval(worker, 5000);
