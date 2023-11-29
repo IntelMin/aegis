@@ -322,20 +322,8 @@ async function worker() {
   const { data: auditRequests, error: error_req } = await supabase
     .from("audit-requests")
     .select("*")
-    .or("status.eq.pending", "status.eq.partial");
 
-  //sorting pending and partial audits
-  auditRequests.sort((a, b) => {
-    if (a.status === "pending" && b.status === "partial") {
-      return -1; // a comes before b
-    } else if (a.status === "partial" && b.status === "pending") {
-      return 1; // b comes before a
-    } else {
-      return 0; // no change in order
-    }
-  });
-  console.log("auditRequests: ", auditRequests);
-  auditRequests.forEach(async (row) => {
+  for (const row in auditRequests.filter(row => row.address === "pending")) {
     const address = row.address;
     if (row.status === "pending") {
       try {
@@ -381,11 +369,13 @@ async function worker() {
         console.log(e);
       }
     }
-    if (row.status === "partial") {
-      await gptauditor(address);
-      modifyRequestdb(address, "complete");
-    }
-  });
+  }
+
+  for (const row in auditRequests.filter(row => row.address === "partial")) {
+    const address = row.address;
+    await gptauditor(address);
+    modifyRequestdb(address, "complete");
+  }
 }
 // module.exports = worker;
 
