@@ -187,6 +187,10 @@ async function getFindings(codeSegments) {
       // if (i > 0) {
       //   break;
       // }
+
+      if (i < codeSegments.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 5000))
+      }
     }
   
     return findings;
@@ -312,11 +316,8 @@ async function definedRequest(address) {
   //GPT code audit part 
 async function worker() {
   const { data: auditRequests, error:error_req } = await supabase
-    .from('audit-requests')
-    .select('*')
-    .eq('status', 'pending')
-    .or('status', 'partial');
-  
+  .from('audit-requests')
+  .select('*')
 
   //sorting pending and partial audits
   auditRequests.sort((a, b) => {
@@ -329,7 +330,7 @@ async function worker() {
     }
   });
   console.log("auditRequests: ", auditRequests);
-  auditRequests.forEach(async (row) => {
+  auditRequests.map(async (row) => {
     const address = row.address;
     if(row.status === "pending"){
       try {
@@ -350,7 +351,11 @@ async function worker() {
           address
         );
         const metadata = await getMetadata(address);
-  
+        const keys = Object.keys(token_security.result);
+        const parse_security = token_security.result[keys[0]];
+        let parse_rugpull = token_rugpull["result"];
+        let parse_meta = metadata["tokens"][0];
+
         //save token contract 
 
         let filename = `./contracts/${address}.json`;
