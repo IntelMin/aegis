@@ -375,8 +375,6 @@ async function worker() {
     if(row.status === "partial"){
       await gptauditor(address)
       modifyRequestdb(address,"complete")
-    }else{
-      return null
     }
   });
 
