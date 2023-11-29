@@ -1,0 +1,1 @@
+[{"title":"WSBT supply is 0 after the first receive when a ransom is collected","severity":"MEDIUM","mitigation":" Initialize the initial supply value in both WBNB.sol and WBT.sol to 1,000,000,00000000"}]
