@@ -187,6 +187,10 @@ async function getFindings(codeSegments) {
       // if (i > 0) {
       //   break;
       // }
+
+      if (i < codeSegments.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 5000))
+      }
     }
   
     return findings;
