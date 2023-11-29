@@ -37,7 +37,7 @@ async function fetchRugpull(address: string) {
 async function fetchTokenCode(address: string) {
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `http://${AEGIS_SRV}/audits/${address}`;
+  const url = `http://${AEGIS_SRV}/audit/${address}`;
 
   return fetchAndRespond(url);
 }
