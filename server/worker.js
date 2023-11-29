@@ -1,4 +1,12 @@
-const { fetchData,fetchAndCacheData,writeCache, readCache,getCachedOrFreshData, supabase, modifyRequestdb } = require("./utils");
+const {
+  fetchData,
+  fetchAndCacheData,
+  writeCache,
+  readCache,
+  getCachedOrFreshData,
+  supabase,
+  modifyRequestdb,
+} = require("./utils");
 const OpenAI = require("openai");
 const async = require("async");
 const path = require("path");
@@ -6,242 +14,242 @@ const axios = require("axios");
 const parser = require("@solidity-parser/parser");
 
 const openai = new OpenAI({
-    apiKey: "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",
-  });
-  function parseSolidity(content) {
-    let parenthesis = 0;
-    let currentContract = [];
-    let contractSegments = [];
-  
-    // Split the content by new line and loop through each line
-    content.split("\n").forEach((line) => {
-      if (line.includes("{")) {
-        parenthesis++;
-      }
-      if (line.includes("}")) {
-        parenthesis--;
-      }
-      if (parenthesis !== 0) {
-        currentContract.push(line);
-        if (currentContract.length > 5) {
-          contractSegments.push(currentContract.join("\n"));
-          currentContract = [];
-        }
-      }
-    });
-  
-    // Check if there's any remaining content in currentContract
-    if (currentContract.length > 1) {
-      contractSegments.push(currentContract.join("\n"));
-    }
-  
-    return contractSegments;
-  }
-  function generateTree(content) {
-    const ast = (() => {
-      try {
-        return parser.parse(content, { loc: true });
-      } catch (err) {
-        console.error(`\nError found while parsing one of the provided files\n`);
-        throw err;
-      }
-    })();
-  
-    console.log("Contract AST loaded -- generateTree");
-  
-    const astTree = [];
-    let currentContract = null;
-  
-    parser.visit(ast, {
-      ContractDefinition(node) {
-        const name = node.name;
-        let bases = node.baseContracts
-          .map((spec) => {
-            return spec.baseName.namePath;
-          })
-          .join(", ");
-  
-        bases = bases.length ? `(${bases})` : "";
-  
-        let specs = "";
-        if (node.kind === "library") {
-          specs += "[Lib]";
-        } else if (node.kind === "interface") {
-          specs += "[Int]";
-        }
-  
-        // console.log(` + ${specs} ${name} ${bases}`);
-        const lineNumber = node.loc.start.line;
-        currentContract = {
-          type: "contract",
-          name: name,
-          bases: bases,
-          specs: specs,
-          line: lineNumber,
-          functions: [],
-        };
-        astTree.push(currentContract);
-        // console.log("line: ", lineNumber);
-  
-        // console.log(` + ${specs} ${name} ${bases} at line ${lineNumber}`);
-      },
-  
-      "ContractDefinition:exit": function (node) {
-        // console.log("");
-        currentContract = null;
-        // console.log("ContractDefinition:exit");
-      },
-  
-      FunctionDefinition(node) {
-        let name;
-  
-        if (node.isConstructor) {
-          name = "<Constructor>";
-        } else if (node.isFallback) {
-          name = "<Fallback>";
-        } else if (node.isReceiveEther) {
-          name = "<Receive Ether>";
-        } else {
-          name = node.name;
-        }
-  
-        let spec = "";
-        if (node.visibility === "public" || node.visibility === "default") {
-          spec += "[Pub]";
-        } else if (node.visibility === "external") {
-          spec += "[Ext]";
-        } else if (node.visibility === "private") {
-          spec += "[Prv]";
-        } else if (node.visibility === "internal") {
-          spec += "[Int]";
-        }
-  
-        let payable = "";
-        if (node.stateMutability === "payable") {
-          payable = " ($)";
-        }
-  
-        let mutating = "";
-        if (!node.stateMutability) {
-          mutating = " #";
-        }
-  
-        let modifiers = "";
-        for (let m of node.modifiers) {
-          if (!!modifiers) modifiers += ",";
-          modifiers += m.name;
-        }
-  
-        // console.log(`    - ${spec} ${name}${payable}${mutating}`);
-        const lineNumber = node.loc.start.line;
-        const functionDef = {
-          type: "func",
-          name: name,
-          spec: spec,
-          payable: payable,
-          modifiers: modifiers,
-          line: lineNumber,
-        };
-  
-        if (currentContract) {
-          currentContract.functions.push(functionDef);
-        }
-  
-        if (!!modifiers) {
-          // console.log(`       - modifiers: ${modifiers}`);
-        }
-      },
-    });
-  
-    return astTree;
-  }
-  
-async function getFindings(codeSegments) {
-    let findings = [];
-  
-    for (let i = 0; i < codeSegments.length; i++) {
-      const segment = codeSegments[i];
-  
-      const chatCompletion = await getFinding(segment);
-  
-      // console.log(chatCompletion);
-  
-      try {
-        // Attempt to parse the chatCompletion
-        const parsedData = JSON.parse(chatCompletion);
-        console.log("Code segment: ", segment);
-        console.log("Valid JSON:", parsedData);
-  
-        findings.push(parsedData);
-  
-        // check if chatCompletion is a valid JSON
-        // if (chatCompletion.includes("status")) {
-        //   findings.push(chatCompletion);
-        // }
-      } catch (e) {
-        console.log("Invalid JSON:", e);
-      }
-  
-      console.log("Loop: ", i);
-  
-      // if (i > 0) {
-      //   break;
-      // }
+  apiKey: "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",
+});
+function parseSolidity(content) {
+  let parenthesis = 0;
+  let currentContract = [];
+  let contractSegments = [];
 
-      if (i < codeSegments.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 5000))
+  // Split the content by new line and loop through each line
+  content.split("\n").forEach((line) => {
+    if (line.includes("{")) {
+      parenthesis++;
+    }
+    if (line.includes("}")) {
+      parenthesis--;
+    }
+    if (parenthesis !== 0) {
+      currentContract.push(line);
+      if (currentContract.length > 5) {
+        contractSegments.push(currentContract.join("\n"));
+        currentContract = [];
       }
     }
-  
-    return findings;
+  });
+
+  // Check if there's any remaining content in currentContract
+  if (currentContract.length > 1) {
+    contractSegments.push(currentContract.join("\n"));
   }
-  async function getFinding(code) {
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content:
-            "Aegis is an AI-powered assistant designed to audit smart contract code that only responds in JSON when user provides code.",
-        },
-        {
-          role: "user",
-          content: code,
-        },
-        {
-          role: "system",
-          content: `For the provided code segment provided above, report any vulnerabilities found in JSON format.
+
+  return contractSegments;
+}
+function generateTree(content) {
+  const ast = (() => {
+    try {
+      return parser.parse(content, { loc: true });
+    } catch (err) {
+      console.error(`\nError found while parsing one of the provided files\n`);
+      throw err;
+    }
+  })();
+
+  console.log("Contract AST loaded -- generateTree");
+
+  const astTree = [];
+  let currentContract = null;
+
+  parser.visit(ast, {
+    ContractDefinition(node) {
+      const name = node.name;
+      let bases = node.baseContracts
+        .map((spec) => {
+          return spec.baseName.namePath;
+        })
+        .join(", ");
+
+      bases = bases.length ? `(${bases})` : "";
+
+      let specs = "";
+      if (node.kind === "library") {
+        specs += "[Lib]";
+      } else if (node.kind === "interface") {
+        specs += "[Int]";
+      }
+
+      // console.log(` + ${specs} ${name} ${bases}`);
+      const lineNumber = node.loc.start.line;
+      currentContract = {
+        type: "contract",
+        name: name,
+        bases: bases,
+        specs: specs,
+        line: lineNumber,
+        functions: [],
+      };
+      astTree.push(currentContract);
+      // console.log("line: ", lineNumber);
+
+      // console.log(` + ${specs} ${name} ${bases} at line ${lineNumber}`);
+    },
+
+    "ContractDefinition:exit": function (node) {
+      // console.log("");
+      currentContract = null;
+      // console.log("ContractDefinition:exit");
+    },
+
+    FunctionDefinition(node) {
+      let name;
+
+      if (node.isConstructor) {
+        name = "<Constructor>";
+      } else if (node.isFallback) {
+        name = "<Fallback>";
+      } else if (node.isReceiveEther) {
+        name = "<Receive Ether>";
+      } else {
+        name = node.name;
+      }
+
+      let spec = "";
+      if (node.visibility === "public" || node.visibility === "default") {
+        spec += "[Pub]";
+      } else if (node.visibility === "external") {
+        spec += "[Ext]";
+      } else if (node.visibility === "private") {
+        spec += "[Prv]";
+      } else if (node.visibility === "internal") {
+        spec += "[Int]";
+      }
+
+      let payable = "";
+      if (node.stateMutability === "payable") {
+        payable = " ($)";
+      }
+
+      let mutating = "";
+      if (!node.stateMutability) {
+        mutating = " #";
+      }
+
+      let modifiers = "";
+      for (let m of node.modifiers) {
+        if (!!modifiers) modifiers += ",";
+        modifiers += m.name;
+      }
+
+      // console.log(`    - ${spec} ${name}${payable}${mutating}`);
+      const lineNumber = node.loc.start.line;
+      const functionDef = {
+        type: "func",
+        name: name,
+        spec: spec,
+        payable: payable,
+        modifiers: modifiers,
+        line: lineNumber,
+      };
+
+      if (currentContract) {
+        currentContract.functions.push(functionDef);
+      }
+
+      if (!!modifiers) {
+        // console.log(`       - modifiers: ${modifiers}`);
+      }
+    },
+  });
+
+  return astTree;
+}
+
+async function getFindings(codeSegments) {
+  let findings = [];
+
+  for (let i = 0; i < codeSegments.length; i++) {
+    const segment = codeSegments[i];
+
+    const chatCompletion = await getFinding(segment);
+
+    // console.log(chatCompletion);
+
+    try {
+      // Attempt to parse the chatCompletion
+      const parsedData = JSON.parse(chatCompletion);
+      console.log("Code segment: ", segment);
+      console.log("Valid JSON:", parsedData);
+
+      findings.push(parsedData);
+
+      // check if chatCompletion is a valid JSON
+      // if (chatCompletion.includes("status")) {
+      //   findings.push(chatCompletion);
+      // }
+    } catch (e) {
+      console.log("Invalid JSON:", e);
+    }
+
+    console.log("Loop: ", i);
+
+    // if (i > 0) {
+    //   break;
+    // }
+
+    if (i < codeSegments.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
+
+  return findings;
+}
+async function getFinding(code) {
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content:
+          "Aegis is an AI-powered assistant designed to audit smart contract code that only responds in JSON when user provides code.",
+      },
+      {
+        role: "user",
+        content: code,
+      },
+      {
+        role: "system",
+        content: `For the provided code segment provided above, report any vulnerabilities found in JSON format.
   
           Important: if there are no vulnerabilities are found, return a json object with the following format:
           {
             "status": "None",
           }
            `,
-        },
-      ],
-      model: "ft:gpt-3.5-turbo-1106:personal::8KeRWVxf",
-    });
-  
-    return chatCompletion.choices[0].message.content;
-  }  
-async function gptauditor(address){
-    let filename = `./contracts/${address}.json`;
-    let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-    let filedata = await fetchData(filename, url);
+      },
+    ],
+    model: "ft:gpt-3.5-turbo-1106:personal::8KeRWVxf",
+  });
 
-    let source_code = filedata["source_code"];
+  return chatCompletion.choices[0].message.content;
+}
+async function gptauditor(address) {
+  let filename = `./contracts/${address}.json`;
+  let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+  let filedata = await fetchData(filename, url);
 
-    const findingsCacheFile = path.join(
+  let source_code = filedata["source_code"];
+
+  const findingsCacheFile = path.join(
     __dirname,
     `./data/${address}/findings.json`
   );
-  
+
   let codeSegments = parseSolidity(source_code);
   // console.log("codeSegments: ", codeSegments);
-  
+
   let findings = await getCachedOrFreshData(
-  findingsCacheFile,
-  getFindings,
-  codeSegments
+    findingsCacheFile,
+    getFindings,
+    codeSegments
   );
 }
 
@@ -313,14 +321,13 @@ async function definedRequest(address) {
   // console.log("response: ", response.data);
   return response.data;
 }
-  //GPT code audit part 
+//GPT code audit part
 async function worker() {
-  const { data: auditRequests, error:error_req } = await supabase
-    .from('audit-requests')
-    .select('*')
-    .eq('status', 'pending')
-    .or('status', 'partial');
-  
+  const { data: auditRequests, error: error_req } = await supabase
+    .from("audit-requests")
+    .select("*")
+    .eq("status", "pending")
+    .or("status", "partial");
 
   //sorting pending and partial audits
   auditRequests.sort((a, b) => {
@@ -335,7 +342,7 @@ async function worker() {
   console.log("auditRequests: ", auditRequests);
   auditRequests.forEach(async (row) => {
     const address = row.address;
-    if(row.status === "pending"){
+    if (row.status === "pending") {
       try {
         const token_info = await fetchAndCacheData(
           "info",
@@ -354,36 +361,35 @@ async function worker() {
           address
         );
         const metadata = await getMetadata(address);
-  
-        //save token contract 
+
+        //save token contract
 
         let filename = `./contracts/${address}.json`;
         let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
         let filedata = await fetchData(filename, url);
 
         let source_code = filedata["source_code"];
-    
-        const treeCacheFile = path.join(__dirname, `../data/${address}/tree.json`);
+
+        const treeCacheFile = path.join(
+          __dirname,
+          `../data/${address}/tree.json`
+        );
         // console.log("treeCacheFile: ", treeCacheFile);
         let treeJson = await getCachedOrFreshData(
           treeCacheFile,
           generateTree,
           source_code
-          );
-          modifyRequestdb(address,"partial")
-      }
-      catch(e){
-        console.log(e)
+        );
+        modifyRequestdb(address, "partial");
+      } catch (e) {
+        console.log(e);
       }
     }
-    if(row.status === "partial"){
-      await gptauditor(address)
-      modifyRequestdb(address,"complete")
+    if (row.status === "partial") {
+      await gptauditor(address);
+      modifyRequestdb(address, "complete");
     }
   });
-
-
-;
-  }
-  // module.exports = worker;
-  setInterval(worker, 5000);
+}
+// module.exports = worker;
+setInterval(worker, 5000);
