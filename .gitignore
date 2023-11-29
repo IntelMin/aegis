@@ -34,7 +34,7 @@ server/contracts/*
 .DS_Store
 *.pem
 /server/data/
-/server/contrats/
+/server/contracts/
 
 # debug
 npm-debug.log*
