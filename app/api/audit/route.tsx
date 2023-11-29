@@ -8,6 +8,7 @@ const { AEGIS_SRV,SUPABASE_URL,SUPABASE_API_KEY } = process.env;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 export async function POST(req: NextRequest, res: NextResponse) {
+    console.log("data")
     const data = await req.json();
     console.log(data)
     const url = `http://${AEGIS_SRV}/audit/`;
