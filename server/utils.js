@@ -2,13 +2,7 @@
 const fs = require("fs").promises;
 const axios = require("axios");
 const path = require("path");
-const { createClient } = require("@supabase/supabase-js");
-const { SUPABASE_URL, SUPABASE_API_KEY } = process.env;
-// Initialize Supabase client
-const supabase = createClient(
-  "https://uxdlqgwtaprqtuluwuku.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZGxxZ3d0YXBycXR1bHV3dWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwODc2MDAsImV4cCI6MjAxNjY2MzYwMH0.x4Yzp1tpTry7L6XXryXQOVXg3Mo7TlRK6AuRF2MuVzs"
-);
+const { supabaseClient: supabase } = require("../app/utils/supabaseDB");
 
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key

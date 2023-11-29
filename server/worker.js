@@ -8,7 +8,6 @@ const {
   modifyRequestdb,
 } = require("./utils");
 const OpenAI = require("openai");
-const async = require("async");
 const path = require("path");
 const axios = require("axios");
 const parser = require("@solidity-parser/parser");
@@ -165,7 +164,7 @@ function generateTree(content) {
 }
 
 async function getFindings(codeSegments) {
-  let findings = [];
+  const findings = [];
 
   for (let i = 0; i < codeSegments.length; i++) {
     const segment = codeSegments[i];
@@ -344,38 +343,39 @@ async function worker() {
     const address = row.address;
     if (row.status === "pending") {
       try {
-        const token_info = await fetchAndCacheData(
-          "info",
-          `https://eth.blockscout.com/api/v2/tokens/${address}`,
-          address
-        );
-        // const token_stats = await fetchAndCacheData("stats", `https://eth.blockscout.com/api/v2/tokens/${address}/stats`, address);
-        const token_security = await fetchAndCacheData(
-          "security",
-          `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
-          address
-        );
-        const token_rugpull = await fetchAndCacheData(
-          "rugpull",
-          `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
-          address
-        );
-        const metadata = await getMetadata(address);
+        await new Promise.all([
+          fetchAndCacheData(
+            "info",
+            `https://eth.blockscout.com/api/v2/tokens/${address}`,
+            address
+          ),
+          fetchAndCacheData(
+            "security",
+            `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
+            address
+          ),
+          fetchAndCacheData(
+            "rugpull",
+            `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
+            address
+          ),
+          getMetadata(address)
+        ])
 
         //save token contract
 
-        let filename = `./contracts/${address}.json`;
-        let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-        let filedata = await fetchData(filename, url);
+        const filename = `./contracts/${address}.json`;
+        const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+        const filedata = await fetchData(filename, url);
 
-        let source_code = filedata["source_code"];
+        const source_code = filedata["source_code"];
 
         const treeCacheFile = path.join(
           __dirname,
           `../data/${address}/tree.json`
         );
         // console.log("treeCacheFile: ", treeCacheFile);
-        let treeJson = await getCachedOrFreshData(
+        await getCachedOrFreshData(
           treeCacheFile,
           generateTree,
           source_code
