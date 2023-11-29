@@ -3,12 +3,8 @@ const axios = require("axios");
 const router = express.Router();
 const { fetchData, getCachedOrFreshData } = require("../utils");
 const parser = require("@solidity-parser/parser");
-const OpenAI = require("openai");
+const openai = require("../openai");
 const path = require("path");
-
-const openai = new OpenAI({
-  apiKey: "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",
-});
 
 function generateTree(content) {
   const ast = (() => {
