@@ -312,8 +312,11 @@ async function definedRequest(address) {
   //GPT code audit part 
 async function worker() {
   const { data: auditRequests, error:error_req } = await supabase
-  .from('audit-requests')
-  .select('*')
+    .from('audit-requests')
+    .select('*')
+    .eq('status', 'pending')
+    .or('status', 'partial');
+  
 
   //sorting pending and partial audits
   auditRequests.sort((a, b) => {
