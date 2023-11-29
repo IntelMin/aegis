@@ -253,7 +253,7 @@ async function gptauditor(address) {
 }
 
 async function getMetadata(address) {
-  const filename = path.join(__dirname, `../data/${address}/meta.json`);
+  const filename = path.join(__dirname, `./data/${address}/meta.json`);
 
   let filedata = await readCache(filename);
 
@@ -372,7 +372,7 @@ async function worker() {
 
         const treeCacheFile = path.join(
           __dirname,
-          `../data/${address}/tree.json`
+          `./data/${address}/tree.json`
         );
         // console.log("treeCacheFile: ", treeCacheFile);
         await getCachedOrFreshData(
