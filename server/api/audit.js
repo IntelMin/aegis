@@ -10,40 +10,76 @@ const {
 const router = express.Router();
 const path = require("path");
 
+const NEW_AUDIT_RETURN_CODE = {
+  success: {
+    code: 0,
+    message: "Contract added to audit queue"
+  },
+  errorFetchingDb: {
+    code: 1,
+    message: "Error in fetching data from database"
+  },
+  alreadyExist: {
+    code: 2,
+    message: "Contract already exists"
+  },
+  notErc20: {
+    code: 3,
+    message: "Contract is not an ERC 20"
+  },
+  notOpenSource: {
+    code: 4,
+    message: "Contract is not open source"
+  },
+  requested: {
+    code: 5,
+    message: "Contract was already requested"
+  },
+}
+
 router.post("/", async (req, res) => {
+  const { address } = req.body;
+
   const { data: auditRequests, error } = await supabase
     .from("audit-requests")
     .select("address")
-    .or("status.eq.pending,status.eq.partial");
+    .eq("address", address)
+
   if (error) {
-    return res.status(500).send("Error in fetching data from database");
+    return res.status(500).send(NEW_AUDIT_RETURN_CODE.errorFetchingDb);
   }
 
-  const { address } = req.body;
-  const filename = `./contracts/${address}.json`;
+  const filename = path.join(__dirname, `./contracts/${address}.json`).toString();
 
   if (fileExists(filename)) {
-    return res.status(200).send("Contract already exists");
+    return res.status(404).send(NEW_AUDIT_RETURN_CODE.alreadyExist);
   }
 
   if (!isERC20Token(address)) {
-    return res.status(200).send("Contract is not an ERC 20");
+    return res.status(404).send(NEW_AUDIT_RETURN_CODE.notErc20);
   }
 
   if (!isContractOpenSource(address)) {
-    return res.status(200).send("Contract is not open source");
+    return res.status(404).send(NEW_AUDIT_RETURN_CODE.notOpenSource);
   }
 
-  if (auditRequests.includes(address)) {
+  if (auditRequests.length) {
     return res
-      .status(200)
-      .send("Contract is in queue, please wait for the audit to finish");
+      .status(404)
+      .send(NEW_AUDIT_RETURN_CODE.requested);
   }
 
   insertRequestdb({ address: address, status: "pending" });
 
-  return res.status(200).send("Contract added to audit queue");
+  return res.status(200).send(NEW_AUDIT_RETURN_CODE.success);
 });
+
+const AUDIT_STATUS_RETURN_CODE = {
+  pending: 0,
+  partial: 1,
+  complete: 2,
+  errorFetchingDb: 3
+}
 
 router.get("/:address", async (req, res) => {
   const address = req.params.address;
@@ -51,13 +87,21 @@ router.get("/:address", async (req, res) => {
     .from("audit-requests")
     .select("*")
     .eq("address", address);
-  if (auditRequests[0]?.status === "pending") {
-    return res
-      .status(200)
-      .send("Contract is in queue, please wait for the audit to finish");
+
+  if (error) {
+    return res.status(500).send({
+      status: AUDIT_STATUS_RETURN_CODE.errorFetchingDb,
+      message: 'Error in fetching data from database'
+    })
   }
 
-  let filedata = readCache(`./contracts/${address}.json`);
+  if (auditRequests[0]?.status === "pending") {
+    return res.status(200).send({
+      status: AUDIT_STATUS_RETURN_CODE.pending
+    });
+  }
+
+  let filedata = readCache(path.join(__dirname, `./contracts/${address}.json`));
   let source_code = filedata["source_code"];
 
   const securityCacheFile = path.join(
@@ -111,6 +155,7 @@ router.get("/:address", async (req, res) => {
   if (auditRequests[0]?.status === "partial") {
     // return res.status(200).send("Contract is Partially complete , please wait for complete audit to finish");
     return res.status(200).send({
+      status: AUDIT_STATUS_RETURN_CODE.partial,
       tree: treeCache,
       code: source_code,
       findings: "pending",
@@ -122,9 +167,12 @@ router.get("/:address", async (req, res) => {
       token: tokenCache,
       stats: statsCache,
     });
-  } else if (auditRequests[0]?.status === "complete") {
+  }
+
+  if (auditRequests[0]?.status === "complete") {
     // return res.status(200).send("Contract is complete");
     return res.status(200).send({
+      status: AUDIT_STATUS_RETURN_CODE.complete,
       tree: treeCache,
       code: source_code,
       findings: findingsCache,
@@ -136,8 +184,6 @@ router.get("/:address", async (req, res) => {
       token: tokenCache,
       stats: statsCache,
     });
-  } else {
-    return res.status(200).send("Contract is not in queue");
   }
 });
 

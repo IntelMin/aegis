@@ -1,5 +1,6 @@
 // utils.js
 const fs = require("fs").promises;
+const fss = require("fs")
 const axios = require("axios");
 const path = require("path");
 const supabase = require("./supabase");
@@ -26,26 +27,26 @@ function fileExists(filePath) {
 
 const fetchData = async (file, url) => {
   try {
-    try {
-      await fs.access(file);
-      const fileData = await fs.readFile(file, "utf8");
-      const jsonData = JSON.parse(fileData);
-      return jsonData;
-    } catch (fileError) {
-      const response = await axios.get(url);
-      console.log("Fetched file from URL");
+    await fs.access(file);
+    const fileData = await fs.readFile(file, "utf8");
+    const jsonData = JSON.parse(fileData);
+    return jsonData;
+  } catch (fileError) {
+    const response = await axios.get(url);
+    console.log("Fetched file from URL");
 
-      // Convert JSON object to a string
-      const result = JSON.stringify(response.data, null, 2); // The null and 2 arguments format the JSON for readability
+    // Convert JSON object to a string
+    const result = JSON.stringify(response.data, null, 2); // The null and 2 arguments format the JSON for readability
 
-      // Write the JSON string to a file
-      await fs.writeFile(file, result, "utf8");
-      console.log("File saved successfully");
-
-      return result;
+    // Write the JSON string to a file
+    if (!fss.existsSync(path.dirname(file))) {
+      await fs.mkdir(path.dirname(file))
     }
-  } catch (error) {
-    throw new Error(`Error in fetchData: ${error.message}`);
+
+    await fs.writeFile(file, result, "utf8");
+    console.log("File saved successfully");
+
+    return result;
   }
 };
 

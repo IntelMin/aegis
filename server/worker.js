@@ -7,14 +7,11 @@ const {
   supabase,
   modifyRequestdb,
 } = require("./utils");
-const OpenAI = require("openai");
+const openai = require("./openai");
 const path = require("path");
 const axios = require("axios");
 const parser = require("@solidity-parser/parser");
 
-const openai = new OpenAI({
-  apiKey: "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",
-});
 function parseSolidity(content) {
   let parenthesis = 0;
   let currentContract = [];
@@ -231,7 +228,7 @@ async function getFinding(code) {
   return chatCompletion.choices[0].message.content;
 }
 async function gptauditor(address) {
-  let filename = `./contracts/${address}.json`;
+  let filename = path.join(__dirname, `./contracts/${address}.json`);
   let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
   let filedata = await fetchData(filename, url);
 
@@ -391,4 +388,12 @@ async function worker() {
   });
 }
 // module.exports = worker;
-setInterval(worker, 5000);
+
+const runWorker = async () => {
+  while (true) {
+    await worker()
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  }
+}
+
+module.exports = runWorker

@@ -11,6 +11,9 @@ const dashboardRoute = require("./api/dashboard");
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
 const auditRoute = require("./api/audit");
+const runWorker = require("./worker");
+
+runWorker()
 
 const port = 9898;
 
