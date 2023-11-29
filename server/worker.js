@@ -311,11 +311,33 @@ async function definedRequest(address) {
 }
   //GPT code audit part 
 async function worker() {
+  const { data: auditRequests, error:error_req } = await supabase
+  .from('audit-requests')
+  .select('*')
 
-    const { data: auditPendingRequests, error:error_pending } = await supabase
-    .from('audit-requests')
-    .select('*')
-    .eq('status', 'pending');
+  //sorting pending and partial audits
+  auditRequests.sort((a, b) => {
+    if (a.status === "pending" && b.status === "partial") {
+      return -1; // a comes before b
+    } else if (a.status === "partial" && b.status === "pending") {
+      return 1; // b comes before a
+    } else {
+      return 0; // no change in order
+    }
+  });
+  console.log("auditRequests: ", auditRequests);
+
+  
+  
+  
+  
+  
+  
+  
+  const { data: auditPendingRequests, error:error_pending } = await supabase
+  .from('audit-requests')
+  .select('*')
+  .eq('status', 'pending');
     async.eachSeries(auditPendingRequests, async (row) => {
       const address = row.address;
       console.log("address: ", address);
@@ -357,7 +379,7 @@ async function worker() {
           generateTree,
           source_code
           );
-          modifyRequestdb(address.address,"partial")
+          modifyRequestdb(address,"partial")
       }
       catch(e){
         console.log(e)
@@ -377,8 +399,8 @@ async function worker() {
     console.log("auditPendingRequests: ", auditPendingRequests);
     async.eachSeries(auditPartialRequests, async (row) => {
       const address = row.address;
-        await gptauditor(address.address)
-        modifyRequestdb(address.address,"complete")
+        await gptauditor(address)
+        modifyRequestdb(address,"complete")
     }, (error) => {
       if (error) {
         console.error('Error:', error);
