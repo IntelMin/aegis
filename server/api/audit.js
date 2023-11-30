@@ -49,24 +49,29 @@ router.post("/", async (req, res) => {
     return res.status(500).send(NEW_AUDIT_RETURN_CODE.errorFetchingDb);
   }
 
+  if (auditRequests.length) {
+    return res
+      .status(404)
+      .send(NEW_AUDIT_RETURN_CODE.requested);
+  }
+
   const filename = path.join(__dirname, `./contracts/${address}.json`).toString();
 
   if (fileExists(filename)) {
     return res.status(404).send(NEW_AUDIT_RETURN_CODE.alreadyExist);
   }
 
-  if (!isERC20Token(address)) {
+  const [isErc20, isOpenSrc] = await Promise.all([
+    isERC20Token(address),
+    isContractOpenSource(address)
+  ])
+
+  if (!isErc20) {
     return res.status(404).send(NEW_AUDIT_RETURN_CODE.notErc20);
   }
 
-  if (!isContractOpenSource(address)) {
+  if (!isOpenSrc) {
     return res.status(404).send(NEW_AUDIT_RETURN_CODE.notOpenSource);
-  }
-
-  if (auditRequests.length) {
-    return res
-      .status(404)
-      .send(NEW_AUDIT_RETURN_CODE.requested);
   }
 
   insertRequestdb({ address: address, status: "pending" });
