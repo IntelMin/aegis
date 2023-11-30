@@ -283,39 +283,35 @@ async function definedRequest(address) {
 
   let request = JSON.stringify(graphql);
 
-  const response = await axios
-    .post("https://graph.defined.fi/graphql", request, {
-      headers: {
-        authority: "graph.defined.fi",
-        accept: "*/*",
-        "accept-language": "en-US,en;q=0.9,ko;q=0.8",
-        authorization: "F056MdQIqh29ZGalfV1m2BChqdQcae84k7wIFBA7",
-        "content-type": "application/json",
-        origin: "https://www.defined.fi",
-        referer: "https://www.defined.fi/",
-        "sec-ch-ua":
-          '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"macOS"',
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-site",
-        "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-        "x-amz-user-agent": "aws-amplify/3.0.7",
-      },
-    })
-    .then((response) => {
-      // console.log("response: ", response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Error making the request", error);
-      return null;
-    });
-
-  // console.log("response: ", response.data);
-  return response.data;
+  try {
+    const response = await axios
+      .post("https://graph.defined.fi/graphql", request, {
+        headers: {
+          authority: "graph.defined.fi",
+          accept: "*/*",
+          "accept-language": "en-US,en;q=0.9,ko;q=0.8",
+          authorization: "F056MdQIqh29ZGalfV1m2BChqdQcae84k7wIFBA7",
+          "content-type": "application/json",
+          origin: "https://www.defined.fi",
+          referer: "https://www.defined.fi/",
+          "sec-ch-ua":
+            '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": '"macOS"',
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-site",
+          "user-agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+          "x-amz-user-agent": "aws-amplify/3.0.7",
+        },
+      })
+    
+    return response.data
+  } catch (error) {
+    console.error("Error making the request", error);
+    return null;
+  }
 }
 //GPT code audit part
 async function worker() {
@@ -323,55 +319,54 @@ async function worker() {
     .from("audit-requests")
     .select("*")
 
-  for (const row in auditRequests.filter(row => row.address === "pending")) {
+  for (const row of auditRequests.filter(row => row.status === "pending")) {
     const address = row.address;
-    if (row.status === "pending") {
-      try {
-        await Promise.all([
-          fetchAndCacheData(
-            "info",
-            `https://eth.blockscout.com/api/v2/tokens/${address}`,
-            address
-          ),
-          fetchAndCacheData(
-            "security",
-            `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
-            address
-          ),
-          fetchAndCacheData(
-            "rugpull",
-            `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
-            address
-          ),
-          getMetadata(address)
-        ])
 
-        //save token contract
+    try {
+      await Promise.all([
+        fetchAndCacheData(
+          "info",
+          `https://eth.blockscout.com/api/v2/tokens/${address}`,
+          address
+        ),
+        fetchAndCacheData(
+          "security",
+          `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
+          address
+        ),
+        fetchAndCacheData(
+          "rugpull",
+          `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
+          address
+        ),
+        getMetadata(address)
+      ])
 
-        const filename = path.join(__dirname, `./contracts/${address}.json`).toString()
-        const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-        const filedata = await fetchData(filename, url);
+      //save token contract
 
-        const source_code = filedata["source_code"];
+      const filename = path.join(__dirname, `./contracts/${address}.json`).toString()
+      const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
+      const filedata = await fetchData(filename, url);
 
-        const treeCacheFile = path.join(
-          __dirname,
-          `./data/${address}/tree.json`
-        );
-        // console.log("treeCacheFile: ", treeCacheFile);
-        await getCachedOrFreshData(
-          treeCacheFile,
-          generateTree,
-          source_code
-        );
-        modifyRequestdb(address, "partial");
-      } catch (e) {
-        console.log(e);
-      }
+      const source_code = filedata["source_code"];
+
+      const treeCacheFile = path.join(
+        __dirname,
+        `./data/${address}/tree.json`
+      );
+      // console.log("treeCacheFile: ", treeCacheFile);
+      await getCachedOrFreshData(
+        treeCacheFile,
+        generateTree,
+        source_code
+      );
+      modifyRequestdb(address, "partial");
+    } catch (e) {
+      console.log(e);
     }
   }
 
-  for (const row in auditRequests.filter(row => row.address === "partial")) {
+  for (const row of auditRequests.filter(row => row.status === "partial")) {
     const address = row.address;
     await gptauditor(address);
     modifyRequestdb(address, "complete");
