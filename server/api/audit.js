@@ -83,7 +83,8 @@ const AUDIT_STATUS_RETURN_CODE = {
   pending: 0,
   partial: 1,
   complete: 2,
-  errorFetchingDb: 3
+  errorFetchingDb: 3,
+  notRequested: 4
 }
 
 router.get("/:address", async (req, res) => {
@@ -97,6 +98,12 @@ router.get("/:address", async (req, res) => {
     return res.status(500).send({
       status: AUDIT_STATUS_RETURN_CODE.errorFetchingDb,
       message: 'Error in fetching data from database'
+    })
+  }
+
+  if (auditRequests.length === 0) {
+    return res.status(200).send({
+      status: AUDIT_STATUS_RETURN_CODE.notRequested
     })
   }
 
@@ -190,6 +197,10 @@ router.get("/:address", async (req, res) => {
       stats: statsCache,
     });
   }
+
+  return res.status(200).send({
+    status: AUDIT_STATUS_RETURN_CODE.notRequested
+  })
 });
 
 module.exports = router;
