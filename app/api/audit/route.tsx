@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 try {
     const data = await req.json();
     console.log(data);
-    const url = `http://${AEGIS_SRV}/audit/`;
+    const url = `${AEGIS_SRV}/audit/`;
     const address = data.address;
     console.log(url);
     const response = await axios.post(url, { address })
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const address = searchParams.get('address');
     console.log(address)
     // const address = "0xdac17f958d2ee523a2206206994597c13d831ec7"
-    const url = `http://${AEGIS_SRV}/`;
+    const url = `${AEGIS_SRV}/`;
     const formated =`${url}audit/${address}`
     console.log(formated);
     const response = await axios.get(formated)
