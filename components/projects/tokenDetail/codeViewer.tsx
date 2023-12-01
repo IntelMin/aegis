@@ -35,9 +35,14 @@ const CodeViewer = (data: CodeData) => {
   useEffect(() => {
     
     if (data.tree) {
-      console.log(data.tree);
       setTreeViewData(data.tree);
+    }
+
+    if (data.code) {
       setSourceCode(data.code);
+    }
+
+    if (data.findings) {
       setFindings(data.findings);
     }
   }, [data]);

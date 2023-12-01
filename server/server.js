@@ -10,9 +10,7 @@ const dashboardRoute = require("./api/dashboard");
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
 const auditRoute = require("./api/audit");
-const runWorker = require("./worker");
-
-runWorker()
+const requestRoute = require("./api/requests");
 
 const port = 9898;
 
@@ -27,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+app.use("/request", requestRoute);
 app.use("/info", infoRoute);
 app.use("/describe", describeRoute);
 app.use("/markdown", markdownRoute);

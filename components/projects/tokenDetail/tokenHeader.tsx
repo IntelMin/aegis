@@ -25,17 +25,17 @@ const TokenHeader = (props: any) => {
   const data = props.metadata;
 
   return (
-    <div className="flex flex-wrap justify-between w-full gap-3 md:absolute top-[22px] left-[25px] ">
+    <div className="flex flex-wrap justify-between w-full gap-3 top-[22px] left-[25px] ">
       <div className="flex items-center gap-4">
         <Link href="/codeAudit">
           <IoIosArrowRoundBack className="text-[28px] cursor-pointer md:hidden block ml-2" />
         </Link>
         <Title title={data?.info.name} icon iconName={data?.info.imageThumbUrl} />
         <Chip className=" rounded-lg py-[3px] px-[6px] text-[12px] font-bold uppercase bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
-          {data.info.symbol}
+          {data?.info.symbol}
         </Chip>
         <Chip className="rounded-lg py-[3px] px-[6px] text-[12px] font-bold bg-gradient-to-r from-[#38383896] via-[#383838] to-gray-700">
-          {data.explorerData.tokenType}
+          {data?.explorerData.tokenType}
         </Chip>
       </div>
     </div>

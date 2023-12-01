@@ -18,7 +18,7 @@ function parseSolidity(content) {
   let contractSegments = [];
 
   // Split the content by new line and loop through each line
-  content.split("\n").forEach((line) => {
+  content?.split("\n")?.forEach((line) => {
     if (line.includes("{")) {
       parenthesis++;
     }
@@ -307,7 +307,7 @@ async function definedRequest(address) {
         },
       })
     
-    return response.data
+    return response.data.data
   } catch (error) {
     console.error("Error making the request", error);
     return null;
@@ -380,5 +380,7 @@ const runWorker = async () => {
     await new Promise((resolve) => setTimeout(resolve, 5000));
   }
 }
+
+runWorker()
 
 module.exports = runWorker

@@ -270,7 +270,7 @@ const AuditDetail = (data: any) => {
 
         {/* <div className="flex p-4 rounded-md items-top">
           <span>
-          <RiPagesLine className="text-white mr-1  mt-1 text-xl"/>
+          <RiPagesLine className="mt-1 mr-1 text-xl text-white"/>
           </span>
 
           <div className="w-full bg-transparent">
