@@ -6,30 +6,28 @@ import React, { useState } from "react";
 import AuditReport from "../auditReport";
 import GoToOtherType from "../GoToOtherType";
 
-type Props = {};
-
-const AddressAuditForm = (props: Props) => {
+const AddressAuditForm = () => {
   const [contractAddress, setContractAddress] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const isAddressValid = (address: string): boolean => {
-    return /^(0x)?[0-9a-fA-F]{40}$/.test(address);
-  };
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (error) setError(null); // Clear error when input changes
+    if (error) {
+      setError(null);
+    }
+
     setContractAddress(event.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isAddressValid(contractAddress)) {
+
+    if (!/^(0x)?[0-9a-fA-F]{40}$/.test(contractAddress)) {
       setError("Please enter a valid Ethereum address.");
       return;
     }
+
     router.push(`/audits/${encodeURIComponent(contractAddress)}`);
-    setContractAddress("");
   };
 
   return (

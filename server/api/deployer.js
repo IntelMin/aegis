@@ -1,14 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const parser = require("@solidity-parser/parser");
-const main = require("../codes/main");
-const dependencies = require("../codes/dependencies");
+const main = require("../modules/deployer/main");
+const dependencies = require("../modules/deployer/dependencies");
 const solc = require("solc");
-const OpenAI = require("openai");
-
-const openai = new OpenAI({
-  apiKey: "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",
-});
+const openai = require("../openai");
 
 async function callOpenAI(query) {
   const response = await openai.chat.completions.create({

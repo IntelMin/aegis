@@ -5,7 +5,9 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const RadialChart = (series_data: any) => {
 
-  const series = Object.keys(series_data).map((key) => series_data[key as any]);
+  const series = series_data
+  ? Object.keys(series_data).map((key) => series_data[key])
+  : [];
 
   console.log("series:", series);
   const options: Props["options"] = {
@@ -35,8 +37,8 @@ const RadialChart = (series_data: any) => {
         },
       },
     },
-    colors: ['#f2f2f2', '#d9d9d9', '#bfbfbf', '#808080', '#404040'],
-    labels: ['Health', 'Security', 'Strength', 'Stability', 'Trust'],
+    colors: ['#f2f2f2', '#808080', '#404040'],
+    labels: ['Health', 'Stability', 'Trust'],
     legend: {
       show: true,
       floating: true,

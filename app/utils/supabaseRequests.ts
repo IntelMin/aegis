@@ -1,4 +1,4 @@
-import { supabaseClient } from './supabaseDB'
+import supabase from '../../server/supabase.js'
 
 type UserProps = {
   email: string,
@@ -7,7 +7,6 @@ type UserProps = {
 }
 
 const emailExists = async (props: UserProps): Promise<boolean> => {
-  const supabase = await supabaseClient();
   const { data, error } = await supabase.from('aegis').select('email').eq('email', props.email).single();
   if (error) return false;
   if (data) return true;
@@ -22,7 +21,6 @@ export const getWhitelistStatus = async (props: UserProps): Promise<boolean> => 
     await updateUser(props)
     return false
   } else {
-    const supabase = await supabaseClient();
     const { data, error } = await supabase.from('aegis').select('whitelisted').eq('email', props.email).single()
     if (error) {
       console.log(error)
@@ -35,7 +33,6 @@ export const getWhitelistStatus = async (props: UserProps): Promise<boolean> => 
 
 export const updateUser = async (props: UserProps) => {
   const userExists = await emailExists(props);
-  const supabase = await supabaseClient();
   // console.log("props at updateUser",props)
   if (!userExists) {
     // console.log("Inserting new user")

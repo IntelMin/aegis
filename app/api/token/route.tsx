@@ -1,11 +1,41 @@
+import { request } from "http";
 import { NextResponse } from "next/server";
 const { AEGIS_SRV } = process.env;
 
-type DataType = "info" | "stats" | "code" | "viz" | "functions" | "dependencies" | "rugpull" | "token_security";
+type DataType =
+  | "audit_request"
+  | "audit_status"
+  | "audit";
+//   | "info"
+//   | "stats"
+//   | "code"
+//   | "viz"
+//   | "functions"
+//   | "dependencies"
+//   | "rugpull"
+//   | "token_security";
 
 type Handlers = {
   [key in DataType]: (address: string) => Promise<Response>;
 };
+
+async function fetchAuditStatus(address: string) {
+  console.log("fetchAuditRequest");
+  const url = `${AEGIS_SRV}/request/${address}`;
+  return fetchAndRespond(url);
+}
+
+async function requestAudit(address: string) {
+  console.log("requestAudit");
+  const url = `${AEGIS_SRV}/request`;
+  return fetchAndRespond(url, "POST", { address });
+}
+
+async function fetchAudit(address: string) {
+  console.log("fetchAuditRequest");
+  const url = `${AEGIS_SRV}/audit/${address}`;
+  return fetchAndRespond(url);
+}
 
 async function fetchTokenInfo(address: string) {
   // console.log("fetchTokenInfo");
@@ -37,7 +67,7 @@ async function fetchRugpull(address: string) {
 async function fetchTokenCode(address: string) {
   console.log("fetchTokenCode");
   // const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  const url = `${AEGIS_SRV}/code/${address}`;
+  const url = `${AEGIS_SRV}/audit/${address}`;
 
   return fetchAndRespond(url);
 }
@@ -63,13 +93,19 @@ async function fetchTokenViz(address: string) {
   return fetchAndRespond(url);
 }
 
-async function fetchAndRespond(url: string) {
+async function fetchAndRespond(
+  url: string,
+  method: string = "GET",
+  body?: any
+) {
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: method,
       headers: {
         Accept: "application/json",
+        "Content-Type": "application/json",
       },
+      body: method === "POST" && body ? JSON.stringify(body) : undefined,
     });
 
     if (!response.ok) {
@@ -100,14 +136,17 @@ export async function POST(req: Request, res: NextResponse) {
   console.log(data);
 
   const handlers: Handlers = {
-    info: fetchTokenInfo,
-    stats: fetchTokenStats,
-    code: fetchTokenCode,
-    viz: fetchTokenViz,
-    functions: fetchTokenFunctions,
-    dependencies: fetchDependencies,
-    rugpull: fetchRugpull,
-    token_security: fetchTokenSecurity,
+    audit_request: requestAudit,
+    audit_status: fetchAuditStatus,
+    audit: fetchAudit,
+    // info: fetchTokenInfo,
+    // stats: fetchTokenStats,
+    // code: fetchTokenCode,
+    // viz: fetchTokenViz,
+    // functions: fetchTokenFunctions,
+    // dependencies: fetchDependencies,
+    // rugpull: fetchRugpull,
+    // token_security: fetchTokenSecurity,
   };
 
   const handler = handlers[data.type as DataType];
