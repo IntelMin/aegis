@@ -94,7 +94,6 @@ async function worker() {
 const runWorker = async () => {
   while (true) {
     await worker();
-    return false;
     await new Promise((resolve) => setTimeout(resolve, 5000));
   }
 };
