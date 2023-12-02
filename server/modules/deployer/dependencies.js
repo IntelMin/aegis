@@ -1,4 +1,4 @@
-const dependencies = `
+const deployerContract = `
 // SPDX-License-Identifier: Unlicensed
 pragma solidity ^0.8.18;
  
@@ -151,4 +151,4 @@ interface IUniswapV2Router02 {
 }
 `
 
-module.exports = dependencies
+module.exports = deployerContract

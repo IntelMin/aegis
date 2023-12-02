@@ -1,6 +1,6 @@
 // utils.js
 const fs = require("fs").promises;
-const fss = require("fs")
+const fss = require("fs");
 const axios = require("axios");
 const path = require("path");
 const supabase = require("./supabase");
@@ -40,7 +40,7 @@ const fetchData = async (file, url) => {
 
     // Write the JSON string to a file
     if (!fss.existsSync(path.dirname(file))) {
-      await fs.mkdir(path.dirname(file))
+      await fs.mkdir(path.dirname(file));
     }
 
     await fs.writeFile(file, result, "utf8");
@@ -76,7 +76,10 @@ async function apiRequest(url, params) {
   }
 }
 async function fetchAndCacheData(type, endpoint, address) {
-  const filename = path.join(__dirname, `/data/${address}/${type}.json`);
+  const filename = path.join(
+    __dirname,
+    `/cache/contracts/${address}/${type}.json`
+  );
   const currentTime = new Date().getTime();
   let filedata = await readCache(filename);
   const expiry = 3600000;
@@ -127,7 +130,7 @@ const getCachedOrFreshData = async (
 
 function getCachedData(cacheFilePath) {
   let cache = readCache(cacheFilePath);
-  console.log(cache);
+//   console.log(cache);
   if (cache !== null) {
     // const cacheData = fs.readFileSync(cacheFilePath, 'utf8');
     return JSON.parse(cache);
@@ -148,10 +151,11 @@ async function isERC20Token(address) {
 async function insertRequestdb(data) {
   try {
     const { data: insertedData, error } = await supabase
-      .from("audit-requests")
+      .from("audit_requests")
       .insert(data);
 
     if (error) {
+      console.log("Error inserting data: ", error);
       throw new Error(error.message);
     }
 
@@ -164,11 +168,12 @@ async function insertRequestdb(data) {
 async function modifyRequestdb(address, newStatus) {
   try {
     const { data: updatedData, error } = await supabase
-      .from("audit-requests")
+      .from("audit_requests")
       .update({ status: newStatus })
-      .eq("address", address);
+      .eq("contract", address);
 
     if (error) {
+      console.log("Error modifying row: ", error);
       throw new Error(error.message);
     }
 

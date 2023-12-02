@@ -174,7 +174,7 @@ router.get("/:type", async (req, res) => {
     }
 
     // get file from cache
-    let filename = `./cache/${type}.json`;
+    let filename = `./cache/trending/${type}.json`;
 
     // get current time
     let currentTime = new Date().getTime();

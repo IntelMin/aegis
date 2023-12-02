@@ -103,7 +103,7 @@ async function definedRequest(address) {
 }
 
 async function getMetadata(address) {
-  const filename = path.join(__dirname, `../data/${address}/meta.json`);
+  const filename = path.join(__dirname, `../cache/contracts/${address}/meta.json`);
 
   let filedata = await readCache(filename);
 

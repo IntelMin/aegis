@@ -1,4 +1,4 @@
-const code = `
+const deployer = `
 contract ABC is Context, IERC20, Ownable {
  
   using SafeMath for uint256;
@@ -435,4 +435,4 @@ contract ABC is Context, IERC20, Ownable {
 }
 `
 
-module.exports = code
+module.exports = deployer

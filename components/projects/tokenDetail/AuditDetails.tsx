@@ -64,7 +64,7 @@ function calculateHealthScore(data: any) {
 
   // Consider liquidity in DEXs, with an arbitrary ideal liquidity value
   const idealLiquidity = 1000000; // Example value
-  const liquidityScore = data.dex.reduce((acc:any, dex:any) => {
+  const liquidityScore = data.dex.reduce((acc: any, dex: any) => {
     return acc + parseFloat(dex.liquidity) / idealLiquidity;
   }, 0);
   score += Math.min(liquidityScore / data.dex.length, 1) * 25;
@@ -141,6 +141,8 @@ function calculateTrustScore(data: any) {
 
 const AuditDetail = (data: any) => {
   const token = data.token;
+  console.log("------------------");
+  console.log(token);
   const total_supply = formatLargeNumber(token.total_supply);
   const market_cap = formatLargeNumber(token.circulating_market_cap);
   // const liquidity = formatLargeNumber(token.liquidity);
@@ -159,6 +161,8 @@ const AuditDetail = (data: any) => {
 
   const metadata = data.metadata;
 
+  console.log("metadata: ", metadata);
+
   return (
     <div className="flex flex-col gap-4 md:flex-row">
       <div className="items-center gap-4 mr-4 ">
@@ -171,7 +175,7 @@ const AuditDetail = (data: any) => {
           </h3>
           {/* <p className="text-[12px] text-success">+5.35%</p> */}
         </div>
-        
+
         <div className="bg-[#2a2a2a52] px-3 py-[6px] rounded-lg mb-5">
           <h1 className="font-semibold text-[13px] text-default-500">
             {"Supply"}
@@ -206,9 +210,7 @@ const AuditDetail = (data: any) => {
           <h1 className="font-semibold text-[13px] text-default-500">
             {"Network"}
           </h1>
-          <h3 className="font-semibold text-[18px] text-light">
-            Ethereum
-          </h3>
+          <h3 className="font-semibold text-[18px] text-light">Ethereum</h3>
           {/* <p className="text-[12px] text-success">+11.35%</p> */}
         </div>
       </div>

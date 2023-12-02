@@ -97,7 +97,7 @@ const ProjectPage = () => {
             // setFunctionTableData(responseData.findings?.table?.slice(1));
             setInfoData(responseData);
             setCodeData(responseData.code);
-            setFunctionData(responseData.tree);
+            setFunctionTableData(responseData.functions.tableRows);
             setDependencyData(responseData.dependencies);
 
             // if (codeData.status === AUDIT_STATUS_RETURN_CODE.complete) {

@@ -18,7 +18,7 @@ router.get("/:address", async (req, res) => {
     return res.status(400).send("No address provided");
   }
 
-  let filename = `./contracts/${address}.json`;
+  let filename = `./cache/contracts/${address}/source.json`;
   let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
 
   let source_code = "";

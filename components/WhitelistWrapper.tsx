@@ -33,8 +33,8 @@ export function WhitelistWrapper({
 
   if (isLoading) {
     return (
-      <div className="bg-black flex justify-center items-center min-h-screen w-full top-0 z-50 loading-screen">
-        <h1 className="text-light font-bold text-3xl">Loading...</h1>
+      <div className="top-0 z-50 flex items-center justify-center w-full min-h-screen bg-black loading-screen">
+        <h1 className="text-3xl font-bold text-light">Loading...</h1>
       </div>
     );
   }
@@ -45,7 +45,7 @@ export function WhitelistWrapper({
       style={{
         backgroundImage: "linear-gradient(27deg, #4d4f55 0%, #000000 79%)",
       }}
-      className="flex flex-col justify-center items-center min-h-screen w-full top-0 z-50 loading-screen"
+      className="top-0 z-50 flex flex-col items-center justify-center w-full min-h-screen loading-screen"
     >
       <div className="bg-gradient-to-r from-[#c6c6c6] via-[#e1dcdc] bg-clip-text to-[white]">
         <h1 className="uppercase font-[800] tracking-[2px] text-[50px] text-transparent">
@@ -58,7 +58,7 @@ export function WhitelistWrapper({
         </i>
         <h1 className="text-transparent font-medium text-[20px] md:text-[24px] max-md:mx-[10px] w-[95%] md:w-[80%] text-center">
           <span className="font-semibold">AegisAI</span>
-          is currently in closed-beta,
+          &nbsp;is currently in closed-beta,
           please wait until you’re invited or
           we open up for public beta.
         </h1>

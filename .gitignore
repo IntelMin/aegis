@@ -8,14 +8,8 @@ cache/
 pnpm-lock.yaml
 
 # Ignore everything in these directories
-contracts/*
-data/*
 cache/*
-server/data/*
-server/contracts/*
-# Except the directories themselves, by negating the ignore with a '!'
-!contracts/
-!data/
+server/cache/*
 
 # But do not ignore .gitkeep files, so the directories are kept in the repository
 !.gitkeep

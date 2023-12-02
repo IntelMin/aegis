@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const parser = require("@solidity-parser/parser");
-const main = require("../codes/main");
-const dependencies = require("../codes/dependencies");
+const main = require("../modules/deployer/main");
+const dependencies = require("../modules/deployer/dependencies");
 const solc = require("solc");
 const openai = require("../openai");
 

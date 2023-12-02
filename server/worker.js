@@ -1,386 +1,104 @@
-const {
-  fetchData,
-  fetchAndCacheData,
-  writeCache,
-  readCache,
-  getCachedOrFreshData,
-  supabase,
-  modifyRequestdb,
-} = require("./utils");
-const openai = require("./openai");
+const { readCache, supabase, modifyRequestdb } = require("./utils");
 const path = require("path");
-const axios = require("axios");
-const parser = require("@solidity-parser/parser");
+const getInfo = require("./modules/info");
+const getTree = require("./modules/tree");
+const getDependencies = require("./modules/dependencies");
+const getFunctions = require("./modules/functions");
+const getAudit = require("./modules/audit");
 
-function parseSolidity(content) {
-  let parenthesis = 0;
-  let currentContract = [];
-  let contractSegments = [];
-
-  // Split the content by new line and loop through each line
-  content?.split("\n")?.forEach((line) => {
-    if (line.includes("{")) {
-      parenthesis++;
-    }
-    if (line.includes("}")) {
-      parenthesis--;
-    }
-    if (parenthesis !== 0) {
-      currentContract.push(line);
-      if (currentContract.length > 5) {
-        contractSegments.push(currentContract.join("\n"));
-        currentContract = [];
-      }
-    }
-  });
-
-  // Check if there's any remaining content in currentContract
-  if (currentContract.length > 1) {
-    contractSegments.push(currentContract.join("\n"));
-  }
-
-  return contractSegments;
-}
-function generateTree(content) {
-  const ast = (() => {
-    try {
-      return parser.parse(content, { loc: true });
-    } catch (err) {
-      console.error(`\nError found while parsing one of the provided files\n`);
-      throw err;
-    }
-  })();
-
-  console.log("Contract AST loaded -- generateTree");
-
-  const astTree = [];
-  let currentContract = null;
-
-  parser.visit(ast, {
-    ContractDefinition(node) {
-      const name = node.name;
-      let bases = node.baseContracts
-        .map((spec) => {
-          return spec.baseName.namePath;
-        })
-        .join(", ");
-
-      bases = bases.length ? `(${bases})` : "";
-
-      let specs = "";
-      if (node.kind === "library") {
-        specs += "[Lib]";
-      } else if (node.kind === "interface") {
-        specs += "[Int]";
-      }
-
-      // console.log(` + ${specs} ${name} ${bases}`);
-      const lineNumber = node.loc.start.line;
-      currentContract = {
-        type: "contract",
-        name: name,
-        bases: bases,
-        specs: specs,
-        line: lineNumber,
-        functions: [],
-      };
-      astTree.push(currentContract);
-      // console.log("line: ", lineNumber);
-
-      // console.log(` + ${specs} ${name} ${bases} at line ${lineNumber}`);
-    },
-
-    "ContractDefinition:exit": function (node) {
-      // console.log("");
-      currentContract = null;
-      // console.log("ContractDefinition:exit");
-    },
-
-    FunctionDefinition(node) {
-      let name;
-
-      if (node.isConstructor) {
-        name = "<Constructor>";
-      } else if (node.isFallback) {
-        name = "<Fallback>";
-      } else if (node.isReceiveEther) {
-        name = "<Receive Ether>";
-      } else {
-        name = node.name;
-      }
-
-      let spec = "";
-      if (node.visibility === "public" || node.visibility === "default") {
-        spec += "[Pub]";
-      } else if (node.visibility === "external") {
-        spec += "[Ext]";
-      } else if (node.visibility === "private") {
-        spec += "[Prv]";
-      } else if (node.visibility === "internal") {
-        spec += "[Int]";
-      }
-
-      let payable = "";
-      if (node.stateMutability === "payable") {
-        payable = " ($)";
-      }
-
-      let mutating = "";
-      if (!node.stateMutability) {
-        mutating = " #";
-      }
-
-      let modifiers = "";
-      for (let m of node.modifiers) {
-        if (!!modifiers) modifiers += ",";
-        modifiers += m.name;
-      }
-
-      // console.log(`    - ${spec} ${name}${payable}${mutating}`);
-      const lineNumber = node.loc.start.line;
-      const functionDef = {
-        type: "func",
-        name: name,
-        spec: spec,
-        payable: payable,
-        modifiers: modifiers,
-        line: lineNumber,
-      };
-
-      if (currentContract) {
-        currentContract.functions.push(functionDef);
-      }
-
-      if (!!modifiers) {
-        // console.log(`       - modifiers: ${modifiers}`);
-      }
-    },
-  });
-
-  return astTree;
-}
-
-async function getFindings(codeSegments) {
-  const findings = [];
-
-  for (let i = 0; i < codeSegments.length; i++) {
-    const segment = codeSegments[i];
-
-    const chatCompletion = await getFinding(segment);
-
-    // console.log(chatCompletion);
-
-    try {
-      // Attempt to parse the chatCompletion
-      const parsedData = JSON.parse(chatCompletion);
-      console.log("Code segment: ", segment);
-      console.log("Valid JSON:", parsedData);
-
-      findings.push(parsedData);
-
-      // check if chatCompletion is a valid JSON
-      // if (chatCompletion.includes("status")) {
-      //   findings.push(chatCompletion);
-      // }
-    } catch (e) {
-      console.log("Invalid JSON:", e);
-    }
-
-    console.log("Loop: ", i);
-
-    // if (i > 0) {
-    //   break;
-    // }
-
-    if (i < codeSegments.length - 1) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
-  }
-
-  return findings;
-}
-async function getFinding(code) {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content:
-          "Aegis is an AI-powered assistant designed to audit smart contract code that only responds in JSON when user provides code.",
-      },
-      {
-        role: "user",
-        content: code,
-      },
-      {
-        role: "system",
-        content: `For the provided code segment provided above, report any vulnerabilities found in JSON format.
-  
-          Important: if there are no vulnerabilities are found, return a json object with the following format:
-          {
-            "status": "None",
-          }
-           `,
-      },
-    ],
-    model: "ft:gpt-3.5-turbo-1106:personal::8KeRWVxf",
-  });
-
-  return chatCompletion.choices[0].message.content;
-}
-async function gptauditor(address) {
-  let filename = path.join(__dirname, `./contracts/${address}.json`);
-  let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-  let filedata = await fetchData(filename, url);
-
-  let source_code = filedata["source_code"];
-
-  const findingsCacheFile = path.join(
-    __dirname,
-    `./data/${address}/findings.json`
-  );
-
-  let codeSegments = parseSolidity(source_code);
-  // console.log("codeSegments: ", codeSegments);
-
-  let findings = await getCachedOrFreshData(
-    findingsCacheFile,
-    getFindings,
-    codeSegments
-  );
-}
-
-async function getMetadata(address) {
-  const filename = path.join(__dirname, `./data/${address}/meta.json`);
-
-  let filedata = await readCache(filename);
-
-  if (filedata) {
-    return filedata;
-  } else {
-    const response_data = await definedRequest(address);
-    console.log(`Fetched metadata from API: `, response_data);
-
-    const data = response_data;
-
-    await writeCache(filename, data);
-    return response_data;
-  }
-}
-async function definedRequest(address) {
-  let graphql = {
-    operationName: "GetTokens",
-    variables: {
-      ids: [
-        {
-          address: address,
-          networkId: 1,
-        },
-      ],
-    },
-    query:
-      "query GetTokens($ids: [TokenInput!]!) {\n  tokens(ids: $ids) {\n    address\n    decimals\n    id\n    name\n    networkId\n    symbol\n    imageLargeUrl\n    imageSmallUrl\n    imageThumbUrl\n    explorerData {\n      id\n      blueCheckmark\n      description\n      divisor\n      tokenPriceUSD\n      tokenType\n      __typename\n    }\n    info {\n      ...BaseTokenInfo\n      __typename\n    }\n    socialLinks {\n      bitcointalk\n      blog\n      coingecko\n      coinmarketcap\n      discord\n      email\n      facebook\n      github\n      instagram\n      linkedin\n      reddit\n      slack\n      telegram\n      twitch\n      twitter\n      website\n      wechat\n      whitepaper\n      youtube\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment BaseTokenInfo on TokenInfo {\n  address\n  circulatingSupply\n  id\n  imageLargeUrl\n  imageSmallUrl\n  imageThumbUrl\n  isScam\n  name\n  networkId\n  symbol\n  totalSupply\n  __typename\n}",
-  };
-
-  let request = JSON.stringify(graphql);
-
-  try {
-    const response = await axios
-      .post("https://graph.defined.fi/graphql", request, {
-        headers: {
-          authority: "graph.defined.fi",
-          accept: "*/*",
-          "accept-language": "en-US,en;q=0.9,ko;q=0.8",
-          authorization: "F056MdQIqh29ZGalfV1m2BChqdQcae84k7wIFBA7",
-          "content-type": "application/json",
-          origin: "https://www.defined.fi",
-          referer: "https://www.defined.fi/",
-          "sec-ch-ua":
-            '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
-          "sec-ch-ua-mobile": "?0",
-          "sec-ch-ua-platform": '"macOS"',
-          "sec-fetch-dest": "empty",
-          "sec-fetch-mode": "cors",
-          "sec-fetch-site": "same-site",
-          "user-agent":
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-          "x-amz-user-agent": "aws-amplify/3.0.7",
-        },
-      })
-    
-    return response.data.data
-  } catch (error) {
-    console.error("Error making the request", error);
-    return null;
-  }
-}
 //GPT code audit part
 async function worker() {
   const { data: auditRequests, error: error_req } = await supabase
-    .from("audit-requests")
+    .from("audit_requests")
     .select("*")
+    .or("status.eq.pending,status.eq.partial");
 
-  for (const row of auditRequests.filter(row => row.status === "pending")) {
-    const address = row.address;
+  for (const row of auditRequests) {
+    const address = row.contract;
+    let source_code = "";
+
+    console.log("Processing: ", address, row.status);
 
     try {
-      await Promise.all([
-        fetchAndCacheData(
-          "info",
-          `https://eth.blockscout.com/api/v2/tokens/${address}`,
-          address
-        ),
-        fetchAndCacheData(
-          "security",
-          `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${address}`,
-          address
-        ),
-        fetchAndCacheData(
-          "rugpull",
-          `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
-          address
-        ),
-        getMetadata(address)
-      ])
+      if (row.status === "pending") {
+        // generate token, meta, security & rugpull json
+        const token_info = await getInfo(address);
+        if (!token_info) {
+          throw new Error("Token info not returned from API");
+        }
+        console.log("-- token, meta, security & rugpull");
 
-      //save token contract
+        // get source file content
+        const source_file = path
+          .join(__dirname, `./cache/contracts/${address}/source.json`)
+          .toString();
+        source_code = await readCache(source_file);
+        source_code = source_code["data"]["source_code"];
 
-      const filename = path.join(__dirname, `./contracts/${address}.json`).toString()
-      const url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
-      const filedata = await fetchData(filename, url);
+        // generate tree.json
+        const tree = await getTree(address, source_code);
+        if (!tree) {
+          throw new Error("Tree not generated");
+        }
+        console.log("-- tree.json");
 
-      const source_code = filedata["source_code"];
+        // generate dependencies.json
+        const dependencies = await getDependencies(address, source_code);
+        if (!dependencies) {
+          throw new Error("Dependencies not generated");
+        }
+        console.log("-- dependencies.json");
 
-      const treeCacheFile = path.join(
-        __dirname,
-        `./data/${address}/tree.json`
-      );
-      // console.log("treeCacheFile: ", treeCacheFile);
-      await getCachedOrFreshData(
-        treeCacheFile,
-        generateTree,
-        source_code
-      );
-      modifyRequestdb(address, "partial");
+        // generate functions.json
+        const functions = await getFunctions(address, source_code);
+        if (!functions) {
+          throw new Error("Functions not generated");
+        }
+        console.log("-- functions.json");
+
+        modifyRequestdb(address, "partial");
+        console.log("-- modified status to partial");
+      }
+
+      if (row.status === "partial") {
+
+        // get source file content
+        const source_file = path
+          .join(__dirname, `./cache/contracts/${address}/source.json`)
+          .toString();
+        source_code = await readCache(source_file);
+        source_code = source_code["data"]["source_code"];
+
+        // generate findings.json
+        start_time = new Date().getTime();
+        console.log("-- start findings.json");
+        const findings = await getAudit(address, source_code);
+        if (!findings) {
+          throw new Error("Findings not generated");
+        }
+        end_time = new Date().getTime();
+        console.log("-- findings.json");
+        console.log("Time taken: ", end_time - start_time, "ms");
+
+        modifyRequestdb(address, "completed");
+        console.log("-- modified status to completed");
+      }
     } catch (e) {
+      // TODO: Add failure to supabase
       console.log(e);
     }
-  }
-
-  for (const row of auditRequests.filter(row => row.status === "partial")) {
-    const address = row.address;
-    await gptauditor(address);
-    modifyRequestdb(address, "complete");
   }
 }
 // module.exports = worker;
 
 const runWorker = async () => {
   while (true) {
-    await worker()
+    await worker();
+    return false;
     await new Promise((resolve) => setTimeout(resolve, 5000));
   }
-}
+};
 
-runWorker()
+runWorker();
 
-module.exports = runWorker
+module.exports = runWorker;
