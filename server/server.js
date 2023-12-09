@@ -11,7 +11,7 @@ const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
 const auditRoute = require("./api/audit");
 const requestRoute = require("./api/requests");
-
+const reportRoute = require("./api/report");
 const port = 9898;
 
 app.use(express.json());
@@ -28,6 +28,7 @@ app.use("/dashboard", dashboardRoute);
 app.use("/trending", trendingTokens);
 app.use("/deployer", deployerRoute);
 app.use("/audit", auditRoute);
+app.use("/report",reportRoute)
 // app.use("/info", infoRoute);
 // app.use("/describe", describeRoute);
 // app.use("/markdown", markdownRoute);

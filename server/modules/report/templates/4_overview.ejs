@@ -1,0 +1,41 @@
+<style>
+  h1 {
+    color: #fff;
+    text-align: center;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    color: #fff;
+    font-size: 20px;
+  }
+
+  p {
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+</style>
+
+<h1>Token Information</h1>
+<div>
+  <img
+    src="https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png?1696509996"
+    alt="Coin Icon"
+  />
+  <h2>Name: <%= info.name %></h2>
+  <p>Symbol: <%= info.symbol %></p>
+  <p>Address: <%= info.address %></p>
+  <p>Type: <%= info.type %></p>
+  <p>Decimals: <%= info.decimals %></p>
+  <p>Total Supply: <%= info.total_supply %></p>
+  <p>Circulating Market Cap: <%= info.circulating_market_cap %></p>
+  <p>Price: <%= info.exchange_rate %></p>
+  <p>Holders: <%= info.holders %></p>
+</div>

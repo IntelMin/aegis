@@ -1,0 +1,12 @@
+<div>
+    <h2>Packages Used:</h2>
+    <% if (source.external_libraries?.length > 0) { %>
+      <ul>
+        <% source.external_libraries.forEach(function(library) { %>
+          <li><%= library %></li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No external libraries used.</p>
+    <% } %>
+  </div>

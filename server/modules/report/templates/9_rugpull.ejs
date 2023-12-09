@@ -1,0 +1,38 @@
+
+<div>
+  <h1>Rug Pull Information</h1>
+  <table style="border: 1px solid black;">
+    <tr style="background-color: blue;">
+      <th style="border: 1px solid black;">Check</th>
+      <th style="border: 1px solid black;">Value</th>
+    </tr>
+    <% if(rugpull.owner){ %>
+    <tr>
+        <td style="border: 1px solid black;">owner name </td>
+        <td style="border: 1px solid black;"><%= rugpull.owner?.owner_name %></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">owner type</td>
+        <td style="border: 1px solid black;"><%= rugpull.owner.owner_type %></td>
+    </tr>
+<%  } %>
+    <tr>
+        <td style="border: 1px solid black;">Privilaged withdraw</td>
+        <td style="border: 1px solid black;"><%= rugpull.privilege_withdraw==1 %></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">withrawal</td>
+        <td style="border: 1px solid black;"><%= rugpull.withdraw_missing==0?"✅":"⚠️" %></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">Self destruct</td>
+        <td style="border: 1px solid black;"><%= rugpull.selfdestruct==1 %></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">Is a proxy</td>
+        <td style="border: 1px solid black;"><%= rugpull.is_proxy==1 %></td>
+    </tr>
+    </tr>
+    <!-- Add table rows here -->
+  </table>
+</div>
