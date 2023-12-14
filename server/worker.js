@@ -5,7 +5,7 @@ const getTree = require("./modules/tree");
 const getDependencies = require("./modules/dependencies");
 const getFunctions = require("./modules/functions");
 const getAudit = require("./modules/audit");
-const createAuditSummery = require("./audit_summery")
+const {createAuditSummery} = require("./audit_summery")
 //GPT code audit part
 async function worker() {
   const { data: auditRequests, error: error_req } = await supabase

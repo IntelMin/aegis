@@ -3,10 +3,7 @@ const OpenAI = require("openai");
 const fs = require("fs").promises;
 const fss = require("fs");
 const path =require("path");
-
-const openai = new OpenAI({
-  apiKey:"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"
-});
+const openai = require("./openai")
 
 const getFunctionsData =async(props)=>{
     let internalCount = 0;
@@ -84,7 +81,7 @@ return completion.choices[0]?.message?.content;
 const saveOnCache = async (props) => {
   const dir = "./server/cache/contracts/" + props.address 
   fs.mkdir(dir, { recursive: true });
-  fs.writeFile(path.join(dir,"audit_summery.json"), JSON.stringify({audit_summery:props.audit_summery}),(err) => {
+  fs.writeFile(path.join(dir,"audit_summery.json"), JSON.stringify({audit_summery:props.audit_summery,data:props.data}),(err) => {
   if(err) throw err;
   console.log("Audit summery saved on cache");
   });
@@ -130,7 +127,7 @@ const createAuditSummery = async (address) => {
 const refineprompt = (prompt.prompt + JSON.stringify(data))
 console.log(refineprompt)
 const audit_summery = await getSummery(refineprompt);
-await saveOnCache({audit_summery:audit_summery,address:address});
+await saveOnCache({audit_summery:audit_summery,address:address,data:data});
 };
 // createAuditSummery("0x514910771AF9Ca656af840dff83E8264EcF986CA")
 module.exports = {createAuditSummery}

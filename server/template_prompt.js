@@ -1,5 +1,5 @@
 const prompt = `
-i need to get the audit report conclusion for an erc20 token under 100 words from the data i provide.
+i need to get the audit report conclusion for an erc20 token under 150 words from the data i provide.
 the  data that i am providing woulde be of the form 
 {
     "token_name": "PEPE meme",  
@@ -41,7 +41,7 @@ There are no honeypots found during the analysis but there are 9 high severity i
 the token is antiwhale and  is listed on dexes also have 4 lp holders which is very less. The token is mintable and open source."
 
 You can make it creative and more conveying, but should include all the data provided in the correct format.You should not sugarcoat 
-or create a biased report. The report should be unbiased and should be based on the data provided. The report should be of 100 words.
+or create a biased report. The report should be unbiased and should be based on the data provided. The report should be of 150 words.
 
 Data is :
 `;
