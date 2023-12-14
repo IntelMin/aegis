@@ -5,7 +5,7 @@ const getTree = require("./modules/tree");
 const getDependencies = require("./modules/dependencies");
 const getFunctions = require("./modules/functions");
 const getAudit = require("./modules/audit");
-const {createAuditSummery} = require("./audit_summery")
+const createAuditSummery = require("./audit_summery")
 //GPT code audit part
 async function worker() {
   const { data: auditRequests, error: error_req } = await supabase
@@ -80,12 +80,13 @@ async function worker() {
         console.log("-- findings.json");
         console.log("Time taken: ", end_time - start_time, "ms");
 
+        await createAuditSummery(address);
+        console.log("-- audit summery created");
+
         modifyRequestdb(address, "completed");
         console.log("-- modified status to completed");
       }
 
-      await createAuditSummery(address);
-      console.log("-- audit summery created");
     } catch (e) {
       // TODO: Add failure to supabase
       console.log(e);

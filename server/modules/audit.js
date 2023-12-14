@@ -60,9 +60,9 @@ async function getFindings(codeSegments) {
 
     console.log("Loop: ", i);
 
-    // if (i > 0) {
-    //   break;
-    // }
+    if (i > 0) {
+      break;
+    }
 
     if (i < codeSegments.length - 1) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
