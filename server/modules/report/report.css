@@ -1,0 +1,123 @@
+.ownership-privileges_head_con h1 {
+  border-width: 2px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #d9dce1, #43434342, #d9dce1) 1;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.ownership-privileges_head_con p {
+  line-height: 40px;
+  letter-spacing: 2px;
+}
+.miniting-priveleges-con h2 {
+  font-size: 26px;
+  font-weight: 900;
+}
+.priveleges-table-head {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  background-color: black;
+  border-radius: 6px;
+  background: #303030;
+}
+.priveleges-table-head h3 {
+  font-size: 16px;
+}
+.priveleges-table-head h3:last-child {
+  font-weight: 300;
+  color: #58ff5e;
+}
+.priveleges-table-value {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  border-bottom-left-radius: 31px;
+  border-bottom-right-radius: 31px;
+  background: #fff;
+}
+.priveleges-table-value h3 {
+  color: black;
+  padding: 10px 30px;
+  min-height: 100px;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.priveleges-table-value h3:last-child {
+  border-left: 1px solid black;
+  font-weight: 400;
+  width: 100%;
+  min-width: 500px;
+}
+.image-con {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.findings-title {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #d9dce1;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.finding-detail-con {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.finding-detail-title-con h1 {
+  font-size: 20px;
+  font-weight: 500;
+}
+.table-head {
+  background: #2f4076;
+  overflow: hidden;
+}
+
+.table-head-first {
+  width: 160px;
+  border-right: 2px solid white;
+  border-top-left-radius: 20px;
+}
+.table-head-second {
+  width: 80px;
+  border-right: 2px solid white;
+}
+.table-head-third {
+  width: 380px;
+  border-top-right-radius: 20px;
+}
+.table-row-first {
+  font-size: 12px;
+  width: 160px;
+  background: #fff;
+  color: black;
+  border-bottom-left-radius: 17px;
+  padding: 10px;
+}
+.table-row-second {
+  font-size: 12px;
+  width: 80px;
+  background: #ffc451;
+  color: white;
+  padding: 10px;
+}
+.table-row-third {
+  width: 380px;
+  background: #fff;
+  border-bottom-right-radius: 17px;
+  padding: 10px;
+}
+.table-row-third p {
+  font-size: 12px;
+  color: black;
+}

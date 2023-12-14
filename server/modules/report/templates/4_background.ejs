@@ -1,0 +1,83 @@
+<style>
+  .audit-bg {
+    margin-top: 100px;
+    align-items: left;
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  .audit-bg h2 {
+    font-style: normal;
+    text-align: center;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 39px;
+    color: #ffffff;
+  }
+
+  .audit-bg p {
+    line-height: 35px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .audit-bg ul li {
+    line-height: 30px;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 0px;
+    list-style-type: disc;
+
+  }
+
+  .audit-bgImage {
+    width: 300px;
+    height: 300px;
+  }
+</style>
+<div class="audit-bg">
+  <ptitle>
+
+  <h2 class="textFont">Background of the Audit</h2>
+  </ptitle>
+
+  <p class="textFont">
+    Overview of the Audited Entity <br />
+    The audit was conducted for <%= info.name %>, an ERC20 token.
+      <br />Purpose of the Audit<br />
+      The primary objective of this audit was to assess the security, code
+      quality, compliance, and overall functionality of <%= info.name %>'s smart
+        contract, identified as <%= source.file_path %>. The smart contract is a
+          critical component of the token, and its performance and security have
+          significant implications for <%= info.name %> and its stakeholders.
+  </p>
+  <ul>
+    <li>Previous Audit History</li>
+  </ul>
+  <p>
+    Include any relevant information about previous audits, if applicable, to
+    provide context on the evolution of the audited system and to highlight any
+    improvements made based on previous audit recommendations.
+  </p>
+  <ul>
+    <li>Regulatory Environment</li>
+  </ul>
+  <p>
+    Discuss any regulatory considerations or compliance standards relevant to
+    the industry in which <%= info.name %> operates. This may include adherence
+      to blockchain standards (e.g., ERC-20, ERC-721), legal requirements, or
+      industry-specific protocols.
+  </p>
+  <ul>
+    <li>Scope of the Audit</li>
+  </ul>
+  <p>
+    Provide a brief overview of the specific components, functionalities, and
+    aspects covered in the audit. Mention any exclusions or limitations within
+    the scope and explain the rationale behind those decision
+  </p>
+</div>

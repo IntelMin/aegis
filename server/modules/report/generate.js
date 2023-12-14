@@ -26,7 +26,7 @@ async function generatePDF() {
 
   // combine templates into render.ejs
   const combinedContent = await renderTemplate("render.ejs",renderedTemplates);
-
+  
   await page.setContent(combinedContent);
 
   await page.addStyleTag({ path: path.join(__dirname, "assets", "style.css") });

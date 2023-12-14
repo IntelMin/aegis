@@ -1,0 +1,88 @@
+<style>
+  a {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none !important;
+  }
+
+  #toc {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #toc li {
+    width: 531px;
+    height: 38px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background: linear-gradient(90deg, #313131 0%, rgba(49, 49, 49, 0) 100%);
+    border-radius: 5px;
+    overflow: hidden;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    display: inline-flex;
+    margin-bottom: 16px;
+  }
+
+  #toc li .page-number {
+    color: #cfcfcf;
+    font-size: 16px;
+    word-wrap: break-word;
+    font-weight: 600;
+    line-height: 24px;
+    width: 28px;
+    text-align: justify;
+  }
+
+  #toc li .page-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    word-wrap: break-word;
+    margin-left: 16px;
+  }
+</style>
+
+<h1>Table of Contents</h1>
+<ul id="toc">
+  <!-- BEGIN: Loop through the contents -->
+  <!-- <li>
+    <a href="#about">
+      <div class="page-number">01.</div>
+      <div class="page-title">About Aegis AI</div>
+    </a>
+  </li> -->
+
+  <!-- END: Loop through the contents -->
+</ul>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("toc");
+    const pages = document.querySelectorAll(".page");
+
+    let count = 1;
+    pages.forEach((page) => {
+      const header = page.querySelector("ptitle");
+      if (header) {
+        const tocItem = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `#${header.id}`;
+        link.innerHTML = `<div class='page-number'>${String(count).padStart(
+          2,
+          "0"
+        )}.</div><div class='page-title'>${header.textContent}</div>`;
+        tocItem.appendChild(link);
+        toc.appendChild(tocItem);
+      }
+      count++;
+    });
+  });
+</script>

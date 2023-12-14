@@ -4,7 +4,6 @@ const fss = require("fs");
 const axios = require("axios");
 const path = require("path");
 const supabase = require("./supabase");
-
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
   const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;

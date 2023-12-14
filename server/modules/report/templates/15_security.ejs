@@ -1,0 +1,231 @@
+<style>
+  .data-container td {
+    color: white;
+  }
+  .security_info_title {
+    font-size: 16px;
+    font-weight: 800;
+  }
+  #data p{
+    line-height: 30px;
+  }
+
+  .files-table-head {
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+    background-color: black;
+    border-radius: 6px;
+    background: #303030;
+  }
+
+  .files-table-head h3 {
+    font-size: 16px;
+  }
+
+  .files-table-head h3:last-child {
+    font-weight: 300;
+    color: #58ff5e;
+  }
+
+  .files-table-value {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border-bottom-left-radius: 31px;
+    border-bottom-right-radius: 31px;
+    background: #fff;
+  }
+
+  .files-table-value h3 {
+    color: black;
+    padding: 10px 30px;
+    min-height: 100px;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .files-table-value h3:last-child {
+    border-left: 1px solid black;
+    font-weight: 400;
+    width: 100%;
+  }
+  .imported-package {
+    display: flex;
+  }
+  .imported-package-text {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 0 0px;
+  }
+  .imported-package-subdiv {
+    border-radius: 20px;
+    padding: auto 20px;
+    background: #2c2c2c;
+    display: flex;
+    margin-top: 20px;
+    gap: 10px;
+    flex-direction: column;
+    width: 50%;
+    margin: 30px 0 0 20px;
+    justify-content: center;
+    font-weight: 800;
+  }
+  .imported-package-subdiv ul {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .imported-package-subdiv li {
+    margin-bottom: 5px;
+  }
+</style>
+
+<div>
+  <ptitle>
+
+  <h1 class="title-button" style="font-size: 24px">Overall Security</h1>
+  </ptitle>
+  <div id="data">
+    <div>
+      <h2>Honeypot</h2>
+      <p>
+        Honeypots are smart contracts that appear to have an obvious flaw in
+        their design, which allows an arbitrary user to drain ether (Ethereum's
+        cryptocurrency) from the contract, given that the user transfers a
+        priori a certain amount of ether to the contract.
+      </p>
+    </div>
+
+    <div class="priveleges-table-con">
+      <div class="priveleges-table-head">
+        <h3 class="textFont" style="font-size: 16px">
+          The contract is Honeypot?
+        </h3>
+        <h3 class="textFont" style="font-size: 16px">
+          <%= security.is_honeypot=="1"?" ⚠️ The contract is a Honey Pot ":" ✅ The contract is not a Honey Pot "%>
+        </h3>
+      </div>
+      <div class="priveleges-table-value-middle">
+        <h3 class="textFont">Description</h3>
+        <h3
+          class="textFont"
+          style="line-height: 110%; border-left: 1px solid black"
+        >
+          <%= security.is_honeypot=="1"?" Owner can drain your wallet ":" Owner cannot drain your wallet through honeypot"%>
+        </h3>
+      </div>
+      <div class="priveleges-table-value" style="border-top: 1px solid black">
+        <h3 class="textFont" style="padding-right: 38.5px">Comments</h3>
+        <h3
+          class="textFont"
+          style="
+            border-left: 1px solid black;
+            font-weight: 600;
+            font-size: 24px;
+          "
+        >
+          N/A
+        </h3>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <h2>Antiwhale</h2>
+        <p>
+          Certain features adopted to prevent large holders (aka whales) from
+          exerting excessive influence or engaging in manipulative behaviors
+          within the token ecosystem. Some examples are setting maximum
+          transaction limits, imposing penalties for transactions exceeding some
+          specific threshhold, Imposing as more equitable distribution of tokens
+        </p>
+      </div>
+      <div class="files-table-con">
+        <div class="files-table-head">
+          <h3>Antiwhale</h3>
+          <h3 class="textFont">
+            <%= security.is_anti_whale=="1"?" ✅ The contract is Anti Whale ":" ⚠️ The contract is not Anti Whale"%>
+          </h3>
+        </div>
+        <div class="files-table-value">
+          <h3 class="textFont">Description</h3>
+          <h3 class="textFont">
+            <%= security.is_anti_whale=="1"?" Whales cant dump ":"Whales might dump"%>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="page-break-before">&nbsp;</div>
+    <!-- <div>
+              <h2>Liquidity Pool</h2>
+                  <table>
+                      <tr>
+                          <th>Check</th>
+                          <th>Value</th>
+                      </tr>
+                      <tr>
+                          <td>LP supply</td>
+                          <td><%= security.lp_total_supply %></td>
+                      </tr>
+                      <tr>
+                          <td>LP Holder Count</td>
+                          <td><%= security.lp_holder_count %></td>
+                      </tr>
+                      <tr>
+                          <td>Pencentage owned by creator</td>
+                          <td><%= security.creator_percent %></td>
+                      </tr>
+                      <tr>
+                          <td>Creator Balance</td>
+                          <td><%= security.creator_balance %></td>
+                      </tr>
+                      <tr>
+                          <td>Creator address</td>
+                          <td><%= security.creator_address %></td>
+                      </tr>
+                      <tr>
+                      <td>Holders</td>
+                      <td><%= security.holder_count %></td>
+                  </tr>
+              </table>
+          </div> -->
+  </div>
+
+  <!-- <div>
+              <div>
+                  <h2>Public Functions</h2>
+                  <table>
+                      <tr>
+                          <th>Function Name</th>
+                          <th>Visibility</th>
+                          <th>Mutability</th>
+                      </tr>
+                      <% for (let i = 0; i < functions.tableRows.length; i++) { %>
+                          <% if(functions.tableRows[i].type=="func" && functions.tableRows[i].spec!="Internal 🔒"){ %>
+                          <tr>
+                              <td><%= functions.tableRows[i].name %></td>
+                              <td><%= functions.tableRows[i].spec.split(' ')[0] %></td>
+                              <td><%= functions.tableRows[i].mutating ? "⚠️" : 'False' %></td>
+                          </tr>
+                          <% } %>
+                      <% } %>
+                  </table>
+              </div>
+          </div> -->
+  <!-- <div>
+              <h2>Contracts used</h2>
+              <ul>
+                  <% for (let i = 0; i < functions.tableRows.length; i++) { %>
+                      <% if(functions.tableRows[i].type=="contract" ){ %>
+                          <li><%= functions.tableRows[i].name %></li>
+                      <% } %>
+                  <% } %>
+              </ul>
+          </div> -->
+</div>

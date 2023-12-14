@@ -1,0 +1,186 @@
+<style>
+    .data-container td {
+      color: white;
+    }
+    .security_info_title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+  
+    .files-table-head {
+      display: flex;
+      gap: 10px;
+      justify-content: space-evenly;
+      background-color: black;
+      border-radius: 6px;
+      background: #303030;
+    }
+  
+    .files-table-head h3 {
+      font-size: 16px;
+    }
+  
+    .files-table-head h3:last-child {
+      font-weight: 300;
+      color: #58ff5e;
+    }
+  
+    .files-table-value {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      border-bottom-left-radius: 31px;
+      border-bottom-right-radius: 31px;
+      background: #fff;
+    }
+  
+    .files-table-value h3 {
+      color: black;
+      padding: 10px 30px;
+      min-height: 100px;
+      height: 100%;
+      margin: 0;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .files-table-value h3:last-child {
+      border-left: 1px solid black;
+      font-weight: 400;
+      width: 100%;
+    }
+    .imported-package {
+      display: flex;
+    }
+    .imported-package-text {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      padding: 0 0px;
+    }
+    .imported-package-subdiv {
+      border-radius: 20px;
+      padding: auto 20px;
+      background: #2c2c2c;
+      display: flex;
+      margin-top: 20px;
+      gap: 10px;
+      flex-direction: column;
+      width: 50%;
+      margin: 30px 0 0 20px;
+      justify-content: center;
+      font-weight: 800;
+    }
+    .imported-package-subdiv ul {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  
+    .imported-package-subdiv li {
+      margin-bottom: 5px;
+    }
+  </style>
+  
+  <div>
+
+    <div id="data">
+      <div style="margin-top: 70px;">
+        <div>
+          <div>
+            <h2>Proxy</h2>
+            <p>
+              Proxy contract is a contract that delegates calls to another
+              contract. It is a contract that has a fallback function that calls
+              another contract.If the proxy contract is well-designed, secure, and
+              serves a legitimate purpose (such as upgradability or modularity),
+              it may not raise concerns. However, if the proxy introduces
+              vulnerabilities, lacks transparency, or is used in a way that
+              compromises the security of the token, it could be flagged during a
+              thorough audit
+            </p>
+          </div>
+          <div class="files-table-con" style="padding: 20px">
+            <div class="files-table-head">
+              <h3>Proxy</h3>
+              <h3 class="textFont">
+                <%= security.is_proxy=="1"?" ✅ The contract is not a Proxy contract":" ⚠️ The contract is a Proxy contract"%>
+              </h3>
+            </div>
+            <div class="files-table-value">
+              <h3 class="textFont">Description</h3>
+              <h3 class="textFont">
+                <%= security.is_proxy=="1"?" This contract could call functions on another contract":" This is a full contract"%>
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div>
+                <h2>Liquidity Pool</h2>
+                    <table>
+                        <tr>
+                            <th>Check</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>LP supply</td>
+                            <td><%= security.lp_total_supply %></td>
+                        </tr>
+                        <tr>
+                            <td>LP Holder Count</td>
+                            <td><%= security.lp_holder_count %></td>
+                        </tr>
+                        <tr>
+                            <td>Pencentage owned by creator</td>
+                            <td><%= security.creator_percent %></td>
+                        </tr>
+                        <tr>
+                            <td>Creator Balance</td>
+                            <td><%= security.creator_balance %></td>
+                        </tr>
+                        <tr>
+                            <td>Creator address</td>
+                            <td><%= security.creator_address %></td>
+                        </tr>
+                        <tr>
+                        <td>Holders</td>
+                        <td><%= security.holder_count %></td>
+                    </tr>
+                </table>
+            </div> -->
+    </div>
+  
+    <!-- <div>
+                <div>
+                    <h2>Public Functions</h2>
+                    <table>
+                        <tr>
+                            <th>Function Name</th>
+                            <th>Visibility</th>
+                            <th>Mutability</th>
+                        </tr>
+                        <% for (let i = 0; i < functions.tableRows.length; i++) { %>
+                            <% if(functions.tableRows[i].type=="func" && functions.tableRows[i].spec!="Internal 🔒"){ %>
+                            <tr>
+                                <td><%= functions.tableRows[i].name %></td>
+                                <td><%= functions.tableRows[i].spec.split(' ')[0] %></td>
+                                <td><%= functions.tableRows[i].mutating ? "⚠️" : 'False' %></td>
+                            </tr>
+                            <% } %>
+                        <% } %>
+                    </table>
+                </div>
+            </div> -->
+    <!-- <div>
+                <h2>Contracts used</h2>
+                <ul>
+                    <% for (let i = 0; i < functions.tableRows.length; i++) { %>
+                        <% if(functions.tableRows[i].type=="contract" ){ %>
+                            <li><%= functions.tableRows[i].name %></li>
+                        <% } %>
+                    <% } %>
+                </ul>
+            </div> -->
+  </div>

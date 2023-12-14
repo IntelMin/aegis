@@ -1,0 +1,217 @@
+<style>
+  .headFont h1 {
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .page-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h3 {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 251.724%;
+  }
+
+  .lockuserfunds-h3 {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 251.724%;
+  }
+
+  .lockuserfunds-desc {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 251.724%;
+  }
+
+  .flex-components {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 58px;
+  }
+
+  .lockuserfunds-group {
+    margin-top: 45px;
+    margin-bottom: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .lockuserfunds-green-text {
+    color: #58FF5E;
+
+    font-family: Montserrat;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 151.724%;
+    /* 16.69px */
+  }
+  .lockuserfunds-red-text {
+    color: red;
+
+    font-family: Montserrat;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 151.724%;
+    /* 16.69px */
+  }
+
+  .lockuserfunds-white-alert {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 151.724%;
+  }
+
+
+  .img-flex {
+    display: flex;
+    justify-content: center;
+  }
+
+  .lockuserfunds-group {
+    border-radius: 31px;
+    width: 100%;
+    background: #FFF;
+    width: 492px;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 38px;
+  }
+
+  .lockuserfunds-group-header {
+    border-radius: 6px;
+    background: #303030;
+    width: 492.469px;
+    height: 43.951px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 20px;
+
+  }
+
+  .lockuserfunds-group-flex {
+    width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lockuserfunds-group-body {
+    display: flex;
+  }
+
+  .lockuserfunds-group-desc {
+    color: #000;
+
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 251.724%;
+    border-right: 1px solid black;
+    width: 156px;
+    height: 80px;
+    background-image: url('./../assets/bg_vector.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 80px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom-left-radius: 31px;
+  }
+
+  .lockuserfunds-group-text {
+    color: #333D4D;
+    width: 336px;
+    font-family: Montserrat;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 151.724%;
+    height: 80px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+  }
+</style>
+<div>
+  <h3 class="lockuserfunds-h3">Lock User Funds</h3>
+  <div class="lockuserfunds-desc">
+    In a smart contract, locking refers to the process of restricting access to certain tokens or assets for a speci ed
+    period of time. When tokens or assets are locked in a smart contract, they cannot be transferred or used until the
+    lock-up period has expired or certain conditions have been met.
+  </div>
+</div>
+<% if(security.locked_detail){ %>
+  <div class="lockuserfunds-group">
+    
+  <div class="lockuserfunds-group-header">
+    <span class="lockuserfunds-white-alert">Owner Can lock<br /> the contract</span>
+    <div class="lockuserfunds-group-flex">
+      <img src="../assets/failure.png" />
+      <span class="lockuserfunds-red-text">The owner can lock the contract</span>
+    </div>
+  </div>
+  <div class="lockuserfunds-group-body">
+    <div class="lockuserfunds-group-desc">
+      Description
+    </div>
+    <div class="lockuserfunds-group-text">
+      The owner is able to lock the contract by any functions or updating any variables.
+    </div>
+  </div>
+</div>
+<% }else{ %>
+  <div class="lockuserfunds-group">
+    
+  <div class="lockuserfunds-group-header">
+    <span class="lockuserfunds-white-alert">Owner Cannot lock<br /> the contract</span>
+    <div class="lockuserfunds-group-flex">
+      <img src="../assets/successIcon.png" />
+      <span class="lockuserfunds-green-text">The owner cannot lock the contract</span>
+    </div>
+  </div>
+  <div class="lockuserfunds-group-body">
+    <div class="lockuserfunds-group-desc">
+      Description
+    </div>
+    <div class="lockuserfunds-group-text">
+      The owner is not able to lock the contract by any functions or updating any variables.
+    </div>
+  </div>
+  <% } %>
+</div>
+
+
+<div class="img-flex">
+  <img src="./../assets/img-lockuserfunds.svg" />
+</div>

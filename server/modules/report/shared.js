@@ -24,7 +24,9 @@ function loadData(directory) {
     const fileContents = fs.readFileSync(filePath, "utf-8");
     const fileData = JSON.parse(fileContents);
     if (
-      fileData.hasOwnProperty("data") &&
+
+      fileData?.hasOwnProperty("data") &&
+
       Object.keys(fileData).length <= 2 &&
       fileData.hasOwnProperty("time")
     ) {
@@ -60,10 +62,28 @@ function getTemplates() {
     });
 
   for (const file of files) {
-    let parts = file.split('_');
-    let name = parts[1].split('.')[0];
+
+    let parts = file.split("_");
+    let name = parts[1].split(".")[0];
     const filePath = path.join(__dirname, "templates", file);
-    const fileData = fs.readFileSync(filePath, "utf-8");
+    let fileData = fs.readFileSync(filePath, "utf-8");
+
+    // change img src to base64
+    fileData = fileData.replace(
+      /\b(src=".*?)(\.jpg|\.jpeg|\.png)"/g,
+      (match, p1, p2) => {
+        const imageFilename = p1.split("/").pop() + p2;
+        const imagePath = path.join(__dirname, "assets", imageFilename);
+        if (fs.existsSync(imagePath)) {
+          const imageAsBase64 = fs.readFileSync(imagePath, "base64");
+          const mimeType = p2 === ".png" ? "image/png" : "image/jpeg";
+          return `src="data:${mimeType};base64,${imageAsBase64}"`;
+        } else {
+          return match;
+        }
+      }
+    );
+
     templates[name] = fileData;
   }
   return templates;

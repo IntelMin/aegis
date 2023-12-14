@@ -1,0 +1,263 @@
+<style>
+  .audit_info_title {
+    border-radius: 20px;
+    color: white;
+    width: fit-content;
+    padding: 5px 10px;
+    font-size: 24px;
+    font-weight: bolder;
+    position: relative;
+  }
+  .audit_info_title.radius {
+    border: 2px solid white;
+  }
+  .audit_info_title_detail {
+    line-height: 40px;
+    letter-spacing: 2px;
+    margin-left: 10px;
+  }
+  .audit_info_subTitle {
+    margin: 15px 0;
+  }
+  .audit_info_table_head_row,
+  .audit_info_table_row {
+    display: flex;
+    align-items: center;
+  }
+  .audit_info_table_head h1 {
+    background-color: #333d4d;
+    padding: 20px 5px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+    margin: 0;
+  }
+  .audit_info_table_head {
+    width: 200px;
+  }
+  .audit_info_table_head:nth-child(2) {
+    width: 100px;
+  }
+  .audit_info_table_head.first_head {
+    width: 200px;
+  }
+  .audit_info_table_head.first_head h1 {
+    background-color: black;
+  }
+  .audit_info_table_head.last_head h1 {
+    letter-spacing: 0;
+  }
+  .audit_info_table_head.last_head {
+    width: 210px;
+  }
+  .audit_info_table_row_data {
+    width: 200px;
+    text-align: center;
+    padding: 2px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .audit_info_table_row_data p {
+    color: black;
+    font-weight: 300;
+    padding-left: 10px;
+    line-height: 100%;
+  }
+  .audit_info_emptyBox {
+    position: absolute;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    top: 50%;
+    transform: translate(12px, -18px) rotate(45deg);
+    background-color: black;
+    z-index: 10;
+    border-radius: 5px;
+  }
+  .audit_info_table_row_data.last_col {
+    width: 190px;
+  }
+  .audit_info_table_row_data:nth-child(1) {
+    width: 199px;
+    transform: translateX(1px);
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.28));
+  }
+  .audit_info_table_row_data:nth-child(1) p {
+    color: white;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+    font-size: 20px;
+  }
+  .audit_info_table_row_data:nth-child(2) {
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .audit_info_table_row_data:nth-child(2) p {
+    color: black;
+  }
+  .audit_info_table_row_data:nth-child(3) p {
+    font-size: 10px;
+  }
+  .audit_info_table_row_data {
+    min-height: 100px;
+  }
+  .red {
+    background-color: #bf0c2e;
+    z-index: 10;
+  }
+  .yellow {
+    background-color: #f9be06;
+    z-index: 10;
+  }
+  .lightGreen {
+    background-color: #e5df0e;
+    z-index: 10;
+  }
+  .green {
+    background-color: #20a023;
+    z-index: 10;
+  }
+  .blue {
+    background-color: #34b7e5;
+    z-index: 10;
+  }
+  .gray {
+    background-color: #e0e0e0;
+  }
+  .white {
+    background-color: #f0edec;
+  }
+  .boldText p {
+    font-weight: 500;
+  }
+</style>
+<div class="audit_style">
+  <div class="audit-info">
+    <ptitle>
+      <div class="title-button light">Audit Summary</div>
+    </ptitle>
+    <div class="audit_info_subTitle">
+      <h1 class="audit_info_title textFont">Vulnerability and Risk Level</h1>
+      <p class="audit_info_title_detail" style="margin-left: 20px">
+        Risk represents the probability that a certain source threat will
+        exploit vulnerability and the impact of that event on the organization
+        or system. The risk Level is computed based on CVSS version 3.0.
+      </p>
+    </div>
+    <!-- Table Starts  -->
+    <div style="margin-left: 20px">
+      <div class="audit_info_table_head_row">
+        <div class="audit_info_table_head textFont first_head">
+          <h1>Choose your plan</h1>
+        </div>
+        <div class="audit_info_table_head textFont"><h1>Value</h1></div>
+        <div class="audit_info_table_head textFont"><h1>Vulnerability</h1></div>
+        <div class="audit_info_table_head textFont last_head">
+          <h1>Risk (Required Action)</h1>
+        </div>
+      </div>
+      <div class="audit_info_table_row first_row">
+        <div class="audit_info_table_row_data first_col red">
+          <p class="textFont">Critical</p>
+          <div class="audit_info_emptyBox red"></div>
+        </div>
+        <div class="boldText audit_info_table_row_data gray">
+          <p>9-10</p>
+        </div>
+        <div class="audit_info_table_row_data white">
+          <p>
+            A vulnerability that can disrupt the contract functioning in a
+            number of scenarios, or creates a risk that the contract may be
+            broken.
+          </p>
+        </div>
+        <div class="audit_info_table_row_data last_col gray">
+          <p>Immediate action to reduce risk level</p>
+        </div>
+      </div>
+      <div class="audit_info_table_row first_row">
+        <div class="audit_info_table_row_data first_col yellow">
+          <p class="textFont">High</p>
+          <div class="audit_info_emptyBox yellow"></div>
+        </div>
+        <div class="audit_info_table_row_data boldText white">
+          <p>7-8.9</p>
+        </div>
+        <div class="audit_info_table_row_data gray">
+          <p>
+            A vulnerability that can disrupt the contract functioning in a
+            number of scenarios, or creates a risk that the contract may be
+            broken.
+          </p>
+        </div>
+        <div class="audit_info_table_row_data last_col white">
+          <p>Immediate action to reduce risk level</p>
+        </div>
+      </div>
+      <div class="audit_info_table_row first_row">
+        <div class="audit_info_table_row_data first_col lightGreen">
+          <p class="textFont">Medium</p>
+          <div class="audit_info_emptyBox lightGreen"></div>
+        </div>
+        <div class="audit_info_table_row_data boldText gray">
+          <p>4-6.9</p>
+        </div>
+        <div class="audit_info_table_row_data white">
+          <p>
+            A vulnerability that can disrupt the contract functioning in a
+            number of scenarios, or creates a risk that the contract may be
+            broken.
+          </p>
+        </div>
+        <div class="audit_info_table_row_data last_col gray">
+          <p>Immediate action to reduce risk level</p>
+        </div>
+      </div>
+      <div class="audit_info_table_row first_row">
+        <div class="audit_info_table_row_data first_col green">
+          <p class="textFont">Low</p>
+          <div class="audit_info_emptyBox green"></div>
+        </div>
+        <div class="audit_info_table_row_data boldText white">
+          <p>2-3.9</p>
+        </div>
+        <div class="audit_info_table_row_data gray">
+          <p>
+            A vulnerability that can disrupt the contract functioning in a
+            number of scenarios, or creates a risk that the contract may be
+            broken.
+          </p>
+        </div>
+        <div class="audit_info_table_row_data last_col white">
+          <p>Immediate action to reduce risk level</p>
+        </div>
+      </div>
+      <div class="audit_info_table_row last_row">
+        <div class="audit_info_table_row_data first_cols blue">
+          <p class="textFont" style="font-size: 15px">Informational</p>
+          <div class="audit_info_emptyBox blue"></div>
+        </div>
+        <div class="audit_info_table_row_data boldText gray">
+          <p>0-1.9</p>
+        </div>
+        <div class="audit_info_table_row_data white">
+          <p>
+            A vulnerability that can disrupt the contract functioning in a
+            number of scenarios, or creates a risk that the contract may be
+            broken.
+          </p>
+        </div>
+        <div class="audit_info_table_row_data last_col gray">
+          <p>Immediate action to reduce risk level</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
