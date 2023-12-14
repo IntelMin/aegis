@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const supabase = require("../supabase");
 
-router.m("/:address/:user_id", async (req, res) => {
+router.get("/:address/:user_id", async (req, res) => {
+
     const address = req.params.address;
     const user_id = req.params.user_id;
 
@@ -40,7 +42,9 @@ router.m("/:address/:user_id", async (req, res) => {
         }
         return res.status(200).send("Report requested");
     }else {
-        return res.status(200).send(reportRequests.data[0].link);   
-    }
 
+        return res.status(200).send(reportRequests[0].link);   
+    }
 })  
+module.exports = router;
+

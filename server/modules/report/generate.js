@@ -1,16 +1,19 @@
 const puppeteer = require("puppeteer");
 const ejs = require("ejs");
 const fs = require("fs");
-const path = require("path");
+
+path = require("path");
 const { loadData, getTemplates, renderTemplate } = require("./shared");
 
-async function generatePDF() {
+ async function generatePDF(address) {
+
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   // get data
-  const data = loadData(
-    "../../cache/contracts/0x514910771AF9Ca656af840dff83E8264EcF986CA"
+
+  const data = loadData(`../cache/contracts/${address}`
+
   );
 
   // get templates
@@ -32,7 +35,9 @@ async function generatePDF() {
   await page.addStyleTag({ path: path.join(__dirname, "assets", "style.css") });
   // Generate the PDF
   await page.pdf({
-    path: "sample.pdf",
+
+    path: `./modules/report/pdf/${address}.pdf`,
+
     format: "A4",
     printBackground: true,
     preferCSSPageSize: true,
@@ -40,4 +45,8 @@ async function generatePDF() {
   await browser.close();
 }
 
-generatePDF();
+
+module.exports = generatePDF;
+
+
+
