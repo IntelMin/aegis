@@ -5,6 +5,7 @@ import Image from "next/image";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -15,9 +16,14 @@ const SignInForm = (props: Props) => {
     email: "",
     password: "",
   });
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(loginData);
+    await signIn("credentials", {
+      email: loginData.email,
+      password: loginData.password,
+      callbackUrl: '/'
+    });
     setLoginData({
       email: "",
       password: "",
