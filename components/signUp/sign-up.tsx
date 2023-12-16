@@ -54,13 +54,13 @@ const SignUpForm = (props: Props) => {
           <form onSubmit={handleSubmit} className="mt-6">
             <motion.div
               key={next}
-              initial={{ opacity: 0, x: 382 }}
+              initial={{ opacity: 0, x: 292 }}
               animate={{
                 opacity: 1,
                 x: 0,
-                transition: { duration: 1, type: "spring" },
+                transition: { duration: 1.2, type: "spring" },
               }}
-              exit={{ x: -382, transition: { duration: 0.25 }, height: 0 }}
+              exit={{ x: -282, transition: { duration: 0.5 } }}
             >
               {next === 2 ? (
                 <SignUpDetailForm
