@@ -30,7 +30,7 @@ const SignInForm = (props: Props) => {
           <Image alt="user-icon" src="/user.png" width={20} height={20} />
         </div>
         <h1 className="font-[600] text-[24px] leading-[48px] text-[#FFFFFF]">
-          Welcome Back
+          Welcome
         </h1>
         <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
           Please enter your account details to sign in.

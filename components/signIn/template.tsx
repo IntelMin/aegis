@@ -11,10 +11,10 @@ const Template = (props: Props) => {
       <div>
         <Image alt="circlelogo" src={circlelogo} width={72} height={72} />
       </div>
-      <h1 className="z-[6] font-[600] text-[36px] leading-[48px] text-[white]">
-        Your Vision, Our dApp,
+      <h1 className="z-[6] font-[600] text-[32px] leading-[48px] text-[white]">
+        Pioneering Blockchain Security
         <br />
-        Building the Ai Future
+        with AI-Enabled Audit Solutions
       </h1>
       <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
         [Description]
