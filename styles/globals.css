@@ -31,16 +31,16 @@ body {
   background-image: linear-gradient(315deg, #676767 0%, #dad9d9 74%);
 }
 
-.loading-screen{
+.loading-screen {
   position: absolute !important;
   z-index: 9999 !important;
 }
 
-.liveOverLay{
+.liveOverLay {
   display: none;
 }
 
-.liveDash:hover .liveOverLay{
+.liveDash:hover .liveOverLay {
   display: flex;
   align-items: center;
   justify-content: center;

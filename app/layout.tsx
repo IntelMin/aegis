@@ -39,12 +39,15 @@ const RootLayout = ({
           "min-h-screen bg-black font-sans antialiased",
           fontSans.variable
         )}
-      ><WhitelistWrapper>
+      >
+        {/* <WhitelistWrapper> */}
         <NextTopLoader color="#b0b0b0" />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <Layout>{children}</Layout>
+          {/* <Layout> */}
+            {children}
+          {/* </Layout> */}
         </Providers>
-        </WhitelistWrapper>
+        {/* </WhitelistWrapper> */}
       </body>
     </html>
   </ClerkProvider>
