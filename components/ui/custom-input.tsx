@@ -39,7 +39,7 @@ const CustomInput = ({
               [name]: e.target.value,
             }))
           }
-          className="bg-[#18181B] w-full px-[10px] py-[5px] rounded-md placeholder:text-[#71717A] outline-black"
+          className="bg-[#18181B] w-full px-[10px] py-[5px] rounded-md placeholder:text-[#71717A] outline-black text-white"
         />
         {isPass && setShowPass && (
           <button
