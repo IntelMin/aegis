@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import CustomInput from "../ui/custom-input";
-import CustomSubmitbtn from "../ui/custom-submitbtn";
 import SignUpDetailForm from "./sign-up-detail";
+import GoBack from "../ui/go-back";
+import SignUpEmail from "./sign-up-email";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -55,7 +55,11 @@ const SignUpForm = (props: Props) => {
             <motion.div
               key={next}
               initial={{ opacity: 0, x: 382 }}
-              animate={{ opacity: 1, x: 0, transition: { duration: 1, type: "spring" } }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                transition: { duration: 1, type: "spring" },
+              }}
               exit={{ x: -382, transition: { duration: 0.25 }, height: 0 }}
             >
               {next === 2 ? (
@@ -64,37 +68,11 @@ const SignUpForm = (props: Props) => {
                   setSignInData={setSignInData as SetValueFunction<{}>}
                 />
               ) : (
-                <div className="flex flex-col gap-2">
-                  <div className="w-[380px]">
-                    <CustomInput
-                      name="email"
-                      label="Email"
-                      placeholder="Enter your email"
-                      type="email"
-                      value={signInData?.email}
-                      setValue={setSignInData as SetValueFunction<{}>}
-                    />
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="checkbox"
-                      style={{ accentColor: "#0E76FD" }}
-                      className="h-5 w-5"
-                    />
-                    <p className="text-[#D4D4D4] text-[14px] leading-[20px]">
-                      By signing up, I accept and agree to the{" "}
-                      <Link href="#" className="text-[#0E76FD]">
-                        Terms of Use
-                      </Link>
-                      .
-                    </p>
-                  </div>
-                  <CustomSubmitbtn
-                    title="Continue"
-                    onClick={() => setNext(2)}
-                    button
-                  />
-                </div>
+                <SignUpEmail
+                  setNext={setNext}
+                  signInData={signInData}
+                  setSignInData={setSignInData as SetValueFunction<{}>}
+                />
               )}
             </motion.div>
           </form>
@@ -112,29 +90,7 @@ const SignUpForm = (props: Props) => {
         </Link>
       </div>
 
-      {next === 2 && (
-        <button
-          type="button"
-          onClick={() => setNext(1)}
-          className="absolute top-[20px] left-[20px] text-[white]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            className="lucide lucide-move-left"
-          >
-            <path d="M6 8L2 12L6 16" />
-            <path d="M2 12H22" />
-          </svg>
-        </button>
-      )}
+      {next === 2 && <GoBack setNext={setNext} />}
     </div>
   );
 };
