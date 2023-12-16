@@ -23,7 +23,7 @@ const CustomInput = ({
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label htmlFor="email" className="text-[13px] font-[500] leading-[20px]">
+      <label htmlFor="email" className="text-[#FAFAFA] text-[13px] font-[400] leading-[20px]">
         {label}
       </label>
       <div className="relative w-full">

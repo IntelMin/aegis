@@ -27,7 +27,7 @@ const SignInForm = (props: Props) => {
       <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
         <Image alt="user-icon" src="/user.png" width={20} height={20} />
       </div>
-      <h1 className="font-[600] text-[24px] leading-[48px]">Welcome Back</h1>
+      <h1 className="font-[600] text-[24px] leading-[48px] text-[#FFFFFF]">Welcome Back</h1>
       <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
         Please enter your account details to sign in.
       </p>
