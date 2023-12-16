@@ -127,7 +127,7 @@
 <div>
   <ptitle>
 
-  <h3 class="external-h3">External/Public functions</h3>
+    <h3 class="external-h3">External/Public functions</h3>
   </ptitle>
   <div class="external-desc">
     External/public functions are functions that can be called from outside of a contract, i.e., they can be accessed by
@@ -140,84 +140,77 @@
   <h3 class="external-h3">State variables</h3>
   <div class="external-desc">
     State variables are variables that are stored on the blockchain as part of the contract's state. They are declared
-    at the contract level and can be accessed and modi ed by any function within the contract. State variables can be de
-    ned with a visibility modi er, such as public, private, or internal, which determines the access level of the
+    at the contract level and can be accessed and modified by any function within the contract. State variables can be denied with a visibility modifier, such as public, private, or internal, which determines the access level of the
     variable.
   </div>
 </div>
 
-<% let internalCount=0; 
-let publicCount=0; 
-let pureCount = 0;
-let viewCount = 0;
-let payableCount = 0;
-let totalFunctions = 0;
+<% let internalCount=0; let publicCount=0; let pureCount=0; let viewCount=0; let payableCount=0; let totalFunctions=0;
+  functions.tableRows.forEach(row=> {
+  if (row.type==='func' ) {
+  totalFunctions++;
+  if (row.spec.includes('Internal 🔒')) {
+  internalCount++;
+  } else if (row.spec.includes('Public ❗️')) {
+  publicCount++;
+  }
+  }
+  });
 
-  functions.tableRows.forEach(row=> { 
-    if (row.type==='func' ) { 
-      totalFunctions++;
-      if (row.spec.includes('Internal 🔒')) { 
-        internalCount++; 
-          } else if (row.spec.includes('Public ❗️')) { 
-            publicCount++; 
-              } 
-                }
-                  });  
-                  
-                  source.abi.forEach(item => {
-                    if (item.type === 'function') {
-                      if (item.stateMutability === 'pure') {
-                        pureCount++;
-                      } else if (item.stateMutability === 'view') {
-                        viewCount++;
-                      } else if (item.payable) {
-                        payableCount++;
-                      }
-                    }
-                  });
-                  const privateFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*private/g;
-                  const payableFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*payable/g;
-                  const pureFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*pure/g;
-                  
-                  const privateMatches = source.source_code.match(privateFunctionPattern);
-                  const payableMatches = source.source_code.match(payableFunctionPattern);
-                  const pureMatches = source.source_code.match(pureFunctionPattern);
-                  
-                  const privateCount = privateMatches ? privateMatches.length : 0;
-                   pureCount = pureMatches ? pureMatches.length : 0;
-                  %>
+  source.abi.forEach(item => {
+  if (item.type === 'function') {
+  if (item.stateMutability === 'pure') {
+  pureCount++;
+  } else if (item.stateMutability === 'view') {
+  viewCount++;
+  } else if (item.payable) {
+  payableCount++;
+  }
+  }
+  });
+  const privateFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*private/g;
+  const payableFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*payable/g;
+  const pureFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*pure/g;
+
+  const privateMatches = source.source_code.match(privateFunctionPattern);
+  const payableMatches = source.source_code.match(payableFunctionPattern);
+  const pureMatches = source.source_code.match(pureFunctionPattern);
+
+  const privateCount = privateMatches ? privateMatches.length : 0;
+  pureCount = pureMatches ? pureMatches.length : 0;
+  %>
 
 
-                      <div class="external-group">
-                        <h3 class="external-h3">Components</h3>
-                        <div class="flex-subjects">
-                          <div class="subject external-subject-first">
-                            External
-                          </div>
-                          <div class="subject external-subject-second">
-                            Internal
-                          </div>
-                          <div class="subject external-subject-third">
-                            Private
-                          </div>
-                          <div class="subject external-subject-forth">
-                            Pure
-                          </div>
-                        </div>
-                        <div class="external-value-items">
-                          <div class="item external-item-first">
-                            <%= publicCount %>
-                          </div>
-                          <div class="item external-item-second">
-                            <%= internalCount %>
-                          </div>
-                          <div class="item external-item-third">
-                            <%= privateCount %>
-                          </div>
-                          <div class="item external-item-forth">
-                            <%= pureCount %>
-                          </div>
-                        </div>
+  <div class="external-group">
+    <h3 class="external-h3">Components</h3>
+    <div class="flex-subjects">
+      <div class="subject external-subject-first">
+        External
+      </div>
+      <div class="subject external-subject-second">
+        Internal
+      </div>
+      <div class="subject external-subject-third">
+        Private
+      </div>
+      <div class="subject external-subject-forth">
+        Pure
+      </div>
+    </div>
+    <div class="external-value-items">
+      <div class="item external-item-first">
+        <%= publicCount %>
+      </div>
+      <div class="item external-item-second">
+        <%= internalCount %>
+      </div>
+      <div class="item external-item-third">
+        <%= privateCount %>
+      </div>
+      <div class="item external-item-forth">
+        <%= pureCount %>
+      </div>
+    </div>
 
-                      </div>
-                      </div>
+  </div>
+  </div>

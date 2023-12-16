@@ -12,19 +12,21 @@
       </p>
       <div class="priveleges-table-con">
         <div class="priveleges-table-head">
+          <% rugpull = rugpull.result %>
+    
           <h3>
-            <%= rugpull.blacklist ? "Contract owner can blacklist addresses" : "Contract owner cannot blacklist addresses"
+            <%= security.is_blacklisted==1 ? "Contract owner can blacklist addresses" : "Contract owner cannot blacklist addresses"
               %>
           </h3>
           <h3>
-            <%= rugpull.blacklist ? "❌ The owner can blacklist addresses" : "✅ The owner cannot blacklist addresses" %>
+            <%= security.is_blacklisted==1 ? "❌ The owner can blacklist addresses" : "✅ The owner cannot blacklist addresses" %>
           </h3>
         </div>
         <div class="priveleges-table-value">
           <h3 class="textFont">Description</h3>
           <h3 class="textFont" style="border-left: 1px solid black; font-weight: 400;
       line-height: 30px;">
-            <%= rugpull.blacklist ? "The owner can blacklist addresses if they want"
+            <%= security.is_blacklisted==1 ? "The owner can blacklist addresses if they want"
               : "The owner cannot blacklist addresses" %>
           </h3>
   

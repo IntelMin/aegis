@@ -95,23 +95,26 @@
               of liquidity is a good sign
             </p>
           </div>
-          <div
-            class="files-table-con"
-            style="padding: 20px; justify-content: space-between !important"
-          >
-            <div class="files-table-head">
-              <h3>Listing</h3>
-              <h3 class="textFont">
-                <%= security.is_in_dex=="1"?" ✅ The contract is listed in Dex ":" ⚠️ The contract is not listed in Dex "%>
-              </h3>
-            </div>
-            <div class="files-table-value">
-              <h3 class="textFont">Description</h3>
-              <h3 class="textFont">
-                <%= security.is_in_dex=="1"?" You can swap tokens on dex":" You cant swap tokens on dex "%>
-              </h3>
-            </div>
-          </div>
+          <% let address = info.address.toLowerCase() %>
+
+
+            <table class="security-table <%= security.is_in_dex == '1' ? 'success' : 'error' %>">
+                <tr>
+                  <td>Is it on a dex?</td>
+                  <td>
+                    <%= security.is_in_dex == "1" ? "✅ The contract is listed" : "⚠️ The contract is not listed" %>
+                  </td>
+                </tr>
+                <tr>
+                <td>
+                    Description
+                </td>
+                <td>
+                <%= security.is_in_dex == "1" ? "You can swap tokens on dex" : "You can't swap tokens on dex" %>
+                </td>
+                </tr>
+              </table>
+              
         </div>
         <div>
           <div>
@@ -121,20 +124,22 @@
               inspect, modify, and enhance.
             </p>
           </div>
-          <div class="files-table-con" style="padding: 20px">
-            <div class="files-table-head">
-              <h3>Opensource</h3>
-              <h3 class="textFont">
-                <%= security.is_open_source=="1"?" ✅ The contract is Open Source ":" ⚠️ The contract is not Open Source "%>
-              </h3>
-            </div>
-            <div class="files-table-value">
-              <h3 class="textFont">Description</h3>
-              <h3 class="textFont">
-                <%= security.is_open_source=="1"?" Code can be read and edited by anyone ":" Code is private"%>
-              </h3>
-            </div>
-          </div>
+          <table class="security-table <%= security.is_open_source == '1' ? 'success' : 'error' %>">
+            <tr>
+              <td>Is code available?</td>
+              <td>
+                <%= security.is_open_source == "1" ? "✅ The contract is Open Source" : "⚠️ The contract is not Open Source" %>
+              </td>
+            </tr>
+            <tr>
+            <td>
+                Description
+            </td>
+            <td>
+            <%= security.is_open_source == "1" ? "Contract code can be reviewed and audited by anyone" : "Contract code is private" %>
+            </td>
+            </tr>
+          </table>
         </div>
       </div>
       <!-- <div>

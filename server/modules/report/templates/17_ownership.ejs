@@ -95,6 +95,7 @@
 
   <div class="title-button">Ownership Privileges</div>
   </ptitle>
+
   <p>
     These functions can be dangerous. Please note that abuse can lead to financial loss.
     We have a guide where you can learn more about these Functions.
@@ -106,20 +107,21 @@
       owner, and the newly minted tokens are added to the owner's balance. Minting is
       usually done to increase the total supply of a cryptocurrency or token.
     </p>
+
     <div class="priveleges-table-con">
       <div class="priveleges-table-head">
         <h3>
-          <%= security.is_mintable ? "Contract owner can mint new tokens" : "Contract owner cannot mint new tokens" %>
+          <%= security.is_mintable=="1" ? "Contract owner can mint new tokens" : "Contract owner cannot mint new tokens" %>
         </h3>
         <h3>
-          <%= security.is_mintable ? "❌ The owner can mint new tokens" : "✅ The owner cannot mint new tokens" %>
+          <%= security.is_mintable=="1" ? "❌ The owner can mint new tokens" : "✅ The owner cannot mint new tokens" %>
         </h3>
       </div>
       <div class="priveleges-table-value">
         <h3 class="textFont">Description</h3>
         <h3 class="textFont" style="border-left: 1px solid black; font-weight: 400;
     line-height: 30px;">
-          <%= security.is_mintable ? "The owner can mint new tokens if they want" : "The owner cannot mint new tokens"
+          <%= security.is_mintable=="1" ? "The owner can mint new tokens if they want" : "The owner cannot mint new tokens"
             %>
         </h3>
         <div style="position: absolute; top: -27px; left: 0; width: 100%; height: 100%">

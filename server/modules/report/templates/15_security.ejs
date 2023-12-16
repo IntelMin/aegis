@@ -84,6 +84,67 @@
   .imported-package-subdiv li {
     margin-bottom: 5px;
   }
+
+.security-table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.security-table tr:first-child {
+    background: #303030;
+}
+
+
+.security-table tr:first-child td:first-child {
+    border-radius: 6px;
+    padding: 25px;
+}
+
+.security-table tr:first-child td:last-child {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.security-table.success tr:first-child td:last-child {
+    color: #58ff5e;
+}
+
+.security-table.error tr:first-child td:last-child {
+    color: #ff5858;
+}
+
+.security-table tr:nth-child(2) {
+    background-color: white;
+}
+
+.security-table tr:nth-child(2) td:first-child {
+    color: black;
+    padding: 10px 30px;
+    text-align: center;
+    border-right: 1px solid #303030;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    border-bottom-left-radius: 32px;
+    width: 30%;
+}
+
+.security-table tr:nth-child(2) td:last-child {
+    color: black;
+    padding: 38px 30px;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    border-bottom-right-radius: 32px;
+    width: 100%;
+}
 </style>
 
 <div>
@@ -93,6 +154,9 @@
   </ptitle>
   <div id="data">
     <div>
+      <% let address = info.address.toLowerCase() %>
+
+      <% security =security.result[address] %>
       <h2>Honeypot</h2>
       <p>
         Honeypots are smart contracts that appear to have an obvious flaw in
@@ -102,38 +166,23 @@
       </p>
     </div>
 
-    <div class="priveleges-table-con">
-      <div class="priveleges-table-head">
-        <h3 class="textFont" style="font-size: 16px">
-          The contract is Honeypot?
-        </h3>
-        <h3 class="textFont" style="font-size: 16px">
-          <%= security.is_honeypot=="1"?" ⚠️ The contract is a Honey Pot ":" ✅ The contract is not a Honey Pot "%>
-        </h3>
-      </div>
-      <div class="priveleges-table-value-middle">
-        <h3 class="textFont">Description</h3>
-        <h3
-          class="textFont"
-          style="line-height: 110%; border-left: 1px solid black"
-        >
-          <%= security.is_honeypot=="1"?" Owner can drain your wallet ":" Owner cannot drain your wallet through honeypot"%>
-        </h3>
-      </div>
-      <div class="priveleges-table-value" style="border-top: 1px solid black">
-        <h3 class="textFont" style="padding-right: 38.5px">Comments</h3>
-        <h3
-          class="textFont"
-          style="
-            border-left: 1px solid black;
-            font-weight: 600;
-            font-size: 24px;
-          "
-        >
-          N/A
-        </h3>
-      </div>
-    </div>
+    <table class="security-table <%= security.is_honeypot != '1' ? 'success' : 'error' %>">
+        <tr>
+          <td>Is it a honeypot?</td>
+          <td>
+            <%= security.is_honeypot == "1" ? "⚠️ The contract is a Honey Pot" : "✅  The contract is not a Honey Pot" %>
+          </td>
+        </tr>
+        <tr>
+        <td>
+            Description
+        </td>
+        <td>
+        <%= security.is_honeypot == "1" ? "Owner can drain your wallet" : "Owner cannot drain your wallet through honeypot" %>
+        </td>
+        </tr>
+      </table>
+
 
     <div>
       <div>
@@ -143,23 +192,27 @@
           exerting excessive influence or engaging in manipulative behaviors
           within the token ecosystem. Some examples are setting maximum
           transaction limits, imposing penalties for transactions exceeding some
-          specific threshhold, Imposing as more equitable distribution of tokens
+          specific threshhold, imposing a more equitable distribution of tokens
         </p>
       </div>
-      <div class="files-table-con">
-        <div class="files-table-head">
-          <h3>Antiwhale</h3>
-          <h3 class="textFont">
-            <%= security.is_anti_whale=="1"?" ✅ The contract is Anti Whale ":" ⚠️ The contract is not Anti Whale"%>
-          </h3>
-        </div>
-        <div class="files-table-value">
-          <h3 class="textFont">Description</h3>
-          <h3 class="textFont">
-            <%= security.is_anti_whale=="1"?" Whales cant dump ":"Whales might dump"%>
-          </h3>
-        </div>
-      </div>
+
+
+      <table class="security-table <%= security.is_anti_whale == '1' ? 'success' : 'error' %>">
+        <tr>
+          <td>Can whales dump?</td>
+          <td>
+            <%= security.is_anti_whale == "1" ? "✅ The contract is Anti Whale" : "⚠️ The contract is not Anti Whale" %>
+          </td>
+        </tr>
+        <tr>
+        <td>
+            Description
+        </td>
+        <td>
+        <%= security.is_anti_whale == "1" ? "Whales can't dump" : "Whales might dump" %>
+        </td>
+        </tr>
+      </table>
     </div>
     <div class="page-break-before">&nbsp;</div>
     <!-- <div>

@@ -84,6 +84,7 @@
   </style>
   
   <div>
+    <% let address = info.address.toLowerCase() %>
 
     <div id="data">
       <div style="margin-top: 70px;">
@@ -101,20 +102,22 @@
               thorough audit
             </p>
           </div>
-          <div class="files-table-con" style="padding: 20px">
-            <div class="files-table-head">
-              <h3>Proxy</h3>
-              <h3 class="textFont">
-                <%= security.is_proxy=="1"?" ✅ The contract is not a Proxy contract":" ⚠️ The contract is a Proxy contract"%>
-              </h3>
-            </div>
-            <div class="files-table-value">
-              <h3 class="textFont">Description</h3>
-              <h3 class="textFont">
-                <%= security.is_proxy=="1"?" This contract could call functions on another contract":" This is a full contract"%>
-              </h3>
-            </div>
-          </div>
+          <table class="security-table <%= security.is_proxy != 1 ? 'success' : 'error' %>">
+            <tr>
+              <td>Is it a proxy?</td>
+              <td>
+                <%= security.is_proxy != 1 ? "✅ The contract is not a Proxy contract" : "⚠️ The contract is a Proxy contract" %>
+              </td>
+            </tr>
+            <tr>
+            <td>
+                Description
+            </td>
+            <td>
+            <%= security.is_proxy == 1 ? "This contract could call functions on another contract" : "This is a full contract" %>
+            </td>
+            </tr>
+          </table>
         </div>
       </div>
       <!-- <div>

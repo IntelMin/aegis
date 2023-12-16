@@ -4,6 +4,19 @@
   
     <div class="miniting-priveleges-con">
       <h2>Fees and tax</h2>
+      <% let address = info.address.toLowerCase() %>
+      <% let buytax = security.buy_tax
+      let selltax = security.sell_tax 
+      if((Number(buytax)*100) < 100) { 
+        buytax = (Number(buytax)*100).toFixed(2)
+      }
+      if((Number(selltax)*100) < 100) { 
+        selltax = (Number(selltax)*100).toFixed(2)
+      }
+      security.buy_tax = buytax
+      security.sell_tax = selltax
+
+      %>
       <p>
         In some smart contracts, the owner or creator of the contract can set
         fees for certain actions or operations within the contract. These fees can

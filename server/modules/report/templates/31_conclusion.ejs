@@ -1,29 +1,55 @@
 <style>
-    .stypeP{
-        font-size: 12px;
-        font-style: normal;
-        line-height:3;
-        font-weight: 600;
-    }
-    .head{
-        border-radius: 6px 6px 0px 0px;
-background: #303030;
-width: 492px;
-height: 47px;
-flex-shrink: 0;
-    }
+  .conclusion-table-head {
+    background-color: #303030;
+    padding: 0 20px;
+  }
+
+  .conclusion-table-head h1 {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 35px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+
+  .conclusion-table-body {
+    padding: 0 17px;
+    background-color: #ffffff;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  .conclusion-table-body h1 {
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000000;
+  }
+
+  .conclusion-table-body:nth-child(1) h1 {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .conclusion-table-body:nth-child(2) h1 {
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  .conclusion-table-body:nth-child(3) h1 {
+    font-size: 15px;
+    font-weight: 400;
+  }
 </style>
 
 <div>
-    <ptitle>
-  
-    <h2>Conclusion</h2>
-    </ptitle>
-    <p class="stypeP textFont">
-        <%= audit_summery.audit_summery %>
-    </p>
-    <div class="head">
-        
-    </div>
-  </div>
-  
+  <ptitle>
+    <h1 style="font-weight: 800">Conclusion</h1>
+  </ptitle>
+  <p style="line-height: 40px; font-family: Montserrat">
+    <%=summary.text%>
+  </p>
+</div>

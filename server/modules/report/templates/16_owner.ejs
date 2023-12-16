@@ -2,8 +2,8 @@
 <style>
   .owner-privileges_head_con h1 {
     box-sizing: border-box;
-    border: 2px solid ;
-    border-image: linear-gradient(to right, #fdfdfd, #5a5a5a,#fdfdfd);
+    border: 2px solid;
+    border-image: linear-gradient(to right, #fdfdfd, #5a5a5a, #fdfdfd);
     border-radius: 50%;
     border-image-slice: 2;
     font-size: 24px;
@@ -104,6 +104,7 @@
     border: none;
     border-color: white;
   }
+
   .priveleges-table-value h1 {
     font-weight: 600;
     width: 100%;
@@ -127,39 +128,62 @@
   .owner-privileges_head_con h4 {
     font-size: large;
   }
-
 </style>
 <div class="owner-privileges_head_con">
   <ptitle>
 
     <h5 class="title-button" style="font-size:24px;">Ownership</h5>
-    </ptitle>
-    
-  <div class="priveleges-table-con">
-    <div class="priveleges-table-head">
-      <h3 class="textFont" style="font-size: 16px;">The ownership is renounced</h3>
-      <h3 class="textFont" style="font-size: 16px;">✅ Contract does not have an owner</h3>
+  </ptitle>
+  <% if(security.owner_address=="" ) { %>
+    <div class="priveleges-table-con">
+      <div class="priveleges-table-head">
+        <h3 class="textFont" style="font-size: 16px;">The ownership is renounced</h3>
+        <h3 class="textFont" style="font-size: 16px;">✅ Contract does not have an owner</h3>
+      </div>
+      <div class="priveleges-table-value-middle">
+        <h3 class="textFont"> Description</h3>
+        <h3 class="textFont" style="line-height: 110%;border-left:1px solid black">The owner has renounced the ownership
+          that means that the owner has no control over the
+          contract’s operations, including the ability to execute functions that may impact the contract’s users or
+          stakeholders.
+        </h3>
+      </div>
+      <div class="priveleges-table-value" style="border-top: 1px solid black;">
+        <h3 class="textFont" style="padding-right: 38.5px;"> Comments</h3>
+        <h3 class="textFont" style="border-left: 1px solid black;font-weight:600; font-size:24px">N/A
+        </h3>
+      </div>
     </div>
-    <div class="priveleges-table-value-middle">
-      <h3 class="textFont"> Description</h3>
-      <h3 class="textFont" style="line-height: 110%;border-left:1px solid black">The owner has not renounced the ownership that means that the owner retains control over the
-        contract’s operations, including the ability to execute functions that may impact the contract’s users or
-        stakeholders. This can lead to potential issues including:
-        <li>
-          Centralization
-          The owner has significant over contract’s operations.
-        </li>
-      </h3>
-    </div>
-    <div class="priveleges-table-value" style="border-top: 1px solid black;">
-      <h3 class="textFont" style="padding-right: 38.5px;"> Comments</h3>
-      <h3 class="textFont" style="border-left: 1px solid black;font-weight:600; font-size:24px">N/A
-      </h3>
-    </div>
-  </div>
-  <div>
-    <h3 class="textFont">Note</h3>
-    <h4 class="textFont" style="line-height: 50px;">If the contract is not deployed then we would consider the ownership to be not renounced.
-      Moreover, if there are no ownership functionalities, ownership is automatically considered renounced</h4>
-  </div>
+    <% } else { %>
+      <div class="priveleges-table-con">
+        <div class="priveleges-table-head">
+          <h3 class="textFont" style="font-size: 16px;">The ownership is not renounced</h3>
+          <h3 class="textFont" style="font-size: 16px; color: red;">❌ Contract has an owner</h3>
+        </div>
+        <div class="priveleges-table-value-middle">
+          <h3 class="textFont"> Description</h3>
+          <h3 class="textFont" style="line-height: 110%;border-left:1px solid black;text-align: center;">
+            The owner hasnot renounced the ownership that means that the owner retains control over the
+            contract’s operations, including the ability to execute functions that may impact the contract’s users or
+            stakeholders. This can lead to potential issues including:
+            <br />
+            <li>
+              Centralization:
+              The owner has significant over contract’s operations.
+            </li>
+          </h3>
+        </div>
+        <div class="priveleges-table-value" style="border-top: 1px solid black;">
+          <h3 class="textFont" style="padding-right: 38.5px;"> Comments</h3>
+          <h3 class="textFont" style="border-left: 1px solid black;font-weight:600; font-size:24px">N/A
+          </h3>
+        </div>
+      </div>
+      <% } %>
+        <div>
+          <h3 class="textFont">Note</h3>
+          <h4 class="textFont" style="line-height: 50px;">If the contract is not deployed then we would consider the
+            ownership to be not renounced.
+            Moreover, if there are no ownership functionalities, ownership is automatically considered renounced.</h4>
+        </div>
 </div>

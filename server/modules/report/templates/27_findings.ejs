@@ -42,8 +42,17 @@
   /* .audit-desc {
 
   } */
-  .audit-table .severity {
-    background-color: #ffc107 !important;
+  .audit-table .severity.info {
+    background-color: #51b7ff !important;
+  }
+  .audit-table .severity.low {
+    background-color: #FFC451 !important;
+  }
+  .audit-table .severity.medium {
+    background-color: #f16f12 !important;
+  }
+  .audit-table .severity.high {
+    background-color: #ff5a51 !important;
   }
   .audit-table .location {
     background-color: #17a2b8 !important;
@@ -97,17 +106,17 @@ for (let i = 0; i < findings.length; i++) {
 
   %>
   <div class="audit-item">
-    <div class="audit-title"><%= "#"+ (i+1) %> <%= findings[i].title %> <%= estimatedHeight %></div>
+    <div class="audit-title"><%= "#AEG-"+ (i+1) %> <%= findings[i].title %></div>
     <table class="audit-table">
       <tr>
         <th>FILE</th>
         <th>Severity</th>
-        <th>Location</th>
+        <!-- <th>Location</th> -->
       </tr>
       <tr>
-        <td>SOL</td>
-        <td class="severity"><%= findings[i].severity %></td>
-        <td class="location">L 707,713</td>
+        <td><%= info.name %>.sol</td>
+        <td class="severity <%= findings[i].severity %>"><%= findings[i].severity %></td>
+        <!-- <td class="location">L 707,713</td> -->
       </tr>
     </table>
     <div class="audit-desc">

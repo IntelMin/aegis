@@ -1,41 +1,230 @@
 <style>
-  h1 {
-    color: #fff;
-    text-align: center;
-  }
+    .overview_head_con {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+    .overview_head_left_item {
+      width: 220px;
+      height: 170px;
+      background: white;
+      padding: 60px 30px 60px;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      position: relative;
+    }
+    .overview_head_left_item_box {
+      position: absolute;
+      bottom: -19px;
+      left: calc(50% - 20px);
+      width: 40px;
+      height: 40px;
+      transform: rotate(45deg);
+      background-color: white;
+      z-index: 10;
+    }
+  
+    .overview_head_left_item h1 {
+      color: #0096c3;
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 20px;
+    }
+    .overview_head_right_item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .overview_head_right_item h1 {
+      color: #fff;
+      font-size: 42px;
+      font-style: normal;
+      font-weight: 300;
+      line-height: normal;
+      letter-spacing: 2px;
+    }
+    .overview_table_row {
+      display: flex;
+    }
+  
+    .overview_table_row_key {
+      width: 220px;
+      background: linear-gradient(
+        170deg,
+        #4a4949 0%,
+        rgba(255, 255, 255, 0.00)  100%
+      );
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    .overview_table_row_key.firstt{
+      padding-top: 20px;
+      background: linear-gradient(
+        170deg,
+        #a3a2a2 0%,
+        rgba(255, 255, 255, 0) 109.74%
+      );
+    }
+    .overview_table_row_key h1 {
+      color: white;
+      font-size: 22px;
+      font-weight: 500;
+    }
+    .overview_table_row_value {
+      width: calc(100% - 220px);
+      background: #fff;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      text-align: center;
+      display: flex;
+      align-items: center;
+    }
+    .overview_table_row_value h1 {
+      color: black;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .overview_table_row_value.firstt h1{
+      font-size: 22px;
+      font-weight: 500;
+    }
+  </style>
+  
+  <!-- <h1>Token Information</h1>
+  <div>
+    <img
+      src="https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png?1696509996"
+      alt="Coin Icon"
+    />
+    <h2>Name: <%= info.name %></h2>
+    <p>Symbol: <%= info.symbol %></p>
+    <p>Address: <%= info.address %></p>
+    <p>Type: <%= info.type %></p>
+    <p>Decimals: <%= info.decimals %></p>
+    <p>Total Supply: <%= info.total_supply %></p>
+    <p>Circulating Market Cap: <%= info.circulating_market_cap %></p>
+    <p>Price: <%= info.exchange_rate %></p>
+    <p>Holders: <%= info.holders %></p>
+  </div> -->
+  <div>
+    <!-- Heading Starts -->
+    <div class="overview_head_con">
+      <div class="overview_head_left_item">
+        <ptitle>
+  
+        <h1 class="textFont" style="line-height: 35px;">Project  Overview</h1>
+        </ptitle>
+        <div class="overview_head_left_item_box"></div>
+      </div>
+      <div class="overview_head_right_item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="126"
+          height="126"
+          viewBox="0 0 76 86"
+          fill="none"
+        >
+          <path
+            d="M69.8775 16.9129L44.124 1.68015C40.3364 -0.560051 35.6675 -0.560051 31.879 1.68015L6.12206 16.9129C2.33403 19.1496 0 23.2895 0 27.7703V58.2323C0 62.7092 2.33403 66.8495 6.12206 69.0897L31.879 84.3225C35.6675 86.5592 40.3364 86.5592 44.124 84.3225L69.8775 69.0897C73.6655 66.8495 76 62.7092 76 58.2323V27.7703C76 23.2895 73.6655 19.1496 69.8775 16.9129ZM46.0581 57.3904L38.4829 63.1397C38.1967 63.3565 37.8054 63.3565 37.5193 63.1397L29.9437 57.3904C29.5818 57.1155 29.5086 56.5911 29.7809 56.2235L37.3565 45.9939C37.6799 45.5567 38.3218 45.5567 38.6456 45.9939L46.2213 56.2235C46.4931 56.5911 46.4199 57.1155 46.0581 57.3904ZM61.0734 56.4723L50.3898 56.3033C50.1855 56.2998 49.9924 56.2005 49.8669 56.036L38.5348 41.3197C38.263 40.9677 37.7401 40.9677 37.4682 41.3197L26.1366 56.036C26.0076 56.2005 25.8176 56.2998 25.6102 56.3033L14.9301 56.4723C14.3712 56.4793 14.0418 55.8378 14.3608 55.3719L37.4431 21.7786C37.7154 21.3827 38.2846 21.3827 38.5564 21.7786L61.6392 55.3719C61.9577 55.8378 61.6283 56.4793 61.0734 56.4723Z"
+            fill="white"
+          />
+        </svg>
+        <h1>Aegis AI</h1>
+      </div>
+    </div>
+    <!-- Heading Ends -->
+    <!-- Table Starts  -->
+    <div>
+  
+      <div class="overview_table_con">
+        <div class="overview_table_row">
+          <div class="overview_table_row_key firstt">
+            <h1 class="textFont">Project Name</h1>
+          </div>
+          <div class="overview_table_row_value firstt">
+            <h1 class="textFont"><%= info.name %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Symbol</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= info.symbol %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Address</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= info.address %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Type</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= info.type %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Decimals</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= info.decimals %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Total Supply</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <% let address = info.address.toLowerCase() %>
+  
+            <% security1 =security.result[address] %>
+            <h1 class="textFont"><%= Number(security1.total_supply).toLocaleString() %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Market Cap</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <!-- <h1 class="textFont"><%= info.circulating_market_cap %></h1> -->
+            <h1 class="textFont"><%= info.circulating_market_cap=="0.0"? (Number(info.exchange_rate)*Number(security1.total_supply)) :Number(info.circulating_market_cap).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')  %></h1>
 
-  img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-  }
-
-  h2 {
-    color: #fff;
-    font-size: 20px;
-  }
-
-  p {
-    color: #fff;
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-
-</style>
-
-<h1>Token Information</h1>
-<div>
-  <img
-    src="https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png?1696509996"
-    alt="Coin Icon"
-  />
-  <h2>Name: <%= info.name %></h2>
-  <p>Symbol: <%= info.symbol %></p>
-  <p>Address: <%= info.address %></p>
-  <p>Type: <%= info.type %></p>
-  <p>Decimals: <%= info.decimals %></p>
-  <p>Total Supply: <%= info.total_supply %></p>
-  <p>Circulating Market Cap: <%= info.circulating_market_cap %></p>
-  <p>Price: <%= info.exchange_rate %></p>
-  <p>Holders: <%= info.holders %></p>
-</div>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Exchange Rate</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= info.exchange_rate %></h1>
+          </div>
+        </div>
+        <div class="overview_table_row">
+          <div class="overview_table_row_key">
+            <h1 class="textFont">Holders</h1>
+          </div>
+          <div class="overview_table_row_value">
+            <h1 class="textFont"><%= Number(info.holders).toLocaleString() %></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

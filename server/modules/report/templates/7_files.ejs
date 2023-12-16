@@ -80,31 +80,39 @@
 </style>
 <div>
   <ptitle>
-
-  <h2>Files Overview</h2>
+    <h2>Files Overview</h2>
   </ptitle>
   <p class="textFont">
-    The Team provided us with the files that should be tested in the security
-    assessment. This audit covered the following files listed below with an
-    SHA-1 Hash.
+    The <%= info.name %> team provided us with the files that should be tested
+    in the security assessment. This audit covered the following files listed
+    below with an SHA-1 Hash.
   </p>
 </div>
-<% if (source.file_path && Array.isArray(source.file_path)) { %>
-<div class="files-table-con">
-  <div class="files-table-head">
-    <h3 class="textFont">File Name</h3>
-    <h3 class="textFont">SHA hash</h3>
-  </div>
-  <% source.file_path.forEach(function(file) { %>
 
-  <div class="files-table-value">
-    <h3 class="textFont"><%= file %></h3>
-    <h3 class="textFont"></h3>
-  </div>
-</div>
-<% });}else { %>
-<p>No files provided.</p>
-<% } %>
+<% if (source.file_path) { %>
+    <div class="files-table-con">
+      <div class="files-table-head">
+        <h3 class="textFont">File Name</h3>
+        <!-- <h3 class="textFont">SHA hash</h3> -->
+      </div>
+      <% if (Array.isArray(source.file_path)) { %>
+        <% source.file_path.forEach(function(file) { %>
+          <div class="files-table-value">
+            <h3 class="textFont"><%= file %></h3>
+            <!-- <h3 class="textFont">SHA hash</h3> -->
+          </div>
+        <% }); %>
+      <% } else if (source.file_path.trim() !== "") { %>
+        <div class="files-table-value">
+          <h3 class="textFont"><%= (source.file_path).split("/")[source.file_path.split("/").length -1] %></h3>
+          <!-- <h3 class="textFont">SHA hash</h3> -->
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <p>No files provided.</p>
+  <% } %>
+  
 <div>
   <div>
     <h3 class="textFont">Note</h3>
@@ -126,13 +134,11 @@
       <div>
         <h3 class="textFont">Note for Investors:</h3>
         <p class="textFont">
-          We only Audited a token contract and a Vault contract for Arbalest.
-          However, If the project has other contracts (for example, a Presale,
-          staking contract etc), and they were not provided to us in the audit
-          scope, then we cannot comment on its security and are not responsible
-          for it in any way. Moreover, the actual code of the interfaces used in
-          the vault contract was not provided to us so we cannot comment on
-          their security
+          We only audited a token contract for <%= info.name %>. However, If the
+          project has other contracts (for example, a Presale, staking contract
+          etc), and they were not provided to us in the audit scope, then we
+          cannot comment on its security and are not responsible for it in any
+          way.
         </p>
       </div>
     </div>
@@ -149,7 +155,8 @@
     </div>
   </div>
   <h3>Source</h3>
-  <p>language: <% source.language %></p>
-  <p>version: <% source.compiler_version %></p>
+  <p>language: <%- source.language %></p>
+  <p>version: <%- source.compiler_version %></p>
+  <p>verified at: <%- source.verified_at %></p>
   <br />
 </div>
