@@ -85,7 +85,6 @@ const SignUpForm = (props: Props) => {
                 title="Continue"
                 onClick={() => setNext(true)}
                 button
-                isSignIn
               />
             </div>
           )}

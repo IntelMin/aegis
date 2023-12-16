@@ -36,7 +36,7 @@ const SignInForm = (props: Props) => {
           Please enter your account details to sign in.
         </p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2">
-          <div className="w-[300px]">
+          <div className="w-[380px]">
             <CustomInput
               name="email"
               label="Email"
@@ -46,7 +46,7 @@ const SignInForm = (props: Props) => {
               setValue={setLoginData as SetValueFunction<{}>}
             />
           </div>
-          <div className="w-[300px]">
+          <div className="w-[380px]">
             <CustomInput
               name="password"
               label="Password"
