@@ -7,20 +7,22 @@ import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import NextTopLoader from "nextjs-toploader";
 import { Providers } from "../providers";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { getServerAuthSession } from "../api/auth/[...nextauth]/auth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     const session = await getSession();
-  //     const serversession = await getServerAuthSession();
+  useEffect(() => {
+    const checkAuth = async () => {
+      const session = await getSession();
+      const serversession = await getServerAuthSession();
+      if (!session) redirect("/signin");
+    };
+    checkAuth();
+  }, []);
+
   //     if (!session) redirect("/signin");
-  //   };
-  //   checkAuth();
-  // }, []);
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
