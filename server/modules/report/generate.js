@@ -12,9 +12,7 @@ const { loadData, getTemplates, renderTemplate } = require("./shared");
 
   // get data
   const contract_dir = path.join(__dirname, `../../cache/contracts/${address}`)
-  const data = loadData(contract_dir
-
-  );
+  const data = loadData(contract_dir);
 
   // get templates
   const templates = getTemplates();

@@ -34,6 +34,11 @@ function loadData(directory) {
     } else {
       data[catagory] = fileData;
     }
+
+    if (catagory === "security") {
+        let contractAddress = Object.keys(data[catagory].result)[0];
+        data[catagory] = data[catagory].result[contractAddress];
+    }
   }
 
   // date

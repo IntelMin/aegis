@@ -77,12 +77,27 @@
   .imported-package-subdiv p {
     align-self: center;
   }
+  .files-page ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .files-page li {
+    margin-bottom: 5px;
+  }
+  .files-page h3 {
+    margin-bottom: 0;
+  }
+  .files-page p {
+    margin-top: 0 !important;
+    line-height: 26px;
+  }
 </style>
 <div>
   <ptitle>
     <h2>Files Overview</h2>
   </ptitle>
-  <p class="textFont">
+  <p>
     The <%= info.name %> team provided us with the files that should be tested
     in the security assessment. This audit covered the following files listed
     below with an SHA-1 Hash.
@@ -90,50 +105,52 @@
 </div>
 
 <% if (source.file_path) { %>
-    <div class="files-table-con">
-      <div class="files-table-head">
-        <h3 class="textFont">File Name</h3>
-        <!-- <h3 class="textFont">SHA hash</h3> -->
-      </div>
-      <% if (Array.isArray(source.file_path)) { %>
-        <% source.file_path.forEach(function(file) { %>
-          <div class="files-table-value">
-            <h3 class="textFont"><%= file %></h3>
-            <!-- <h3 class="textFont">SHA hash</h3> -->
-          </div>
-        <% }); %>
-      <% } else if (source.file_path.trim() !== "") { %>
-        <div class="files-table-value">
-          <h3 class="textFont"><%= (source.file_path).split("/")[source.file_path.split("/").length -1] %></h3>
-          <!-- <h3 class="textFont">SHA hash</h3> -->
-        </div>
-      <% } %>
-    </div>
-  <% } else { %>
-    <p>No files provided.</p>
+<div class="files-table-con">
+  <div class="files-table-head">
+    <h3>File Name</h3>
+    <!-- <h3>SHA hash</h3> -->
+  </div>
+  <% if (Array.isArray(source.file_path)) { %> <%
+  source.file_path.forEach(function(file) { %>
+  <div class="files-table-value">
+    <h3><%= file %></h3>
+    <!-- <h3>SHA hash</h3> -->
+  </div>
+  <% }); %> <% } else if (source.file_path.trim() !== "") { %>
+  <div class="files-table-value">
+    <h3>
+      <%= (source.file_path).split("/")[source.file_path.split("/").length -1]
+      %>
+    </h3>
+    <!-- <h3>SHA hash</h3> -->
+  </div>
   <% } %>
-  
-<div>
-  <div>
-    <h3 class="textFont">Note</h3>
-    <p class="textFont">
+</div>
+<% } else { %>
+<p>No files provided.</p>
+<% } %>
+
+<div class="files-page">
+  <!-- <div>
+    <h3>Note</h3>
+    <p>
       Files with a different hash value than in this table have been modified
       after the security check, either intentionally or unintentionally. A
       different hash value may (but need not) be an indication of a changed
       state or potential vulnerability that was not the subject of this scan.
     </p>
-  </div>
+  </div> -->
   <div>
-    <h3 class="textFont">Imported Packages</h3>
-    <p class="textFont">
+    <h3>Imported Packages</h3>
+    <p>
       Used code from other Frameworks/Smart Contracts (direct imports).
     </p>
   </div>
   <div class="imported-package">
     <div class="imported-package-text">
       <div>
-        <h3 class="textFont">Note for Investors:</h3>
-        <p class="textFont">
+        <h3>Note for Investors:</h3>
+        <p>
           We only audited a token contract for <%= info.name %>. However, If the
           project has other contracts (for example, a Presale, staking contract
           etc), and they were not provided to us in the audit scope, then we
@@ -144,19 +161,32 @@
     </div>
     <div class="imported-package-subdiv">
       <% if (source.external_libraries?.length > 0) { %>
-      <ul class="textFont">
+      <ul>
         <% source.external_libraries.forEach(function(library) { %>
         <li><%= library %></li>
         <% }); %>
       </ul>
       <% } else { %>
-      <p class="textFont">No external libraries used.</p>
+      <p>No external libraries used.</p>
       <% } %>
     </div>
   </div>
   <h3>Source</h3>
-  <p>language: <%- source.language %></p>
-  <p>version: <%- source.compiler_version %></p>
-  <p>verified at: <%- source.verified_at %></p>
-  <br />
+  <ul>
+    <li><strong>language</strong>: <%- source.language %></li>
+    <li><strong>version</strong>: <%- source.compiler_version %></li>
+    <li><strong>verified at</strong>: 
+        <%- 
+          new Date(source.verified_at).toLocaleString('en-US', { 
+            timeZone: 'UTC', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+          }) 
+        %> (UTC+0)
+      </li>
+  </ul>
 </div>

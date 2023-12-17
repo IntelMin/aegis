@@ -1,48 +1,33 @@
 <!-- FILEPATH: /c:/Users/aslam/Desktop/DEnz/aegis/server/modules/report/templates/10_ownership.ejs -->
-  <div class="ownership-privileges_head_con">
+<div class="overall-security-page">
+  <div>
+    <h2>Burning Tokens</h2>
+    <p>
+      Burning tokens is the process of permanently destroying a certain number
+      of tokens, reducing the total supply of a cryptocurrency or token. This is
+      usually done to increase the value of the remaining tokens, as the reduced
+      supply can create scarcity and potentially drive up demand.
+    </p>
 
-    <div class="miniting-priveleges-con">
-      <h2>Burning Tokens</h2>
-      <p>
-        Burning tokens is the process of permanently destroying a certain number of tokens, reducing the total supply of a
-        cryptocurrency or token. This is usually done to increase the value of the remaining tokens, as the reduced supply
-        can create scarcity and potentially drive up demand.
-      </p>
-  
-      <div class="priveleges-table-con">
-        <div class="priveleges-table-head">
-          <h3>
-            <%= rugpull.blacklist==1 ? "Contract owner can burn tokens" : "Contract owner cannot burn tokens" %>
-          </h3>
-          <h3>
-            <%= rugpull.blacklist==1 ? "❌ The owner can burn tokens" : "✅ The owner cannot burn tokens" %>
-          </h3>
-        </div>
-        <div class="priveleges-table-value">
-          <h3 class="textFont">Description</h3>
-          <h3 class="textFont" style="border-left: 1px solid black; font-weight: 400;
-      line-height: 30px;">
-            <%= rugpull.blacklist==1 ? "The owner is able burn tokens without any allowance"
-              : "The owner is not able burn tokens without any allowance" %>
-          </h3>
-  
-          <div style="position: absolute; top: -27px; left: 0; width: 100%; height: 100%">
-            <svg xmlns="http://www.w3.org/2000/svg" width="124" height="144" viewBox="0 0 94 124" fill="none">
-              <path
-                d="M-24.1288 23.6976L-24.1274 23.6993L13.08 70.9202L13.0804 70.9208C14.1731 72.3037 16.2742 72.3036 17.367 70.9208L17.3674 70.9202L54.5707 23.7028C54.5712 23.7021 54.5717 23.7015 54.5722 23.7009C54.9064 23.2855 55.392 23.0407 55.9174 23.0319L90.9822 22.4899C90.9823 22.4899 90.9824 22.4899 90.9824 22.4899C92.4093 22.4724 93.2494 24.0722 92.4355 25.2339L16.6483 133.026C15.9533 134.013 14.504 134.013 13.8108 133.026L13.8107 133.026L-61.9778 25.2341C-62.7923 24.07 -61.9476 22.4723 -60.5362 22.4899L-25.4601 23.0319C-24.9415 23.0407 -24.4488 23.2878 -24.1288 23.6976Z"
-                stroke="#C1C1C1" />
-              <path
-                d="M41.8169 22.486L41.8169 22.4861L16.9433 55.3106L16.9431 55.3108C16.0816 56.449 14.3708 56.4494 13.5077 55.3106L-11.3657 22.4863C-12.0907 21.5285 -11.8955 20.1615 -10.9306 19.4454L13.9412 0.997758C14.7039 0.432992 15.7472 0.432989 16.5099 0.997758L41.383 19.4454C42.3478 20.1616 42.5429 21.5283 41.8169 22.486Z"
-                stroke="#C1C1C1" />
-            </svg>
-          </div>
-        </div>
-  
-      </div>
-    </div>
-    <div class="image-con">
-  
-      <img src="../assets/burntoken.png" alt="blacklist-address" />
-    </div>
-
+    <table
+      class="security-table <%= security.is_blacklisted != 1 ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Can burn tokens?</td>
+        <td>
+          <%= rugpull.is_blacklisted != 1 ? "❌ The owner can burn tokens" : "✅ The owner cannot burn tokens" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+          <%= rugpull.is_blacklisted != 1 ? "The owner is able to burn tokens without any allowance": "The owner is not able to burn tokens without any allowance"
+          %>
+        </td>
+      </tr>
+    </table>
   </div>
+  <div class="image">
+    <img src="../assets/burntoken.png" alt="blacklist-address" />
+  </div>
+</div>

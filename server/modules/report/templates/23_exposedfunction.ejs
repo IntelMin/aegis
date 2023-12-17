@@ -1,8 +1,11 @@
 <style>
+<<<<<<< HEAD
+=======
   .page23-body {
     width: fit-content;
   }
 
+>>>>>>> dev
   h3 {
     color: #FFF;
 
@@ -229,12 +232,13 @@
 
   <div>
     <h3>Exposed Functions</h3>
-    <p class="expose-desc">
+    <p>
       This section lists functions that are explicitly declared public or payable. Please note that getter methods for
-      public stateVars are not included
+      public state variables are not included.
     </p>
   </div>
-  <% let internalCount=0; 
+  <% 
+  let internalCount=0; 
   let publicCount=0; 
   let pureCount = 0;
   let viewCount = 0;
@@ -334,7 +338,7 @@ const privateCount = privateMatches ? privateMatches.length : 0;
       </div>
     </div>
 
-    <h3>StateVariables</h3>
+    <h3>State Variables</h3>
 
     <div class="group group-third">
       <div class="flex-subjects">

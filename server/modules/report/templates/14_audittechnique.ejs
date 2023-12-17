@@ -1,66 +1,47 @@
 <style>
-    .audittechnique {
-        margin-right: 30px;
-    }
-
-    .auditing-strategy {
-        font-size: 14px;
-        line-height: 40px;
-        font-weight: 600;
-        /* margin-top: 70px; */
-        letter-spacing: 2px;
-    }
-
-    .methodology {
-        font-size: 14px;
-        line-height: 40px;
-        font-weight: 600;
-        letter-spacing: 2px;
-    }
-
-    .methodology ol {
-        margin-top: 0;
-    }
+  .audit-strategy-page {
+    margin-right: 30px;
+  }
+  .audit-strategy-page li {
+    margin-bottom: 16px;
+  }
 </style>
 
-<div class="audittechnique">
-    <div class="auditing-strategy">
-        <div style="font-size: 18px; line-height: 40px; font-weight: 900; letter-spacing: 1px;">
-            <ptitle>
-
-                Auditing Strategy and Techniques Applied
-            </ptitle>
-        </div>
-        Throughout the review process, care was taken to check the repository for
-        security-related issues, code quality, and compliance with specifications
-        and best practices. To this end, our team of experienced pen-testers and
-        smart contract developers reviewed the code line by line and documented any
-        issues discovered.
-        <br />
-        We check every file manually. We use automated tools only so that they help
-        us achieve faster and better results.
-        <br />
-        <br />
-        <br />
-    </div>
-    <div class="methodology">
-        <div style="font-size: 18px; font-weight: 900; letter-spacing: 1px;">
-            Methodology
-        </div>
-        <div>
-            The audit adopted a systematic and risk-based approach to thoroughly evaluate the smart contract [Smart
-            Contract Name]. The assessment focused on key areas including security, code quality, compliance, gas
-            efficiency, and functionality.
-        </div>
-        <ul>
-            <li>
-                Security Assessment:
-            </li>
-            <div>
-                Our team employed both manual and automated techniques to identify and assess security vulnerabilities.
-                Manual code reviews, static analysis tools, and dynamic testing were utilized to ensure a comprehensive
-                evaluation of potential threats.
-            </div>
-        </ul>
-    </div>
+<div class="audit-strategy-page">
+  <ptitle>
+    <h3>Auditing Strategy and Techniques</h3>
+  </ptitle>
+  <p>
+    In our review process, we leverage advanced, finetuned Large Language Models
+    (LLMs) alongside sophisticated LLM agent mechanisms. This approach ensures
+    comprehensive examination of the smart contract repository, targeting
+    security vulnerabilities, code integrity, and adherence to the latest
+    standards and best practices.
+  </p>
+  <p>
+    Our review blends the precision of machine learning models with human
+    oversight. The finetuned LLMs efficiently parse and analyze every file,
+    providing in-depth insights and faster results, which are then meticulously
+    validated by our team of experts for accuracy and relevance.
+  </p>
+  <h3>Methodology</h3>
+  <p>
+    The audit of the smart contract <%= info.name%> was conducted using a
+    systematic and risk-based approach. Emphasis was placed on essential aspects
+    such as security, code quality, compliance, gas efficiency, and overall
+    functionality.
+  </p>
+  <ul>
+    <li>
+      <strong>Security Assessment</strong>
+      <p>
+        Our approach integrates advanced AI-driven techniques, primarily
+        leveraging Large Language Models (LLMs) and GPT agents. This blend of AI
+        tools provides an in-depth analysis, identifying and evaluating
+        potential security vulnerabilities. Alongside this, we conduct targeted
+        manual reviews to validate and contextualize the AI-generated insights,
+        ensuring comprehensive and accurate security assessments.
+      </p>
+    </li>
+  </ul>
 </div>

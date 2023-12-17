@@ -37,7 +37,7 @@ const { loadData, getTemplates, renderTemplate } = require("./shared");
 
   await page.addStyleTag({ path: path.join(__dirname, "assets", "style.css") });
   // Generate the PDF
-  const pdfpath = path.join(__dirname, `../pdf/${name}.pdf`)
+  const pdfpath = path.join(__dirname, `./pdf/${name}.pdf`)
   await page.pdf({
     path: pdfpath,
     format: "A4",
@@ -47,5 +47,5 @@ const { loadData, getTemplates, renderTemplate } = require("./shared");
 
   await browser.close();
 }
-generatePDF('0x6982508145454ce325ddbe47a25d4ec3d2311933','test')
+generatePDF('0x55A8f6c6b3Aa58ad6D1f26f6AFeDEd78F32E19f4','aegis')
 // module.exports = generatePDF;

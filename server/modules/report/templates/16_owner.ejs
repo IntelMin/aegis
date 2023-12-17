@@ -1,189 +1,50 @@
 <!-- FILEPATH: /c:/Users/aslam/Desktop/DEnz/aegis/server/modules/report/templates/10_owner.ejs -->
-<style>
-  .owner-privileges_head_con h1 {
-    box-sizing: border-box;
-    border: 2px solid;
-    border-image: linear-gradient(to right, #fdfdfd, #5a5a5a, #fdfdfd);
-    border-radius: 50%;
-    border-image-slice: 2;
-    font-size: 24px;
-    padding: 10px 15px;
-    font-weight: 800;
-    width: fit-content;
-  }
-
-
-  .owner-privileges_head_con p {
-    line-height: 10px;
-    letter-spacing: 2px;
-  }
-
-  .miniting-priveleges-con h2 {
-    font-size: 26px;
-    font-weight: 900;
-  }
-
-  .priveleges-table-head {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    padding: 0 10px;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #303030;
-  }
-
-  .priveleges-table-head h3 {
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .priveleges-table-head h3:last-child {
-    font-weight: 300;
-    color: #58ff5e;
-  }
-
-  .priveleges-table-value {
-    border: none;
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    margin: auto;
-    background: #fff;
-    position: relative;
-    overflow: wrap;
-  }
-
-  .priveleges-table-value-middle {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    margin: auto;
-    background: #fff;
-    position: relative;
-    overflow: wrap;
-  }
-
-  .priveleges-table-value-middle h3 {
-    color: black;
-    padding: 10px 30px;
-    min-height: 100px;
-    height: 100%;
-    margin: auto;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    padding: auto;
-    width: auto;
-  }
-
-  .priveleges-table-value-middle h3:last-child {
-    font-weight: 400;
-    border: none;
-  }
-
-  .priveleges-table-value h3 {
-    color: black;
-    padding: 10px 30px;
-    min-height: 100px;
-    height: 100%;
-    margin: auto;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    padding: auto;
-    width: auto;
-  }
-
-  .priveleges-table-value h3:last-child {
-    font-weight: 400;
-    width: 100%;
-    min-width: 500px;
-    border: none;
-    border-color: white;
-  }
-
-  .priveleges-table-value h1 {
-    font-weight: 600;
-    width: 100%;
-    min-width: 500px;
-    color: black;
-    margin-left: 30px;
-
-  }
-
-  .image-con {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .textFont {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .owner-privileges_head_con h4 {
-    font-size: large;
-  }
-</style>
-<div class="owner-privileges_head_con">
+<div class="overall-security-page">
   <ptitle>
-
-    <h5 class="title-button" style="font-size:24px;">Ownership</h5>
+    <h5 class="title-button" style="font-size: 24px">Ownership</h5>
   </ptitle>
-  <% if(security.owner_address=="" ) { %>
-    <div class="priveleges-table-con">
-      <div class="priveleges-table-head">
-        <h3 class="textFont" style="font-size: 16px;">The ownership is renounced</h3>
-        <h3 class="textFont" style="font-size: 16px;">✅ Contract does not have an owner</h3>
-      </div>
-      <div class="priveleges-table-value-middle">
-        <h3 class="textFont"> Description</h3>
-        <h3 class="textFont" style="line-height: 110%;border-left:1px solid black">The owner has renounced the ownership
-          that means that the owner has no control over the
-          contract’s operations, including the ability to execute functions that may impact the contract’s users or
-          stakeholders.
-        </h3>
-      </div>
-      <div class="priveleges-table-value" style="border-top: 1px solid black;">
-        <h3 class="textFont" style="padding-right: 38.5px;"> Comments</h3>
-        <h3 class="textFont" style="border-left: 1px solid black;font-weight:600; font-size:24px">N/A
-        </h3>
-      </div>
-    </div>
-    <% } else { %>
-      <div class="priveleges-table-con">
-        <div class="priveleges-table-head">
-          <h3 class="textFont" style="font-size: 16px;">The ownership is not renounced</h3>
-          <h3 class="textFont" style="font-size: 16px; color: red;">❌ Contract has an owner</h3>
-        </div>
-        <div class="priveleges-table-value-middle">
-          <h3 class="textFont"> Description</h3>
-          <h3 class="textFont" style="line-height: 110%;border-left:1px solid black;text-align: center;">
-            The owner hasnot renounced the ownership that means that the owner retains control over the
-            contract’s operations, including the ability to execute functions that may impact the contract’s users or
-            stakeholders. This can lead to potential issues including:
-            <br />
-            <li>
-              Centralization:
-              The owner has significant over contract’s operations.
-            </li>
-          </h3>
-        </div>
-        <div class="priveleges-table-value" style="border-top: 1px solid black;">
-          <h3 class="textFont" style="padding-right: 38.5px;"> Comments</h3>
-          <h3 class="textFont" style="border-left: 1px solid black;font-weight:600; font-size:24px">N/A
-          </h3>
-        </div>
-      </div>
+
+  <div>
+    <table
+      class="security-table <%= security.owner_address=='' ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Is ownership is renounced?</td>
+        <td>
+          <%= security.owner_address=="" ? "✅ Contract does not have an owner": "❌ Contract has an owner" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+        <% if(security.owner_address=="" ) { %> 
+            The owner has renounced the ownership that means that the owner has 
+            no control over the contract’s operations, including the ability to 
+            execute functions that may impact the contract’s users or stakeholders. 
+        <% } else { %> 
+            The owner has not renounced the ownership that means that the owner 
+            retains control over the contract’s operations, including the ability 
+            to execute functions that may impact the contract’s users or stakeholders. 
+            This can lead to potential issues. 
+        <% } %>
+        </td>
+      </tr>
+      <% if(security.owner_address != "" ) { %>
+      <tr>
+        <td>Comments</td>
+        <td>
+          <strong>Centralization</strong><br />
+          The owner has significant control over contract’s operations.
+        </td>
+      </tr>
       <% } %>
-        <div>
-          <h3 class="textFont">Note</h3>
-          <h4 class="textFont" style="line-height: 50px;">If the contract is not deployed then we would consider the
-            ownership to be not renounced.
-            Moreover, if there are no ownership functionalities, ownership is automatically considered renounced.</h4>
-        </div>
+    </table>
+
+    <h3>Note</h3>
+    <p>
+      If the contract is not deployed then we would consider the ownership to be
+      not renounced. Moreover, if there are no ownership functionalities,
+      ownership is automatically considered renounced.
+    </p>
+  </div>
 </div>

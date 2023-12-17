@@ -1,88 +1,93 @@
 <style>
-  .data-container td {
-    color: white;
-  }
-  .security_info_title {
-    font-size: 16px;
-    font-weight: 800;
-  }
-  #data p{
-    line-height: 30px;
+  .overall-security-page p {
+    line-height: 32px;
+    letter-spacing: 1px;
   }
 
-  .files-table-head {
-    display: flex;
-    gap: 10px;
-    justify-content: space-evenly;
-    background-color: black;
-    border-radius: 6px;
+  .security-table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .security-table tr:first-child {
     background: #303030;
   }
 
-  .files-table-head h3 {
-    font-size: 16px;
+  .security-table tr:first-child td:first-child {
+    border-radius: 6px;
+    padding: 25px;
   }
 
-  .files-table-head h3:last-child {
-    font-weight: 300;
+  .security-table tr:first-child td:last-child {
+    text-align: right;
+    padding-right: 20px;
+  }
+
+  .security-table.success tr:first-child td:last-child {
     color: #58ff5e;
   }
 
-  .files-table-value {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    border-bottom-left-radius: 31px;
-    border-bottom-right-radius: 31px;
-    background: #fff;
+  .security-table.error tr:first-child td:last-child {
+    color: #ff5858;
   }
 
-  .files-table-value h3 {
+  .security-table tr {
+    background-color: white;
+    border-top: 1px solid #303030;
+  }
+
+  .security-table tr:nth-child(2) td:first-child {
     color: black;
     padding: 10px 30px;
-    min-height: 100px;
-    height: 100%;
-    margin: 0;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    border-right: 1px solid #303030;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    width: 30%;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAXNSR0IArs4c6QAACcNJREFUeF7tnWFy2zoMhKPkXnF9srQnS9171X6jTNTXpHYkwtQSS37903ZGEpYfsBJIWvb0+vr67Xg8/nxI+ufXr1+vl8vldDgcvm+VeDqdvk/TdHh+fj5uPUd5XGRMSn3E+p/AdDqdLufz+ZjRJHOhz1JLzDEb/vHx8fVwOEwZEx0ZU8ZxjKJpNkjKu21U12z4h4eHHyWmUiX73RwvWc2r4uAU5+0um+2utjwFSp9s2VuXzOZ1Klql1j9tSKbiihRSNpN/TmJ2fcqic4r1xyDRu3btwUYKKdqO1dZ+63rZ9ak4OMb5MJFtnchI/CzG/ir5mRdCHItWqfmflZ7IHbyG4OjqU6Qdq6F36zUyta5bNXPcX8u812C0SGqk0FuZeWsBZde3dRwjH3d1r0DdtkQKKXKOMtHRJ6JSI7HWCdzcTIvMB9bD/XtEJI7DfkLkiRjhxzn7EvhytzlSvCVyI4WufrqVjGc5NvvTLTKmUc9Z/TjGnvORyF12Tz01iiBi+hpxucY+BFYNstcdO3KXjZyzD7bbV2VJV01833irBpnDzyZ5enp6qfXp2Eih793u1cAcGVeNuFxjPwKbDDKHr1WgkRYkcs5+yK5fuRYftW7ifU1gs0Hmy9To/yPzjsg5ysSzpKukrY01lbwwde98JNKC1DDl3kgdNO7NoNfrF78wFb1bRswROUedKAeNaiY9xQu9MFXab0fmEKUxWiQlMq4WOokZJxB+YaqkrShd+ry3lYvjKDsz+9yobDQcfY3AXS9MbSn8EiMtAh0Kj9ZqDEPd9cLU2nwkUkSRc9Spcmj/1Ex6jfdhmXet4K9BuFUskf7cwRzve0Jpvwmm10JtNa6rL0yVfqfUtTZqS/v196AjhmoBzcXELdj0GPPqRmFk3rCcM0OaDVbyZW9Gk/Li7+nqsWhGGtPNnfSISZa76/l8/lnyRXSRWOokRdpPtUbi1Sdw0yCqu7pLy+Jg4vrlwRWbvzBVOt9pkTIXE7dg03vM1Q8r7rWkaTYp5+tCe3fCjfGtGmQ+b4/2onSVq1V+HDYtW7EZIe4mg9Re+9/DcHski9ZqD6pe19xskFqTdpei26u19CoP1G42yPtT5K6fSnAqOpcWkBLel0CRQRaTzH+X/v6G0z6Cy1Nu39Lg6m+b3hEMkTmEy2QXc0Qqot9zQgYpnY9EDNUCudNTrgWfEWOGDDKD2lpMTndkl6fciIXaasxhg2yZtJtNyvkgYqsqTBz3LoN8tYlY2oa1ZOSyq9+S0aix7zbINZMs5sj6a7Ofk01rNWr5r4+7ikH+brfmf18ul29G5qC1Wq+TYY+oZpBl4r6QLHkfpBV9pzlSK0ajx61qECeYW1fhnMaE1voEhjWIy95M/ZRzxRICQxrEaW+mJJkcW5/AcAZhSbd+EfV8xRENcnFZYeu58FzGNpRBaK1cyjKPzmEMQmuVp+iclIxkEL4u1Kkyk2gdwiC0VkmqzVBG9wbBHIZVmUhy1wZhtzxRpZlK6dog7JabVmUi2d0ahNYqUZUZS+nSICzpGldkMum9GoTd8mSF5iqnO4PQWrmWYk7dXRmEF6ByFpmzqt4Mwm65czUm1N6NQWitElZXB5K6MAjm6KASkw7B3iDslietrE5k2RuE3fJOKjHpMKwNQmuVtKo6kmVrEHbLO6rCxENxNgi75YkLqxdplgahteql/PKPw84g7JbnL6qeFDoahN3yniow+VisDMKSbvJq6lCejUGYd3RYfQZDsjAIu+UGldSpRAuD8AtQnVafwbCm+e6c+cduaK0MqqhjidM88X1+fj5mHCO75RmzMpamN4NcLpfT4XB4+62+TH/m1up8Ph8zP+Ey8UJLfQJvLdbj4+NrtkKktaqfbK5YTuBtkj6b5Onp6SVLq8VueXkiOWMfAn9WsbLcsVnS3SfRXDVG4MMy7zwf+f3794+WPX/mOVEMMWc5E/hgkNZ37yxPMeeEor0ugX82Clv1/yzp1k0sV6tD4OpOeos2h93yOgnlKnUJXDWIeumX1qpuUrlaPQI3P4ularVUceoh40ojEfjyw4qKVovd8pHKzW+sq5/m3bOAaa38CmY0xasG2WuXHXOMVmqe4101yDys2sXcer/FM1WobkFgk0FmYTV32RVzmxYwidkfgc0GqXXXr/006i8ljCgTgc0GWVqtaZoO0U/9slueKfVo2UKgyCBLqxV9wYrd8i0p4ZhMBIoNEt1lp7XKlHa0bCVQbJBIq8Vu+dZ0cFw2AiGDlLZae242ZgOKnr4IhA3y/iRZ/VIFWqu+Cma00dxlkLVddswxWjn1N967DPLVfKTWvkl/yBmRE4G7DbLMRz6/y86SrlMZoPUWgSoG+bz0S2tFwfVCoIpBllbr4eHhZZqmn/P/o7vtvYBlHH0QqGaQBUf2L8PuI22MQkWgukFUwokDAQUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQwCAKysSwJYBBbFOHcAUBDKKgTAxbAhjENnUIVxDAIArKxLAlgEFsU4dwBQEMoqBMDFsCGMQ2dQhXEMAgCsrEsCWAQWxTh3AFAQyioEwMWwIYxDZ1CFcQ+A/bsUkUVj+s7QAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
   }
 
-  .files-table-value h3:last-child {
-    border-left: 1px solid black;
+  .security-table tr:nth-child(2) td:last-child {
+    color: black;
+    padding: 38px 30px;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
     font-weight: 400;
     width: 100%;
   }
-  .imported-package {
-    display: flex;
-  }
-  .imported-package-text {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    padding: 0 0px;
-  }
-  .imported-package-subdiv {
-    border-radius: 20px;
-    padding: auto 20px;
-    background: #2c2c2c;
-    display: flex;
-    margin-top: 20px;
-    gap: 10px;
-    flex-direction: column;
-    width: 50%;
-    margin: 30px 0 0 20px;
-    justify-content: center;
-    font-weight: 800;
-  }
-  .imported-package-subdiv ul {
-    margin-top: 10px;
-    margin-bottom: 10px;
+
+  .security-table tr:last-child td:first-child {
+    color: black;
+    padding: 10px 30px;
+    text-align: center;
+    border-right: 1px solid #303030;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    border-bottom-left-radius: 32px;
+    width: 30%;
   }
 
-  .imported-package-subdiv li {
-    margin-bottom: 5px;
+  .security-table tr:last-child td:last-child {
+    color: black;
+    padding: 38px 30px;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    border-bottom-right-radius: 32px;
+    width: 100%;
   }
 
 .security-table {
@@ -130,7 +135,6 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 900;
-    border-bottom-left-radius: 32px;
     width: 30%;
 }
 
@@ -142,143 +146,75 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    border-bottom-right-radius: 32px;
     width: 100%;
+}
+
+.security-table tr:last-child td:first-child {
+    border-bottom-left-radius: 32px;
+}
+
+.security-table tr:last-child td:last-child {
+    border-bottom-right-radius: 32px;
 }
 </style>
 
-<div>
+<div class="overall-security-page">
   <ptitle>
-
-  <h1 class="title-button" style="font-size: 24px">Overall Security</h1>
+    <h1 class="title-button" style="font-size: 24px">Overall Security</h1>
   </ptitle>
-  <div id="data">
-    <div>
-      <% let address = info.address.toLowerCase() %>
+  <div>
+    <h2>Honeypot</h2>
+    <p>
+      Honeypots are smart contracts that appear to have an obvious flaw in their
+      design, which allows an arbitrary user to drain ether (Ethereum's
+      cryptocurrency) from the contract, given that the user transfers a priori
+      a certain amount of ether to the contract.
+    </p>
 
-      <% security =security.result[address] %>
-      <h2>Honeypot</h2>
-      <p>
-        Honeypots are smart contracts that appear to have an obvious flaw in
-        their design, which allows an arbitrary user to drain ether (Ethereum's
-        cryptocurrency) from the contract, given that the user transfers a
-        priori a certain amount of ether to the contract.
-      </p>
-    </div>
-
-    <table class="security-table <%= security.is_honeypot != '1' ? 'success' : 'error' %>">
-        <tr>
-          <td>Is it a honeypot?</td>
-          <td>
-            <%= security.is_honeypot == "1" ? "⚠️ The contract is a Honey Pot" : "✅  The contract is not a Honey Pot" %>
-          </td>
-        </tr>
-        <tr>
+    <table
+      class="security-table <%= security.is_honeypot != '1' ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Is it a honeypot?</td>
         <td>
-            Description
+          <%= security.is_honeypot == "1" ? "⚠️ The contract is a Honey Pot" : "✅ The contract is not a Honey Pot" %>
         </td>
+      </tr>
+      <tr>
+        <td>Description</td>
         <td>
-        <%= security.is_honeypot == "1" ? "Owner can drain your wallet" : "Owner cannot drain your wallet through honeypot" %>
+          <%= security.is_honeypot == "1" ? "Owner can drain your wallet" : "Owner cannot drain your wallet through honeypot" %>
         </td>
-        </tr>
-      </table>
-
-
-    <div>
-      <div>
-        <h2>Antiwhale</h2>
-        <p>
-          Certain features adopted to prevent large holders (aka whales) from
-          exerting excessive influence or engaging in manipulative behaviors
-          within the token ecosystem. Some examples are setting maximum
-          transaction limits, imposing penalties for transactions exceeding some
-          specific threshhold, imposing a more equitable distribution of tokens
-        </p>
-      </div>
-
-
-      <table class="security-table <%= security.is_anti_whale == '1' ? 'success' : 'error' %>">
-        <tr>
-          <td>Can whales dump?</td>
-          <td>
-            <%= security.is_anti_whale == "1" ? "✅ The contract is Anti Whale" : "⚠️ The contract is not Anti Whale" %>
-          </td>
-        </tr>
-        <tr>
-        <td>
-            Description
-        </td>
-        <td>
-        <%= security.is_anti_whale == "1" ? "Whales can't dump" : "Whales might dump" %>
-        </td>
-        </tr>
-      </table>
-    </div>
-    <div class="page-break-before">&nbsp;</div>
-    <!-- <div>
-              <h2>Liquidity Pool</h2>
-                  <table>
-                      <tr>
-                          <th>Check</th>
-                          <th>Value</th>
-                      </tr>
-                      <tr>
-                          <td>LP supply</td>
-                          <td><%= security.lp_total_supply %></td>
-                      </tr>
-                      <tr>
-                          <td>LP Holder Count</td>
-                          <td><%= security.lp_holder_count %></td>
-                      </tr>
-                      <tr>
-                          <td>Pencentage owned by creator</td>
-                          <td><%= security.creator_percent %></td>
-                      </tr>
-                      <tr>
-                          <td>Creator Balance</td>
-                          <td><%= security.creator_balance %></td>
-                      </tr>
-                      <tr>
-                          <td>Creator address</td>
-                          <td><%= security.creator_address %></td>
-                      </tr>
-                      <tr>
-                      <td>Holders</td>
-                      <td><%= security.holder_count %></td>
-                  </tr>
-              </table>
-          </div> -->
+      </tr>
+    </table>
   </div>
 
-  <!-- <div>
-              <div>
-                  <h2>Public Functions</h2>
-                  <table>
-                      <tr>
-                          <th>Function Name</th>
-                          <th>Visibility</th>
-                          <th>Mutability</th>
-                      </tr>
-                      <% for (let i = 0; i < functions.tableRows.length; i++) { %>
-                          <% if(functions.tableRows[i].type=="func" && functions.tableRows[i].spec!="Internal 🔒"){ %>
-                          <tr>
-                              <td><%= functions.tableRows[i].name %></td>
-                              <td><%= functions.tableRows[i].spec.split(' ')[0] %></td>
-                              <td><%= functions.tableRows[i].mutating ? "⚠️" : 'False' %></td>
-                          </tr>
-                          <% } %>
-                      <% } %>
-                  </table>
-              </div>
-          </div> -->
-  <!-- <div>
-              <h2>Contracts used</h2>
-              <ul>
-                  <% for (let i = 0; i < functions.tableRows.length; i++) { %>
-                      <% if(functions.tableRows[i].type=="contract" ){ %>
-                          <li><%= functions.tableRows[i].name %></li>
-                      <% } %>
-                  <% } %>
-              </ul>
-          </div> -->
+  <div>
+    <h2>Antiwhale</h2>
+    <p>
+      Certain features adopted to prevent large holders (aka whales) from
+      exerting excessive influence or engaging in manipulative behaviors within
+      the token ecosystem. Some examples are setting maximum transaction limits,
+      imposing penalties for transactions exceeding some specific threshhold,
+      imposing a more equitable distribution of tokens
+    </p>
+
+    <table
+      class="security-table <%= security.is_anti_whale == '1' ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Can whales dump?</td>
+        <td>
+          <%= security.is_anti_whale == "1" ? "✅ The contract is Anti Whale" :"⚠️ The contract is not Anti Whale" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+          <%= security.is_anti_whale == "1" ? "Whales can't dump" : "Whales might dump" %>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="page-break-before">&nbsp;</div>
 </div>

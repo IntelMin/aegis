@@ -199,10 +199,17 @@ h6 {
 
 /* For all paragraph tags */
 p {
-  /* Reset the margin so that the text starts and ends at the expected marks */
   margin: 0;
-  color: #fff;
   font-family: "Montserrat";
+  font-size: 14px;
+  line-height: 32px;
+  font-weight: 500;
+  text-align: left;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: white;
+  word-wrap: break-word;
+  letter-spacing: 1px;
 }
 
 /* For adjacent paragraph tags */
@@ -237,17 +244,14 @@ h2 {
   color: #fff;
 }
 
-p {
-  font-size: 14px;
-  font-weight: 400;
-  text-align: left;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: white;
-}
-
 ul {
   list-style: none;
+}
+
+.image {
+  margin: 0 auto;
+  width: 216px;
+  padding-top: 72px;
 }
 
 .title-button {

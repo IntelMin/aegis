@@ -164,11 +164,11 @@ async function insertRequestdb(data) {
     throw error;
   }
 }
-async function modifyRequestdb(address, newStatus) {
+async function modifyRequestdb(address, newStatus, error_log = '') {
   try {
     const { data: updatedData, error } = await supabase
       .from("audit_requests")
-      .update({ status: newStatus })
+      .update({ status: newStatus, status_log: error_log })
       .eq("contract", address);
 
     if (error) {

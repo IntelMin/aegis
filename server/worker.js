@@ -94,7 +94,7 @@ async function worker() {
       }
 
     } catch (e) {
-      // TODO: Add failure to supabase
+      modifyRequestdb(address, "failed", e.message);
       console.log(e);
     }
   }
