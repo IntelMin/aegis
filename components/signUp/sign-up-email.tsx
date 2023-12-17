@@ -6,6 +6,8 @@ import Link from "next/link";
 type Props = {
   signInData: {
     email: string;
+    password: string;
+    password2: string;
     projectname: string;
     website: string;
     tokenAddress: string;
@@ -28,6 +30,24 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           type="email"
           required={true}
           value={signInData?.email}
+          setValue={setSignInData}
+        />
+        <CustomInput
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+          required={true}
+          value={signInData?.password}
+          setValue={setSignInData}
+        />
+        <CustomInput
+          name="password2"
+          label="Confirm Password"
+          placeholder="Confirm Password"
+          type="password"
+          required={true}
+          value={signInData?.password2}
           setValue={setSignInData}
         />
       </div>

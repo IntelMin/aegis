@@ -15,6 +15,8 @@ const SignUpForm = (props: Props) => {
   const [next, setNext] = React.useState(1);
   const [signInData, setSignInData] = React.useState({
     email: "",
+    password: "",
+    password2: "",
     projectname: "",
     website: "",
     tokenAddress: "",
@@ -34,6 +36,8 @@ const SignUpForm = (props: Props) => {
     });
     setSignInData({
       email: "",
+      password: "",
+      password2: "",
       projectname: "",
       website: "",
       tokenAddress: "",
