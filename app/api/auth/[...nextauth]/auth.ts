@@ -1,3 +1,4 @@
+import supabase from "@/server/supabase";
 import {
   getServerSession,
   type NextAuthOptions,
@@ -8,11 +9,10 @@ export const userService = {
   authenticate,
 };
 
-function authenticate(username: string, password: string) {
-  if (username !== "admin" && password !== "admin") {
+async function authenticate(email: string, password: string) {
+  if (email !== "admin" && password !== "admin") {
     return null;
   }
-
   const user = {
     id: "9001",
     name: "Web Admin",
@@ -39,8 +39,6 @@ export const authOptions: NextAuthOptions = {
       console.log("------------ SESSION ------------");
       console.log({ session }, { token }, { user });
 
-      session.user.id = token.userId;
-
       return session;
     },
   },
@@ -51,16 +49,28 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "username" },
+        email: { label: "Username", type: "text", placeholder: "email" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        const { username, password } = credentials as {
-          username: string
+        const { email, password } = credentials as {
+          email: string
           password: string
         };
-
-        return userService.authenticate(username, password);
+        console.log(credentials?.email)
+  const {data:user,error} = await supabase.from("users").select("*").eq("email", credentials?.email).single()
+  if (error) {
+    return null;
+  
+  }
+  if (!user) {
+    return "no user found";
+  }
+  if(user.password !== credentials?.password){
+    return "wrong password";
+  }
+  
+        return user;
       }
     })
   ],
