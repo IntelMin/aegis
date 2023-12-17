@@ -1,11 +1,6 @@
 "use client";
-import React, { ReactNode } from "react";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getWhitelistStatus } from "./../app/utils/supabaseRequests";
-import { UserButton, SignIn } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-import { baseTheme } from "@rainbow-me/rainbowkit/dist/themes/baseTheme";
 
 export function WhitelistWrapper({
   children,
@@ -13,23 +8,22 @@ export function WhitelistWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
-  const [whitelistStatus, setWhitelistStatus] = useState<boolean>();
+  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isSignedIn, user, isLoaded } = useUser();
 
-  useEffect(() => {
-    setIsLoading(true);
+  // useEffect(() => {
+  //   setIsLoading(true);
 
-    if (isSignedIn && isLoaded) {
-      getWhitelistStatus({
-        email: String(user.primaryEmailAddress?.emailAddress),
-        user_id: user.id,
-      }).then((ws) => {
-        setWhitelistStatus(ws);
-        setIsLoading(false);
-      });
-    }
-  }, [isSignedIn, isLoaded]);
+  //   if (isSignedIn && isLoaded) {
+  //     getWhitelistStatus({
+  //       email: String(user.primaryEmailAddress?.emailAddress),
+  //       user_id: user.id,
+  //     }).then((ws) => {
+  //       setWhitelistStatus(ws);
+  //       setIsLoading(false);
+  //     });
+  //   }
+  // }, [isSignedIn, isLoaded]);
 
   if (isLoading) {
     return (
@@ -63,7 +57,6 @@ export function WhitelistWrapper({
           we open up for public beta.
         </h1>
       </div>
-      <UserButton afterSignOutUrl="/" appearance={{baseTheme: dark}} />
     </div>)
   }
 

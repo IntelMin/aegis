@@ -1,13 +1,10 @@
 "use client"
-import React, { use } from "react";
-import Title from "../title";
-import { AiOutlineLock } from "react-icons/ai";
-import { TbFileReport  } from "react-icons/tb";
-import { LuCoins, LuFile } from "react-icons/lu";
 import { Input } from "@nextui-org/react";
 import axios from "axios";
-import { report } from "process";
-import { useUser } from "@clerk/nextjs";
+import React from "react";
+import { LuFile } from "react-icons/lu";
+import { TbFileReport } from "react-icons/tb";
+
 type Props = {};
 const AEGIS_SERVER = "http://localhost:9898";
 const AuditReport = (props: Props) => {
@@ -15,8 +12,9 @@ const AuditReport = (props: Props) => {
   const [error, setError] = React.useState<string | null>(null);
   const [requestedreport, setRequestedReport] = React.useState<boolean | null>(null); //["Report requested"
   const [loading, setLoading] = React.useState<boolean>(false);
-  const { user } = useUser();
-  const user_id = user?.id;
+
+  // const user_id = user?.id; //commented for clerk
+  const user_id = 1
   function shortenText(text: string) {
     if (text.length <= 250) {
       return text;
@@ -42,7 +40,7 @@ const AuditReport = (props: Props) => {
       requestReport();
     }
     },[]
-  )
+  )  //commented for clerk
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
