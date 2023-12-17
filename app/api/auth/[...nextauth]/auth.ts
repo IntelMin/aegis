@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           return "no user found";
         }
-        if (user.password !== hashString(credentials?.password)) {
+        if (user.password !== credentials?.password) {
           return "wrong password";
         }
 
@@ -62,6 +62,7 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+  secret: process.env.NEXT_AUTH_SECRET,
 };
 
 export const getServerAuthSession = () => getServerSession(authOptions);
