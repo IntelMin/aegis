@@ -23,6 +23,7 @@ const SignUpForm = (props: Props) => {
     teleAccount: "",
     projectX: "",
     projectInsta: "",
+    role: ""
   });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,6 +45,7 @@ const SignUpForm = (props: Props) => {
       teleAccount: "",
       projectX: "",
       projectInsta: "",
+      role: ""
     });
   };
   return (

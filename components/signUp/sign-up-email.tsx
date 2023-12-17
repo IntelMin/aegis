@@ -2,6 +2,8 @@ import React from "react";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
+import SelectRoles from "../SelectRoles";
+import { sign } from "crypto";
 
 type Props = {
   signInData: {
@@ -14,6 +16,7 @@ type Props = {
     teleAccount: string;
     projectX: string;
     projectInsta: string;
+    role: string;
   }; // Adjust the type according to your data structure
   setSignInData: React.Dispatch<React.SetStateAction<{}>>;
   setNext: React.Dispatch<React.SetStateAction<number>>;
@@ -22,7 +25,7 @@ type Props = {
 const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-[380px]">
+      <div className="w-[380px] gap-4 flex flex-col">
         <CustomInput
           name="email"
           label="Email"
@@ -49,6 +52,10 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           required={true}
           value={signInData?.password2}
           setValue={setSignInData}
+        />
+        <SelectRoles
+          setSignInData={setSignInData}
+          signInData={signInData}
         />
       </div>
       <div className="flex gap-2 items-center">

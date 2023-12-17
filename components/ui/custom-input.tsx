@@ -21,11 +21,11 @@ const CustomInput = ({
   setShowPass,
   value,
   setValue,
-  required=false
+  required = false
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label htmlFor="email" className="text-[#FAFAFA] text-[13px] font-[400] leading-[20px]">
+      <label htmlFor="email" className="text-[#FAFAFA] text-[16px] font-[500] leading-[20px]">
         {label}
       </label>
       <div className="relative w-full">
