@@ -5,22 +5,7 @@ import {
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-export const userService = {
-  authenticate,
-};
 
-async function authenticate(email: string, password: string) {
-  if (email !== "admin" && password !== "admin") {
-    return null;
-  }
-  const user = {
-    id: "9001",
-    name: "Web Admin",
-    email: "admin@example.com"
-  };
-
-  return user;
-}
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -44,6 +29,8 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/signin',
+    signOut: '/signout',
+    newUser: '/signup',
   },
   providers: [
     Credentials({
@@ -58,18 +45,17 @@ export const authOptions: NextAuthOptions = {
           password: string
         };
         console.log(credentials?.email)
-  const {data:user,error} = await supabase.from("users").select("*").eq("email", credentials?.email).single()
-  if (error) {
-    return null;
-  
-  }
-  if (!user) {
-    return "no user found";
-  }
-  if(user.password !== credentials?.password){
-    return "wrong password";
-  }
-  
+        const { data: user, error } = await supabase.from("users").select("*").eq("email", credentials?.email).single()
+        if (error) {
+          return null;
+        }
+        if (!user) {
+          return "no user found";
+        }
+        if (user.password !== credentials?.password) {
+          return "wrong password";
+        }
+
         return user;
       }
     })
