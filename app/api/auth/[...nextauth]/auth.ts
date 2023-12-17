@@ -4,6 +4,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { hashString } from "@/server/utils"
 
 export const userService = {
   authenticate,
@@ -58,18 +59,18 @@ export const authOptions: NextAuthOptions = {
           password: string
         };
         console.log(credentials?.email)
-  const {data:user,error} = await supabase.from("users").select("*").eq("email", credentials?.email).single()
-  if (error) {
-    return null;
-  
-  }
-  if (!user) {
-    return "no user found";
-  }
-  if(user.password !== credentials?.password){
-    return "wrong password";
-  }
-  
+        const { data: user, error } = await supabase.from("users").select("*").eq("email", credentials?.email).single()
+        if (error) {
+          return null;
+
+        }
+        if (!user) {
+          return "no user found";
+        }
+        if (user.password !== hashString(credentials?.password)) {
+          return "wrong password";
+        }
+
         return user;
       }
     })

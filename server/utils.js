@@ -3,6 +3,7 @@ const fs = require("fs").promises;
 const fss = require("fs");
 const axios = require("axios");
 const path = require("path");
+const crypto = require('crypto');
 const supabase = require("./supabase");
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
@@ -129,7 +130,7 @@ const getCachedOrFreshData = async (
 
 function getCachedData(cacheFilePath) {
   let cache = readCache(cacheFilePath);
-//   console.log(cache);
+  //   console.log(cache);
   if (cache !== null) {
     // const cacheData = fs.readFileSync(cacheFilePath, 'utf8');
     return JSON.parse(cache);
@@ -182,6 +183,25 @@ async function modifyRequestdb(address, newStatus) {
   }
 }
 
+
+
+function hashString(input) {
+  // Choose the hashing algorithm (e.g., 'sha256', 'md5', 'sha512', etc.)
+  const algorithm = 'sha256';
+
+  // Create a hash object
+  const hash = crypto.createHash(algorithm);
+
+  // Update the hash object with the input string
+  hash.update(input);
+
+  // Get the hexadecimal representation of the hash
+  const hashedString = hash.digest('hex');
+
+  return hashedString;
+}
+
+
 module.exports = {
   fileExists,
   getCachedOrFreshData,
@@ -195,4 +215,5 @@ module.exports = {
   modifyRequestdb,
   supabase,
   fetchAndCacheData,
+  hashString
 };
