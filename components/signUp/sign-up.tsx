@@ -22,9 +22,16 @@ const SignUpForm = (props: Props) => {
     projectX: "",
     projectInsta: "",
   });
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(signInData);
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      body: JSON.stringify(signInData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     setSignInData({
       email: "",
       projectname: "",
