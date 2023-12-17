@@ -25,7 +25,7 @@ const SignUpForm = (props: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(signInData);
-    const res = await fetch("/api/auth/signup", {
+    await fetch("/api/auth/signup", {
       method: "POST",
       body: JSON.stringify(signInData),
       headers: {
