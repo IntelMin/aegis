@@ -6,45 +6,32 @@ import {
 import Credentials from "next-auth/providers/credentials";
 import { hashString } from "@/server/utils"
 
-export const userService = {
-  authenticate,
-};
 
-async function authenticate(email: string, password: string) {
-  if (email !== "admin" && password !== "admin") {
-    return null;
-  }
-  const user = {
-    id: "9001",
-    name: "Web Admin",
-    email: "admin@example.com"
-  };
-
-  return user;
-}
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  callbacks: {
-    async jwt({ token, account, profile }) {
-      console.log("------------ JWT ------------");
-      console.log({ token }, { account }, { profile });
-      if (account && account.type === "credentials") {
-        token.userId = account.providerAccountId; // this is Id that coming from authorize() callback 
-      }
-      return token;
-    },
-    async session({ session, token, user }) {
-      console.log("------------ SESSION ------------");
-      console.log({ session }, { token }, { user });
+  // callbacks: {
+  //   async jwt({ token, account, profile }) {
+  //     console.log("------------ JWT ------------");
+  //     console.log({ token }, { account }, { profile });
+  //     if (account && account.type === "credentials") {
+  //       token.userId = account.providerAccountId; // this is Id that coming from authorize() callback 
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token, user }) {
+  //     console.log("------------ SESSION ------------");
+  //     console.log({ session }, { token }, { user });
 
-      return session;
-    },
-  },
+  //     return session;
+  //   },
+  // },
   pages: {
     signIn: '/signin',
+    signOut: '/signout',
+    newUser: '/signup',
   },
   providers: [
     Credentials({

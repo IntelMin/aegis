@@ -8,7 +8,7 @@ export async function POST(req: Request) {
       password: string;
     };
     console.log("name=======>", name)
-    const hashed_password = await hash(password, 12);
+    // const hashed_password = await hash(password, 12);
 
     // const user = await prisma.user.create({
     //   data: {
