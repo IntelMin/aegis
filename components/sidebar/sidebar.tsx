@@ -18,7 +18,7 @@ export const SidebarWrapper = () => {
   const { collapsed, setCollapsed } = useSidebarContext();
   const handleLogout = async () => {
     await signOut();
-    redirect("/signin")
+    // redirect("/signin")
   }
   return (
     <aside className="h-screen z-[202] sticky top-0 bg-red-500">

@@ -3,6 +3,8 @@ import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
+import { getServerAuthSession } from "./api/auth/[...nextauth]/auth";
+import { redirect } from "next/navigation";
 
 
 export const metadata: Metadata = {
@@ -23,7 +25,8 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-
+  const authSession = await getServerAuthSession();
+  if (authSession) redirect("/signin")
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
