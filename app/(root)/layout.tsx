@@ -6,9 +6,16 @@ import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import NextTopLoader from "nextjs-toploader";
 import { Providers } from "../providers";
+import { getSession } from "next-auth/react";
+import { getServerAuthSession } from "../api/auth/[...nextauth]/auth";
+import { redirect } from "next/navigation";
 
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => (
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getSession();
+  const serversession = await getServerAuthSession();
+if(!session) redirect("/signin")
+  return(
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={clsx(
@@ -23,6 +30,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
           </Providers>
       </body>
     </html>
-);
+)};
 
 export default RootLayout;
