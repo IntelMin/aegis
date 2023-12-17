@@ -11,22 +11,22 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  callbacks: {
-    async jwt({ token, account, profile }) {
-      console.log("------------ JWT ------------");
-      console.log({ token }, { account }, { profile });
-      if (account && account.type === "credentials") {
-        token.userId = account.providerAccountId; // this is Id that coming from authorize() callback 
-      }
-      return token;
-    },
-    async session({ session, token, user }) {
-      console.log("------------ SESSION ------------");
-      console.log({ session }, { token }, { user });
+  // callbacks: {
+  //   async jwt({ token, account, profile }) {
+  //     console.log("------------ JWT ------------");
+  //     console.log({ token }, { account }, { profile });
+  //     if (account && account.type === "credentials") {
+  //       token.userId = account.providerAccountId; // this is Id that coming from authorize() callback 
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token, user }) {
+  //     console.log("------------ SESSION ------------");
+  //     console.log({ session }, { token }, { user });
 
-      return session;
-    },
-  },
+  //     return session;
+  //   },
+  // },
   pages: {
     signIn: '/signin',
     signOut: '/signout',
