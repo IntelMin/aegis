@@ -13,14 +13,14 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      const serversession = await getServerAuthSession();
-      if (!session) redirect("/signin");
-    };
-    checkAuth();
-  }, []);
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const session = await getSession();
+  //     const serversession = await getServerAuthSession();
+  //     if (!session) redirect("/signin");
+  //   };
+  //   checkAuth();
+  // }, []);
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

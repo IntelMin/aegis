@@ -26,6 +26,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           label="Email"
           placeholder="Enter your email"
           type="email"
+          required={true}
           value={signInData?.email}
           setValue={setSignInData}
         />

@@ -9,6 +9,7 @@ type Props = {
   setShowPass?: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<{}>>;
+  required?: boolean;
 };
 
 const CustomInput = ({
@@ -20,6 +21,7 @@ const CustomInput = ({
   setShowPass,
   value,
   setValue,
+  required=false
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -33,6 +35,7 @@ const CustomInput = ({
           type={type}
           placeholder={`${placeholder}`}
           value={value}
+          required={required}
           onChange={(e) =>
             setValue((prev) => ({
               ...prev,

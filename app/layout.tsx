@@ -25,8 +25,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const authSession = await getServerAuthSession();
-  if (authSession) redirect("/signin")
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
