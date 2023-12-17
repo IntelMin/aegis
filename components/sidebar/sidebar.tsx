@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { GiStabbedNote, GiToken } from "react-icons/gi";
 import { MdSecurity } from "react-icons/md";
 import { LuTable, LuRocket } from "react-icons/lu";
@@ -18,6 +18,7 @@ export const SidebarWrapper = () => {
   const { collapsed, setCollapsed } = useSidebarContext();
   const handleLogout = async () => {
     await signOut();
+    redirect("/signin")
   }
   return (
     <aside className="h-screen z-[202] sticky top-0 bg-red-500">
