@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,11 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import SignUpDetailForm from "./sign-up-detail";
 import GoBack from "../ui/go-back";
 import SignUpEmail from "./sign-up-email";
+import { redirect,useRouter } from "next/navigation";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
 
 const SignUpForm = (props: Props) => {
+  const router =useRouter()
   const [next, setNext] = React.useState(1);
   const [signInData, setSignInData] = React.useState({
     email: "",
@@ -34,6 +35,13 @@ const SignUpForm = (props: Props) => {
       headers: {
         "Content-Type": "application/json",
       },
+    }).then((res) => {
+      if (res.ok) {
+        router.push('/signin')
+      }
+      if (res.status === 400) {
+        console.log("error");
+      }
     });
     setSignInData({
       email: "",
