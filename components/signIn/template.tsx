@@ -16,7 +16,7 @@ const Template = (props: Props) => {
         <br />
         with AI-Enabled Audit Solutions
       </h1>
-      <p className="font-[400] text-[14px] leading-[24px] w-[80%] relative text-[#d1d1d1] mt-[16px]">
+      <p className="z-[6] font-[400] text-[14px] leading-[24px] w-[80%] relative text-[#d1d1d1] mt-[16px]">
         Aegis AI is an AI-powered smart contract auditing tool that empowers end
         users with the ability to assess and enhance the security of their smart
         contracts, even without any coding knowledge.

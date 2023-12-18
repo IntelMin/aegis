@@ -12,76 +12,59 @@ type Props = {
     projectX: string;
     projectInsta: string;
     name: string;
-    projectEmail: string;
+    twitter: string;
+    teleId: string;
     about: string;
+    vcContactName: string;
+    vcEmail: string;
   }; // Adjust the type according to your data structure
   setSignInData: React.Dispatch<React.SetStateAction<{}>>;
 };
 
-const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
+const SignUpVcForm = ({ signInData, setSignInData }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="w-[380px]">
         <CustomInput
-          name="name"
-          label="Name"
+          name="vcContactName"
+          label="Contact Name"
           placeholder="Example"
           type="text"
-          value={signInData?.name}
+          value={signInData?.vcContactName}
           setValue={setSignInData}
         />
       </div>
       <div className="w-[380px]">
         <CustomInput
-          name="projectname"
-          label="Project name"
-          placeholder="Example"
-          type="text"
-          value={signInData?.projectname}
-          setValue={setSignInData}
-        />
-      </div>
-      <div className="w-[380px]">
-        <CustomInput
-          name="projectEmail"
-          label="Project email"
+          name="vcEmail"
+          label="Email of contact person"
           placeholder="Your email"
           type="text"
-          value={signInData?.projectEmail}
+          value={signInData?.vcEmail}
           setValue={setSignInData}
         />
       </div>
       <div className="w-[380px] grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <CustomInput
-            name="projectX"
-            label="Project’s X"
-            placeholder="@example"
+            name="website"
+            label="Website"
+            placeholder="Example"
             type="text"
-            value={signInData?.projectX}
+            value={signInData?.website}
             setValue={setSignInData}
           />
         </div>
         <div className="col-span-1">
           <CustomInput
-            name="projectInsta"
-            label="Project’s Instagram"
-            placeholder="@example"
+            name="twitter"
+            label="Twitter"
+            placeholder="Example"
             type="text"
-            value={signInData?.projectInsta}
+            value={signInData?.twitter}
             setValue={setSignInData}
           />
         </div>
-      </div>
-      <div className="w-[380px]">
-        <CustomInput
-          name="tokenAddress"
-          label="Token address"
-          placeholder="0x..."
-          type="text"
-          value={signInData?.tokenAddress}
-          setValue={setSignInData}
-        />
       </div>
       <div className="w-[380px]">
         <CustomInput
@@ -98,4 +81,4 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
   );
 };
 
-export default SignUpDetailForm;
+export default SignUpVcForm;

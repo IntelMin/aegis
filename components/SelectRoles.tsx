@@ -71,7 +71,7 @@ const SelectRoles: React.FC<IProps> = ({
       <div className='flex flex-wrap max-w-[358px] w-[100%] gap-3 mt-[12px]'>
         {roles.map((role, index) =>
           <button
-            className={`${role.value === signInData.role ? 'bg-[#0e76fd]' : 'bg-transparent'} border-[1px] border border-[#27272a] py-[6px] px-[12px] gap-2 flex hover:bg-[#555555]`}
+            className={`${role.value === signInData.role ? 'bg-[#0e76fd]' : 'bg-transparent'} border border-[#27272a] py-[6px] px-[12px] gap-2 flex hover:bg-[#555555]`}
             key={index}
             onClick={(e) => {
               e.preventDefault()
