@@ -33,9 +33,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       >
         <NextTopLoader color="#b0b0b0" />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          {/* <WhitelistWrapper> */}
+          <WhitelistWrapper>
           <Layout>{children}</Layout>
-          {/* </WhitelistWrapper> */}
+          </WhitelistWrapper>
         </Providers>
       </body>
     </html>
