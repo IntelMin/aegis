@@ -40,7 +40,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
   };
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-[380px] grid grid-cols-2 gap-4">
+      <div className="w-[395px] grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <CustomInput
             name="name"
@@ -62,7 +62,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[380px] grid grid-cols-2 gap-4">
+      <div className="w-[395px] grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <CustomInput
             name="projectEmail"
@@ -84,7 +84,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[380px] grid grid-cols-2 gap-4">
+      <div className="w-[395px] grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <CustomInput
             name="teleId"
@@ -106,7 +106,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[380px]">
+      <div className="w-[395px]">
         <div className="flex flex-col gap-2 w-full">
           <label
             htmlFor="imageLogo"
@@ -173,7 +173,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           </div>
         </div>
       </div>
-      <div className="w-[380px]">
+      <div className="w-[395px]">
         <CustomTextarea
           name="about"
           label="Tell us why do you like to be given early access "
