@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getWhitelistStatus } from "./../app/utils/supabaseRequests";
+import { getWhitelistStatus } from "./../app/utils/getWhitelistStatus";
 import { getServerAuthSession } from "@/app/api/auth/[...nextauth]/auth";
 import { get } from "http";
 import { signOut, useSession } from "next-auth/react";
@@ -12,20 +12,20 @@ export function WhitelistWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
-  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
+  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession()
   // const [session, setSession] = useState<any>(null);
   useEffect(() => {
     if(session.status=="authenticated" && session.data?.user?.email){
       setIsLoading(true);
-      getWhitelistStatus({email:session?.data?.user?.email,user_id:"1"}).then((res) => {
+      getWhitelistStatus(String(session?.data?.user?.email)).then((res) => {
         setWhitelistStatus(res);
         setIsLoading(false);
       });
     }
   }, [session]);
-  console.log(session)
+  console.log({whitelistStatus})
   if (isLoading) {
     return (
       <div className="top-0 z-50 flex items-center justify-center w-full min-h-screen bg-black loading-screen">
