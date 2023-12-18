@@ -33,10 +33,8 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 export async function Providers({ children, themeProps }: ProvidersProps) {
-  const session = await getSession();
-  console.log(session);
+
   return (
-    <SessionProvider session={session}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
           <NextUIProvider>
@@ -44,6 +42,5 @@ export async function Providers({ children, themeProps }: ProvidersProps) {
           </NextUIProvider>
         </RainbowKitProvider>
       </WagmiConfig>
-    </SessionProvider>
   );
 }
