@@ -17,7 +17,7 @@ const roles = [
     icon: AuditorIcon,
     text: "Auditors",
     value: "auditor",
-    desc: "venture capitalists"
+    desc: "Individual/Team auditors"
   },
   {
     icon: IndivIcon,
