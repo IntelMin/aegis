@@ -14,10 +14,14 @@ import { MdOutlineMonitorHeart, MdSecurity } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { useNewTokens } from "@/utils/useNewTokens";
 import { useDashboardData } from "@/utils/useDashboard";
-
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 export default function Home() {
   const newTokens = useNewTokens();
   const dashboardData = useDashboardData();
+  const { data: session } = useSession()
+  //   console.log("session",session)
+  // if (!session) redirect("/signin");
   return (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />

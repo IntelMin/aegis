@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { GiStabbedNote, GiToken } from "react-icons/gi";
 import { MdSecurity } from "react-icons/md";
 import { LuTable, LuRocket } from "react-icons/lu";
@@ -11,10 +11,15 @@ import { useSidebarContext } from "../layout/layout-context";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarMenu } from "./sidebar-menu";
 import { Sidebar } from "./sidebar.styles";
+import { signOut } from "next-auth/react";
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
+  const handleLogout = async () => {
+    await signOut();
+    // redirect("/signin")
+  }
   return (
     <aside className="h-screen z-[202] sticky top-0 bg-red-500">
       {collapsed ? (
@@ -101,6 +106,7 @@ export const SidebarWrapper = () => {
                 href="/bugBounty"
               />
             </SidebarMenu>
+            <button onClick={handleLogout}>Sign out</button>
           </div>
         </div>
       </div>

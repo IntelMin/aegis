@@ -1,11 +1,10 @@
 "use client";
-import React, { ReactNode } from "react";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import { getWhitelistStatus } from "./../app/utils/supabaseRequests";
-import { UserButton, SignIn } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-import { baseTheme } from "@rainbow-me/rainbowkit/dist/themes/baseTheme";
+import React, { useEffect, useState } from "react";
+import { getWhitelistStatus } from "./../app/utils/getWhitelistStatus";
+import { getServerAuthSession } from "@/app/api/auth/[...nextauth]/auth";
+import { get } from "http";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@nextui-org/react";
 
 export function WhitelistWrapper({
   children,
@@ -13,24 +12,20 @@ export function WhitelistWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
-  const [whitelistStatus, setWhitelistStatus] = useState<boolean>();
+  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isSignedIn, user, isLoaded } = useUser();
-
+  const session = useSession()
+  // const [session, setSession] = useState<any>(null);
   useEffect(() => {
-    setIsLoading(true);
-
-    if (isSignedIn && isLoaded) {
-      getWhitelistStatus({
-        email: String(user.primaryEmailAddress?.emailAddress),
-        user_id: user.id,
-      }).then((ws) => {
-        setWhitelistStatus(ws);
+    if(session.status=="authenticated" && session.data?.user?.email){
+      setIsLoading(true);
+      getWhitelistStatus(String(session?.data?.user?.email)).then((res) => {
+        setWhitelistStatus(res);
         setIsLoading(false);
       });
     }
-  }, [isSignedIn, isLoaded]);
-
+  }, [session]);
+  console.log({whitelistStatus})
   if (isLoading) {
     return (
       <div className="top-0 z-50 flex items-center justify-center w-full min-h-screen bg-black loading-screen">
@@ -62,8 +57,8 @@ export function WhitelistWrapper({
           please wait until you’re invited or
           we open up for public beta.
         </h1>
+        <Button onClick={()=>signOut()} >Sign Out</Button>
       </div>
-      <UserButton afterSignOutUrl="/" appearance={{baseTheme: dark}} />
     </div>)
   }
 
