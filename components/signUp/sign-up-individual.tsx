@@ -1,6 +1,7 @@
 import React from "react";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
+import CustomTextarea from "../ui/custom-textarea";
 
 type Props = {
   signInData: {
@@ -46,11 +47,10 @@ const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
         />
       </div>
       <div className="w-[380px]">
-        <CustomInput
+        <CustomTextarea
           name="about"
           label="Tell us why do you like to be given early access "
           placeholder="I like because..."
-          type="text"
           value={signInData?.about}
           setValue={setSignInData}
         />
