@@ -44,6 +44,12 @@ const CustomInput = ({
           }
           className="bg-zinc-900 border border-zinc-800 w-full px-[10px] py-[5px] placeholder:text-[#71717A] outline-black text-white"
         />
+        {
+          required && !value &&
+          <p className="text-[#ff0000]">
+            This input is required
+          </p>
+        }
         {isPass && setShowPass && (
           <button
             type="button"

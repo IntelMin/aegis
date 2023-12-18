@@ -23,6 +23,12 @@ type Props = {
 };
 
 const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
+  const handleClickNext = () => {
+    if (!signInData.email || !signInData.password || !signInData.password2 || !signInData.role || (signInData.password !== signInData.password2)) {
+      return;
+    }
+    setNext(2)
+  }
   return (
     <div className="flex flex-col gap-1">
       <div className="w-[380px] gap-4 flex flex-col">
@@ -53,6 +59,12 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           value={signInData?.password2}
           setValue={setSignInData}
         />
+        {
+          signInData.password && signInData.password2 && signInData.password !== signInData.password2 &&
+          <p className="text-[#ff0000]">
+            Password is not matching
+          </p>
+        }
         <SelectRoles
           setSignInData={setSignInData}
           signInData={signInData}
@@ -72,7 +84,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           .
         </p>
       </div>
-      <CustomSubmitbtn title="Continue" onClick={() => setNext(2)} button />
+      <CustomSubmitbtn title="Continue" onClick={handleClickNext} button />
     </div>
   );
 };
