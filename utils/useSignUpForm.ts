@@ -1,6 +1,6 @@
 // useForm.ts
 import { useState, Dispatch, SetStateAction } from "react";
-
+import { useRouter } from "next/navigation";
 type SignInData = {
     email: string,
     password: string,
@@ -23,8 +23,8 @@ type SignInData = {
     // team
     projectEmail: string,
 };
-
 export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e: React.FormEvent<HTMLFormElement>) => Promise<void>] => {
+    const router = useRouter();
     const [signInData, setSignInData] = useState<SignInData>({
         email: "",
         password: "",
@@ -57,7 +57,12 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
             headers: {
                 "Content-Type": "application/json",
             },
-        });
+        }).then((res) => {
+            if (res.status === 200) {
+                console.log("success");
+                router.push("/signin");
+            }
+        }).catch((err) => {if (err) {console.log(err);}});
         setSignInData({
             email: "",
             password: "",

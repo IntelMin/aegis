@@ -130,7 +130,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
             <h1 className="text-[#FAFAFA] text-[14px] font-[400] leading-[20px]">
               Upload the project logo
             </h1>
-            <p className="text-[#71717A]">.png .jpg .jpeg | max:12mg </p>
+            <p className="text-[#71717A]">.png .jpg .jpeg | max:12mb </p>
           </div>
         </div>
       </div>
