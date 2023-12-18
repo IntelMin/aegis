@@ -4,7 +4,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { hashString } from "@/server/utils"
+import hashString  from "@/app/utils/hash"
 
 
 
@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           return "no user found";
         }
-        if (user.password !== credentials?.password) {
+        if (user.password !== hashString(credentials?.password)) {
           return "wrong password";
         }
 
