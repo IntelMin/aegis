@@ -1,4 +1,3 @@
-"use client"
 import WhitelistWrapper from "@/components/WhitelistWrapper";
 import { Layout } from "@/components/layout";
 import { fontSans } from "@/config/fonts";
