@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getWhitelistStatus } from "./../app/utils/supabaseRequests";
+import { getServerAuthSession } from "@/app/api/auth/[...nextauth]/auth";
+import { get } from "http";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@nextui-org/react";
 
 export function WhitelistWrapper({
   children,
@@ -10,21 +14,18 @@ export function WhitelistWrapper({
 }) {
   const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-
-  //   if (isSignedIn && isLoaded) {
-  //     getWhitelistStatus({
-  //       email: String(user.primaryEmailAddress?.emailAddress),
-  //       user_id: user.id,
-  //     }).then((ws) => {
-  //       setWhitelistStatus(ws);
-  //       setIsLoading(false);
-  //     });
-  //   }
-  // }, [isSignedIn, isLoaded]);
-
+  const session = useSession()
+  // const [session, setSession] = useState<any>(null);
+  useEffect(() => {
+    if(session.status=="authenticated" && session.data?.user?.email){
+      setIsLoading(true);
+      getWhitelistStatus({email:session?.data?.user?.email,user_id:"1"}).then((res) => {
+        setWhitelistStatus(res);
+        setIsLoading(false);
+      });
+    }
+  }, [session]);
+  console.log(session)
   if (isLoading) {
     return (
       <div className="top-0 z-50 flex items-center justify-center w-full min-h-screen bg-black loading-screen">
@@ -56,6 +57,7 @@ export function WhitelistWrapper({
           please wait until you’re invited or
           we open up for public beta.
         </h1>
+        <Button onClick={()=>signOut()} >Sign Out</Button>
       </div>
     </div>)
   }
