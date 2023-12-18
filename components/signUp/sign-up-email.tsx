@@ -4,6 +4,7 @@ import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import SelectRoles from "../SelectRoles";
 import { sign } from "crypto";
+import { signIn } from "next-auth/react";
 
 type Props = {
   signInData: {
@@ -17,6 +18,7 @@ type Props = {
     projectX: string;
     projectInsta: string;
     role: string;
+    isChecked: boolean;
   }; // Adjust the type according to your data structure
   setSignInData: React.Dispatch<React.SetStateAction<{}>>;
   setNext: React.Dispatch<React.SetStateAction<number>>;
@@ -24,13 +26,13 @@ type Props = {
 
 const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
   const handleClickNext = () => {
-    if (!signInData.email || !signInData.password || !signInData.password2 || !signInData.role || (signInData.password !== signInData.password2)) {
+    if (!signInData.email || !signInData.password || !signInData.password2 || !signInData.role || (signInData.password !== signInData.password || !signInData.isChecked)) {
       return;
     }
     setNext(2)
   }
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-2">
       <div className="w-[380px] gap-4 flex flex-col">
         <CustomInput
           name="email"
@@ -75,9 +77,19 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           type="checkbox"
           style={{ accentColor: "#0E76FD" }}
           className="h-5 w-5"
+          checked={signInData.isChecked} // Use the checked attribute to set the checkbox state
+          onChange={() => {
+            setSignInData((prev) => ({
+              ...prev,
+              // @ts-ignore
+              isChecked: !signInData.isChecked, // Toggle the isChecked value
+            }));
+          }}
         />
+
+
         <p className="text-[#D4D4D4] text-[14px] leading-[20px]">
-          By signing up, I accept and agree to the{" "}
+          <span className="text-[#ff0000]">*</span>By signing up, I accept and agree to the{" "}
           <Link href="#" className="text-[#0E76FD]">
             Terms of Use
           </Link>
