@@ -21,7 +21,6 @@ const SignUpForm = (props: Props) => {
   const renderFormBasedOnRole = () => {
     switch (signInData.role) {
       case "builder":
-      case "admin":
       case "kol":
       case "auditor":
         return (
@@ -31,6 +30,7 @@ const SignUpForm = (props: Props) => {
           />
         );
       case "individual":
+      case "admin":
         return (
           <SignUpIndividualForm
             signInData={signInData}

@@ -25,7 +25,7 @@ type Props = {
 const SignUpVcForm = ({ signInData, setSignInData }: Props) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-[380px]">
+      <div className="w-[395px]">
         <CustomInput
           name="vcContactName"
           label="Contact Name"
@@ -35,7 +35,7 @@ const SignUpVcForm = ({ signInData, setSignInData }: Props) => {
           setValue={setSignInData}
         />
       </div>
-      <div className="w-[380px]">
+      <div className="w-[395px]">
         <CustomInput
           name="vcEmail"
           label="Email of contact person"
@@ -45,7 +45,7 @@ const SignUpVcForm = ({ signInData, setSignInData }: Props) => {
           setValue={setSignInData}
         />
       </div>
-      <div className="w-[380px] grid grid-cols-2 gap-4">
+      <div className="w-[395px] grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <CustomInput
             name="website"
@@ -67,7 +67,7 @@ const SignUpVcForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[380px]">
+      <div className="w-[395px]">
         <CustomTextarea
           name="about"
           label="Tell us why do you like to be given early access "
