@@ -73,7 +73,8 @@ const SelectRoles: React.FC<IProps> = ({
           <button
             className={`${role.value === signInData.role ? 'bg-[#0e76fd]' : 'bg-transparent'} border-[1px] border border-[#27272a] py-[6px] px-[12px] gap-2 flex hover:bg-[#555555]`}
             key={index}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               setSignInData((prev) => ({
                 ...prev,
                 role: role.value,
