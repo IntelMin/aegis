@@ -24,7 +24,7 @@ type Props = {
 
 const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       <div className="w-[380px] gap-4 flex flex-col">
         <CustomInput
           name="email"
