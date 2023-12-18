@@ -23,10 +23,11 @@ const CustomInput = ({
   setValue,
   required = false
 }: Props) => {
+  const [typed, setTyped] = useState<boolean>(false)
   return (
     <div className="flex flex-col gap-2 w-full">
       <label htmlFor="email" className="text-[#FAFAFA] text-[14px] font-[400] leading-[20px]">
-        {label}
+        {label} <span className="text-[#ff0000]">*</span>
       </label>
       <div className="relative w-full">
         <input
@@ -36,20 +37,18 @@ const CustomInput = ({
           placeholder={`${placeholder}`}
           value={value}
           required={required}
-          onChange={(e) =>
+          onChange={(e) => {
+            setTyped(true)
             setValue((prev) => ({
               ...prev,
               [name]: e.target.value,
             }))
           }
-          className="bg-zinc-900 border border-zinc-800 w-full px-[10px] py-[5px] placeholder:text-[#71717A] outline-black text-white"
+          }
+          className={`${typed && required && !value && 'border-[#ff0000] border border-[2px]'} bg-[#18181B] w-full px-[10px] py-[5px] rounded-md placeholder:text-[#71717A] outline-black text-white`}
         />
-        {
-          required && !value &&
-          <p className="text-[#ff0000]">
-            This input is required
-          </p>
-        }
+
+
         {isPass && setShowPass && (
           <button
             type="button"

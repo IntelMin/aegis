@@ -22,6 +22,7 @@ type SignInData = {
     vcEmail: string,
     // team
     projectEmail: string,
+    isChecked: boolean
 };
 export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e: React.FormEvent<HTMLFormElement>) => Promise<void>] => {
     const router = useRouter();
@@ -46,6 +47,7 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
         vcEmail: "",
         // team
         projectEmail: "",
+        isChecked: false
     });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,7 +64,7 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
                 console.log("success");
                 router.push("/signin");
             }
-        }).catch((err) => {if (err) {console.log(err);}});
+        }).catch((err) => { if (err) { console.log(err); } });
         setSignInData({
             email: "",
             password: "",
@@ -81,6 +83,7 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
             vcContactName: "",
             vcEmail: "",
             projectEmail: "",
+            isChecked: false
         });
     };
 
