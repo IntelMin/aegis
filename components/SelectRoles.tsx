@@ -69,7 +69,12 @@ const SelectRoles: React.FC<IProps> = ({
     <div>
       <p className='text-[16px] font-semibold leading-[24px] text-white'>
         Choose your user type
-        <span className="text-[#ff0000]">&nbsp;&nbsp;Required</span>
+        {
+          !signInData.role &&
+          <span className="text-[#ff0000]">&nbsp;&nbsp;Required</span>
+
+        }
+
       </p>
       <div className='flex flex-wrap max-w-[358px] w-[100%] gap-3 mt-[12px]'>
         {roles.map((role, index) =>
