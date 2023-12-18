@@ -46,15 +46,6 @@ const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
           setValue={setSignInData}
         />
       </div>
-      <div className="w-[395px]">
-        <CustomTextarea
-          name="about"
-          label="Tell us why do you like to be given early access "
-          placeholder="I like because..."
-          value={signInData?.about}
-          setValue={setSignInData}
-        />
-      </div>
       <CustomSubmitbtn title="Submit" />
     </div>
   );
