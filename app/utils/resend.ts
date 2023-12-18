@@ -1,5 +1,6 @@
 import {Resend} from "resend";
-const resend = new Resend(process.env.RESEND_API_KEY);
+import dotenv from "dotenv";
+const resend = new Resend(process.env.RESEND_API_SECRET);
 export async function sendEmail(email: string, name: string,html:string) {
     // Send email
     resend.emails.send({

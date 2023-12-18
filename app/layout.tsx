@@ -3,9 +3,10 @@ import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
-import { getServerAuthSession } from "./api/auth/[...nextauth]/auth";
 import { redirect } from "next/navigation";
-
+import SessionProvider from "./authProvider";
+import getServerSession from "next-auth";
+import { getServerAuthSession } from "./api/auth/[...nextauth]/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -25,11 +26,15 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-
+  const session= await getServerAuthSession();
+  console.log({session});
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body>{children}</body>
+      <body>
+        <SessionProvider session= {session}>
+         {children}
+         </SessionProvider></body>
     </html>
   );
 };

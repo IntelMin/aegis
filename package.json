@@ -12,6 +12,7 @@
     "run-server": "concurrently \"npm run server\" \"npm run worker\""
   },
   "dependencies": {
+    "@auth/core": "^0.18.6",
     "@monaco-editor/react": "^4.6.0",
     "@nextui-org/button": "2.0.18",
     "@nextui-org/code": "2.0.16",
@@ -33,6 +34,7 @@
     "@types/react-dom": "18.2.7",
     "@wagmi/core": "^1.4.7",
     "apexcharts": "^3.44.0",
+    "auth": "^0.0.9",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.1",
     "bcryptjs": "^2.4.3",
@@ -51,7 +53,7 @@
     "framer-motion": "^10.16.5",
     "intl-messageformat": "^10.5.0",
     "next": "14.0.3",
-    "next-auth": "^4.24.5",
+    "next-auth": "4.24.5",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.6.4",
     "node-cache": "^5.1.2",

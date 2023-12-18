@@ -5,6 +5,7 @@ import {
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import hashString  from "@/app/utils/hash"
+import NextAuth from "next-auth/next";
 
 
 
@@ -54,15 +55,16 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           return "no user found";
         }
+        if(credentials?.password === undefined) return "no password"
         if (user.password !== hashString(credentials?.password)) {
           return "wrong password";
         }
-
+        console.log(user)
         return user;
       }
     })
   ],
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: "aaaaaaaaaaaaaaaaaaa",
 };
-
+export const {auth,signOut} = NextAuth(authOptions)
 export const getServerAuthSession = () => getServerSession(authOptions);

@@ -22,8 +22,10 @@ const SignInForm = (props: Props) => {
     await signIn("credentials", {
       email: loginData.email,
       password: loginData.password,
-      callbackUrl: '/'
-    });
+      callbackUrl: "/",
+      redirect: true,
+    }).then((res) => console.log(res));
+
     setLoginData({
       email: "",
       password: "",
