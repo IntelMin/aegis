@@ -28,8 +28,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     };
     let hashed_password = await hashString(password);
     const { data: user, error } = await supabase.from("users").select("*").eq("email", email).single()
+
     if (user) {
-        return NextResponse.json("user already exists")
+        return NextResponse.json("user already exists", { status: 400 })
     }
     const { data, error: error2 } = await supabase.from("users").insert([{ email:email, password:hashed_password,projectname, website,tokenAddress, teleAccount,projectX,projectInsta,projectEmail,twitter,teleId,about,vcContactName,vcEmail,role }]);
     if (error2) {
