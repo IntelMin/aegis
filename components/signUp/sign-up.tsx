@@ -141,17 +141,28 @@ const SignUpForm = () => {
           <br /> {next === 2 && "we’ll use this data to whitelist you."}
         </p>
         <AnimatePresence initial={false}>
-          {next === 2 ? (
-            renderFormBasedOnRole()
-          ) : (
-            <SignUpEmail
-              onSubmit={data => {
-                setNext(2)
-                setSignInData(prev => ({...prev, ...data}))
-              }}
-              defaultValues={signInData}
-            />
-          )}
+          <motion.div
+            key={next}
+            initial={{ opacity: 0, x: 292 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 1.2, type: "spring" },
+            }}
+            exit={{ x: -282, transition: { duration: 0.5 } }}
+          >
+            {next === 2 ? (
+              renderFormBasedOnRole()
+            ) : (
+              <SignUpEmail
+                onSubmit={data => {
+                  setNext(2)
+                  setSignInData(prev => ({...prev, ...data}))
+                }}
+                defaultValues={signInData}
+              />
+            )}
++          </motion.div>
         </AnimatePresence>
       </div>
       <div className="flex flex-col items-center justify-center">

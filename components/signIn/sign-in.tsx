@@ -7,10 +7,10 @@ import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const schema = yup
   .object()
@@ -29,6 +29,8 @@ const SignInForm = () => {
     resolver: yupResolver(schema)
   })
 
+  const router = useRouter();
+
   const onSubmit = async (data: { email: any; password: any; }) => {
     await signIn("credentials", {
       email: data.email,
@@ -41,7 +43,7 @@ const SignInForm = () => {
         toast.error("Invalid Credentials");
       }
       if (res.ok) {
-          redirect("/");
+          router.push("/");
       }
     });
   };
