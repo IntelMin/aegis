@@ -22,13 +22,13 @@ export function WhitelistWrapper({
   }
   // const [session, setSession] = useState<any>(null);
   useEffect(() => {
+    setIsLoading(true);
     if(session.status=="authenticated" && session.data?.user?.email){
-      setIsLoading(true);
       getWhitelistStatus(String(session?.data?.user?.email)).then((res) => {
         setWhitelistStatus(res);
-        setIsLoading(false);
       });
     }
+    setIsLoading(false);
   }, [session]);
   // console.log({whitelistStatus})
   if (isLoading) {
