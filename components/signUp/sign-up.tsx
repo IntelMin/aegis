@@ -67,7 +67,7 @@ const SignUpForm = (props: Props) => {
           <br /> {next === 2 && "we’ll use this data to whitelist you."}
         </p>
         <AnimatePresence initial={false}>
-          <form onSubmit={handleSubmit} className="mt-6">
+          <form onSubmit={handleSubmit} className="mt-6 mx-[10px] w-full">
             <motion.div
               key={next}
               initial={{ opacity: 0, x: 292 }}
