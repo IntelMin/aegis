@@ -17,6 +17,7 @@ type Props = {
     projectEmail: string;
     about: string;
     teleId: string;
+    logourl: File | null;
   }; // Adjust the type according to your data structure
   setSignInData: React.Dispatch<React.SetStateAction<{}>>;
 };
@@ -29,6 +30,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
     const file = event.target.files?.[0];
 
     if (file) {
+      setSignInData((prev) => ({ ...prev, logourl: file }));
       setNewImage(file);
       const reader = new FileReader();
       reader.readAsDataURL(file);
