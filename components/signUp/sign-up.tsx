@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,41 +9,113 @@ import GoBack from "../ui/go-back";
 import SignUpEmail from "./sign-up-email";
 import SignUpIndividualForm from "./sign-up-individual";
 import SignUpVcForm from "./sign-up-vc";
-import { useForm } from "@/utils/useSignUpForm";
 import { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import uploadImage from "@/utils/uploadImage";
 
-type Props = {};
-type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
+export type SignInData = {
+  email: string,
+  password: string,
+  passwordConfirmation: string,
+  projectname: string,
+  website: string,
+  tokenAddress: string,
+  teleAccount: string,
+  projectX: string,
+  projectInsta: string,
+  role: string,
+  // individual
+  name: string,
+  twitter: string,
+  teleId: string,
+  about: string,
+  // vc
+  vcContactName: string,
+  vcEmail: string,
+  // team
+  projectEmail: string,
+  logourl: File | null,
+  terms: boolean
+};
 
-const SignUpForm = (props: Props) => {
+const init: SignInData = {
+  email: "",
+  password: "",
+  passwordConfirmation: "",
+  projectname: "",
+  website: "",
+  tokenAddress: "",
+  teleAccount: "",
+  projectX: "",
+  projectInsta: "",
+  role: "",
+  // individual
+  name: "",
+  twitter: "",
+  teleId: "",
+  about: "",
+  // vc
+  vcContactName: "",
+  vcEmail: "",
+  // team
+  projectEmail: "",
+  logourl: null,
+  terms: false
+}
+
+const SignUpForm = () => {
   const [next, setNext] = React.useState(1);
-  const [signInData, setSignInData, handleSubmit] = useForm();
+  const router = useRouter();
+  const [signInData, setSignInData] = useState<SignInData>(init)
+
+  const handleSubmit = async (data: any) => {
+    const payload = {
+      ...signInData,
+      ...data
+    }
+
+    if (payload.logourl !== null) {
+      await uploadImage(payload.logourl);
+    }
+
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (res.status === 200) {
+        console.log("success");
+        toast.success('Sign Up Successfull!')
+        router.push("/signin");
+      }
+    } catch (err) {
+      if (err) {
+        console.log(err); toast.error('Sign Up Failed!')
+      }
+    }
+  }
 
   const renderFormBasedOnRole = () => {
-    switch (signInData.role) {
+    switch (signInData['role']) {
       case "builder":
       case "kol":
       case "auditor":
         return (
-          <SignUpDetailForm
-            signInData={signInData}
-            setSignInData={setSignInData as SetValueFunction<{}>}
-          />
+          <SignUpDetailForm onSubmit={handleSubmit} defaultValues={signInData} />
         );
       case "individual":
       case "admin":
         return (
-          <SignUpIndividualForm
-            signInData={signInData}
-            setSignInData={setSignInData as SetValueFunction<{}>}
-          />
+          <SignUpIndividualForm onSubmit={handleSubmit} defaultValues={signInData} />
         );
       case "vc":
         return (
-          <SignUpVcForm
-            signInData={signInData}
-            setSignInData={setSignInData as SetValueFunction<{}>}
-          />
+          <SignUpVcForm onSubmit={handleSubmit} defaultValues={signInData} />
         );
       default:
         setNext(1);
@@ -67,28 +139,17 @@ const SignUpForm = (props: Props) => {
           <br /> {next === 2 && "we’ll use this data to whitelist you."}
         </p>
         <AnimatePresence initial={false}>
-          <form onSubmit={handleSubmit} className="mt-6">
-            <motion.div
-              key={next}
-              initial={{ opacity: 0, x: 292 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                transition: { duration: 1.2, type: "spring" },
+          {next === 2 ? (
+            renderFormBasedOnRole()
+          ) : (
+            <SignUpEmail
+              onSubmit={data => {
+                setNext(2)
+                setSignInData(prev => ({...prev, ...data}))
               }}
-              exit={{ x: -282, transition: { duration: 0.5 } }}
-            >
-              {next === 2 ? (
-                renderFormBasedOnRole()
-              ) : (
-                <SignUpEmail
-                  setNext={setNext}
-                  signInData={signInData}
-                  setSignInData={setSignInData as SetValueFunction<{}>}
-                />
-              )}
-            </motion.div>
-          </form>
+              defaultValues={signInData}
+            />
+          )}
         </AnimatePresence>
       </div>
       <div className="flex flex-col items-center justify-center">

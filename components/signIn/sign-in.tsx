@@ -1,30 +1,38 @@
 "use client";
 
-import React, { use } from "react";
+import React from "react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
-import { signIn,useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
-type Props = {};
-type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
+const schema = yup
+  .object()
+  .shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  })
+  .required()
 
-const SignInForm = (props: Props) => {
-  const [showPass, setShowPass] = React.useState(true);
-  const [loginData, setLoginData] = React.useState({
-    email: "",
-    password: "",
-  });
-  const session = useSession();
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(loginData);
+const SignInForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
+
+  const onSubmit = async (data) => {
     await signIn("credentials", {
-      email: loginData.email,
-      password: loginData.password,
+      email: data.email,
+      password: data.password,
       // callbackUrl: "/",
       redirect: false,
     }).then((res: any) => {
@@ -36,12 +44,8 @@ const SignInForm = (props: Props) => {
           redirect("/");
       }
     });
-
-    setLoginData({
-      email: "",
-      password: "",
-    });
   };
+
   return (
     <div className="col-span-1 h-full">
       <div className="flex items-center justify-center flex-col h-[90%]">
@@ -54,27 +58,23 @@ const SignInForm = (props: Props) => {
         <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
           Please enter your account details to sign in.
         </p>
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col gap-2">
           <div className="w-[395px]">
             <CustomInput
-              name="email"
               label="Email"
               placeholder="Enter your email"
               type="email"
-              value={loginData?.email}
-              setValue={setLoginData as SetValueFunction<{}>}
+              errors={errors}
+              {...register("email")}
             />
           </div>
           <div className="w-[395px]">
             <CustomInput
-              name="password"
               label="Password"
               placeholder="Enter your password"
-              type={showPass ? "password" : "text"}
               isPass
-              setShowPass={setShowPass}
-              value={loginData?.password}
-              setValue={setLoginData as SetValueFunction<{}>}
+              errors={errors}
+              {...register("password")}
             />
           </div>
           <CustomSubmitbtn title="Sign In" />

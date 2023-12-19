@@ -1,54 +1,68 @@
 import React from "react";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
-import CustomTextarea from "../ui/custom-textarea";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup"
+import { SignInData } from "./sign-up";
 
-type Props = {
-  signInData: {
-    name: string;
-    twitter: string;
-    teleId: string;
-    about: string;
-  }; // Adjust the type according to your data structure
-  setSignInData: React.Dispatch<React.SetStateAction<{}>>;
-};
+interface Props {
+  onSubmit: (data: any) => void
+  defaultValues: SignInData
+}
 
-const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
+const schema = yup.object()
+  .shape({
+    name: yup.string().required(),
+    twitter: yup.string().required(),
+    teleId: yup.string().required(),
+  })
+  .required()
+
+const SignUpIndividualForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues
+  })
+
   return (
-    <div className="flex flex-col gap-2">
+    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
       <div className="w-[395px]">
         <CustomInput
-          name="name"
           label="Name"
           placeholder="Example"
           type="text"
-          value={signInData?.name}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("name")}
         />
       </div>
       <div className="w-[395px]">
         <CustomInput
-          name="twitter"
           label="Twitter"
           placeholder="@username"
           type="text"
-          value={signInData?.twitter}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("twitter")}
+  
         />
       </div>
       <div className="w-[395px]">
         <CustomInput
-          name="teleId"
           label="Telegram ID"
           placeholder="@username"
           type="text"
-          value={signInData?.teleId}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("teleId")}
+  
         />
       </div>
       <CustomSubmitbtn title="Submit" />
-    </div>
+    </form>
   );
-};
+}
 
 export default SignUpIndividualForm;

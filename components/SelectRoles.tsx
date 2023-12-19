@@ -46,63 +46,39 @@ const roles = [
 ]
 
 interface IProps {
-  signInData: {
-    email: string;
-    password: string;
-    password2: string;
-    projectname: string;
-    website: string;
-    tokenAddress: string;
-    teleAccount: string;
-    projectX: string;
-    projectInsta: string;
-    role: string;
-  }; // Adjust the type according to your data structure
-  setSignInData: React.Dispatch<React.SetStateAction<{}>>;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 const SelectRoles: React.FC<IProps> = ({
-  signInData,
-  setSignInData
-}) => {
-  return (
-    <div>
-      <p className='text-[16px] font-semibold leading-[24px] text-white'>
-        Choose your user type <span className="text-[#ff0000]">*</span>
-        {/* {
-          !signInData.role &&
-          <span className="text-[#ff0000]">&nbsp;&nbsp;Required</span>
-        } */}
-
-      </p>
-      <div className='flex flex-wrap max-w-[358px] w-[100%] gap-3 mt-[12px]'>
-        {roles.map((role, index) =>
-          <button
-            className={`${role.value === signInData.role ? 'bg-[#0e76fd]' : 'bg-transparent'} border border-[#27272a] py-[6px] px-[12px] gap-2 flex hover:bg-[#555555]`}
-            key={index}
-            onClick={(e) => {
-              e.preventDefault()
-              setSignInData((prev) => ({
-                ...prev,
-                role: role.value,
-              }))
-            }}
-          >
-            <Image
-              width={22}
-              height={22}
-              src={role.icon}
-              alt={`role-icon-` + index}
-            />
-            <div>
-              <p className='text-[16px] font-medium leading-[24px] text-white text-left'>{role.text}</p>
-              <p className={`${role.value === signInData.role ? 'text-white' : 'text-[#71717a]'} text-[14px] font-normal leading-[20px]`}>{role.desc}</p>
-            </div>
-          </button>
-        )}
-      </div>
-    </div >
-  )
-}
+  value,
+  onChange
+}) => (
+  <div>
+    <p className='text-[16px] font-semibold leading-[24px] text-white'>
+      Choose your user type <span className="text-[#ff0000]">*</span>
+    </p>
+    <div className='flex flex-wrap max-w-[358px] w-[100%] gap-3 mt-[12px]'>
+      {roles.map((role, index) =>
+        <button
+          className={`${role.value === value ? 'bg-[#0e76fd]' : 'bg-transparent'} border border-[#27272a] py-[6px] px-[12px] gap-2 flex hover:bg-[#555555]`}
+          key={index}
+          onClick={() => onChange(role.value)}
+        >
+          <Image
+            width={22}
+            height={22}
+            src={role.icon}
+            alt={`role-icon-` + index}
+          />
+          <div>
+            <p className='text-[16px] font-medium leading-[24px] text-white text-left'>{role.text}</p>
+            <p className={`${role.value === value ? 'text-white' : 'text-[#71717a]'} text-[14px] font-normal leading-[20px]`}>{role.desc}</p>
+          </div>
+        </button>
+      )}
+    </div>
+  </div>
+)
 
 export default SelectRoles
