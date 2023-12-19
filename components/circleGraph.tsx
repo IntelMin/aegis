@@ -62,7 +62,7 @@ const CircleGraph = (props: props) => {
           },
           value: {
             formatter: function (val: any) {
-              return parseInt(val).toString();
+              return parseInt(val)?.toString();
             },
             color: "#dbd9d9",
             fontSize: "36px",

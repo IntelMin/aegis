@@ -27,13 +27,14 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const session= await getServerAuthSession();
-  console.log({session});
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
         <SessionProvider session= {session}>
+
          {children}
+         
          </SessionProvider></body>
     </html>
   );

@@ -14,9 +14,9 @@ export function WhitelistWrapper({
   className?: string;
 }) {
   const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession()
-  console.log({session})
+  // console.log({session})
   if(!session?.data?.user?.email){
     redirect("/signin");
   }
