@@ -10,7 +10,7 @@ const SignIn = async (props: Props) => {
   const authSession = await getServerAuthSession();
   if (authSession?.user?.email) redirect("/")
   return (
-    <div className="flex items-center justify-center bg-black w-screen h-screen">
+    <div className="flex items-center justify-center bg-black w-screen min-h-screen">
       <div className="grid grid-cols-2 w-full h-full">
         <SignInForm />
         <Template />

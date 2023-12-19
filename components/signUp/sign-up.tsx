@@ -52,8 +52,8 @@ const SignUpForm = (props: Props) => {
   };
 
   return (
-    <div className="col-span-1 h-full overflow-hidden relative">
-      <div className="flex items-center justify-center flex-col h-[90%]">
+    <div className="col-span-1 min-h-[100%] relative max-[900px]:col-span-2 flex items-center justify-center flex-col gap-[50px]">
+      <div className="flex items-center justify-center flex-col ">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="clipboard" src="/clipboard.png" width={20} height={20} />
         </div>

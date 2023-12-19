@@ -33,7 +33,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-[380px] gap-4 flex flex-col">
+      <div className="w-[375px] max-[450px]:w-[270px] max-[450px]:mx-auto gap-4 flex flex-col">
         <CustomInput
           name="email"
           label="Email"
@@ -72,7 +72,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           signInData={signInData}
         />
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center w-[375px] max-[450px]:w-[270px] max-[450px]:mx-auto">
         <input
           type="checkbox"
           style={{ accentColor: "#0E76FD" }}

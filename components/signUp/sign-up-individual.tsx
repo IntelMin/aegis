@@ -16,7 +16,7 @@ type Props = {
 const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-[395px]">
+      <div className="w-[375px] max-[450px]:w-[270px] max-[450px]:mx-auto">
         <CustomInput
           name="name"
           label="Name"
@@ -26,7 +26,7 @@ const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
           setValue={setSignInData}
         />
       </div>
-      <div className="w-[395px]">
+      <div className="w-[375px] max-[450px]:w-[270px] max-[450px]:mx-auto">
         <CustomInput
           name="twitter"
           label="Twitter"
@@ -36,7 +36,7 @@ const SignUpIndividualForm = ({ signInData, setSignInData }: Props) => {
           setValue={setSignInData}
         />
       </div>
-      <div className="w-[395px]">
+      <div className="w-[375px] max-[450px]:w-[270px] max-[450px]:mx-auto">
         <CustomInput
           name="teleId"
           label="Telegram ID"
