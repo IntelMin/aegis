@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
     const { data, error: error2 } = await supabase.from("users").insert([{ email:email, password:hashed_password,projectname, website,tokenAddress, teleAccount,projectX,projectInsta,projectEmail,twitter,teleId,about,vcContactName,vcEmail,role }]);
     if (error2) {
-        console.log(error2)
+        console.log(error2, "error")
         return NextResponse.json("error creating user")
     }
     const html = `<h1>Welcome to Aegis, ${name}!</h1>`
