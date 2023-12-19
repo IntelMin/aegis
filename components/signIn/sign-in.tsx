@@ -13,6 +13,7 @@ type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
 
 const SignInForm = (props: Props) => {
   const [showPass, setShowPass] = React.useState(true);
+  const [error, setError] = React.useState(""); // [TODO
   const [loginData, setLoginData] = React.useState({
     email: "",
     password: "",
@@ -31,7 +32,13 @@ const SignInForm = (props: Props) => {
         alert(res.error);
       }
       if (res.ok) {
-        redirect("/");
+        if(res.json?.user?.email){
+          redirect("/");
+          setError("");
+        }else{
+          setError("Invalid credentials");
+        }
+
       }
     });
 
