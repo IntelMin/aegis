@@ -99,7 +99,7 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(signInData);
-        if(signInData.logourl !== null){
+        if (signInData.logourl !== null) {
             await uploadImage(signInData.logourl);
         }
         await fetch("/api/signup", {
@@ -111,10 +111,14 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
         }).then(async (res) => {
             if (res.status === 200) {
                 console.log("success");
+<<<<<<< HEAD
                 toast.success("Successfully signed up",{duration: 5000});
+=======
+                toast.success('Sign Up Successfull!')
+>>>>>>> ecbdb2733f6d034122e30effc957f80d2966446b
                 router.push("/signin");
             }
-        }).catch((err) => { if (err) { console.log(err); } });
+        }).catch((err) => { if (err) { console.log(err); toast.error('Sign Up Failed!') } });
         setSignInData({
             email: "",
             password: "",
