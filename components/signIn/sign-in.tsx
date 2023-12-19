@@ -5,6 +5,7 @@ import Image from "next/image";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
+import { Toaster, toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 
@@ -26,19 +27,18 @@ const SignInForm = (props: Props) => {
       password: loginData.password,
       callbackUrl: "/",
       // redirect: true,
-    }).then((res:any) => {
+    }).then((res: any) => {
       console.log(res);
       if (res.error) {
-        alert(res.error);
+        toast.error("Invalid Credentials")
       }
       if (res.ok) {
-        if(res.json?.user?.email){
-          redirect("/");
+        if (res.json?.user?.email) {
           setError("");
-        }else{
+          redirect("/");
+        } else {
           setError("Invalid credentials");
         }
-
       }
     });
 
@@ -86,9 +86,17 @@ const SignInForm = (props: Props) => {
         </form>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <p className="text-[14px] font-[400] text-center text-[#d4d4d8d6]">Don’t you have an account?</p>
-        <Link href="/signup" className="text-[#0E76FD] text-[14px] font-[400] text-center">Sign Up</Link>
+        <p className="text-[14px] font-[400] text-center text-[#d4d4d8d6]">
+          Don’t you have an account?
+        </p>
+        <Link
+          href="/signup"
+          className="text-[#0E76FD] text-[14px] font-[400] text-center"
+        >
+          Sign Up
+        </Link>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
