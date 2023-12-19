@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn,useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
 type Props = {};
@@ -14,11 +14,11 @@ type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
 
 const SignInForm = (props: Props) => {
   const [showPass, setShowPass] = React.useState(true);
-  const [error, setError] = React.useState(""); // [TODO
   const [loginData, setLoginData] = React.useState({
     email: "",
     password: "",
   });
+  const session = useSession();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(loginData);
@@ -31,16 +31,9 @@ const SignInForm = (props: Props) => {
       console.log(res);
       if (res.error) {
         toast.error("Invalid Credentials");
-        setError("Invalid Credentials");
       }
       if (res.ok) {
-        if (res.json?.user?.email) {
-          setError("");
           redirect("/");
-        } else {
-          setError("Invalid credentials");
-          toast.error("Invalid Credentials");
-        }
       }
     });
 

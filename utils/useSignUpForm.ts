@@ -1,6 +1,7 @@
 // useForm.ts
 import { useState, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 type SignInData = {
     email: string,
     password: string,
@@ -107,9 +108,10 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
             headers: {
                 "Content-Type": "application/json",
             },
-        }).then((res) => {
+        }).then(async (res) => {
             if (res.status === 200) {
                 console.log("success");
+                toast.success("Successfully signed up",{duration: 5000});
                 router.push("/signin");
             }
         }).catch((err) => { if (err) { console.log(err); } });
