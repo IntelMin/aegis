@@ -10,6 +10,7 @@ import SignUpEmail from "./sign-up-email";
 import SignUpIndividualForm from "./sign-up-individual";
 import SignUpVcForm from "./sign-up-vc";
 import { useForm } from "@/utils/useSignUpForm";
+import { Toaster } from "react-hot-toast";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -103,6 +104,7 @@ const SignUpForm = (props: Props) => {
       </div>
 
       {next === 2 && <GoBack setNext={setNext} />}
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

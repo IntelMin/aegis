@@ -1,6 +1,7 @@
 // useForm.ts
 import { useState, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 type SignInData = {
     email: string,
     password: string,
@@ -98,7 +99,7 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(signInData);
-        if(signInData.logourl !== null){
+        if (signInData.logourl !== null) {
             await uploadImage(signInData.logourl);
         }
         await fetch("/api/signup", {
@@ -110,9 +111,10 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
         }).then((res) => {
             if (res.status === 200) {
                 console.log("success");
+                toast.success('Sign Up Successfull!')
                 router.push("/signin");
             }
-        }).catch((err) => { if (err) { console.log(err); } });
+        }).catch((err) => { if (err) { console.log(err); toast.error('Sign Up Failed!') } });
         setSignInData({
             email: "",
             password: "",
