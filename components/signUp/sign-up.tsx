@@ -53,7 +53,7 @@ const SignUpForm = (props: Props) => {
 
   return (
     <div className="col-span-1 min-h-[100%] relative max-[900px]:col-span-2 flex items-center justify-center flex-col gap-[50px]">
-      <div className="flex items-center justify-center flex-col ">
+      <div className="flex  flex-col items-center justify-center ">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="clipboard" src="/clipboard.png" width={20} height={20} />
         </div>
@@ -97,7 +97,7 @@ const SignUpForm = (props: Props) => {
         </p>
         <Link
           href="/signin"
-          className="text-[#0E76FD] text-[14px] font-[400] text-center"
+          className="text-[#0E76FD] text-[14px] font-[400] text-center "
         >
           Sign In
         </Link>

@@ -43,7 +43,7 @@ const SignInForm = (props: Props) => {
     });
   };
   return (
-    <div className="col-span-1 h-full max-[900px]:col-span-2">
+    <div className="col-span-1 h-full max-[900px]:col-span-2 flex items-center justify-center flex-col">
       <div className="flex items-center justify-center flex-col h-[90%] px-[10px]">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="user-icon" src="/user.png" width={20} height={20} />
