@@ -25,12 +25,13 @@ const SignInForm = (props: Props) => {
     await signIn("credentials", {
       email: loginData.email,
       password: loginData.password,
-      callbackUrl: "/",
-      // redirect: true,
+      // callbackUrl: "/",
+      redirect: false,
     }).then((res: any) => {
       console.log(res);
       if (res.error) {
-        toast.error("Invalid Credentials")
+        toast.error("Invalid Credentials");
+        setError("Invalid Credentials");
       }
       if (res.ok) {
         if (res.json?.user?.email) {
@@ -38,6 +39,7 @@ const SignInForm = (props: Props) => {
           redirect("/");
         } else {
           setError("Invalid credentials");
+          toast.error("Invalid Credentials");
         }
       }
     });
