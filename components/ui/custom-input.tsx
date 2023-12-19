@@ -45,7 +45,7 @@ const CustomInput = ({
             }))
           }
           }
-          className={`${typed && required && !value && 'border-[#ff0000] border border-[2px]'} bg-[#18181B] w-full px-[10px] py-[5px] rounded-md placeholder:text-[#71717A] outline-black text-white`}
+          className={`${typed && required && !value && 'border-[#ff0000] border-[2px]'} bg-[#18181B] w-full px-[10px] py-[5px] rounded-md placeholder:text-[#71717A] outline-black text-white`}
         />
 
 
@@ -65,16 +65,16 @@ const CustomInput = ({
               <path
                 d="M1.33301 8.5C1.33301 8.5 3.33301 3.83333 7.99967 3.83333C12.6663 3.83333 14.6663 8.5 14.6663 8.5C14.6663 8.5 12.6663 13.1667 7.99967 13.1667C3.33301 13.1667 1.33301 8.5 1.33301 8.5Z"
                 stroke="#737373"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M8 10.5C9.10457 10.5 10 9.60457 10 8.5C10 7.39543 9.10457 6.5 8 6.5C6.89543 6.5 6 7.39543 6 8.5C6 9.60457 6.89543 10.5 8 10.5Z"
                 stroke="#737373"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>

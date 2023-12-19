@@ -19,9 +19,7 @@ import { redirect } from "next/navigation";
 export default function Home() {
   const newTokens = useNewTokens();
   const dashboardData = useDashboardData();
-  const { data: session } = useSession()
-  //   console.log("session",session)
-  // if (!session) redirect("/signin");
+
   return (
     <NavbarWrapper pageTitle={<div></div>}>
       <IntroModal />

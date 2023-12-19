@@ -5,6 +5,7 @@ import { getServerAuthSession } from "@/app/api/auth/[...nextauth]/auth";
 import { get } from "http";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@nextui-org/react";
+import { redirect } from "next/navigation";
 
 export function WhitelistWrapper({
   children,
@@ -12,9 +13,13 @@ export function WhitelistWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
-  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(false);
+  const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession()
+  // console.log({session})
+  if(!session?.data?.user?.email){
+    redirect("/signin");
+  }
   // const [session, setSession] = useState<any>(null);
   useEffect(() => {
     if(session.status=="authenticated" && session.data?.user?.email){
@@ -25,7 +30,7 @@ export function WhitelistWrapper({
       });
     }
   }, [session]);
-  console.log({whitelistStatus})
+  // console.log({whitelistStatus})
   if (isLoading) {
     return (
       <div className="top-0 z-50 flex items-center justify-center w-full min-h-screen bg-black loading-screen">
@@ -57,7 +62,7 @@ export function WhitelistWrapper({
           please wait until you’re invited or
           we open up for public beta.
         </h1>
-        <Button onClick={()=>signOut()} >Sign Out</Button>
+        <Button className="mt-5" onClick={()=>signOut()} >Sign Out</Button>
       </div>
     </div>)
   }

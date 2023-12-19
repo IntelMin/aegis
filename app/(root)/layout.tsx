@@ -12,14 +12,7 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     const session = await getSession();
-  //     const serversession = await getServerAuthSession();
-  //     if (!session) redirect("/signin");
-  //   };
-  //   checkAuth();
-  // }, []);
+
   const session = await getServerAuthSession();
   if (!session) redirect("/signin");
   return (

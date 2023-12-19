@@ -13,27 +13,28 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
-  description: siteConfig.description,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
+  // description: siteConfig.description,
+  // themeColor: [
+  //   { media: "(prefers-color-scheme: light)", color: "white" },
+  //   { media: "(prefers-color-scheme: dark)", color: "black" },
+  // ],
+  // icons: {
+  //   icon: "/favicon.ico",
+  //   shortcut: "/favicon-16x16.png",
+  //   apple: "/apple-touch-icon.png",
+  // },
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const session= await getServerAuthSession();
-  console.log({session});
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
         <SessionProvider session= {session}>
+
          {children}
+         
          </SessionProvider></body>
     </html>
   );

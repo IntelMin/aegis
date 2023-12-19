@@ -6,6 +6,7 @@ import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -23,8 +24,16 @@ const SignInForm = (props: Props) => {
       email: loginData.email,
       password: loginData.password,
       callbackUrl: "/",
-      redirect: true,
-    }).then((res) => console.log(res));
+      // redirect: true,
+    }).then((res:any) => {
+      console.log(res);
+      if (res.error) {
+        alert(res.error);
+      }
+      if (res.ok) {
+        redirect("/");
+      }
+    });
 
     setLoginData({
       email: "",
@@ -44,7 +53,7 @@ const SignInForm = (props: Props) => {
           Please enter your account details to sign in.
         </p>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2">
-          <div className="w-[380px]">
+          <div className="w-[395px]">
             <CustomInput
               name="email"
               label="Email"
@@ -54,7 +63,7 @@ const SignInForm = (props: Props) => {
               setValue={setLoginData as SetValueFunction<{}>}
             />
           </div>
-          <div className="w-[380px]">
+          <div className="w-[395px]">
             <CustomInput
               name="password"
               label="Password"
