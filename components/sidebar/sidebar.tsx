@@ -45,14 +45,14 @@ export const SidebarWrapper = () => {
               isActive={pathname === "/"}
               href="/"
             />
-            <SidebarItem
+            {/* <SidebarItem
               title="Deployer"
               icon={
                 <FaCloudUploadAlt className="text-[#c5c5c5] text-[22px] ml-[2px]" />
               }
               isActive={pathname === "/deployer"}
               href="/deployer"
-            />
+            /> */}
             <SidebarMenu title="Audits">
               <SidebarItem
                 isActive={pathname === "/codeAudit"}
