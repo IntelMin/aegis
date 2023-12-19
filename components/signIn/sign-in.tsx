@@ -7,7 +7,7 @@ import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
 import { signIn,useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect,useRouter } from "next/navigation";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -18,7 +18,7 @@ const SignInForm = (props: Props) => {
     email: "",
     password: "",
   });
-  const session = useSession();
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(loginData);
@@ -33,7 +33,7 @@ const SignInForm = (props: Props) => {
         toast.error("Invalid Credentials");
       }
       if (res.ok) {
-          redirect("/");
+          router.push("/");
       }
     });
 
