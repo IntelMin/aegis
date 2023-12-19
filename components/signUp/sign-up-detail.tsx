@@ -53,8 +53,8 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
   };
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+    <form className="flex flex-col gap-2  w-full px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             label="Name"
@@ -74,7 +74,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             label="Project email"
@@ -84,7 +84,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             {...register("projectEmail")}
           />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 ">
           <CustomInput
             label="Website"
             placeholder="Example"
@@ -94,7 +94,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             label="Telegram of contact person"
@@ -114,7 +114,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           />
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <div className="flex flex-col gap-2 w-full">
           <label
             htmlFor="imageLogo"
@@ -181,7 +181,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           </div>
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <CustomTextarea
           label="Tell us why do you like to be given early access "
           placeholder="I like because..."

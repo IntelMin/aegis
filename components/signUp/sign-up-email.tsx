@@ -37,8 +37,8 @@ const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
   })
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-[380px] gap-4 flex flex-col">
+    <form className="flex flex-col gap-2 w-full items-center justify-center px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="gap-4 flex flex-col items-center">
         <CustomInput
           label="Email"
           placeholder="Enter your email"
@@ -46,6 +46,7 @@ const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           errors={errors}
           {...register("email")}
         />
+
         <CustomInput
           label="Password"
           placeholder="Enter your password"

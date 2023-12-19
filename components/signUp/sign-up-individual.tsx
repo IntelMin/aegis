@@ -30,8 +30,8 @@ const SignUpIndividualForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
   })
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-[395px]">
+    <form className="flex flex-col gap-2 w-full px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="">
         <CustomInput
           label="Name"
           placeholder="Example"
@@ -40,7 +40,7 @@ const SignUpIndividualForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           {...register("name")}
         />
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <CustomInput
           label="Twitter"
           placeholder="@username"
@@ -50,7 +50,7 @@ const SignUpIndividualForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
   
         />
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <CustomInput
           label="Telegram ID"
           placeholder="@username"

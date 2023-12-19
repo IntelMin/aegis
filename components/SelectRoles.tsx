@@ -54,7 +54,7 @@ const SelectRoles: React.FC<IProps> = ({
   value,
   onChange
 }) => (
-  <div>
+  <div className='w-full'>
     <p className='text-[16px] font-semibold leading-[24px] text-white'>
       Choose your user type <span className="text-[#ff0000]">*</span>
     </p>

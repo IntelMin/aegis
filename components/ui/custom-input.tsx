@@ -47,6 +47,7 @@ const CustomInput = React.forwardRef<HTMLInputElement, Props>(({
       </div>
       {errors?.[props.name] && <span className='text-red-800'>{errors[props.name]?.message?.toString()}</span>}
     </div>
+
   );
 });
 

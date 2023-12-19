@@ -33,8 +33,8 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
   })
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-[395px]">
+    <form className="flex flex-col gap-2 w-full px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div>
         <CustomInput
           label="Contact Name"
           placeholder="Example"
@@ -43,7 +43,7 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           {...register("vcContactName")}
         />
       </div>
-      <div className="w-[395px]">
+      <div>
         <CustomInput
           label="Email of contact person"
           placeholder="Your email"
@@ -52,8 +52,8 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           {...register("vcEmail")}
         />
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
-        <div className="col-span-1">
+      <div className=" grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
+        <div className="col-span-1 ">
           <CustomInput
             label="Website"
             placeholder="Example"
@@ -73,7 +73,7 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           />
         </div>
       </div>
-      <div className="w-[395px]">
+      <div>
         <CustomTextarea
           label="Tell us why do you like to be given early access "
           placeholder="I like because..."

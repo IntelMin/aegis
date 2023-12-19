@@ -126,8 +126,8 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="col-span-1 h-full overflow-hidden relative">
-      <div className="flex items-center justify-center flex-col h-[90%]">
+    <div className="col-span-1 min-h-[100%] relative max-[900px]:col-span-2 flex items-center justify-center flex-col gap-[50px]">
+      <div className="flex  flex-col items-center justify-center ">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="clipboard" src="/clipboard.png" width={20} height={20} />
         </div>
@@ -141,7 +141,7 @@ const SignUpForm = () => {
           <br /> {next === 2 && "we’ll use this data to whitelist you."}
         </p>
         <AnimatePresence initial={false}>
-          <div className="mt-6">
+          <div className="mt-6 mx-[10px] w-full">
             <motion.div
               key={next}
               initial={{ opacity: 0, x: 292 }}
@@ -173,7 +173,7 @@ const SignUpForm = () => {
         </p>
         <Link
           href="/signin"
-          className="text-[#0E76FD] text-[14px] font-[400] text-center"
+          className="text-[#0E76FD] text-[14px] font-[400] text-center "
         >
           Sign In
         </Link>
