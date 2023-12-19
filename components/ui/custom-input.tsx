@@ -26,6 +26,7 @@ const CustomInput = ({
   const [typed, setTyped] = useState<boolean>(false)
   return (
     <div className="flex flex-col gap-2 w-full">
+
       <label htmlFor="email" className="text-[#FAFAFA] text-[14px] font-[400] leading-[20px]">
         {label} <span className="text-[#ff0000]">*</span>
       </label>
@@ -81,6 +82,7 @@ const CustomInput = ({
         )}
       </div>
     </div>
+
   );
 };
 

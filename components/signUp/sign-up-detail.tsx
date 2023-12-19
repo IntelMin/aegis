@@ -41,8 +41,8 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
     }
   };
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+    <div className="flex flex-col gap-2  w-full px-[10px]">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             name="name"
@@ -64,7 +64,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             name="projectEmail"
@@ -75,7 +75,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
             setValue={setSignInData}
           />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 ">
           <CustomInput
             name="website"
             label="Website"
@@ -86,7 +86,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
             name="teleId"
@@ -108,7 +108,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           />
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <div className="flex flex-col gap-2 w-full">
           <label
             htmlFor="imageLogo"
@@ -175,7 +175,7 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           </div>
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <CustomTextarea
           name="about"
           label="Tell us why do you like to be given early access "

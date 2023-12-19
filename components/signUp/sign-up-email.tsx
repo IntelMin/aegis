@@ -32,8 +32,8 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
     setNext(2)
   }
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-[380px] gap-4 flex flex-col">
+    <div className="flex flex-col gap-2 w-full items-center justify-center px-[10px] ">
+      <div className="gap-4 flex flex-col items-center">
         <CustomInput
           name="email"
           label="Email"
@@ -43,6 +43,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           value={signInData?.email}
           setValue={setSignInData}
         />
+
         <CustomInput
           name="password"
           label="Password"
@@ -61,6 +62,7 @@ const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
           value={signInData?.password2}
           setValue={setSignInData}
         />
+
         {
           signInData.password && signInData.password2 && signInData.password !== signInData.password2 &&
           <p className="text-[#ff0000]">

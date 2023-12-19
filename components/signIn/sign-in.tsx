@@ -6,8 +6,8 @@ import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
-import { signIn,useSession } from "next-auth/react";
-import { redirect,useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 type Props = {};
 type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -33,7 +33,7 @@ const SignInForm = (props: Props) => {
         toast.error("Invalid Credentials");
       }
       if (res.ok) {
-          router.push("/");
+        router.push("/");
       }
     });
 
@@ -43,8 +43,8 @@ const SignInForm = (props: Props) => {
     });
   };
   return (
-    <div className="col-span-1 h-full">
-      <div className="flex items-center justify-center flex-col h-[90%]">
+    <div className="col-span-1 h-full max-[900px]:col-span-2 flex items-center justify-center flex-col">
+      <div className="flex items-center justify-center flex-col h-[90%] px-[10px]">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="user-icon" src="/user.png" width={20} height={20} />
         </div>
@@ -54,9 +54,10 @@ const SignInForm = (props: Props) => {
         <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
           Please enter your account details to sign in.
         </p>
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2">
-          <div className="w-[395px]">
+        <form onSubmit={handleSubmit} className="mt-6 mx-[10px] flex flex-col gap-2 w-full">
+          <div className="w-full lg:min-w-[375px]">
             <CustomInput
+
               name="email"
               label="Email"
               placeholder="Enter your email"
@@ -65,7 +66,7 @@ const SignInForm = (props: Props) => {
               setValue={setLoginData as SetValueFunction<{}>}
             />
           </div>
-          <div className="w-[395px]">
+          <div className="w-full lg:min-w-[375px]">
             <CustomInput
               name="password"
               label="Password"
