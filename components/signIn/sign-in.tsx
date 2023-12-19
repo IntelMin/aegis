@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { Toaster, toast } from "react-hot-toast";
+import { signIn,useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
 type Props = {};
@@ -17,21 +18,22 @@ const SignInForm = (props: Props) => {
     email: "",
     password: "",
   });
+  const session = useSession();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(loginData);
     await signIn("credentials", {
       email: loginData.email,
       password: loginData.password,
-      callbackUrl: "/",
-      // redirect: true,
-    }).then((res:any) => {
+      // callbackUrl: "/",
+      redirect: false,
+    }).then((res: any) => {
       console.log(res);
       if (res.error) {
-        alert(res.error);
+        toast.error("Invalid Credentials");
       }
       if (res.ok) {
-        redirect("/");
+          redirect("/");
       }
     });
 
@@ -79,9 +81,17 @@ const SignInForm = (props: Props) => {
         </form>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <p className="text-[14px] font-[400] text-center text-[#d4d4d8d6]">Don’t you have an account?</p>
-        <Link href="/signup" className="text-[#0E76FD] text-[14px] font-[400] text-center">Sign Up</Link>
+        <p className="text-[14px] font-[400] text-center text-[#d4d4d8d6]">
+          Don’t you have an account?
+        </p>
+        <Link
+          href="/signup"
+          className="text-[#0E76FD] text-[14px] font-[400] text-center"
+        >
+          Sign Up
+        </Link>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

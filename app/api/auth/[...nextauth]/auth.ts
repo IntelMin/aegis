@@ -53,11 +53,13 @@ export const authOptions: NextAuthOptions = {
 
         }
         if (!user) {
-          return "no user found";
+          throw new Error("no user found");
+
         }
         if(credentials?.password === undefined) return "no password"
         if (user.password !== hashString(credentials?.password)) {
-          return "wrong password";
+          throw new Error("wrong password");
+
         }
         console.log(user)
         return user;
