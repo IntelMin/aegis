@@ -33,7 +33,6 @@ const SignInForm = (props: Props) => {
         toast.error("Invalid Credentials");
       }
       if (res.ok) {
-          // redirect("/");
           router.push("/");
       }
     });

@@ -8,7 +8,6 @@ type Props = {}
 
 const SignUpPage = async (props: Props) => {
   const authSession = await getServerAuthSession();
-  console.log(authSession)
   if (authSession?.user?.email) redirect("/")
   return (
     <div className="flex items-center justify-center bg-black w-screen h-screen">
