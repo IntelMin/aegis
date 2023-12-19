@@ -29,7 +29,7 @@ const SignInForm = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: { email: any; password: any; }) => {
     await signIn("credentials", {
       email: data.email,
       password: data.password,

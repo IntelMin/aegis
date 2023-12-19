@@ -92,6 +92,8 @@ const SignUpForm = () => {
         console.log("success");
         toast.success('Sign Up Successfull!')
         router.push("/signin");
+      } else {
+        toast.error(await res.text())
       }
     } catch (err) {
       if (err) {
