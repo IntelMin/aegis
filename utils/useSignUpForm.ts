@@ -66,6 +66,8 @@ export const useForm = (): [SignInData, Dispatch<SetStateAction<SignInData>>, (e
             );
             const uploadedImageData = await uploadResponse.json();
             const imageUrl = uploadedImageData.secure_url;
+            console.log("Imge", imageUrl);
+            setSignInData((prev) => ({...prev, logourl: imageUrl}));
         } catch (error) {
             console.log(error, "Error while image upload");
         }
