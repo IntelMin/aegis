@@ -32,7 +32,7 @@ const wagmiConfig = createConfig({
   connectors,
   publicClient,
 });
-export async function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
       <WagmiConfig config={wagmiConfig}>
