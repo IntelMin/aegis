@@ -17,18 +17,18 @@ export function WhitelistWrapper({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession()
   // console.log({session})
-  if(!session?.data?.user?.email){
-    redirect("/signin");
-  }
+
   // const [session, setSession] = useState<any>(null);
   useEffect(() => {
-    setIsLoading(true);
-    if(session.status=="authenticated" && session.data?.user?.email){
+    if(!session?.data?.user?.email){
+      redirect("/signin");
+    } else if(session.status=="authenticated"){
+      setIsLoading(true);
       getWhitelistStatus(String(session?.data?.user?.email)).then((res) => {
         setWhitelistStatus(res);
+        setIsLoading(false);
       });
     }
-    setIsLoading(false);
   }, [session]);
   // console.log({whitelistStatus})
   if (isLoading) {
