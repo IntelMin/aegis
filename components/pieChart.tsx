@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { Props } from "react-apexcharts";
 
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false }) as React.FC<Props>;
 
 type Series = {
   detail?: boolean;

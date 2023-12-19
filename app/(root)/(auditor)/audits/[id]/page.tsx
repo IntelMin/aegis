@@ -10,7 +10,7 @@ import InheritanceGraph from "@/components/projects/tokenDetail/inheritanceGraph
 import CodeViewer from "@/components/projects/tokenDetail/codeViewer";
 import AuditFunctionTable, { DataProps } from "@/components/auditFunctionTable";
 import AuditDetail from "@/components/projects/tokenDetail/AuditDetails";
-import { AUDIT_STATUS_RETURN_CODE } from "../../../../server/api/statusCodes";
+import { AUDIT_STATUS_RETURN_CODE } from "@/server/api/statusCodes";
 
 type Finding = {
   severity: "LOW" | "MEDIUM" | "HIGH";
