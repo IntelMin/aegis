@@ -62,7 +62,7 @@ export function WhitelistWrapper({
           please wait until you’re invited or
           we open up for public beta.
         </h1>
-        <Button onClick={()=>signOut()} >Sign Out</Button>
+        <Button className="mt-5" onClick={()=>signOut()} >Sign Out</Button>
       </div>
     </div>)
   }
