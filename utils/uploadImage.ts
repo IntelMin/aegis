@@ -32,7 +32,7 @@ const uploadImage = async (newImage: File | null) => {
             }
         );
         const uploadedImageData = await uploadResponse.json();
-        const imageUrl = uploadedImageData.secure_url;
+        return uploadedImageData.secure_url;
     } catch (error) {
         console.log(error, "Error while image upload");
     }

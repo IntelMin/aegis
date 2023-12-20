@@ -49,8 +49,7 @@ export const authOptions: NextAuthOptions = {
         console.log(credentials?.email)
         const { data: user, error } = await supabase.from("users").select("*").eq("email", credentials?.email).single()
         if (error) {
-          return null;
-
+          throw new Error(error.message);
         }
         if (!user) {
           throw new Error("no user found");
@@ -62,7 +61,7 @@ export const authOptions: NextAuthOptions = {
 
         }
         console.log(user)
-        return user;
+        return {id:user.id, email:user.email};
       }
     })
   ],

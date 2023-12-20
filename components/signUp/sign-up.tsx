@@ -76,7 +76,7 @@ const SignUpForm = () => {
     }
 
     if (payload.logourl !== null) {
-      await uploadImage(payload.logourl);
+      payload.logourl = await uploadImage(payload.logourl);
     }
 
     try {
