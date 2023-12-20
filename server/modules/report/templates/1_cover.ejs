@@ -1,0 +1,172 @@
+<style>
+  .page-cover {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-cover .title {
+    padding-top: 30px;
+    font-size: 55px;
+    font-weight: 400;
+    line-height: 55px;
+    letter-spacing: 0em;
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  .page-cover .subtitle {
+    text-align: center;
+    font-size: 19px;
+    font-weight: 400;
+    word-wrap: break-word;
+    margin-top: 20px;
+  }
+
+  /* .header,
+  .footer {
+    flex: 0 0 auto;
+    width: 100%;
+    background: #ddd;
+    padding: 10px;
+    text-align: center;
+  } */
+
+  .page-cover .centered-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+
+  .page-cover .component {
+    flex: 0 0 auto;
+  }
+
+  .page-cover .component.left {
+    margin-left: -10px;
+  }
+
+  .page-cover .component.right {
+    margin-right: -10px;
+  }
+
+  .page-cover .component.middle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .page-cover .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 58px 42px;
+  }
+
+  .page-cover .footer .links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .page-cover .footer .link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: underline;
+    word-wrap: break-word;
+    text-transform: uppercase;
+  }
+
+  .page-cover .footer .link img {
+    width: 20px;
+    height: auto;
+  }
+
+  .page-cover .footer .date {
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    word-wrap: break-word;
+  }
+
+  .page-cover a {
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration-line: underline;
+  }
+
+  /* Additional styles for responsiveness or specific visual preferences can be added */
+</style>
+<div class="page-cover">
+  <div class="top-right-image" style="position: absolute; top: 50; right: 50;">
+    <img src="../assets/topleft.png" />
+  </div>
+  <div class="title">Aegis AI</div>
+  <div class="subtitle">
+    Pioneering Blockchain Security with <br />AI-Enabled Audit Solutions.
+  </div>
+
+  <div class="centered-container">
+    <div class="component left">
+      <svg xmlns="http://www.w3.org/2000/svg" width="214" height="295" viewBox="0 0 214 295" fill="none">
+        <path opacity="0.14"
+          d="M4.35181 221.681L4.35013 221.682C3.47284 222.367 2.94324 223.421 2.92422 224.534M4.35181 221.681L2.42428 224.527L2.9242 224.535M4.35181 221.681L93.4184 151.491L93.4189 151.49M4.35181 221.681L93.4189 151.49M2.92422 224.534C2.92422 224.535 2.9242 224.535 2.9242 224.535M2.92422 224.534L2.9242 224.535M2.92422 224.534L1.90186 290.706M2.9242 224.535L1.90186 290.706M1.90186 290.706C1.90186 290.707 1.90184 290.707 1.90184 290.708M1.90186 290.706L1.90184 290.708M1.90184 290.708C1.86516 293.734 5.28638 295.536 7.77483 293.795L211.089 150.823L211.089 150.823C213.202 149.339 213.202 146.232 211.089 144.745L7.77475 1.77589L1.90184 290.708ZM93.4189 151.49C95.8027 149.607 95.8027 145.984 93.4189 144.099L93.4183 144.099M93.4189 151.49L93.4183 144.099M93.4183 144.099L4.35531 73.9146M93.4183 144.099L4.35531 73.9146M4.35531 73.9146C4.35479 73.9142 4.35426 73.9138 4.35374 73.9134M4.35531 73.9146L4.35374 73.9134M4.35374 73.9134C3.47067 73.2039 2.94336 72.1654 2.92422 71.0365C2.92422 71.0363 2.92421 71.036 2.92421 71.0358L4.35374 73.9134ZM64.5176 151.386L2.60537 198.309C0.602561 199.825 -2.25568 199.417 -3.7535 197.398L-38.5491 150.479C-39.7303 148.883 -39.7303 146.701 -38.5491 145.106L-3.7535 98.1832C-3.75345 98.1832 -3.75342 98.1831 -3.75338 98.1831C-2.25568 96.1652 0.602398 95.7572 2.60507 97.2756L2.90715 96.8772L2.60514 97.2757L64.5176 144.198L64.5178 144.199C66.899 146.001 66.8995 149.58 64.5176 151.386ZM1.90186 4.88444C1.86514 1.83207 5.28796 0.0341586 7.77406 1.77541L1.90186 4.88444Z"
+          stroke="black" />
+      </svg>
+    </div>
+    <div class="component middle">
+      <img src="assets/coverlogo.png" width="500px" height="500px" />
+    </div>
+    <div class="component right">
+      <svg xmlns="http://www.w3.org/2000/svg" width="211" height="295" viewBox="0 0 211 295" fill="none">
+        <path opacity="0.14"
+          d="M208.878 73.889L208.88 73.8877C209.757 73.2025 210.286 72.1482 210.306 71.0352M208.878 73.889L210.805 71.0429L210.306 71.0345M208.878 73.889L119.811 144.079L119.811 144.079M208.878 73.889L119.811 144.079M210.306 71.0352C210.306 71.0349 210.306 71.0347 210.306 71.0345M210.306 71.0352L210.306 71.0345M210.306 71.0352L211.328 4.86325M210.306 71.0345L211.328 4.86325M211.328 4.86325C211.328 4.86276 211.328 4.86228 211.328 4.86179M211.328 4.86325L211.328 4.86179M211.328 4.86179C211.365 1.83597 207.943 0.0335718 205.455 1.77497L2.14063 144.747L2.14048 144.747C0.0280318 146.231 0.0274625 149.337 2.1408 150.825L205.455 293.794L211.328 4.86179ZM119.811 144.079C117.427 145.963 117.427 149.586 119.811 151.47L119.811 151.471M119.811 144.079L119.811 151.471M119.811 151.471L208.874 221.655M119.811 151.471L208.874 221.655M208.874 221.655C208.875 221.655 208.875 221.656 208.876 221.656M208.874 221.655L208.876 221.656M208.876 221.656C209.759 222.366 210.286 223.404 210.306 224.533C210.306 224.533 210.306 224.534 210.306 224.534L208.876 221.656ZM148.712 144.184L210.624 97.2611C212.627 95.7451 215.485 96.153 216.983 98.1712L251.779 145.091C252.96 146.686 252.96 148.869 251.779 150.464L216.983 197.386C216.983 197.386 216.983 197.387 216.983 197.387C215.485 199.404 212.627 199.812 210.625 198.294L210.323 198.692L210.625 198.294L148.712 151.371L148.712 151.371C146.331 149.568 146.33 145.989 148.712 144.184ZM211.328 290.685C211.365 293.738 207.942 295.536 205.456 293.794L211.328 290.685Z"
+          stroke="black" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="links">
+      <div class="link">
+        <img src="assets/webicon.png" />
+        <a href="https://aiaegis.org">AIAEGIS.ORG</a>
+      </div>
+      <div class="link">
+        <svg width="20" height="20" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="icons8-twitterx 1">
+        <path id="Vector" d="M3.2597 3.82147L10.884 15.364L3.42119 24.3415H5.07463L11.6142 16.4693L16.8142 24.3415H23.0613L15.0958 12.2832L22.1249 3.82147H20.4766L14.3645 11.1748L9.50681 3.82147H3.2597ZM5.23408 4.90147H8.95939L21.087 23.2615H17.3617L5.23408 4.90147Z" fill="white"/>
+        </g>
+        </svg>
+        <a href="https://twitter.com/aegisaisecurity">AEGISAISECURITY</a>
+      </div>
+      <div class="link">
+        <svg width="20" height="20" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="telegram-svgrepo-com (6) 1">
+        <path id="Vector" d="M7.79549 21.3898C7.79549 21.3898 21.192 15.9086 25.8382 13.9786C27.6191 13.2067 33.6592 10.7362 33.6592 10.7362C33.6592 10.7362 36.4469 9.65564 36.2146 12.2802C36.137 13.361 35.5175 17.1437 34.898 21.2352C33.9689 27.0252 32.9622 33.3553 32.9622 33.3553C32.9622 33.3553 32.8074 35.1309 31.4911 35.4398C30.1745 35.7486 28.0064 34.359 27.6191 34.0501C27.3095 33.8185 21.8115 30.3446 19.7983 28.6463C19.2562 28.1832 18.6367 27.2567 19.8757 26.1759C22.6633 23.6285 25.9931 20.4633 28.0064 18.4562C28.9355 17.5297 29.8649 15.3681 25.9931 17.9928C20.4952 21.7755 15.0746 25.3268 15.0746 25.3268C15.0746 25.3268 13.8358 26.0987 11.5127 25.4039C9.18962 24.7091 6.47933 23.7828 6.47933 23.7828C6.47933 23.7828 4.62103 22.6247 7.7959 21.3898H7.79549Z" stroke="white"/>
+        </g>
+        </svg>
+        <a href="https://t.me/AegisAiSecurity">aegisaisecurity</a>
+      </div>
+    </div>
+    <div class="date">2023</div>
+  </div>
+  <!-- <p id="token-name"><%= info.name %></p>
+    <img id="token-icon" src=<%= info.iconurl %> alt="Token Icon" /> -->
+</div>

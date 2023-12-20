@@ -1,0 +1,364 @@
+<style>
+<<<<<<< HEAD
+=======
+  .page23-body {
+    width: fit-content;
+  }
+
+>>>>>>> dev
+  h3 {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 251.724%;
+  }
+
+  .expose-desc {
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 251.724%;
+  }
+
+  .flex-subjects {
+    display: flex;
+  }
+
+  .subject {
+    width: 129.825px;
+    height: 33.225px;
+    display: flex;
+    flex-shrink: 0;
+    border-radius: 79px;
+    color: #FFF;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Montserrat;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 251.724%;
+  }
+
+  .item {
+    color: #FFF;
+
+    font-family: Montserrat;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 151.724%;
+    /* 36.414px */
+  }
+
+  .group-first {
+    margin-top: 47.58px;
+  }
+
+  .subject.public {
+    background-image: linear-gradient(#cb66fa, #516cfe);
+    z-index: 3;
+    margin-left: -11px;
+  }
+
+  .subject.payable {
+    background-image: linear-gradient(#4f3aff, #8243ff);
+    margin-left: -22px;
+    z-index: 2;
+  }
+
+  .value-items-first {
+    border-radius: 0px 0px 12.9px 12.9px;
+    border: 1px solid #FFF;
+    width: 217px;
+    height: 79px;
+    flex-shrink: 0;
+    display: flex;
+    margin-top: -10px;
+  }
+
+  .item-public {
+    width: 107.71px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-payable {
+    width: 109.29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  /*** second **/
+  .group-second {
+    margin-top: 45px;
+    margin-bottom: 45px;
+  }
+
+  .subject.external {
+    background-image: linear-gradient(#00E332, #2cb0de);
+    z-index: 6;
+    margin-left: -11px;
+  }
+
+  .subject.internal {
+    background-image: linear-gradient(#FF3C3C, #720cdb);
+    margin-left: -22px;
+    z-index: 5;
+  }
+
+  .subject.private {
+    background-image: linear-gradient(#63FFB4, #434149);
+    margin-left: -22px;
+    z-index: 4;
+  }
+
+  .subject.pure {
+    background-image: linear-gradient(#ff802c, #ffe52a);
+    margin-left: -22px;
+    z-index: 3;
+  }
+
+  .subject.view {
+    background-image: linear-gradient(#ff4791, #ffde38);
+    margin-left: -22px;
+    z-index: 2;
+  }
+
+  .value-items-second {
+    border-radius: 0px 0px 12.9px 12.9px;
+    border: 1px solid #FFF;
+    width: 535px;
+    height: 79px;
+    flex-shrink: 0;
+    display: flex;
+    margin-top: -10px;
+  }
+
+  .item-external {
+    width: 107px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-internal {
+    width: 107px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-private {
+    width: 107px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-pure {
+    width: 107px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .item-view {
+    width: 107px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /*** third***/
+  .group-third {
+    margin-top: 45px;
+  }
+
+  .subject.total {
+    background-image: linear-gradient(#addabc, #4db4e7);
+    z-index: 3;
+    margin-left: -11px;
+  }
+
+  .subject.public-second {
+    background-image: linear-gradient(#afc9ff, #925eff);
+    margin-left: -22px;
+    z-index: 2;
+  }
+
+  .value-items-third {
+    border-radius: 0px 0px 12.9px 12.9px;
+    border: 1px solid #FFF;
+    width: 217px;
+    height: 79px;
+    flex-shrink: 0;
+    display: flex;
+    margin-top: -10px;
+  }
+
+  .item-total {
+    width: 107.71px;
+    border-right: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-public-second {
+    width: 109.29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+</style>
+<div class="page23-body">
+
+  <div>
+    <h3>Exposed Functions</h3>
+    <p>
+      This section lists functions that are explicitly declared public or payable. Please note that getter methods for
+      public state variables are not included.
+    </p>
+  </div>
+  <% 
+  let internalCount=0; 
+  let publicCount=0; 
+  let pureCount = 0;
+  let viewCount = 0;
+  let payableCount = 0;
+  let totalFunctions = 0;
+  
+    functions.tableRows.forEach(row=> { 
+      if (row.type==='func' ) { 
+        totalFunctions++;
+        if (row.spec.includes('Internal 🔒')) { 
+          internalCount++; 
+            } else if (row.spec.includes('Public ❗️')) { 
+              publicCount++; 
+                } 
+                  }
+                    });  
+                    
+                    source.abi.forEach(item => {
+                      if (item.type === 'function') {
+                        if (item.stateMutability === 'pure') {
+                          pureCount++;
+                        } else if (item.stateMutability === 'view') {
+                          viewCount++;
+                        } else if (item.payable) {
+                          payableCount++;
+                        }
+                      }
+                    });
+                   
+const privateFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*private/g;
+const payableFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*payable/g;
+const pureFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*pure/g;
+
+const privateMatches = source.source_code.match(privateFunctionPattern);
+const payableMatches = source.source_code.match(payableFunctionPattern);
+const pureMatches = source.source_code.match(pureFunctionPattern);
+
+const privateCount = privateMatches ? privateMatches.length : 0;
+ pureCount = pureMatches ? pureMatches.length : 0;
+                    %>
+  <div class="page-content-exposed-function">
+    <div class="group group-first">
+      <div class="flex-subjects">
+        <div class="subject public">
+          Public
+        </div>
+        <div class="subject payable">
+          Payable
+        </div>
+      </div>
+      <div class="value-items-first">
+        <div class="item item-public">
+          <%= publicCount %>
+        </div>
+        <div class="item item-payable">
+          <%= payableCount %>
+        </div>
+      </div>
+    </div>
+
+    <div class="group group-second">
+      <div class="flex-subjects">
+        <div class="subject external">
+          External
+        </div>
+        <div class="subject internal">
+          Internal
+        </div>
+        <div class="subject private">
+          Private
+        </div>
+        <div class="subject pure">
+          Pure
+        </div>
+        <div class="subject view">
+          View
+        </div>
+
+      </div>
+      <div class="value-items-second">
+        <div class="item item-external">
+          <%= publicCount %>
+        </div>
+        <div class="item item-internal">
+          <%= internalCount %>
+        </div>
+        <div class="item item-private">
+          <%= privateCount %>
+        </div>
+        <div class="item item-pure">
+          <%= pureCount %>
+        </div>
+        <div class="item item-view">
+          <%= viewCount %>
+        </div>
+
+      </div>
+    </div>
+
+    <h3>State Variables</h3>
+
+    <div class="group group-third">
+      <div class="flex-subjects">
+        <div class="subject total">
+          Total
+        </div>
+        <div class="subject public-second">
+          Public
+        </div>
+      </div>
+
+      <div class="value-items-third">
+        <div class="item item-total">
+          <%= totalFunctions %>
+        </div>
+        <div class="item item-public-second">
+          <%= viewCount %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

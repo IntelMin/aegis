@@ -1,0 +1,32 @@
+<div class="overall-security-page">
+    <h3>Self Destruct</h3>
+
+    <p>
+        In a smart contract, the selfdestruct feature refers to a specific function that, when executed, destroys the
+        contract and removes it from the blockchain. This action renders the contract inoperative and ends all its
+        functions. When a contract is self-destructed, any remaining balance in the contract is sent to a designated
+        address, and the contract's code and storage are removed from the state of the blockchain.
+    </p>
+
+    <table class="security-table <%= security.selfdestruct != 1 ? 'success' : 'error' %>">
+        <tr>
+            <td>Can self destruct?</td>
+            <td>
+                <%= security.selfdestruct==1 ? "❌ Contract can self destruct" : "✅ Contract cannot self destruct" %>
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>
+                <%= security.selfdestruct==1
+                    ? "The smart contract includes a self-destruct feature, which allows the owner to terminate the contract."
+                    : "The smart contract does not include a self-destruct feature." %>
+            </td>
+        </tr>
+    </table>
+
+
+    <div class="image">
+        <img src="../assets/selfdestruct.png" style="margin-left: -80px;" />
+    </div>
+</div>

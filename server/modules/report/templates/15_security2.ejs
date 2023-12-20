@@ -1,0 +1,50 @@
+<div class="overall-security-page">
+  <div style="margin-top: 70px">
+    <div>
+      <h2>Listing</h2>
+      <p>
+        Listings on multiple decentralized exchanges (DEX) with good amount of
+        liquidity is a good sign
+      </p>
+      <table
+        class="security-table <%= security.is_in_dex == '1' ? 'success' : 'error' %>"
+      >
+        <tr>
+          <td>Is it on a dex?</td>
+          <td>
+            <%= security.is_in_dex == "1" ? "✅ The contract is listed" : "⚠️The contract is not listed" %>
+          </td>
+        </tr>
+        <tr>
+          <td>Description</td>
+          <td>
+            <%= security.is_in_dex == "1" ? "You can swap tokens on dex" :"You can't swap tokens on dex" %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h2>Opensource</h2>
+      <p>
+        Open source contract is contract with source code that anyone can
+        inspect, modify, and enhance.
+      </p>
+      <table
+        class="security-table <%= security.is_open_source == '1' ? 'success' : 'error' %>"
+      >
+        <tr>
+          <td>Is code available?</td>
+          <td>
+            <%= security.is_open_source == "1" ? "✅ The contract is Open Source" : "⚠️ The contract is not Open Source" %>
+          </td>
+        </tr>
+        <tr>
+          <td>Description</td>
+          <td>
+            <%= security.is_open_source == "1" ? "Contract code can be reviewed and audited by anyone" : "Contract code is private" %>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

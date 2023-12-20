@@ -1,0 +1,208 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>aegis audit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/style.css" />
+  </head>
+
+
+  <body class="document">
+    <div class="page bg-alternate"><%- cover %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- toc %></div>
+    <div class="page bg-aegis-bottom bg-default padding-15mm"><%- about %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- intro %></div>
+    <!-- <div class="page bg-aegis-bottom bg-default padding-15mm"><%- background %></div> -->
+    <!-- <div class="page bg-aegis-right bg-default padding-15mm"><%- objective %></div> -->
+    <!-- <div class="page bg-aegis-right bg-default padding-15mm"><%- disclaimer1 %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- disclaimer2 %></div> -->
+    <div class="page bg-aegis-bottom bg-default padding-15mm"><%- overview %></div>
+    <div class="page bg-aegis-left bg-alternate padding-15mm"><%- social %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- summary %></div>
+    <div class="page bg-aegis-bottom bg-alternate padding-15mm"><%- auditinfo %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- audittechnique %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- audittechnique2 %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- security %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- security2 %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- security3 %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- owner %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- ownership %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- burningtokens %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- blacklistaddress %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- feestax %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- lockuserfunds %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- externalfunction %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- exposedfunction %></div>
+    <div class="page bg-aegis-left bg-alternate padding-15mm"><%- capabilities %></div>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- inheritance %></div>
+    <div class="page bg-aegis-left bg-alternate padding-15mm"><%- centralization %></div>
+    <%- findings %>
+    <div class="page bg-aegis-right bg-default padding-15mm"><%- files %></div>
+    <div class="page bg-aegis-right bg-alternate padding-15mm"><%- conclusion %></div>
+    <div class="page bg-aegis-right bg-alternate padding-15mm"><%- conclusionTable %></div>
+    <div class="page bg-aegis-bottom bg-default padding-15mm"><%- glossary %></div>
+    <div class="page bg-aegis-bottom bg-default padding-15mm"><%- glossary2 %></div>
+
+  </body>
+  <script type="text/javascript">
+    // window.print();
+
+    var Config = {};
+    Config.pixelsPerInch = 96;
+    Config.pageHeightInCentimeter = 29.7; // must match 'min-height' from 'css/sheets-of-paper-*.css' being used
+    Config.pageMarginBottomInCentimeter = 2; // must match 'padding-bottom' and 'margin-bottom' from 'css/sheets-of-paper-*.css' being used
+
+    window.addEventListener("DOMContentLoaded", function () {
+      applyPageBreaks();
+    });
+
+    function applyPageBreaks() {
+      applyManualPageBreaks();
+      applyAutomaticPageBreaks(
+        Config.pixelsPerInch,
+        Config.pageHeightInCentimeter,
+        Config.pageMarginBottomInCentimeter
+      );
+
+      document.querySelectorAll(".document .page").forEach(function (element) {
+        if (!element.classList.contains("has-events")) {
+          element.addEventListener("blur", function () {
+            applyPageBreaks();
+          });
+
+          element.classList.add("has-events");
+        }
+      });
+    }
+
+    /* Applies any manual page breaks in preview mode (screen, non-print) where CSS Paged Media is not fully supported */
+    function applyManualPageBreaks() {
+      var docs, pages, snippets;
+      docs = document.querySelectorAll(".document");
+
+      for (var d = docs.length - 1; d >= 0; d--) {
+        pages = docs[d].querySelectorAll(".page");
+
+
+        for (var p = 0; p < pages.length; p++) {
+          if (p <= 1) continue;
+          // Create the header elements
+          var headerDiv = document.createElement("div");
+          var pageNumberDiv = document.createElement("div");
+          var logoDiv = document.createElement("div");
+          var img = document.createElement("img");
+
+          // Set classes and content for the header elements
+          headerDiv.className = "page-header";
+          pageNumberDiv.className = "page-number";
+          logoDiv.className = "logo";
+
+          // Set the page number, incrementing p by 1 because pages are usually 1-indexed
+          pageNumberDiv.textContent = ("0" + (p + 1)).slice(-2);
+
+          // Set the source for your image
+          img.src =
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAcCAMAAAD8x6nuAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJcEhZcwAACxMAAAsTAQCanBgAAABUUExURf///////////////////////////0dwTP///////////////////////////////////////////////////////////////////////////////+sn3H4AAAAcdFJOUzMtBhMgBwMADRodIxYUEDAKJiwZBCchKRwqCRfHtcaeAAABjElEQVRIx62V25KcMAxEfT+S7YCBmdlL/v8/80BmgYFkq2D7ya4yp9xCbhmeuk29GTquyDwXtTfGGBPidZh8mKemi7BYzErWX4Ddpt5sddarQazZ65xXE82h8inYsHInK1o6A1sV3pGX3a9rMA/J7mB+9zPKai0NiLKDZQB5hcWwq966AEMBRF9hdj6TX2BeSoKooULMIdSGEnMICUC8yhHs71XT2xY2IAqDQ5TB4awQyA43O3apHMAUiBPQNjDvoaRWvPd3lwEVAjV0ca4BZNnBLHCztgPqGjaoavjtQowxpgIEIUCSIkDIqjnsYA4I6mwEhgXmPcAHpUMEfe8mKwR8o/r5YlDSC0yBqUD3lsD1C8wBdAn/qAmaT7nR4fThAXEArW1bwwLNOiDnp9GDpq0SZfi2aftxHPuSgGrGcRz/AXNe639fmVnix0belx4+E+BGl+/7VRjZU6mRjuLM9N3JpNU96/55ega4sEXZ7tJ08iuvvaarc/PL6939wBCevVr5kYkOkh81XWHxB739MqZE+J/uAAAAAElFTkSuQmCC";
+          img.width = "76";
+          img.height = "28";
+
+          // Append the image to the logo container
+          logoDiv.appendChild(img);
+
+          // Append page number and logo to the header
+          headerDiv.appendChild(pageNumberDiv);
+          headerDiv.appendChild(logoDiv);
+
+          // Prepend the header to the page
+          pages[p].insertBefore(headerDiv, pages[p].firstChild);
+        }
+        
+        // for (var p = pages.length - 1; p >= 0; p--) {
+        //   // snippets = pages[p].children;
+        //   var snippets = pages[p].querySelectorAll("*");
+
+        //   console.log(snippets);
+        //   for (var s = snippets.length - 1; s >= 0; s--) {
+        //     if (snippets[s].classList.contains("page-break")) {
+        //       console.log("page-break found");
+        //       pages[p].insertAdjacentHTML(
+        //         "afterend",
+        //         '<div class="page"></div>'
+        //       );
+
+        //       for (var n = snippets.length - 1; n > s; n--) {
+        //         pages[p].nextElementSibling.insertBefore(
+        //           snippets[n],
+        //           pages[p].nextElementSibling.firstChild
+        //         );
+        //       }
+
+        //       snippets[s].remove();
+        //     }
+        //   }
+        // }
+
+      }
+    }
+
+    // /* Applies (where necessary) automatic page breaks in preview mode (screen, non-print) where CSS Paged Media is not fully supported */
+    // function applyAutomaticPageBreaks(
+    //   pixelsPerInch,
+    //   pageHeightInCentimeter,
+    //   pageMarginBottomInCentimeter
+    // ) {
+    //   var inchPerCentimeter = 0.393701;
+    //   var pageHeightInInch = pageHeightInCentimeter * inchPerCentimeter;
+    //   var pageHeightInPixels = Math.ceil(pageHeightInInch * pixelsPerInch);
+    //   var pageMarginBottomInInch =
+    //     pageMarginBottomInCentimeter * inchPerCentimeter;
+    //   var pageMarginBottomInPixels = Math.ceil(
+    //     pageMarginBottomInInch * pixelsPerInch
+    //   );
+    //   var docs, pages, snippets, pageCoords, snippetCoords;
+    //   docs = document.querySelectorAll(".document");
+
+
+    //   try {
+    //     for (var d = docs.length - 1; d >= 0; d--) {
+    //       pages = docs[d].querySelectorAll(".page");
+
+    //       for (var p = 0; p < pages.length; p++) {
+    //         if (pages[p].clientHeight > pageHeightInPixels) {
+    //           pages[p].insertAdjacentHTML(
+    //             "afterend",
+    //             '<div class="page"></div>'
+    //           );
+    //           pageCoords = pages[p].getBoundingClientRect();
+    //           snippets = pages[p].querySelectorAll(
+    //             "h1, h2, h3, h4, h5, h6, p, ul, ol"
+    //           );
+
+    //           for (var s = snippets.length - 1; s >= 0; s--) {
+    //             snippetCoords = snippets[s].getBoundingClientRect();
+
+    //             if (
+    //               snippetCoords.bottom -
+    //                 pageCoords.top +
+    //                 pageMarginBottomInPixels >
+    //               pageHeightInPixels
+    //             ) {
+    //               pages[p].nextElementSibling.insertBefore(
+    //                 snippets[s],
+    //                 pages[p].nextElementSibling.firstChild
+    //               );
+    //             }
+    //           }
+
+    //           pages = docs[d].querySelectorAll(".page");
+    //         }
+    //       }
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+  </script>
+</html>

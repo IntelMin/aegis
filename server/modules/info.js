@@ -28,7 +28,7 @@ async function definedRequest(address) {
           authority: "graph.defined.fi",
           accept: "*/*",
           "accept-language": "en-US,en;q=0.9,ko;q=0.8",
-          authorization: "F056MdQIqh29ZGalfV1m2BChqdQcae84k7wIFBA7",
+          authorization: "e0f195aecd9fd4a41c387f38002ce1ce3783cf57",
           "content-type": "application/json",
           origin: "https://www.defined.fi",
           referer: "https://www.defined.fi/",
@@ -46,7 +46,7 @@ async function definedRequest(address) {
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error("Error making the request", error);
     return null;

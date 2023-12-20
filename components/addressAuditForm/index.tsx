@@ -21,7 +21,7 @@ const AddressAuditForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("contractAddress", contractAddress);
     if (!/^(0x)?[0-9a-fA-F]{40}$/.test(contractAddress)) {
       setError("Please enter a valid Ethereum address.");
       return;
@@ -40,7 +40,7 @@ const AddressAuditForm = () => {
           <h1 className="w-full text-success font-[600]">Enter Contract Address</h1>
           <Input
             type="text"
-            label="Contract Address"
+            placeholder="Contract Address"
             value={contractAddress}
             onChange={handleInputChange}
             errorMessage={error || ""}
@@ -53,7 +53,7 @@ const AddressAuditForm = () => {
         </form>
         <GoToOtherType />
       </div>
-      <AuditReport />
+      {/* <AuditReport /> */}
     </div>
   );
 };

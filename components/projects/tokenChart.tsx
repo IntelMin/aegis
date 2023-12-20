@@ -1,8 +1,8 @@
 "use client";
+import dynamic from "next/dynamic";
+import { Props } from "react-apexcharts";
 
-import React from "react";
-
-import Chart, { Props } from "react-apexcharts";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false }) as React.FC<Props>;
 
 const TokenChart = () => {
   const options: Props["options"] = {

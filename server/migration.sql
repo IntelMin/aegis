@@ -7,8 +7,8 @@ CREATE TABLE aegis (
 
 CREATE TABLE audit_requests (
     request_id SERIAL PRIMARY KEY,
-    contract VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL CHECK (status IN ('pending', 'partial', 'completed')),
+    contract VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(50) NOT NULL CHECK (status IN ('pending', 'partial', 'completed', 'failed')),
     status_log TEXT,
     created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -42,6 +42,40 @@ CREATE TABLE token_audits (
     audit_loc INTEGER,
     created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    projectname VARCHAR(255) NULL,
+    website VARCHAR(255) NULL,
+    tokenAddress VARCHAR(255) NULL,
+    teleAccount VARCHAR(255) NULL,
+    projectX VARCHAR(255) NULL,
+    projectInsta VARCHAR(255) NULL,
+    role VARCHAR(255) NULL,
+    name VARCHAR(255) NULL,
+    twitter VARCHAR(255) NULL,
+    teleId VARCHAR(255) NULL,
+    about VARCHAR(255) NULL,
+    vcContactName VARCHAR(255) NULL,
+    vcEmail VARCHAR(255) NULL,
+    projectEmail VARCHAR(255) NULL,
+    logourl VARCHAR(255),
+    isChecked BOOLEAN NULL DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    is_admin BOOLEAN NULL DEFAULT false,
+    whitelisted BOOLEAN NULL DEFAULT false
+);
+
+CREATE TABLE report_requests(
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    address VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    status VARCHAR(255) NULL,
+    link VARCHAR(255) NULL
 );
 
 CREATE TRIGGER update_token_audits_modtime

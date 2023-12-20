@@ -1,0 +1,141 @@
+<style>
+    .conclusion-table {
+        border-collapse: collapse;
+        color: black;
+        line-height: 15px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #000000;
+        font-size: 15px;
+        font-weight: 300;
+    }
+
+    .conclusion-table tr:not(:first-child) {
+        background-color: white;
+    }
+
+    .conclusion-table tr:first-child {
+        background-color: #303030;
+    }
+
+    .conclusion-table tr:first-child th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .conclusion-table tr:first-child th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    .conclusion-table tr:last-child td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    .conclusion-table tr:last-child td:last-child {
+        border-bottom-right-radius: 10px;
+    }
+
+    .conclusion-table tr th {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: left;
+        color: white;
+        padding: 10px 0px 15px 15px;
+        padding-left: 15px;
+    }
+
+    .conclusion-table tr td {
+        padding: 10px 0px 15px 15px;
+    }
+
+    .conclusion-table tr:not(:first-child) td:first-child {
+        line-height: 26px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .conclusion-table tr:not(:last-child) {
+        border-bottom: 1px solid black;
+    }
+
+    .conclusion-table tr td:nth-child(2) {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+</style>
+
+<h1><strong>Conclusion Overview<strong></h1>
+    <% 
+    let holders=summary.table.holder_count
+    let lpHolder=summary.table.lp_holder_count
+    %>
+
+    <table class="conclusion-table">
+        <tr>
+          <th width="30%">Overview</th>
+          <th width="40%">Notes</th>
+          <th width="20%">Result</th>
+        </tr>
+        
+        <tr>
+          <td>Honeypot</td>
+          <td>The contract owner can drain the funds from the contract</td>
+          <td><%= summary.table.is_honeypot==="0" ? "✅ False" : "❌ True" %></td>
+        </tr>
+        <tr>
+          <td>Anti whale check</td>
+          <td>Features preventing whales from manipulating the Token</td>
+          <td><%= summary.table.is_antiwhale=="1" ? "✅ True" : "❌ False" %></td>
+        </tr>
+        <tr>
+          <td>Opensource</td>
+          <td>The code of the contract is public</td>
+          <td><%= summary.table.is_open_source==="1" ? "✅ True" : "❌ False" %></td>
+        </tr>
+        <tr>
+          <td>Ownership renounced</td>
+          <td>Contract owner has renounced ownership</td>
+          <td><%= summary.table.owner_address=="" ? "✅ True" : "❌ False" %></td>
+        </tr>
+        <tr>
+          <td>Buy tax</td>
+          <td>Fees incurred when buying the token</td>
+          <td><%= Number(summary.table.buy_tax)> 5 ? "❌ High buy tax" : "✅" %></td>
+        </tr>
+        <tr>
+          <td>Sell tax</td>
+          <td>Fees incurred when selling the token</td>
+          <td><%= Number(summary.table.sell_tax)> 5 ? "❌ High sell tax" : "✅" %></td>
+        </tr>
+        <tr>
+          <td>High Severity Issues</td>
+          <td>Number of High severity issues</td>
+          <td><%= summary.table.number_of_high_severity_issues %></td>
+        </tr>
+        <tr>
+          <td>Medium Severity Issues</td>
+          <td>Number of Medium severity issues</td>
+          <td><%= summary.table.number_of_medium_severity_issues %></td>
+        </tr>
+        <tr>
+          <td>Mintable</td>
+          <td>Can mint new tokens</td>
+          <td><%= summary.table.is_mintable=="0" ? "✅ False" : "❌ True" %></td>
+        </tr>
+        <tr>
+          <td>Blacklist</td>
+          <td>Owner can blacklist users</td>
+          <td><%= security.is_blacklisted=="0" ? "✅ False" : "❌ True" %></td>
+        </tr>
+        <tr>
+          <td>Holders</td>
+          <td>Total wallets holding the token</td>
+          <td><%= Number(summary.table.holder_count)> 10000 ? `✅ ${holders}` : `${holders}` %></td>
+        </tr>
+        <tr>
+          <td>LP holder</td>
+          <td>Number of liquidity providers</td>
+          <td><%= Number(summary.table.lp_holder_count)> 10000 ? `✅ ${lpHolder}` : `${lpHolder}` %></td>
+        </tr>
+      </table>
+      

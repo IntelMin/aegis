@@ -4,7 +4,8 @@ const getInfo = require("./modules/info");
 const getTree = require("./modules/tree");
 const getDependencies = require("./modules/dependencies");
 const getFunctions = require("./modules/functions");
-const getAudit = require("./modules/audit");
+const getAudit = require("./modules/audit/audit");
+const getSummary = require("./modules/audit/summary")
 
 //GPT code audit part
 async function worker() {
@@ -72,19 +73,28 @@ async function worker() {
         // generate findings.json
         start_time = new Date().getTime();
         console.log("-- start findings.json");
-        const findings = await getAudit(address, source_code);
+        // const findings = await getAudit(address, source_code);
+        const findings = await getAudit(address,source_code);
         if (!findings) {
           throw new Error("Findings not generated");
         }
         end_time = new Date().getTime();
         console.log("-- findings.json");
         console.log("Time taken: ", end_time - start_time, "ms");
+        
+        // generate summary.json
+        const functions = await getSummary(address);
+        if (!functions) {
+            throw new Error('Summary not generated');
+        }
+        console.log('-- summary.json');
 
         modifyRequestdb(address, "completed");
         console.log("-- modified status to completed");
       }
+
     } catch (e) {
-      // TODO: Add failure to supabase
+      modifyRequestdb(address, "failed", e.message);
       console.log(e);
     }
   }

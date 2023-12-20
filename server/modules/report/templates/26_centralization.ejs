@@ -1,0 +1,123 @@
+<style>
+    .centralization-table {
+      display: flex;
+      border-radius: 20px 0 20px 0;
+      overflow: hidden;
+      width: fit-content;
+      margin-top: 0px;
+    }
+  
+    .functions-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    .functions-table tr:nth-child(1) {
+      background-color: red;
+      border-top-left-radius: 20px;
+    }
+  
+    .functions-table tr:first-child th:first-child {
+      border-top-left-radius: 20px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      height: 62px;
+      background-color: #2f4076;
+      border-right: 1px solid #647fd4;
+      border-bottom: 1px solid #647fd4;
+    }
+  
+    .functions-table tr:first-child th:last-child {
+      border-top-right-radius: 20px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      background-color: #2f4076;
+    }
+  
+    .functions-table th,
+    .functions-table td {
+      padding: 8px;
+    }
+  
+    .functions-table tr>td:nth-child(1) {
+      color: white;
+      background-color: #2f4076;
+      border-right: 1px solid #647fd4;
+      border-bottom: 1px solid #647fd4;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      border-left: 0px;
+      text-align: center;
+      padding: 14px;
+    }
+  
+    .functions-table tr>td:nth-child(2) {
+      background: white;
+      color: black;
+      text-align: center;
+      border-bottom: 1px solid black;
+    }
+  
+    .functions-table tr:last-child>td:nth-child(1) {
+      border-bottom-left-radius: 20px;
+      border-bottom: none;
+    }
+  
+    .functions-table tr:last-child>td:nth-child(2) {
+      border-bottom-right-radius: 20px;
+    }
+  
+    .functions-table .contract-name {
+      width: 30%;
+    }
+  
+    .functions-table .contract-functions {
+      width: 70%;
+    }
+  </style>
+  <div class="centralization">
+    <div class="title-button light">Centralization Privilege</div>
+    <p>
+      Centralization can arise when one or more parties have privileged access or
+      control over the contract's functionality, data, or decision-making. This
+      can occur, for example, if the contract is controlled by a single entity or
+      if certain participants have special permissions or abilities that others do
+      not. In the project, there are authorities that have access to the following
+      functions:
+    </p>
+  </div>
+  
+  <div>
+  
+    <table class="functions-table">
+      <tr>
+        <th>Contract</th>
+        <th>Privileges</th>
+      </tr>
+      <% functions.tableRows.forEach(function(item, index) { if (item.type==='contract' ) { %>
+        <tr>
+          <td>
+            <%= item.name %>
+          </td>
+          <td>
+            <% funcsList=[]; functions.tableRows.slice(index + 1).some(function(func) { if(func.type==='func' && func.spec
+              !='Internal 🔒' && func.mutating=='🛑' ) { if (func.name.length> 0 && func.name.indexOf('Constructor') ===
+              -1) {
+              funcsList.push(func.name);
+              }
+              } else if (func.type === 'contract') {
+              return true;
+              }
+              });
+              if (funcsList.length > 0) {
+              %> <%- funcsList.join(', ') %> <%
+          }
+          else { %> N/A <% } %>
+        </td>
+      </tr>
+      <% } %> <% }) %>
+    </table>
+  </div>

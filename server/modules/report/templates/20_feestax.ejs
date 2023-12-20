@@ -1,0 +1,49 @@
+<!-- FILEPATH: /c:/Users/aslam/Desktop/DEnz/aegis/server/modules/report/templates/10_ownership.ejs -->
+<div class="overall-security-page">
+    <div>
+      <h2>Fees and tax</h2>
+      <% let hasTax = (Number(security.buy_tax) > 0) || (Number(security.sell_tax) > 0); %>
+      <p>
+        In some smart contracts, the owner or creator of the contract can set
+        fees for certain actions or operations within the contract. These fees can
+        be used to cover the cost of running the contract, such as paying for gas
+        fees or compensating the contract's owner for their time and effort in
+        developing and maintaining the contract.
+      </p>
+      <table
+      class="security-table <%= hasTax != 1 ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Is there a tax?</td>
+        <td>
+          <%= hasTax==1 ? "⚠️ Contract takes a tax" : "✅ Contract does not take a tax" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+            <% if (security.buy_tax > 0 && security.sell_tax > 0) { %>
+                There is a tax to the contract owner when you buy and sell the token
+                <br/><br/>
+                <strong>Tax on buy: </strong><%= Number(security.buy_tax) * 100  %>%
+                <br/>
+                <strong>Tax on sell: </strong><%= Number(security.sell_tax) * 100  %>%
+            <% } else if (security.buy_tax > 0) { %>
+                There is a tax to the contract owner when you buy the token
+                <br/><br/>
+                <strong>Tax on buy: </strong><%= Number(security.buy_tax) * 100 %>%
+            <% } else if (security.sell_tax > 0) { %>
+                There is a tax to the contract owner when you sell the token
+                <br/><br/>
+                <strong>Tax on sell: </strong><%= Number(security.sell_tax) * 100  %>%
+            <% } else { %>
+                No taxes are taken by the contract owner
+            <% } %>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div class="image">
+      <img src="../assets/feeTax.png" alt="feeTax" />
+    </div>
+  </div>

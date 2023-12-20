@@ -1,0 +1,35 @@
+<div class="overall-security-page">
+  <div class="title-button">Ownership Privileges</div>
+
+  <p>
+    These functions can be dangerous. Please note that abuse can lead to
+    financial loss. We have a guide where you can learn more about these
+    Functions.
+  </p>
+
+  <div>
+    <h2>Minting Privileges</h2>
+    <p>
+      Minting is the process of creating new tokens. This is usually done by the
+      contract owner, and the newly minted tokens are added to the owner's
+      balance. Minting is usually done to increase the total supply of a
+      cryptocurrency or token.
+    </p>
+    <table
+      class="security-table <%= security.is_mintable != 1 ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Can mint new tokens?</td>
+        <td>
+          <%= security.is_mintable=="1" ? "❌ The owner can mint new tokens" : "✅ The owner cannot mint new tokens" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+          <%= security.is_mintable=="1" ? "The owner can mint new tokens if they want" : "The owner cannot mint new tokens" %>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

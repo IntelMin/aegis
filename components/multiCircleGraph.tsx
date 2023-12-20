@@ -1,4 +1,7 @@
-import Chart, { Props } from "react-apexcharts";
+import dynamic from "next/dynamic";
+import { Props } from "react-apexcharts";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false }) as React.FC<Props>;
 
 
 const MultiCircleGraph = () => {

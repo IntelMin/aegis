@@ -48,7 +48,7 @@ const formatLargeNumber = (numberStr: string) => {
     const scale = scales[i];
     if (number >= scale.value * BigInt(10 ** shift)) {
       const scaledNumber = number / (scale.value * BigInt(10 ** shift));
-      return `${scaledNumber.toString()} ${scale.symbol}`;
+      return `${scaledNumber?.toString()} ${scale.symbol}`;
     }
   }
 

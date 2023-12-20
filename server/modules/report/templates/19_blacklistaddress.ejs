@@ -1,0 +1,32 @@
+<!-- FILEPATH: /c:/Users/aslam/Desktop/DEnz/aegis/server/modules/report/templates/10_ownership.ejs -->
+<div class="overall-security-page">
+  <div>
+    <h2>Blacklist addresses</h2>
+    <p>
+      Blacklisting addresses in smart contracts is the process of adding a
+      certain address to a blacklist, effectively preventing them from accessing
+      or participating in certain functionalities or transactions within the
+      contract. This can be useful in preventing fraudulent or malicious
+      activities, such as hacking attempts or money laundering.
+    </p>
+    <table
+      class="security-table <%= security.is_blacklisted != 1 ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Can blacklist addresses?</td>
+        <td>
+          <%= security.is_blacklisted==1 ? "⚠️ Owner can blacklist addresses" : "✅ Owner cannot blacklist addresses"%>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+          <%= security.is_blacklisted==1 ? "The contract owner can blacklist addresses if they want": "The contract owner cannot blacklist addresses" %>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="image">
+    <img src="../assets/blacklistaddress.png" alt="blacklist-address" />
+  </div>
+</div>

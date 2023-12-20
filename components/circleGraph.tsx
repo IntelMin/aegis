@@ -1,7 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { Props } from "react-apexcharts";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false }) as React.FC<Props>;
 
 type props = {
   value: number;
@@ -62,7 +62,7 @@ const CircleGraph = (props: props) => {
           },
           value: {
             formatter: function (val: any) {
-              return parseInt(val).toString();
+              return parseInt(val)?.toString();
             },
             color: "#dbd9d9",
             fontSize: "36px",

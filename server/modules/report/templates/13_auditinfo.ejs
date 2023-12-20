@@ -1,0 +1,307 @@
+<style>
+  .audit_info_title {
+    border-radius: 20px;
+    color: white;
+    width: fit-content;
+    padding: 5px 10px;
+    font-size: 24px;
+    font-weight: bolder;
+    position: relative;
+  }
+
+  .audit_info_title.radius {
+    border: 2px solid white;
+  }
+
+  .audit_info_title_detail {
+    line-height: 40px;
+    letter-spacing: 2px;
+    margin-left: 10px;
+  }
+
+  .audit_info_subTitle {
+    margin: 15px 0;
+  }
+
+  .audit_info_table_head_row,
+  .audit_info_table_row {
+    display: flex;
+    align-items: center;
+  }
+  .audit_info_table_head h1 {
+    background-color: #333d4d;
+    padding: 20px 5px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .audit_info_table_head {
+    width: 200px;
+  }
+
+  .audit_info_table_head:nth-child(2) {
+    width: 100px;
+  }
+
+  .audit_info_table_head.first_head {
+    width: 200px;
+  }
+
+  .audit_info_table_head.first_head h1 {
+    background-color: black;
+  }
+
+  .audit_info_table_head.last_head h1 {
+    letter-spacing: 0;
+  }
+
+  .audit_info_table_head.last_head {
+    width: 210px;
+  }
+
+  .audit_info_table_row_data {
+    width: 200px;
+    text-align: center;
+    padding: 2px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .audit_info_table_row_data p {
+    color: black;
+    font-weight: 300;
+    padding-left: 10px;
+    line-height: 100%;
+  }
+  .audit_info_emptyBox {
+    position: absolute;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    top: 50%;
+    transform: translate(12px, -18px) rotate(45deg);
+    background-color: black;
+    z-index: 10;
+    border-radius: 5px;
+  }
+
+  .audit_info_table_row_data.last_col {
+    width: 190px;
+  }
+
+  .audit_info_table_row_data:nth-child(1) {
+    width: 199px;
+    transform: translateX(1px);
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.28));
+  }
+  .audit_info_table_row_data:nth-child(1) p {
+    color: white;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+    font-size: 20px;
+  }
+  .audit_info_table_row_data:nth-child(2) {
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .audit_info_table_row_data:nth-child(2) p {
+    color: black;
+  }
+
+  .audit_info_table_row_data:nth-child(3) p {
+    font-size: 10px;
+  }
+
+  .audit_info_table_row_data {
+    min-height: 100px;
+  }
+
+  .red {
+    background-color: #bf0c2e;
+    z-index: 10;
+  }
+  .yellow {
+    background-color: #f9be06;
+    z-index: 10;
+  }
+  .lightGreen {
+    background-color: #e5df0e;
+    z-index: 10;
+  }
+  .green {
+    background-color: #20a023;
+    z-index: 10;
+  }
+  .blue {
+    background-color: #34b7e5;
+    z-index: 10;
+  }
+
+  .gray {
+    background-color: #e0e0e0;
+  }
+
+  .white {
+    background-color: #f0edec;
+  }
+
+  .boldText p {
+    font-weight: 500;
+  }
+
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: black;
+  }
+
+  .risk-table tr:first-child th {
+    background-color: #333d4d;
+    color: white;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 20px 5px;
+  }
+
+  .risk-table tr:first-child th:first-child {
+    background-color: black;
+    width: 20%;
+  }
+
+  .risk-table tr td {
+    font-weight: 400;
+    font-size: 15px;
+    padding: 20px;
+    word-break: break-word;
+  }
+
+  .risk-table tr:nth-child(odd) {
+    background-color: #f0edec;
+  }
+
+  .risk-table tr:nth-child(even) {
+    background-color: #e0e0e0;
+  }
+
+  .risk-table tr td:first-child {
+    color: white;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .risk-table .red {
+    background-color: #bf0c2e;
+  }
+
+  .risk-table .orange {
+    background-color: #f9be06;
+  }
+
+  .risk-table .yellow {
+    background-color: #e5df0e;
+  }
+
+  .risk-table .green {
+    background-color: #20a023;
+  }
+
+  .risk-table .blue {
+    background-color: #34b7e5;
+  }
+
+  .risk-table tr td:nth-child(2) {
+    text-align: center;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .risk-table .right-arrow {
+    position: absolute;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    margin-left: -32px;
+    top: 50%;
+    transform: translate(12px, -18px) rotate(45deg);
+    z-index: 10;
+    border-radius: 5px;
+  }
+
+</style>
+<div class="audit_style">
+  <div class="audit-info">
+    <ptitle>
+      <h1>Vulnerability and Risk Level</h1>
+    </ptitle>
+    <p>
+      Risk assessment gauges the likelihood and impact of potential threats
+      exploiting vulnerabilities. It is quantified using
+      <strong>CVSS version 3.0</strong> standards, providing a clear metric for
+      organizational or system security evaluation.
+    </p>
+    <!-- Table Starts  -->
+    <table class="risk-table">
+      <tr>
+        <th width="25%">Severity Level</th>
+        <th width="15%">CVSS Score</th>
+        <th width="30%">Description</th>
+        <th width="30%">Recommended Action</th>
+      </tr>
+      <tr>
+        <td class="red">Critical</td>
+        <td><div class="right-arrow red"></div>9-10</td>
+        <td>
+          Severe threat with potential for major losses or complete failure.
+        </td>
+        <td>Immediate action required to mitigate and resolve.</td>
+      </tr>
+      <tr>
+        <td class="orange">High</td>
+        <td><div class="right-arrow orange"></div>7-8.9</td>
+        <td>
+          Can seriously compromise functionality and security, allowing
+          potential exploitation.
+        </td>
+        <td>Address promptly to prevent exploitation.</td>
+      </tr>
+      <tr>
+        <td class="yellow">Medium</td>
+        <td><div class="right-arrow yellow"></div>4-6.9</td>
+        <td>
+          Impact certain aspects, potentially leading to unintended behaviors.
+        </td>
+        <td>Correct within a reasonable timeframe to maintain integrity.</td>
+      </tr>
+      <tr>
+        <td class="green">Low</td>
+        <td><div class="right-arrow green"></div>2-3.9</td>
+        <td>
+          Less likely to significantly impact performance but should be
+          addressed.
+        </td>
+        <td>Consider remediation, may accept risk based on context.</td>
+      </tr>
+      <tr>
+        <td class="blue">Information</td>
+        <td><div class="right-arrow blue"></div>0-1.9</td>
+        <td>
+          Highlights areas for improvement or optimization, no security risk.
+        </td>
+        <td>Review for potential enhancements, no immediate action.</td>
+      </tr>
+    </table>
+
+  </div>
+</div>

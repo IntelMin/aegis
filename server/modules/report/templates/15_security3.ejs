@@ -1,0 +1,31 @@
+<div class="overall-security-page">
+  <div>
+    <h2>Proxy</h2>
+    <p>
+      Proxy contract is a contract that delegates calls to another contract. It
+      is a contract that has a fallback function that calls another contract.If
+      the proxy contract is well-designed, secure, and serves a legitimate
+      purpose (such as upgradability or modularity), it may not raise concerns.
+      However, if the proxy introduces vulnerabilities, lacks transparency, or
+      is used in a way that compromises the security of the token, it could be
+      flagged during a thorough audit.
+    </p>
+  </div>
+
+  <table
+    class="security-table <%= security.is_proxy != 1 ? 'success' : 'error' %>"
+  >
+    <tr>
+      <td>Is it a proxy?</td>
+      <td>
+        <%= security.is_proxy != 1 ? "✅ The contract is not a Proxy contract" :"⚠️ The contract is a Proxy contract" %>
+      </td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>
+        <%= security.is_proxy == 1 ? "This contract could call functions on another contract" : "This is a full contract" %>
+      </td>
+    </tr>
+  </table>
+</div>

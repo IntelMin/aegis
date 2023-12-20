@@ -1,0 +1,167 @@
+<style>
+  .project-summary {
+    margin-top: 100px;
+    color: white;
+  }
+
+  .summary-table {
+    margin-top: 15px;
+  }
+
+  .summary-head {
+    font-size: 16px;
+    line-height: 40px;
+    font-weight: 900;
+    position: relative;
+  }
+
+  .summary-table-head-con {
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    border: 1px solid;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .summary-table-head-row1 {
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    border-right: 1px solid #a8a8a8;
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .summary-table-head-row2 {
+    display: inline-block;
+    width: 30%;
+    height: 100%;
+    border-right: 1px solid #a8a8a8;
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .summary-table-head-row3 {
+    display: inline-block;
+    width: 45%;
+    height: 100%;
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .summary-table-body-con {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    margin-top: -2px;
+    /* top: -5px; */
+  }
+
+  .summary-table-body-row1 {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 19%;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 1%;
+    border-right: 1px solid #d9d9d9;
+    border-radius: 0px 0px 12px 12px;
+    border-right-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .summary-table-body-row2 {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 31%;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 16px;
+    font-weight: 500;
+    border-right: 1px solid #d9d9d9;
+    border-radius: 5px;
+    border-right-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .summary-table-body-row3 {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 50%;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 0 0px 12px 12px;
+  }
+
+  .summary-table-body-row3 li {
+    margin-bottom: 16px;
+  }
+
+  .note {
+    margin-top: 50px;
+  }
+
+  .note-content {
+    font-size: 14px;
+    line-height: 35px;
+    font-weight: 500;
+  }
+
+  .note-symbol-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+<div class="project-summary">
+  <ptitle>
+    <div class="summary-head">Audit Summary</div>
+  </ptitle>
+  <div class="summary-table">
+    <div class="summary-table-head-con">
+      <div class="summary-table-head-row1">Version</div>
+      <div class="summary-table-head-row2">Delivery Date</div>
+      <div class="summary-table-head-row3">Changelog</div>
+    </div>
+    <div class="summary-table-body-con">
+      <div class="summary-table-body-row1">1.0</div>
+      <div class="summary-table-body-row2"><%= extra.currentDate %></div>
+      <div class="summary-table-body-row3">
+        <ul>
+          <li>Layout project</li>
+          <li>Automated / Manual Security Testing</li>
+          <li>Summary</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <h3>Note</h3>
+  <p>
+    This Audit report consists of a security analysis of the <%= info.name %> smart
+    contract. <br />
+  </p>
+  <div class="image" style="width: 300px;">
+    <img
+      src="../assets/purplesummary.png"
+      alt="Aegis Hero"
+      width="300"
+      height="300"
+    />
+  </div>
+</div>
