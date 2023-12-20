@@ -2,6 +2,7 @@ import React, { InputHTMLAttributes } from "react";
 import { FieldErrors } from "react-hook-form";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import clsx from "clsx"
+import capitalize from "@/utils/capitalize";
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   type?: string;
@@ -45,7 +46,11 @@ const CustomInput = React.forwardRef<HTMLInputElement, Props>(({
           </button>
         )}
       </div>
-      {errors?.[props.name] && <span className='text-red-800'>{errors[props.name]?.message?.toString()}</span>}
+      {errors?.[props.name] && (
+        <span className='text-red-800'>
+          {capitalize(errors[props.name]?.message?.toString()!)}
+        </span>
+      )}
     </div>
 
   );

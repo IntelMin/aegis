@@ -6,6 +6,9 @@ import BuilderIcon from '@/public/role-icons/builder.svg'
 import AdminIcon from '@/public/role-icons/admin.svg'
 import KolIcon from '@/public/role-icons/kol.svg'
 import Image from 'next/image'
+import { FieldErrors } from 'react-hook-form'
+import capitalize from '@/utils/capitalize'
+
 const roles = [
   {
     icon: VCIcon,
@@ -48,11 +51,13 @@ const roles = [
 interface IProps {
   value: string;
   onChange: (value: string) => void;
+  errors?: FieldErrors;
 }
 
 const SelectRoles: React.FC<IProps> = ({
   value,
-  onChange
+  onChange,
+  errors
 }) => (
   <div className='w-full'>
     <p className='text-[16px] font-semibold leading-[24px] text-white'>
@@ -78,6 +83,11 @@ const SelectRoles: React.FC<IProps> = ({
         </button>
       )}
     </div>
+    {errors?.["role"] && (
+      <span className='text-red-800'>
+        {capitalize(errors["role"]?.message?.toString()!)}
+      </span>
+    )}
   </div>
 )
 

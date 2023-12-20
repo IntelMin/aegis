@@ -1,5 +1,6 @@
 import React, { TextareaHTMLAttributes } from "react";
 import { FieldErrors } from "react-hook-form";
+import capitalize from "@/utils/capitalize";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
@@ -31,7 +32,11 @@ const CustomTextarea = React.forwardRef<HTMLTextAreaElement, Props>(({
           className={`placeholder:text-[14px] bg-zinc-900 border border-zinc-800 w-full px-[10px] py-[5px] placeholder:text-[#71717A] outline-black text-white`}
         />
       </div>
-      {errors?.[props.name] && <span className='text-red-800'>{errors[props.name]?.message?.toString()}</span>}
+      {errors?.[props.name] && (
+        <span className='text-red-800'>
+          {capitalize(errors[props.name]?.message?.toString()!)}
+        </span>
+      )}
     </>
   )
 );

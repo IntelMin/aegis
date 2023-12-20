@@ -7,6 +7,7 @@ import SelectRoles from "../SelectRoles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup"
 import { SignInData } from "./sign-up";
+import capitalize from "@/utils/capitalize";
 
 interface Props {
   onSubmit: (data: any) => void
@@ -21,7 +22,7 @@ const schema = yup
     passwordConfirmation: yup.string()
       .oneOf([yup.ref('password'), 'Password must match'], 'Password must match'),
     role: yup.string().required(),
-    terms: yup.bool().oneOf([true], 'Field must be checked'),
+    terms: yup.bool().oneOf([true], 'Please accept the terms of use'),
   })
   .required()
 
@@ -70,24 +71,30 @@ const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             <SelectRoles
               onChange={onChange}
               value={value}
+              errors={errors}
             />
           )}
           name="role"
         />
+        <label className="flex gap-2 items-center text-[#D4D4D4] text-[14px] leading-[20px]">
+          <input
+            type="checkbox"
+            style={{ accentColor: "#0E76FD" }}
+            className="h-5 w-5"
+            {...register("terms")}
+          />
+          <span className="text-[#ff0000]">*</span>By signing up, I accept and agree to the{" "}
+          <Link href="#" className="text-[#0E76FD]">
+            Terms of Use
+          </Link>
+          .
+        </label>
+        {errors?.["terms"] && (
+          <span className='text-red-800 w-full'>
+            {capitalize(errors["terms"]?.message?.toString()!)}
+          </span>
+        )}
       </div>
-      <label className="flex gap-2 items-center text-[#D4D4D4] text-[14px] leading-[20px]">
-        <input
-          type="checkbox"
-          style={{ accentColor: "#0E76FD" }}
-          className="h-5 w-5"
-          {...register("terms")}
-        />
-        <span className="text-[#ff0000]">*</span>By signing up, I accept and agree to the{" "}
-        <Link href="#" className="text-[#0E76FD]">
-          Terms of Use
-        </Link>
-        .
-      </label>
       <CustomSubmitbtn title="Continue" />
     </form>
   )
