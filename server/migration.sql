@@ -43,6 +43,7 @@ CREATE TABLE token_audits (
     created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -65,16 +66,16 @@ CREATE TABLE users(
     isChecked BOOLEAN NULL DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     is_admin BOOLEAN NULL DEFAULT false,
-    whitelisted BOOLEAN NULL DEFAULT false,
+    whitelisted BOOLEAN NULL DEFAULT false
 );
-CREATE TABLE report-requests(
+
+CREATE TABLE report_requests(
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     address VARCHAR(255) NOT NULL,
     user_id VARCHAR(255) NOT NULL,
     status VARCHAR(255) NULL,
-    link VARCHAR(255) NULL,
-     
+    link VARCHAR(255) NULL
 );
 
 CREATE TRIGGER update_token_audits_modtime

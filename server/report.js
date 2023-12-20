@@ -16,7 +16,7 @@ const octokit = new Octokit({
   
 async function modifyreportRequestdb(address, status,link) {
     try {
-        const { data, error } = await supabase.from('report-requests').update({ status,link }).eq('address', address);
+        const { data, error } = await supabase.from('report_requests').update({ status,link }).eq('address', address);
         if (error) {
         throw new Error(error.message);
         }
@@ -29,7 +29,7 @@ async function modifyreportRequestdb(address, status,link) {
 // Fetch data from Supabase table
 async function fetchDataFromTable() {
   try {
-    const { data, error } = await supabase.from('report-requests').select('*').eq('status', 'requested');
+    const { data, error } = await supabase.from('report-report_requests').select('*').eq('status', 'requested');
     if (error) {
       throw new Error(error.message);
     }

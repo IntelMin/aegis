@@ -30,13 +30,13 @@ router.get("/:address/:user_id", async (req, res) => {
     if (auditRequests.length === 0) {
         return res.status(404).send("Not found");
     }
-    const {data: reportRequests, error: error_report} = await supabase.from('report-requests').select('*').eq('address', address);
+    const {data: reportRequests, error: error_report} = await supabase.from('report_requests').select('*').eq('address', address);
     if(error_report) {
         throw new Error(error_report.message);
     }
 
     if(reportRequests.length === 0) {
-        const {data: reportRequests, error: error_report} = await supabase.from('report-requests').insert([{address: address, status: "requested", user_id: user_id}]);
+        const {data: reportRequests, error: error_report} = await supabase.from('report_requests').insert([{address: address, status: "requested", user_id: user_id}]);
         if(error_report) {
             throw new Error(error_report.message);
         }
