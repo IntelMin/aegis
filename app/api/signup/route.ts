@@ -4,7 +4,24 @@ import { sendEmail } from "@/app/utils/resend";
 import  hashString  from "@/app/utils/hash"
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const { name, email, password,projectname, website,tokenAddress, teleAccount,projectX,projectInsta,projectEmail,twitter,teleId,about,vcContactName,vcEmail,role } = (await req.json()) as {
+    const {
+        name,
+        email,
+        password,
+        projectname,
+        website,
+        tokenAddress,
+        teleAccount,
+        projectX,
+        projectInsta,
+        projectEmail,
+        twitter,
+        teleId,
+        about,
+        vcContactName,
+        vcEmail,
+        role
+    } = (await req.json()) as {
         email: string;
         password: string;
 
@@ -32,7 +49,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (user) {
         return NextResponse.json("user already exists", { status: 400 })
     }
-    const { data, error: error2 } = await supabase.from("users").insert([{ email:email, password:hashed_password,projectname, website,tokenAddress, teleAccount,projectX,projectInsta,projectEmail,twitter,teleId,about,vcContactName,vcEmail,role }]);
+    const { data, error: error2 } = await supabase.from("users").insert([{ email:email,
+        password:hashed_password,
+        project_name: projectname,
+        website,
+        token_address: tokenAddress,
+        tele_account: teleAccount,
+        project_x: projectX,
+        project_insta: projectInsta,
+        project_email: projectEmail,
+        twitter,
+        tele_id: teleId,
+        about,
+        vc_contact_name: vcContactName,
+        vc_email: vcEmail,
+        role
+    }]);
     if (error2) {
         console.log(error2, "error")
         return NextResponse.json("error creating user")
