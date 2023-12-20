@@ -3,35 +3,46 @@ import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import CustomTextarea from "../ui/custom-textarea";
 import Image from "next/image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup"
+import { useForm } from "react-hook-form";
+import { SignInData } from "./sign-up";
 
-type Props = {
-  signInData: {
-    email: string;
-    projectname: string;
-    website: string;
-    tokenAddress: string;
-    teleAccount: string;
-    projectX: string;
-    projectInsta: string;
-    name: string;
-    projectEmail: string;
-    about: string;
-    teleId: string;
-    logourl: File | null;
-  }; // Adjust the type according to your data structure
-  setSignInData: React.Dispatch<React.SetStateAction<{}>>;
-};
+const schema = yup.object()
+  .shape({
+    name: yup.string().required(),
+    projectname: yup.string().required(),
+    projectEmail: yup.string().email().required(),
+    website: yup.string().required(),
+    teleId: yup.string().required(),
+    tokenAddress: yup.string().required(),
+    logourl: yup.mixed(),
+    about: yup.string().required(),
+  })
 
-const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
-  const [newImage, setNewImage] = React.useState<File | null>(null);
+interface Props {
+  onSubmit: (data: any) => void
+  defaultValues: SignInData
+}
+  
+const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues
+  })
+
   const [preview, setPreview] = React.useState<string | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file) {
-      setSignInData((prev) => ({ ...prev, logourl: file }));
-      setNewImage(file);
+      setValue('logourl', file)
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
@@ -40,75 +51,70 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
       };
     }
   };
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+    <form className="flex flex-col gap-2  w-full px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
-            name="name"
             label="Name"
             placeholder="Example"
             type="text"
-            value={signInData?.name}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("name")}
           />
         </div>
         <div className="col-span-1">
           <CustomInput
-            name="projectname"
             label="Project name"
             placeholder="Example"
             type="text"
-            value={signInData?.projectname}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("projectname")}
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
-            name="projectEmail"
             label="Project email"
             placeholder="Your email"
             type="text"
-            value={signInData?.projectEmail}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("projectEmail")}
           />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 ">
           <CustomInput
-            name="website"
             label="Website"
             placeholder="Example"
             type="text"
-            value={signInData?.website}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("website")}
           />
         </div>
       </div>
-      <div className="w-[395px] grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
         <div className="col-span-1">
           <CustomInput
-            name="teleId"
             label="Telegram of contact person"
             placeholder="@Example"
             type="text"
-            value={signInData?.teleId}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("teleId")}
           />
         </div>
         <div className="col-span-1">
           <CustomInput
-            name="tokenAddress"
             label="Token address"
             placeholder="0x..."
             type="text"
-            value={signInData?.tokenAddress}
-            setValue={setSignInData}
+            errors={errors}
+            {...register("tokenAddress")}
           />
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <div className="flex flex-col gap-2 w-full">
           <label
             htmlFor="imageLogo"
@@ -175,17 +181,16 @@ const SignUpDetailForm = ({ signInData, setSignInData }: Props) => {
           </div>
         </div>
       </div>
-      <div className="w-[395px]">
+      <div className="">
         <CustomTextarea
-          name="about"
           label="Tell us why do you like to be given early access "
           placeholder="I like because..."
-          value={signInData?.about}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("about")}
         />
       </div>
       <CustomSubmitbtn title="Submit" />
-    </div>
+    </form>
   );
 };
 

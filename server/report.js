@@ -2,6 +2,7 @@
 // Add report worker logic hereconst { report } = require("process");
 const supabase = require("./supabase");
 const generatePDF = require("./modules/report/generate");
+// const generatePDF = require("./modules/report/sample");
 const fs = require('fs');
 const { Octokit } = require("@octokit/rest");
 
@@ -87,7 +88,7 @@ async function reportWorker() {
 
         try {
             if (row.status === "requested") {
-                await generatePDF(address).then(() => console.log("Generated PDF"));
+                await generatePDF(address,address).then(() => console.log("Generated PDF"));
                 // console.log("-- generated pdf");
                 const link = await pushToGithub(address);
                 console.log("-- pushed to github");

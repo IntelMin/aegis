@@ -1,30 +1,40 @@
 "use client";
 
-import React, { use } from "react";
+import React from "react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
-import { signIn,useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-type Props = {};
-type SetValueFunction<T> = React.Dispatch<React.SetStateAction<T>>;
+const schema = yup
+  .object()
+  .shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  })
+  .required()
 
-const SignInForm = (props: Props) => {
-  const [showPass, setShowPass] = React.useState(true);
-  const [loginData, setLoginData] = React.useState({
-    email: "",
-    password: "",
-  });
-  const session = useSession();
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(loginData);
+const SignInForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
+
+  const router = useRouter();
+
+  const onSubmit = async (data: { email: any; password: any; }) => {
     await signIn("credentials", {
-      email: loginData.email,
-      password: loginData.password,
+      email: data.email,
+      password: data.password,
       // callbackUrl: "/",
       redirect: false,
     }).then((res: any) => {
@@ -33,18 +43,14 @@ const SignInForm = (props: Props) => {
         toast.error("Invalid Credentials");
       }
       if (res.ok) {
-          redirect("/");
+        router.push("/");
       }
     });
-
-    setLoginData({
-      email: "",
-      password: "",
-    });
   };
+
   return (
-    <div className="col-span-1 h-full">
-      <div className="flex items-center justify-center flex-col h-[90%]">
+    <div className="col-span-1 h-full max-[900px]:col-span-2 flex items-center justify-center flex-col">
+      <div className="flex items-center justify-center flex-col h-[90%] px-[10px]">
         <div className="border border-[#27272A] w-fit p-4 rounded-md mb-3">
           <Image alt="user-icon" src="/user.png" width={20} height={20} />
         </div>
@@ -54,27 +60,23 @@ const SignInForm = (props: Props) => {
         <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
           Please enter your account details to sign in.
         </p>
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-2">
-          <div className="w-[395px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 mx-[10px] flex flex-col gap-2 w-full">
+          <div className="w-full lg:min-w-[375px]">
             <CustomInput
-              name="email"
               label="Email"
               placeholder="Enter your email"
               type="email"
-              value={loginData?.email}
-              setValue={setLoginData as SetValueFunction<{}>}
+              errors={errors}
+              {...register("email")}
             />
           </div>
-          <div className="w-[395px]">
+          <div className="w-full lg:min-w-[375px]">
             <CustomInput
-              name="password"
               label="Password"
               placeholder="Enter your password"
-              type={showPass ? "password" : "text"}
               isPass
-              setShowPass={setShowPass}
-              value={loginData?.password}
-              setValue={setLoginData as SetValueFunction<{}>}
+              errors={errors}
+              {...register("password")}
             />
           </div>
           <CustomSubmitbtn title="Sign In" />

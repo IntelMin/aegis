@@ -7,7 +7,7 @@ type Props = {};
 const Template = (props: Props) => {
   return (
     <div
-      className="col-span-1 relative py-[96px] pl-[64px] max-h-screen overflow-hidden"
+      className="col-span-1 relative py-[96px] pl-[64px] min-h-screen overflow-hidden max-[900px]:hidden"
       style={{
         background:
           "linear-gradient(160deg, #18181B 13.54%, rgba(24, 24, 27, 0.00) 64.41%)",

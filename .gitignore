@@ -11,6 +11,9 @@ pnpm-lock.yaml
 cache/*
 server/cache/*
 
+# Ignore generated PDFs
+/server/**/*.pdf
+
 # But do not ignore .gitkeep files, so the directories are kept in the repository
 !.gitkeep
 
@@ -29,7 +32,8 @@ server/cache/*
 *.pem
 /server/data/
 /server/contracts/
-
+/server/modules/audit/data/*
+/server/modules/audit/logs/*
 # debug
 npm-debug.log*
 yarn-debug.log*

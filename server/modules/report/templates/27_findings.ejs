@@ -1,125 +1,134 @@
 <style>
-  .page-findings .table {
-    width: 423px;
-    height: 67px;
-    background: #2f4076;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-
-  .audit-item {
-    margin-bottom: 36px;
-  }
-  .audit-title {
-    color: #333;
-    font-weight: bold;
-    color: white;
-    font-size: 16px;
-    font-weight: 900;
-    line-height: 25.76px;
-    word-wrap: break-word;
-    margin-bottom: 10px;
-  }
-  .audit-table {
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 17px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border-collapse: collapse;
-  }
-  .audit-table th {
-    background: #2f4076;
-    color: #fff;
-    padding: 10px;
-  }
-  .audit-table td {
-    text-align: center;
-    padding: 10px;
-    color: black;
-    background-color: white;
-  }
-  /* .audit-desc {
-
-  } */
-  .audit-table .severity {
-    background-color: #ffc107 !important;
-  }
-  .audit-table .location {
-    background-color: #17a2b8 !important;
-  }
-  .audit-table .status {
-    background-color: #28a745 !important;
-    color: #fff;
-  }
-</style>
-
-<%
-let cumulativeLength = 0;
-const MAX_HEIGHT = 610;
-let estimatedHeight = 0;
-let insertPageBreak = false;
-
-const averageCharWidth = 4;
-const containerWidth = 680;
-const lineHeight = 20;
-const headerHeight = 70;
-const tableHeight = 80;
-
-const charactersPerLine = Math.floor(containerWidth / averageCharWidth);
-
-for (let i = 0; i < findings.length; i++) {
-  if (!findings[i].mitigation || !findings[i].title) {
-    continue;
-  }
-  let trimmedMitigation = findings[i].mitigation.trim();
-  let trimmedTitle = findings[i].title.trim();
-  let lines = Math.ceil(trimmedMitigation.length / charactersPerLine);
-  lines += Math.ceil(trimmedTitle.length / charactersPerLine);
-  let contentHeight = lines * lineHeight + tableHeight; 
-
-  // new if first item or exceeds max height
-  if (i === 0 || (estimatedHeight + contentHeight) >= MAX_HEIGHT) {
-    if (i !== 0) {
-      %></div></div><% // close prev
+    .page-findings .table {
+      width: 423px;
+      height: 67px;
+      background: #2f4076;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+  
+    .audit-item {
+      margin-bottom: 36px;
+    }
+    .audit-title {
+      color: #333;
+      font-weight: bold;
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 25.76px;
+      word-wrap: break-word;
+      margin-bottom: 10px;
+    }
+    .audit-table {
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 17px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border-collapse: collapse;
+    }
+    .audit-table th {
+      background: #2f4076;
+      color: #fff;
+      padding: 10px;
+    }
+    .audit-table td {
+      text-align: center;
+      padding: 10px;
+      color: black;
+      background-color: white;
+    }
+    /* .audit-desc {
+  
+    } */
+    .audit-table .severity.info {
+      background-color: #51b7ff !important;
+    }
+    .audit-table .severity.low {
+      background-color: #FFC451 !important;
+    }
+    .audit-table .severity.medium {
+      background-color: #f16f12 !important;
+    }
+    .audit-table .severity.high {
+      background-color: #ff5a51 !important;
+    }
+    .audit-table .location {
+      background-color: #17a2b8 !important;
+    }
+    .audit-table .status {
+      background-color: #28a745 !important;
+      color: #fff;
+    }
+  </style>
+  
+  <%
+  let cumulativeLength = 0;
+  const MAX_HEIGHT = 610;
+  let estimatedHeight = 0;
+  let insertPageBreak = false;
+  
+  const averageCharWidth = 4;
+  const containerWidth = 680;
+  const lineHeight = 36;
+  const headerHeight = 70;
+  const tableHeight = 80;
+  
+  const charactersPerLine = Math.floor(containerWidth / averageCharWidth);
+  
+  for (let i = 0; i < findings.length; i++) {
+    if (!findings[i].mitigation || !findings[i].title) {
+      continue;
+    }
+    let trimmedMitigation = findings[i].mitigation.trim();
+    let trimmedTitle = findings[i].title.trim();
+    let lines = Math.ceil(trimmedMitigation.length / charactersPerLine);
+    lines += Math.ceil(trimmedTitle.length / charactersPerLine);
+    let contentHeight = lines * lineHeight + tableHeight; 
+  
+    // new if first item or exceeds max height
+    if (i === 0 || (estimatedHeight + contentHeight) >= MAX_HEIGHT) {
+      if (i !== 0) {
+        %></div></div><% // close prev
+      }
+      %>
+      <div class="page bg-aegis-right bg-default padding-15mm">
+        <div class="page-findings">
+          <ptitle>
+            <div class="title-button">Audit Results</div>
+          </ptitle>
+      <% 
+      estimatedHeight = headerHeight; // reset
+    } 
+  
+    estimatedHeight += contentHeight; 
+  
+    %>
+    <div class="audit-item">
+      <div class="audit-title"><%= "#AEG-"+ (i+1) %> <%= findings[i].title %></div>
+      <table class="audit-table">
+        <tr>
+          <th>FILE</th>
+          <th>Severity</th>
+          <!-- <th>Location</th> -->
+        </tr>
+        <tr>
+          <td><%= info.name %>.sol</td>
+          <td class="severity <%= findings[i].severity %>"><%= findings[i].severity %></td>
+          <!-- <td class="location">L 707,713</td> -->
+        </tr>
+      </table>
+      <div class="audit-desc">
+        <p><strong>Description</strong> - <%= findings[i].mitigation %></p>
+      </div>
+    </div>
+    <% } %>
+  
+    <% // close if open
+    if (!insertPageBreak || i === findings.length - 1) {
+      console.log("estimatedHeight: ", estimatedHeight);
+      %></div></div><%
     }
     %>
-    <div class="page bg-aegis-right bg-default padding-15mm">
-      <div class="page-findings">
-        <ptitle>
-          <div class="title-button">Audit Results</div>
-        </ptitle>
-    <% 
-    estimatedHeight = headerHeight; // reset
-  } 
-
-  estimatedHeight += contentHeight; 
-
-  %>
-  <div class="audit-item">
-    <div class="audit-title"><%= "#"+ (i+1) %> <%= findings[i].title %> <%= estimatedHeight %></div>
-    <table class="audit-table">
-      <tr>
-        <th>FILE</th>
-        <th>Severity</th>
-        <th>Location</th>
-      </tr>
-      <tr>
-        <td>SOL</td>
-        <td class="severity"><%= findings[i].severity %></td>
-        <td class="location">L 707,713</td>
-      </tr>
-    </table>
-    <div class="audit-desc">
-      <p><strong>Description</strong> - <%= findings[i].mitigation %></p>
-    </div>
-  </div>
-  <% } %>
-
-  <% // close if open
-  if (!insertPageBreak || i === findings.length - 1) {
-    console.log("estimatedHeight: ", estimatedHeight);
-    %></div></div><%
-  }
-  %>
-
+  

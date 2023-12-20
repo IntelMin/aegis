@@ -2,103 +2,102 @@ import React from "react";
 import CustomInput from "../ui/custom-input";
 import CustomSubmitbtn from "../ui/custom-submitbtn";
 import Link from "next/link";
+import { Controller, useForm } from "react-hook-form";
 import SelectRoles from "../SelectRoles";
-import { sign } from "crypto";
-import { signIn } from "next-auth/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup"
+import { SignInData } from "./sign-up";
+import capitalize from "@/utils/capitalize";
 
-type Props = {
-  signInData: {
-    email: string;
-    password: string;
-    password2: string;
-    projectname: string;
-    website: string;
-    tokenAddress: string;
-    teleAccount: string;
-    projectX: string;
-    projectInsta: string;
-    role: string;
-    isChecked: boolean;
-  }; // Adjust the type according to your data structure
-  setSignInData: React.Dispatch<React.SetStateAction<{}>>;
-  setNext: React.Dispatch<React.SetStateAction<number>>;
-};
+interface Props {
+  onSubmit: (data: any) => void
+  defaultValues: SignInData
+}
 
-const SignUpEmail = ({ signInData, setSignInData, setNext }: Props) => {
-  const handleClickNext = () => {
-    if (!signInData.email || !signInData.password || !signInData.password2 || !signInData.role || (signInData.password !== signInData.password || !signInData.isChecked)) {
-      return;
-    }
-    setNext(2)
-  }
+const schema = yup
+  .object()
+  .shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+    passwordConfirmation: yup.string()
+      .oneOf([yup.ref('password'), 'Password must match'], 'Password must match'),
+    role: yup.string().required(),
+    terms: yup.bool().oneOf([true], 'Please accept the terms of use'),
+  })
+  .required()
+
+const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues
+  })
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-[380px] gap-4 flex flex-col">
+    <form className="flex flex-col gap-2 w-full items-center justify-center px-[10px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="gap-4 flex flex-col items-center">
         <CustomInput
-          name="email"
           label="Email"
           placeholder="Enter your email"
           type="email"
-          required={true}
-          value={signInData?.email}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("email")}
         />
+
         <CustomInput
-          name="password"
           label="Password"
           placeholder="Enter your password"
           type="password"
-          required={true}
-          value={signInData?.password}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("password")}
         />
         <CustomInput
-          name="password2"
           label="Confirm Password"
           placeholder="Confirm Password"
           type="password"
-          required={true}
-          value={signInData?.password2}
-          setValue={setSignInData}
+          errors={errors}
+          {...register("passwordConfirmation")}
         />
-        {
-          signInData.password && signInData.password2 && signInData.password !== signInData.password2 &&
-          <p className="text-[#ff0000]">
-            Password is not matching
-          </p>
-        }
-        <SelectRoles
-          setSignInData={setSignInData}
-          signInData={signInData}
-        />
-      </div>
-      <div className="flex gap-2 items-center">
-        <input
-          type="checkbox"
-          style={{ accentColor: "#0E76FD" }}
-          className="h-5 w-5"
-          checked={signInData.isChecked} // Use the checked attribute to set the checkbox state
-          onChange={() => {
-            setSignInData((prev) => ({
-              ...prev,
-              // @ts-ignore
-              isChecked: !signInData.isChecked, // Toggle the isChecked value
-            }));
+        <Controller
+          control={control}
+          rules={{
+            required: true,
           }}
+          render={({ field: { onChange, value } }) => (
+            <SelectRoles
+              onChange={onChange}
+              value={value}
+              errors={errors}
+            />
+          )}
+          name="role"
         />
-
-
-        <p className="text-[#D4D4D4] text-[14px] leading-[20px]">
+        <label className="flex gap-2 items-center text-[#D4D4D4] text-[14px] leading-[20px]">
+          <input
+            type="checkbox"
+            style={{ accentColor: "#0E76FD" }}
+            className="h-5 w-5"
+            {...register("terms")}
+          />
           <span className="text-[#ff0000]">*</span>By signing up, I accept and agree to the{" "}
           <Link href="#" className="text-[#0E76FD]">
             Terms of Use
           </Link>
           .
-        </p>
+        </label>
+        {errors?.["terms"] && (
+          <span className='text-red-800 w-full'>
+            {capitalize(errors["terms"]?.message?.toString()!)}
+          </span>
+        )}
       </div>
-      <CustomSubmitbtn title="Continue" onClick={handleClickNext} button />
-    </div>
-  );
-};
+      <CustomSubmitbtn title="Continue" />
+    </form>
+  )
+}
 
 export default SignUpEmail;

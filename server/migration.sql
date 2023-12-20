@@ -7,8 +7,8 @@ CREATE TABLE aegis (
 
 CREATE TABLE audit_requests (
     request_id SERIAL PRIMARY KEY,
-    contract VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL CHECK (status IN ('pending', 'partial', 'completed')),
+    contract VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(50) NOT NULL CHECK (status IN ('pending', 'partial', 'completed', 'failed')),
     status_log TEXT,
     created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

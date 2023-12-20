@@ -11,7 +11,7 @@ const SignUpPage = async (props: Props) => {
   console.log(authSession)
   if (authSession?.user?.email) redirect("/")
   return (
-    <div className="flex items-center justify-center bg-black w-screen h-screen">
+    <div className="flex items-center justify-center bg-black w-full min-h-screen max-[450px]:py-[30px]">
       <div className="grid grid-cols-2 w-full h-full">
         <SignUpForm />
         <Template />

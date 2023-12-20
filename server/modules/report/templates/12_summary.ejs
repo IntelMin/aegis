@@ -30,7 +30,7 @@
     display: inline-block;
     width: 20%;
     height: 100%;
-    border-right: 1px solid #A8A8A8;
+    border-right: 1px solid #a8a8a8;
     color: black;
     text-align: center;
     padding: 5px 0;
@@ -42,7 +42,7 @@
     display: inline-block;
     width: 30%;
     height: 100%;
-    border-right: 1px solid #A8A8A8;
+    border-right: 1px solid #a8a8a8;
     color: black;
     text-align: center;
     padding: 5px 0;
@@ -78,7 +78,7 @@
     font-size: 16px;
     font-weight: 500;
     margin-left: 1%;
-    border-right: 1px solid #D9D9D9;
+    border-right: 1px solid #d9d9d9;
     border-radius: 0px 0px 12px 12px;
     border-right-color: rgba(255, 255, 255, 0.1);
   }
@@ -86,12 +86,12 @@
   .summary-table-body-row2 {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
-    width:31%;
+    width: 31%;
     text-align: center;
     padding: 30px 0;
     font-size: 16px;
     font-weight: 500;
-    border-right: 1px solid #D9D9D9;
+    border-right: 1px solid #d9d9d9;
     border-radius: 5px;
     border-right-color: rgba(255, 255, 255, 0.1);
   }
@@ -99,7 +99,7 @@
   .summary-table-body-row3 {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
-    width:50%;
+    width: 50%;
     text-align: center;
     padding: 30px 0;
     font-size: 16px;
@@ -129,28 +129,17 @@
 </style>
 <div class="project-summary">
   <ptitle>
-
-  <div class="summary-head">Audit Summary</div>
+    <div class="summary-head">Audit Summary</div>
   </ptitle>
   <div class="summary-table">
     <div class="summary-table-head-con">
-      <div class="summary-table-head-row1">
-        Version
-      </div>
-      <div class="summary-table-head-row2">
-        Delivery Date
-      </div>
-      <div class="summary-table-head-row3">
-        Changelog
-      </div>
+      <div class="summary-table-head-row1">Version</div>
+      <div class="summary-table-head-row2">Delivery Date</div>
+      <div class="summary-table-head-row3">Changelog</div>
     </div>
     <div class="summary-table-body-con">
-      <div class="summary-table-body-row1">
-        1.0
-      </div>
-      <div class="summary-table-body-row2">
-        <%= extra.currentDate %>
-      </div>
+      <div class="summary-table-body-row1">1.0</div>
+      <div class="summary-table-body-row2"><%= extra.currentDate %></div>
       <div class="summary-table-body-row3">
         <ul>
           <li>Layout project</li>
@@ -161,14 +150,18 @@
     </div>
   </div>
 </div>
-<div class="note">
-  <div class="note-content">
-    <div style="font-weight: 900; font-size: 20px; line-height: 50px;">Note</div>
-    This Audit report consists of a security analysis of the Aegis AI smart contract. <br />
-    This analysis did not include functional testing (or unit testing) of the
-    contract’s logic
-  </div>
-  <div class="note-symbol-container">
-    <img src="../assets/purplesummary.png" alt="Aegis Hero" width="344" height="344">
+<div>
+  <h3>Note</h3>
+  <p>
+    This Audit report consists of a security analysis of the <%= info.name %> smart
+    contract. <br />
+  </p>
+  <div class="image" style="width: 300px;">
+    <img
+      src="../assets/purplesummary.png"
+      alt="Aegis Hero"
+      width="300"
+      height="300"
+    />
   </div>
 </div>
