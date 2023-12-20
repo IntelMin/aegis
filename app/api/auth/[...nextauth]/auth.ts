@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
 
         }
         console.log(user)
-        return user;
+        return {id:user.id, email:user.email};
       }
     })
   ],
