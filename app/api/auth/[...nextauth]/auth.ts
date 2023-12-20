@@ -1,13 +1,8 @@
 import supabase from "@/server/supabase";
-import {
-  getServerSession,
-  type NextAuthOptions,
-} from "next-auth";
+import { getServerSession, type NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import hashString  from "@/app/utils/hash"
+import hashString from "@/app/utils/hash";
 import NextAuth from "next-auth/next";
-
-
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -18,7 +13,7 @@ export const authOptions: NextAuthOptions = {
   //     console.log("------------ JWT ------------");
   //     console.log({ token }, { account }, { profile });
   //     if (account && account.type === "credentials") {
-  //       token.userId = account.providerAccountId; // this is Id that coming from authorize() callback 
+  //       token.userId = account.providerAccountId; // this is Id that coming from authorize() callback
   //     }
   //     return token;
   //   },
@@ -30,42 +25,45 @@ export const authOptions: NextAuthOptions = {
   //   },
   // },
   pages: {
-    signIn: '/signin',
-    signOut: '/signout',
-    newUser: '/signup',
+    signIn: "/signin",
+    signOut: "/signout",
+    newUser: "/signup",
   },
   providers: [
     Credentials({
       name: "Credentials",
       credentials: {
         email: { label: "Username", type: "text", placeholder: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const { email, password } = credentials as {
-          email: string
-          password: string
-        };
-        console.log(credentials?.email)
-        const { data: user, error } = await supabase.from("users").select("*").eq("email", credentials?.email).single()
-        if (error) {
-          throw new Error(error.message);
-        }
-        if (!user) {
-          throw new Error("no user found");
+        try {
+          const { email, password } = credentials || {};
+          if (!email || !password) {
+            return null;
+          }
 
-        }
-        if(credentials?.password === undefined) return "no password"
-        if (user.password !== hashString(credentials?.password)) {
-          throw new Error("wrong password");
+          const { data: user, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("email", email)
+            .single();
+          if (error) throw new Error(error.message);
+          if (!user) throw new Error("No user found");
 
+          if (user.password !== hashString(password)) {
+            throw new Error("Wrong password");
+          }
+
+          return { id: user.id, email: user.email };
+        } catch (error) {
+          console.error(error);
+          return null; 
         }
-        console.log(user)
-        return {id:user.id, email:user.email};
-      }
-    })
+      },
+    }),
   ],
   secret: "aaaaaaaaaaaaaaaaaaa",
 };
-export const {auth,signOut} = NextAuth(authOptions)
+export const { auth, signOut } = NextAuth(authOptions);
 export const getServerAuthSession = () => getServerSession(authOptions);
