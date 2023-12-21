@@ -59,44 +59,52 @@ const getData = async (request_data, expiry) => {
 };
 
 router.get("/all_token", async (req, res) => {
-  res.status(200).send(
-    await getData(
-      {
-        query: `{
-          getNetworks {
-            name
-            id
-          }
-        }`,
-      },
-      600000
-    )
-  );
+  try {
+    res.status(200).send(
+      await getData(
+        {
+          query: `{
+            getNetworks {
+              name
+              id
+            }
+          }`,
+        },
+        600000
+      )
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 router.post("/getpairmetadata", async (req, res) => {
-  const pairId = req.body.pairId;
-  const quoteToken = req.body.quoteToken | "token0";        // "token0" or "token1"
-  const statsType = req.body.statsType | "unfiltered";          // "filtered" or "unfiltered"
+  try {
+    const pairId = req.body.pairId;
+    const quoteToken = req.body.quoteToken || "token0"; // "token0" or "token1"
+    const statsType = req.body.statsType || "UNFILTERED"; // "FILTERED" or "UNFILTERED"
 
-  if (pairId) {
-    res.status(200).send(
-      await getData({
-        operationName: "GetPairMetadata",
-        query:
-          "query GetPairMetadata($pairId: String!, $quoteToken: QuoteToken, $statsType: TokenPairStatisticsType) {\n  pairMetadata(pairId: $pairId, quoteToken: $quoteToken, statsType: $statsType) {\n    price\n    exchangeId\n    fee\n    id\n    liquidity\n    liquidityToken\n    nonLiquidityToken\n    pairAddress\n    priceChange: priceChange24\n    priceChange1\n    priceChange12\n    priceChange24\n    priceChange4\n    tickSpacing\n    volume: volume24\n    volume1\n    volume12\n    volume24\n    volume4\n    quoteToken\n    statsType\n    token0 {\n      address\n      decimals\n      name\n      networkId\n      pooled\n      price\n      symbol\n      labels {\n        type\n        subType\n        createdAt\n        __typename\n      }\n      __typename\n    }\n    token1 {\n      address\n      decimals\n      name\n      networkId\n      pooled\n      price\n      symbol\n      labels {\n        type\n        subType\n        createdAt\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}",
-        variables: {
-          pairId: pairId,
-          quoteToken: quoteToken,
-          statsType: statsType,
-        },
-      })
-    );
-  } else {
-    res.status(402).send("Error: " + "Please Select pairId");
+    if (pairId) {
+      res.status(200).send(
+        await getData({
+          operationName: "GetPairMetadata",
+          variables: {
+            pairId: pairId,
+            quoteToken: quoteToken,
+            statsType: statsType,
+          },
+          query:
+            "query GetPairMetadata($pairId: String!, $quoteToken: QuoteToken, $statsType: TokenPairStatisticsType) {\n  pairMetadata(pairId: $pairId, quoteToken: $quoteToken, statsType: $statsType) {\n    price\n    exchangeId\n    fee\n    id\n    liquidity\n    liquidityToken\n    nonLiquidityToken\n    pairAddress\n    priceChange: priceChange24\n    priceChange1\n    priceChange12\n    priceChange24\n    priceChange4\n    tickSpacing\n    volume: volume24\n    volume1\n    volume12\n    volume24\n    volume4\n    quoteToken\n    statsType\n    token0 {\n      address\n      decimals\n      name\n      networkId\n      pooled\n      price\n      symbol\n      labels {\n        type\n        subType\n        createdAt\n        __typename\n      }\n      __typename\n    }\n    token1 {\n      address\n      decimals\n      name\n      networkId\n      pooled\n      price\n      symbol\n      labels {\n        type\n        subType\n        createdAt\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}",
+        })
+      );
+    } else {
+      res.status(500).send("Please Select pairId");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
   }
-
-
 });
 
 module.exports = router;

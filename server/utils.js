@@ -3,7 +3,7 @@ const fs = require("fs").promises;
 const fss = require("fs");
 const axios = require("axios");
 const path = require("path");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const supabase = require("./supabase");
 
 async function isContractOpenSource(address) {
@@ -166,7 +166,7 @@ async function insertRequestdb(data) {
     throw error;
   }
 }
-async function modifyRequestdb(address, newStatus, error_log = '') {
+async function modifyRequestdb(address, newStatus, error_log = "") {
   try {
     const { data: updatedData, error } = await supabase
       .from("audit_requests")
@@ -184,11 +184,9 @@ async function modifyRequestdb(address, newStatus, error_log = '') {
   }
 }
 
-
-
 function hashString(input) {
   // Choose the hashing algorithm (e.g., 'sha256', 'md5', 'sha512', etc.)
-  const algorithm = 'sha256';
+  const algorithm = "sha256";
 
   // Create a hash object
   const hash = crypto.createHash(algorithm);
@@ -197,7 +195,7 @@ function hashString(input) {
   hash.update(input);
 
   // Get the hexadecimal representation of the hash
-  const hashedString = hash.digest('hex');
+  const hashedString = hash.digest("hex");
 
   return hashedString;
 }
@@ -209,7 +207,7 @@ async function definedRequest(graphql) {
   // console.log("request: ", request);
 
   const response = await axios
-    .post("https://graph.defined.fi/graphql", graphql, {
+    .post("https://graph.defined.fi/graphql", request, {
       headers: {
         authority: "graph.defined.fi",
         accept: "*/*",
@@ -236,13 +234,18 @@ async function definedRequest(graphql) {
     })
     .catch((error) => {
       console.error("Error making the request", error);
+      throw new Error(rerror);
       return null;
     });
 
   // console.log("response: ", response.data);
-  if (response) {
-    return response.data;
+  if (response && response.data) {
+    if (response.data) {
+      return response.data;
+    }
+    throw new Error(response.errors[0].message);
   }
+
   return null;
 }
 
@@ -260,5 +263,5 @@ module.exports = {
   supabase,
   fetchAndCacheData,
   hashString,
-  definedRequest
+  definedRequest,
 };
