@@ -5,6 +5,7 @@ const axios = require("axios");
 const path = require("path");
 const crypto = require('crypto');
 const supabase = require("./supabase");
+
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
   const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
@@ -201,6 +202,49 @@ function hashString(input) {
   return hashedString;
 }
 
+async function definedRequest(graphql) {
+  let request = null;
+  request = JSON.stringify(graphql);
+
+  // console.log("request: ", request);
+
+  const response = await axios
+    .post("https://graph.defined.fi/graphql", graphql, {
+      headers: {
+        authority: "graph.defined.fi",
+        accept: "*/*",
+        "accept-language": "en-US,en;q=0.9,ko;q=0.8",
+        authorization: "e0f195aecd9fd4a41c387f38002ce1ce3783cf57",
+        "content-type": "application/json",
+        origin: "https://www.defined.fi",
+        referer: "https://www.defined.fi/",
+        "sec-ch-ua":
+          '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-site",
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "x-amz-user-agent": "aws-amplify/3.0.7",
+      },
+    })
+    .then((response) => {
+      // console.log("response: ", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error making the request", error);
+      return null;
+    });
+
+  // console.log("response: ", response.data);
+  if (response) {
+    return response.data;
+  }
+  return null;
+}
 
 module.exports = {
   fileExists,
@@ -215,5 +259,6 @@ module.exports = {
   modifyRequestdb,
   supabase,
   fetchAndCacheData,
-  hashString
+  hashString,
+  definedRequest
 };

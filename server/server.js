@@ -7,6 +7,7 @@ const cors = require("cors");
 // const markdownRoute = require("./api/markdown");
 // const dependencyRoute = require("./api/dependencies");
 const dashboardRoute = require("./api/dashboard");
+const monitorRoute = require("./api/monitor");
 const trendingTokens = require("./api/trending");
 const deployerRoute = require("./api/deployer");
 const auditRoute = require("./api/audit");
@@ -31,6 +32,7 @@ router.get('/ping', (req, res) => {
 
 app.use("/request", requestRoute);
 app.use("/dashboard", dashboardRoute);
+app.use("/monitor", monitorRoute);
 app.use("/trending", trendingTokens);
 app.use("/deployer", deployerRoute);
 app.use("/audit", auditRoute);
