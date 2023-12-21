@@ -32,7 +32,7 @@ const Template = (props: Props) => {
           alt="authbg"
           width={500}
           height={700}
-          className="absolute bottom-0 right-0 w-[650px] h-[full]"
+          className="absolute bottom-0 right-0 top-0 left-0 w-[650px] h-[full]"
         />
       </div>
     </div>
