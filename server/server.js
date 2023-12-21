@@ -23,6 +23,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+const router = express.Router();
+
+router.get('/ping', (req, res) => {
+  res.status(200).json({ result: 'pong' });
+});
+
 app.use("/request", requestRoute);
 app.use("/dashboard", dashboardRoute);
 app.use("/trending", trendingTokens);
