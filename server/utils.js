@@ -207,7 +207,7 @@ async function definedRequest(graphql) {
   // console.log("request: ", request);
 
   const response = await axios
-    .post("https://graph.defined.fi/graphql", request, {
+    .post("https://graph.defined.fi/graphql", graphql, {
       headers: {
         authority: "graph.defined.fi",
         accept: "*/*",
@@ -234,7 +234,7 @@ async function definedRequest(graphql) {
     })
     .catch((error) => {
       console.error("Error making the request", error);
-      throw new Error(rerror);
+      throw new Error(error);
       return null;
     });
 
