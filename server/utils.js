@@ -200,14 +200,43 @@ function hashString(input) {
   return hashedString;
 }
 
+async function axiosgetapi(url, config) {
+  return await axios
+    .get(url, config)
+    .then((response) => {
+      if (!response.data) {
+        throw Error("Invalid Response");
+      }
+      // console.log("response: ", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error making the request", error);
+      throw new Error(error);
+    });
+}
+
+async function axiospostapi(url, params, config) {
+  return await axios
+    .post(url, params, config)
+    .then((response) => {
+      if (!response) {
+        throw Error("Invalid Response");
+      }
+      // console.log("response: ", response.data);
+      return response;
+    })
+    .catch((error) => {
+      console.error("Error making the request", error);
+      throw new Error(error);
+    });
+}
+
 async function definedRequest(graphql) {
-  let request = null;
-  request = JSON.stringify(graphql);
-
-  // console.log("request: ", request);
-
-  const response = await axios
-    .post("https://graph.defined.fi/graphql", graphql, {
+  const response = await axiospostapi(
+    "https://graph.defined.fi/graphql",
+    graphql,
+    {
       headers: {
         authority: "graph.defined.fi",
         accept: "*/*",
@@ -227,16 +256,8 @@ async function definedRequest(graphql) {
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
         "x-amz-user-agent": "aws-amplify/3.0.7",
       },
-    })
-    .then((response) => {
-      // console.log("response: ", response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Error making the request", error);
-      throw new Error(error);
-      return null;
-    });
+    }
+  );
 
   // console.log("response: ", response.data);
   if (response && response.data) {
@@ -244,6 +265,26 @@ async function definedRequest(graphql) {
       return response.data;
     }
     throw new Error(response.errors[0].message);
+  }
+
+  return null;
+}
+
+async function chainbaseRequest(params) {
+  const response = await axiosgetapi(
+    "https://api.chainbase.online/v1/token/top-holders",
+    {
+      headers: {
+        "content-type": "application/json",
+        "X-API-Key": "demo",
+      },
+      params: params,
+    }
+  );
+
+  // console.log("response: ", response.data);
+  if (response) {
+      return response;
   }
 
   return null;
@@ -264,4 +305,5 @@ module.exports = {
   fetchAndCacheData,
   hashString,
   definedRequest,
+  chainbaseRequest,
 };

@@ -1,17 +1,20 @@
 const express = require("express");
+const axios = require("axios");
+
 const router = express.Router();
 const {
   fetchData,
   readCache,
   writeCache,
   definedRequest,
+  chainbaseRequest,
 } = require("../utils");
 const { sha256 } = require("viem");
 
-const getData = async (request_data, expiry) => {
-  const type = sha256(JSON.stringify(request_data));
+const getData = async (request_data, expiry = 600000, type = 1) => {
+  const hash = sha256(JSON.stringify(request_data));
 
-  let filename = `./cache/monitor/${type}.json`;
+  let filename = `./cache/monitor/${hash}.json`;
 
   // get current time
   let currentTime = new Date().getTime();
@@ -35,7 +38,13 @@ const getData = async (request_data, expiry) => {
 
   if (live_fetch) {
     console.log("Making the reqest.");
-    response_data = await definedRequest(request_data);
+    if (type == 1) {
+      response_data = await definedRequest(request_data);
+    } else if (type == 2) {
+      response_data = await chainbaseRequest(request_data);
+    } else {
+      throw new Error("wrong input");
+    }
 
     if (response_data == null) {
       throw new Error("wrong respond");
@@ -113,29 +122,27 @@ router.post("/getbars", async (req, res) => {
     const resolution = req.body.resolution || 15;
     const from = parseInt(req.body.from);
     const to = parseInt(req.body.to);
-    const currencyCode = req.body.currencyCode || "USD"; 
+    const currencyCode = req.body.currencyCode || "USD";
     const statsType = req.body.statsType || "UNFILTERED"; // "FILTERED" or "UNFILTERED"
     const quoteToken = req.body.quoteToken || "token0"; // "token0" or "token1"
 
     if (symbol && from && to) {
-      res
-        .status(200)
-        .send(
-          await getData({
-            operationName: "GetBars",
-            variables: {
-              symbol: symbol,
-              resolution: resolution,
-              from: from,
-              to: to,
-              currencyCode: currencyCode,
-              statsType: statsType,
-              quoteToken: quoteToken,
-            },
-            query:
-              "query GetBars($symbol: String!, $from: Int!, $to: Int!, $resolution: String!, $currencyCode: String, $quoteToken: QuoteToken, $statsType: TokenPairStatisticsType) {\n  getBars(\n    symbol: $symbol\n    from: $from\n    to: $to\n    resolution: $resolution\n    currencyCode: $currencyCode\n    quoteToken: $quoteToken\n    statsType: $statsType\n  ) {\n    o\n    h\n    l\n    c\n    t\n    s\n    volume\n    __typename\n  }\n}",
-          })
-        );
+      res.status(200).send(
+        await getData({
+          operationName: "GetBars",
+          variables: {
+            symbol: symbol,
+            resolution: resolution,
+            from: from,
+            to: to,
+            currencyCode: currencyCode,
+            statsType: statsType,
+            quoteToken: quoteToken,
+          },
+          query:
+            "query GetBars($symbol: String!, $from: Int!, $to: Int!, $resolution: String!, $currencyCode: String, $quoteToken: QuoteToken, $statsType: TokenPairStatisticsType) {\n  getBars(\n    symbol: $symbol\n    from: $from\n    to: $to\n    resolution: $resolution\n    currencyCode: $currencyCode\n    quoteToken: $quoteToken\n    statsType: $statsType\n  ) {\n    o\n    h\n    l\n    c\n    t\n    s\n    volume\n    __typename\n  }\n}",
+        })
+      );
     } else {
       res.status(500).send("Invalid Parameter");
     }
@@ -172,6 +179,32 @@ router.post("/gettokenevents", async (req, res) => {
       );
     } else {
       res.status(500).send("Please Select pairId");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+router.post("/gettopholders", async (req, res) => {
+  try {
+    const limit = parseInt(req.body.limit) || 20; // 30
+    const page = parseInt(req.body.page) || 1; // 30
+    const address = req.body.address;
+    const networkId = parseInt(req.body.networkId) || 1;
+    // const address = "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0";
+
+    if (address) {
+      res.status(200).send(
+        await getData({
+          chain_id: networkId,
+          contract_address: address,
+          page: page,
+          limit: limit,
+        }, 60000000, 2)
+      );
+    } else {
+      res.status(500).send("Please Select address");
     }
   } catch (error) {
     console.log(error);
