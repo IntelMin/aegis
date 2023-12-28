@@ -84,7 +84,7 @@ const DashboardDataTable = (props: Props) => {
       <table className="w-full">
         <TableHead />
         {data?.map((item, i) => (
-          <TableRow item={item} index={i} />
+          <TableRow key={i} item={item} index={i} />
         ))}
       </table>
     </div>

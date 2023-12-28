@@ -51,6 +51,9 @@ body {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.141);
 }
+.grid-cols-16 {
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+}
 @keyframes marquee {
   from {
     transform: translateX(100%);
@@ -58,8 +61,4 @@ body {
   to {
     transform: translateX(-100%);
   }
-}
-
-.grid-cols-16 {
-  grid-template-columns: repeat(16, minmax(0, 1fr));
 }

@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import copy from 'copy-to-clipboard';
 import ChartTd from "./chart-td";
 
 type Token = {
@@ -35,6 +38,11 @@ type Props = {
 };
 
 const TableRow = ({ item, index }: Props) => {
+
+  const handleCopy = (data: string) => {
+    copy(data);
+  }
+
   return (
     <tr
       key={index}
@@ -63,7 +71,8 @@ const TableRow = ({ item, index }: Props) => {
             </div>
             <div className="flex items-center gap-1">
               <p className="text-[13px] text-blue-400">{item.token.address}</p>
-              <button type="button">
+              <button type="button" onClick={() => handleCopy(item.token.address)}>
+
                 <Image
                   src="/token-icons/blue-copy.svg"
                   alt="copy-icon"

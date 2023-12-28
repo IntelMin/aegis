@@ -1,15 +1,28 @@
 import React from "react";
+import { tokenData } from "./demo-token-data";
+import Marquee from "react-fast-marquee";
 
 const TokenMarquee = () => {
-  return (
-    <div className="overflow-hidden">
-      <p
-        className="inline-block whitespace-nowrap text-white"
-        style={{ animation: "marquee 10s linear infinite" }}
+  const marqueeContent = tokenData.map((token) => (
+    <span key={token.name} className="flex items-center mr-8">
+      <img src={token.icon} alt={token.name} className="w-4 h-4 mr-2" />
+
+      <span className="text-white">{token.name}</span>
+
+      <span className="ml-2 text-white">{token.price}</span>
+      <span
+        className={`ml-2 ${
+          token.change >= 0 ? "text-green-500" : "text-red-500"
+        }`}
       >
-        BTC, ETH, BNB, SOL, PEPE, DEF, KEL, SHIBA INU, CRYP, PLU, CALAC, LUPA,
-        ION, MAK
-      </p>
+        {token.change >= 0 ? `+${token.change}` : token.change}
+      </span>
+    </span>
+  ));
+  return (
+    <div className="overflow-hidden relative flex">
+      <Marquee>{marqueeContent}</Marquee>
+
     </div>
   );
 };
