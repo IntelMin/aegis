@@ -212,4 +212,33 @@ router.post("/gettopholders", async (req, res) => {
   }
 });
 
+router.post("/filtertokens", async (req, res) => {
+  try {
+    const network = req.body.network || [];
+    const limit = req.body.limit || 200;
+    const tokens = req.body.tokens || [];
+
+    if (address) {
+      res.status(200).send(
+        await getData({
+          operationName: "FilterTokens",
+          variables: {
+            filters: {
+              network: network
+            },
+            limit: limit,
+            tokens: tokens,
+          },
+          query: "query FilterTokens($filters: TokenFilters, $statsType: TokenPairStatisticsType, $phrase: String, $tokens: [String], $rankings: [TokenRanking], $limit: Int, $offset: Int) {\n  filterTokens(\n    filters: $filters\n    statsType: $statsType\n    phrase: $phrase\n    tokens: $tokens\n    rankings: $rankings\n    limit: $limit\n    offset: $offset\n  ) {\n    results {\n      buyCount1\n      buyCount12\n      buyCount24\n      buyCount4\n      uniqueBuys1\n      uniqueBuys12\n      uniqueBuys24\n      uniqueBuys4\n      change1\n      change12\n      change24\n      change4\n      createdAt\n      exchanges {\n        ...ExchangeModel\n        __typename\n      }\n      fdv\n      high1\n      high12\n      high24\n      high4\n      lastTransaction\n      liquidity\n      low1\n      low12\n      low24\n      low4\n      marketCap\n      pair {\n        ...PairModel\n        __typename\n      }\n      priceUSD\n      quoteToken\n      sellCount1\n      sellCount12\n      sellCount24\n      sellCount4\n      uniqueSells1\n      uniqueSells12\n      uniqueSells24\n      uniqueSells4\n      token {\n        address\n        decimals\n        id\n        name\n        networkId\n        symbol\n        isScam\n        imageThumbUrl\n        imageSmallUrl\n        imageLargeUrl\n        info {\n          ...BaseTokenInfo\n          __typename\n        }\n        __typename\n      }\n      txnCount1\n      txnCount12\n      txnCount24\n      txnCount4\n      uniqueTransactions1\n      uniqueTransactions12\n      uniqueTransactions24\n      uniqueTransactions4\n      volume1\n      volume12\n      volume24\n      volume4\n      __typename\n    }\n    count\n    page\n    __typename\n  }\n}\n\nfragment ExchangeModel on Exchange {\n  address\n  color\n  exchangeVersion\n  id\n  name\n  networkId\n  tradeUrl\n  iconUrl\n  enabled\n  __typename\n}\n\nfragment PairModel on Pair {\n  address\n  exchangeHash\n  fee\n  id\n  networkId\n  tickSpacing\n  token0\n  token1\n  __typename\n}\n\nfragment BaseTokenInfo on TokenInfo {\n  address\n  circulatingSupply\n  id\n  imageLargeUrl\n  imageSmallUrl\n  imageThumbUrl\n  isScam\n  name\n  networkId\n  symbol\n  totalSupply\n  __typename\n}"         
+        })
+      );
+    } else {
+      res.status(500).send("Please Select pairId");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
