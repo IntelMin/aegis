@@ -5,7 +5,7 @@ type Props = {}
 
 const TokenAuditPage = (props: Props) => {
   return (
-    <div className='tokenBg mt-[80px] w-full flex items-center justify-center'>
+    <div className='tokenBg pt-[80px] w-full flex items-center justify-center'>
         <TokenAuditorForm />
     </div>
   )

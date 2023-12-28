@@ -22,7 +22,6 @@ const TokenMarquee = () => {
   return (
     <div className="overflow-hidden relative flex">
       <Marquee>{marqueeContent}</Marquee>
-
     </div>
   );
 };

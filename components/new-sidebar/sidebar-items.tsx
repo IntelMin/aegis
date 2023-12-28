@@ -16,7 +16,6 @@ type Props = {
 
 const SidebarItems = ({ item, open }: Props) => {
   const pathName = usePathname();
-
   return (
     <Link
       href={`/${item?.href}`}

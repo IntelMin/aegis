@@ -56,7 +56,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 70px);
 }
 .tokenAuditoptionBg{
   background-image: url('tokenoptionBg.png');
@@ -64,6 +64,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+.grid-cols-16 {
   grid-template-columns: repeat(16, minmax(0, 1fr));
 }
 @keyframes marquee {

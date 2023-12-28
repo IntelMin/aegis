@@ -5,6 +5,7 @@ import React from "react";
 import copy from 'copy-to-clipboard';
 import ChartTd from "./chart-td";
 
+//! Shift to types folder
 type Token = {
   iconSrc: string;
   iconAlt: string;
@@ -72,7 +73,6 @@ const TableRow = ({ item, index }: Props) => {
             <div className="flex items-center gap-1">
               <p className="text-[13px] text-blue-400">{item.token.address}</p>
               <button type="button" onClick={() => handleCopy(item.token.address)}>
-
                 <Image
                   src="/token-icons/blue-copy.svg"
                   alt="copy-icon"
