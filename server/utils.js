@@ -3,8 +3,9 @@ const fs = require("fs").promises;
 const fss = require("fs");
 const axios = require("axios");
 const path = require("path");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const supabase = require("./supabase");
+
 async function isContractOpenSource(address) {
   const apiKey = "EYEC357Q2UY267KX88U25HZ57KIPNT4CYB"; // Replace with your Etherscan API key
   const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
@@ -165,7 +166,7 @@ async function insertRequestdb(data) {
     throw error;
   }
 }
-async function modifyRequestdb(address, newStatus, error_log = '') {
+async function modifyRequestdb(address, newStatus, error_log = "") {
   try {
     const { data: updatedData, error } = await supabase
       .from("audit_requests")
@@ -183,11 +184,9 @@ async function modifyRequestdb(address, newStatus, error_log = '') {
   }
 }
 
-
-
 function hashString(input) {
   // Choose the hashing algorithm (e.g., 'sha256', 'md5', 'sha512', etc.)
-  const algorithm = 'sha256';
+  const algorithm = "sha256";
 
   // Create a hash object
   const hash = crypto.createHash(algorithm);
@@ -196,11 +195,86 @@ function hashString(input) {
   hash.update(input);
 
   // Get the hexadecimal representation of the hash
-  const hashedString = hash.digest('hex');
+  const hashedString = hash.digest("hex");
 
   return hashedString;
 }
 
+async function axiosgetapi(url, config) {
+  return await axios
+    .get(url, config)
+    .then((response) => {
+      if (!response.data) {
+        throw Error("Invalid Response");
+      }
+      // console.log("response: ", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error making the request", error);
+      throw new Error(error);
+    });
+}
+
+async function axiospostapi(url, params, config) {
+  return await axios
+    .post(url, params, config)
+    .then((response) => {
+      if (!response) {
+        throw Error("Invalid Response");
+      }
+      // console.log("response: ", response.data);
+      return response;
+    })
+    .catch((error) => {
+      console.error("Error making the request", error);
+      throw new Error(error);
+    });
+}
+
+async function definedRequest(graphql) {
+  const response = await axiospostapi(
+    "https://graph.defined.fi/graphql",
+    graphql,
+    {
+      headers: {
+        authority: "graph.defined.fi",
+        authorization: "e0f195aecd9fd4a41c387f38002ce1ce3783cf57",
+        "content-type": "application/json"
+      },
+    }
+  );
+
+  // console.log("response: ", response.data);
+  if (response && response.data) {
+    if (response.data) {
+      return response.data;
+    }
+    throw new Error(response.errors[0].message);
+  }
+
+  return null;
+}
+
+async function chainbaseRequest(params) {
+  const response = await axiosgetapi(
+    "https://api.chainbase.online/v1/token/top-holders",
+    {
+      headers: {
+        "content-type": "application/json",
+        "X-API-Key": "demo",
+      },
+      params: params,
+    }
+  );
+
+  // console.log("response: ", response.data);
+  if (response) {
+      return response;
+  }
+
+  return null;
+}
 
 module.exports = {
   fileExists,
@@ -215,5 +289,7 @@ module.exports = {
   modifyRequestdb,
   supabase,
   fetchAndCacheData,
-  hashString
+  hashString,
+  definedRequest,
+  chainbaseRequest,
 };
