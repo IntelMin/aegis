@@ -4,44 +4,27 @@ import { sendEmail } from "@/app/utils/resend";
 import  hashString  from "@/app/utils/hash"
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const {
-        name,
-        email,
-        password,
-        projectname,
-        website,
-        tokenAddress,
-        teleAccount,
-        projectX,
-        projectInsta,
-        projectEmail,
-        twitter,
-        teleId,
-        about,
-        vcContactName,
-        vcEmail,
-        role
-    } = (await req.json()) as {
+    const { name, email, password,project_name, website,token_address, tele_account,project_x,project_insta,project_email,twitter,tele_id,about,vc_contact_name,vc_email,role } = (await req.json()) as {
         email: string;
         password: string;
 
-        projectname: string,
+        project_name: string,
         website: string,
-        tokenAddress: string,
-        teleAccount: string,
-        projectX: string,
-        projectInsta: string,
+        token_address: string,
+        tele_account: string,
+        project_x: string,
+        project_insta: string,
         role: string,
         // individual
         name: string,
         twitter: string,
-        teleId: string,
+        tele_id: string,
         about: string,
         // vc
-        vcContactName: string,
-        vcEmail: string,
+        vc_contact_name: string,
+        vc_email: string,
         // team
-        projectEmail: string,
+        project_email: string,
     };
     let hashed_password = await hashString(password);
     const { data: user, error } = await supabase.from("users").select("*").eq("email", email).single()
@@ -49,28 +32,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (user) {
         return NextResponse.json("user already exists", { status: 400 })
     }
-    const { data, error: error2 } = await supabase.from("users").insert([{ email:email,
-        password:hashed_password,
-        project_name: projectname,
-        website,
-        token_address: tokenAddress,
-        tele_account: teleAccount,
-        project_x: projectX,
-        project_insta: projectInsta,
-        project_email: projectEmail,
-        twitter,
-        tele_id: teleId,
-        about,
-        vc_contact_name: vcContactName,
-        vc_email: vcEmail,
-        role
-    }]);
+    const { data, error: error2 } = await supabase.from("users").insert([{ email:email, password:hashed_password,project_name, website,token_address, tele_account,project_x,project_insta,project_email,twitter,tele_id,about,vc_contact_name,vc_email,role }]);
     if (error2) {
         console.log(error2, "error")
         return NextResponse.json("error creating user")
     }
     const html = `<h1>Welcome to Aegis, ${name}!</h1>`
-    await sendEmail(email, name, html);
+    await sendEmail(email, name);
 
     return NextResponse.json({ data: data });
 }

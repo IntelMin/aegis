@@ -17,51 +17,51 @@ import uploadImage from "@/utils/uploadImage";
 export type SignInData = {
   email: string,
   password: string,
-  passwordConfirmation: string,
-  projectname: string,
+  password2: string,
+  project_name: string,
   website: string,
-  tokenAddress: string,
-  teleAccount: string,
-  projectX: string,
-  projectInsta: string,
+  token_address: string,
+  tele_account: string,
+  project_x: string,
+  project_insta: string,
   role: string,
   // individual
   name: string,
   twitter: string,
-  teleId: string,
+  tele_id: string,
   about: string,
   // vc
-  vcContactName: string,
-  vcEmail: string,
+  vc_contact_name: string,
+  vc_email: string,
   // team
-  projectEmail: string,
-  logourl: File | null,
-  terms: boolean
+  project_email: string,
+  logo_url: File | null,
+  is_checked: boolean
 };
 
 const init: SignInData = {
   email: "",
   password: "",
-  passwordConfirmation: "",
-  projectname: "",
+  password2: "",
+  project_name: "",
   website: "",
-  tokenAddress: "",
-  teleAccount: "",
-  projectX: "",
-  projectInsta: "",
+  token_address: "",
+  tele_account: "",
+  project_x: "",
+  project_insta: "",
   role: "",
   // individual
   name: "",
   twitter: "",
-  teleId: "",
+  tele_id: "",
   about: "",
   // vc
-  vcContactName: "",
-  vcEmail: "",
+  vc_contact_name: "",
+  vc_email: "",
   // team
-  projectEmail: "",
-  logourl: null,
-  terms: false
+  project_email: "",
+  logo_url: null,
+  is_checked: false
 }
 
 const SignUpForm = () => {

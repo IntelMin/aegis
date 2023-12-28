@@ -11,12 +11,12 @@ import { SignInData } from "./sign-up";
 const schema = yup.object()
   .shape({
     name: yup.string().required(),
-    projectname: yup.string().required(),
-    projectEmail: yup.string().email().required(),
+    project_name: yup.string().required(),
+    project_email: yup.string().email().required(),
     website: yup.string().required(),
-    teleId: yup.string().required(),
-    tokenAddress: yup.string().required(),
-    logourl: yup.mixed(),
+    tele_id: yup.string().required(),
+    token_address: yup.string().required(),
+    logo_url: yup.mixed(),
     about: yup.string().required(),
   })
 
@@ -42,7 +42,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
     const file = event.target.files?.[0];
 
     if (file) {
-      setValue('logourl', file)
+      setValue('logo_url', file)
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
@@ -70,7 +70,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             placeholder="Example"
             type="text"
             errors={errors}
-            {...register("projectname")}
+            {...register("project_name")}
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             placeholder="Your email"
             type="text"
             errors={errors}
-            {...register("projectEmail")}
+            {...register("project_email")}
           />
         </div>
         <div className="col-span-1 ">
@@ -101,7 +101,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             placeholder="@Example"
             type="text"
             errors={errors}
-            {...register("teleId")}
+            {...register("tele_id")}
           />
         </div>
         <div className="col-span-1">
@@ -110,7 +110,7 @@ const SignUpDetailForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             placeholder="0x..."
             type="text"
             errors={errors}
-            {...register("tokenAddress")}
+            {...register("token_address")}
           />
         </div>
       </div>

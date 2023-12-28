@@ -19,10 +19,10 @@ const schema = yup
   .shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
-    passwordConfirmation: yup.string()
+    password2: yup.string()
       .oneOf([yup.ref('password'), 'Password must match'], 'Password must match'),
     role: yup.string().required(),
-    terms: yup.bool().oneOf([true], 'Please accept the terms of use'),
+    is_checked: yup.bool().oneOf([true], 'Please accept the is_checked of use'),
   })
   .required()
 
@@ -60,7 +60,7 @@ const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           placeholder="Confirm Password"
           type="password"
           errors={errors}
-          {...register("passwordConfirmation")}
+          {...register("password2")}
         />
         <Controller
           control={control}
@@ -81,17 +81,17 @@ const SignUpEmail: React.FC<Props> = ({ onSubmit, defaultValues }) => {
             type="checkbox"
             style={{ accentColor: "#0E76FD" }}
             className="h-5 w-5"
-            {...register("terms")}
+            {...register("is_checked")}
           />
           <span className="text-[#ff0000]">*</span>By signing up, I accept and agree to the{" "}
           <Link href="#" className="text-[#0E76FD]">
-            Terms of Use
+            is_checked of Use
           </Link>
           .
         </label>
-        {errors?.["terms"] && (
+        {errors?.["is_checked"] && (
           <span className='text-red-800 w-full'>
-            {capitalize(errors["terms"]?.message?.toString()!)}
+            {capitalize(errors["is_checked"]?.message?.toString()!)}
           </span>
         )}
       </div>

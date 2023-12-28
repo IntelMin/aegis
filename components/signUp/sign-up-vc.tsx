@@ -14,8 +14,8 @@ interface Props {
 
 const schema = yup.object()
   .shape({
-    vcContactName: yup.string().required(),
-    vcEmail: yup.string().email().required(),
+    vc_contact_name: yup.string().required(),
+    vc_email: yup.string().email().required(),
     website: yup.string().required(),
     twitter: yup.string().required(),
     about: yup.string().required(),
@@ -40,7 +40,7 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           placeholder="Example"
           type="text"
           errors={errors}
-          {...register("vcContactName")}
+          {...register("vc_contact_name")}
         />
       </div>
       <div>
@@ -49,7 +49,7 @@ const SignUpVcForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           placeholder="Your email"
           type="text"
           errors={errors}
-          {...register("vcEmail")}
+          {...register("vc_email")}
         />
       </div>
       <div className=" grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">

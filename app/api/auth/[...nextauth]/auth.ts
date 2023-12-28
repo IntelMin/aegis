@@ -60,8 +60,10 @@ export const authOptions: NextAuthOptions = {
           console.error(error);
           return null; 
         }
-      },
-    }),
+        console.log(user)
+        return user
+      }
+    })
   ],
   secret: "aaaaaaaaaaaaaaaaaaa",
 };

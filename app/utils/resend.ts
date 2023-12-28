@@ -1,11 +1,10 @@
 import {Resend} from "resend";
 
 const resend = new Resend(process.env.RESEND_API_SECRET);
-export async function sendEmail(email: string, name: string,html:string) {
+export async function sendEmail(email: string, name: string) {
     // Send email
-    console.log(process.env.RESEND_API_SECRET)
     await resend.emails.send({
-      from: 'support@aegis.org',
+      from: 'support@aiaegis.org',
       to: email,
       subject: 'Welcome to Aegis AI',
       html: `<!DOCTYPE html>
@@ -18,8 +17,8 @@ export async function sendEmail(email: string, name: string,html:string) {
       <body style="background-color: #f4f4f4; font-family: Arial, sans-serif;">
           <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="email-container" style="background: #ffffff; margin: auto; padding-bottom: 30px;">
               <tr>
-                  <td style="background: url('bg-image.png'), rgb(25, 29, 54); background-size: auto; background-position: center; color: white; padding: 20px; text-align: left; padding-left: 5%;">
-                      <img src="logo.svg" alt="Aegis AI Logo" width="50" height="50" style="display: block;">
+                  <td style="background: url('https://i.ibb.co/Z14PzWq/bg-image.png'), rgb(25, 29, 54); background-size: auto; background-position: center; color: white; padding: 20px; text-align: left; padding-left: 5%;">
+                      <img src="https://app.aiaegis.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcirclelogo.ff1e8937.png&w=256&q=75" alt="Aegis AI Logo" width="50" height="50" style="display: block;">
                       <h1>Welcome to Aegis AI</h1>
                       <p>Thanks for signing up</p>
                   </td>
@@ -33,19 +32,19 @@ export async function sendEmail(email: string, name: string,html:string) {
               </tr>
               <tr>
                   <td style="padding: 7px 5%;">
-                      <p><a href="#" style="color: #2563EB;">Follow us on X</a></p>
+                      <p><a href="https://twitter.com/aegisaisecurity" style="color: #2563EB;">Follow us on X</a></p>
                       <p>Stay up-to-date with our latest announcements and updates.</p>
                   </td>
               </tr>
               <tr>
                   <td style="padding: 7px 5%;">
-                      <p>Thanks for signing up. If you have any questions, send us a message at <a href="#" style="color: #2563EB;">hello@aegisiai.xyz</a> or on <a href="#" style="color: #2563EB;">Twitter</a>. We'd love to hear from you.</p>
+                      <p>Thanks for signing up. If you have any questions, send us a message at <a href="mailto:info@aiaegis.org" style="color: #2563EB;">info@aegisiai.org</a> or on <a href="https://t.me/AegisAiSecurity" style="color: #2563EB;">Telegram</a>. We'd love to hear from you.</p>
                       <p>- The team</p>
                   </td>
               </tr>
               <tr>
                   <td style="padding: 7px 5%;">
-                      <a href="#" class="button" style="background-color: #0E76FD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Get started</a>
+                      <a href="https://app.aiaegis.org" class="button" style="background-color: #0E76FD; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Get started</a>
                   </td>
               </tr>
           </table>
@@ -53,5 +52,3 @@ export async function sendEmail(email: string, name: string,html:string) {
       </html>`
     });
 }
-
-sendEmail("aslamprdpd@gmail.com", "Aslam", "<h1>hello</h1>")

@@ -15,7 +15,7 @@ const schema = yup.object()
   .shape({
     name: yup.string().required(),
     twitter: yup.string().required(),
-    teleId: yup.string().required(),
+    tele_id: yup.string().required(),
   })
   .required()
 
@@ -56,7 +56,7 @@ const SignUpIndividualForm: React.FC<Props> = ({ onSubmit, defaultValues }) => {
           placeholder="@username"
           type="text"
           errors={errors}
-          {...register("teleId")}
+          {...register("tele_id")}
   
         />
       </div>
