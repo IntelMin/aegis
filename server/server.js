@@ -36,7 +36,7 @@ app.use("/monitor", monitorRoute);
 app.use("/trending", trendingTokens);
 app.use("/deployer", deployerRoute);
 app.use("/audit", auditRoute);
-app.use("/report",reportRoute)
+app.use("/report", reportRoute)
 // app.use("/info", infoRoute);
 // app.use("/describe", describeRoute);
 // app.use("/markdown", markdownRoute);

@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "server": "node server/server.js",
-    "worker": "node server/worker.js",
+    "server": "nodemon server/server.js",
+    "worker": "nodemon server/worker.js",
     "run-server": "concurrently \"npm run server\" \"npm run worker\""
   },
   "dependencies": {
