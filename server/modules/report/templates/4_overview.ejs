@@ -120,13 +120,19 @@
             console.log(metadata);
               if (metadata.info.imageLargeUrl) { %>
                 <img src="<%= metadata.info.imageLargeUrl %>" width="126" height="126" />
-              <% } else { %>
+              <% } else {
                 defaultOverviewImg = true;
-              <% } 
+              } 
           } else { 
             defaultOverviewImg = true;
           }
+        
+        if (defaultOverviewImg) { %>
+            <div style="display: flex;flex-direction: row;width: 126px;height:126px;" />&nbsp;</div>
+        <% }
         %>
+
+
 
         <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -225,4 +231,3 @@
       </div>
     </div>
   </div>
-  
