@@ -29,15 +29,17 @@ const CodeAuditForm = (props: Props) => {
         sourcecode: contractCode,
       };
 
-      const response = await fetch("/api/audit", {
+      const response = await fetch("/api/code", {
         method: "POST",
         body: JSON.stringify(data),
       });
+      const Tempdata = await response.json()
 
-      return response.json();
+      return Tempdata.findings;
     };
-    postData().then((data) => {
-      alert(data.message);
+    postData().then((data:any) => {
+      // alert(data.message);
+      console.log(data)
     });
   };
 

@@ -46,8 +46,7 @@ async function solve(backend, temperature, topk, numAuditor, code) {
         return [];
     }
 }
-
-async function runAudit(source_code, backend, temperature, topk, numAuditor) {
+async function runAudit(source_code, backend, temperature, topk, numAuditor,isCode) {
 
     const cleanedCode = removeSpaces(source_code);
     const bugInfoList = await solve(backend, temperature, topk, numAuditor, cleanedCode);
@@ -60,7 +59,8 @@ async function runAudit(source_code, backend, temperature, topk, numAuditor) {
         console.log("Auditing successful.");
     }
 
-    return bugInfoList.map(info => ({ ...info, sourceCode: cleanedCode }));
+    return isCode ? bugInfoList : bugInfoList.map(info => ({ ...info, sourceCode: cleanedCode }));
+
 }
 
 module.exports = {
