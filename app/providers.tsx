@@ -38,7 +38,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
           <NextUIProvider>
-            <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+            <NextThemesProvider {...themeProps}>
+              {children}
+              </NextThemesProvider>
           </NextUIProvider>
         </RainbowKitProvider>
       </WagmiConfig>

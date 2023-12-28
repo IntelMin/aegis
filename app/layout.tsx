@@ -1,4 +1,3 @@
-
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -26,16 +25,13 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session= await getServerAuthSession();
+  const session = await getServerAuthSession();
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
-        <SessionProvider session= {session}>
-
-         {children}
-         
-         </SessionProvider></body>
+        <SessionProvider session={session}>{children}</SessionProvider>
+      </body>
     </html>
   );
 };

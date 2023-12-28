@@ -69,6 +69,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-markdown": "^9.0.0",
+    "recharts": "^2.10.3",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "resend": "^2.0.0",

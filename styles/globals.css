@@ -1,10 +1,14 @@
+/* @import url('https://fonts.cdnfonts.com/css/satoshi'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  background: url(/lime.png);
+  /* background: url(/lime.png); */
+  background-color: black;
   background-size: cover;
+  /* font-family: 'Satoshi', sans-serif; */
 }
 
 .glassCard {
