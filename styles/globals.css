@@ -51,7 +51,19 @@ body {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.141);
 }
-.grid-cols-16 {
+.tokenBg{
+  background-image: url('tokenauditbg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: calc(100vh - 80px);
+}
+.tokenAuditoptionBg{
+  background-image: url('tokenoptionBg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
   grid-template-columns: repeat(16, minmax(0, 1fr));
 }
 @keyframes marquee {

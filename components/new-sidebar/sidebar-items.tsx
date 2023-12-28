@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 type Props = {
   item: {
@@ -14,11 +15,13 @@ type Props = {
 };
 
 const SidebarItems = ({ item, open }: Props) => {
+  const pathName = usePathname();
+
   return (
     <Link
       href={`/${item?.href}`}
       className={`hover:border-l-[2px] hover:bg-zinc-900 hover:border-blue-600 transition-all ease-in duration-250 flex items-center gap-2 py-3  ${
-        item?.href === "livemonitoring"
+        item?.href === `${pathName?.split("/")[1]}`
           ? "border-l-[2px] border-blue-600 bg-zinc-900"
           : ""
       } ${open === 2 ? "px-2" : "px-4"}`}
@@ -40,7 +43,7 @@ const SidebarItems = ({ item, open }: Props) => {
               transition: { duration: 0.6, type: "spring" },
             }}
             className={`${
-              item?.href === "livemonitoring" //! change it according to future designs
+              item?.href === `${pathName?.split("/")[1]}`
                 ? "text-white"
                 : "text-zinc-500"
             } text-[16px] leading-[24px] cursor-pointer font-300`}

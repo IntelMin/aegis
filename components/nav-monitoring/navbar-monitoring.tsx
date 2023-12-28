@@ -6,7 +6,7 @@ type Props = {};
 
 const NavbarMonitoring = (props: Props) => {
   return (
-    <div className="sticky top-0 bg-black">
+    <div className="sticky w-full top-0 bg-black">
       <NavHeader />
     </div>
   );
