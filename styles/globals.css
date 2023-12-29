@@ -21,9 +21,13 @@ body {
 /* .apexcharts-legend-marker{
   display: none !important;
 } */
-
+.apexcharts-legend{
+  display: flex;
+  gap: 20px;
+}
 .apexcharts-legend-text {
   color: white !important;
+  margin: 20px 0 !important;
 }
 
 .text-success {
@@ -51,6 +55,7 @@ body {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.141);
 }
+
 .tokenBg{
   background-image: url('tokenauditbg.png');
   background-position: center;
@@ -74,4 +79,13 @@ body {
   to {
     transform: translateX(-100%);
   }
+}
+.auditReportDetailedBg {
+  background-image: url('auditreportBg.svg');
+background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.grid-cols-16 {
+  grid-template-columns: repeat(16, minmax(0, 1fr));
 }

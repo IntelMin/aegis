@@ -17,13 +17,15 @@ const TokenAuditOption = ({ params }: props) => {
         "Don’t let hidden bugs hold back your code’s success and maximize your code’s efficiency - let our premium audit report uncover them for you.",
       imageurl: "detailAuditbg.png",
       premium: true,
+      url: "detailed"
     },
     {
       btntitle: "Quick Audit",
       about:
         "A handful of information about $WIF token, to help guide your trading decisions ",
-      imageurl: "quickAuditbg.png",
-      premium: false,
+        imageurl: "quickAuditbg.png",
+        premium: false,
+        url: "quick"
     },
   ];
 
@@ -48,7 +50,7 @@ const TokenAuditOption = ({ params }: props) => {
         </div>
         <div className="flex items-center gap-10">
           {cardOptionArr?.map((item) => (
-            <TokenOptionCard key={item?.btntitle} item={item} />
+            <TokenOptionCard key={item?.btntitle} item={item} id={params?.id} />
           ))}
         </div>
       </div>

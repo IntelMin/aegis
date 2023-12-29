@@ -4,7 +4,6 @@ import {
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip,
     YAxis
 } from "recharts";
 
@@ -16,7 +15,6 @@ const ChartTd = () => {
   return (
     <ResponsiveContainer width={100} height={32}>
       <LineChart width={100} height={32} data={dummyData}>
-        <Tooltip />
         <YAxis hide domain={["auto", "auto"]} />
         <Line
           type="monotone"

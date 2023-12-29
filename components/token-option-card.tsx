@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -7,10 +8,12 @@ type Props = {
     about: string;
     imageurl: string;
     premium: boolean;
+    url: string
   };
+  id: string;
 };
 
-const TokenOptionCard = ({ item }: Props) => {
+const TokenOptionCard = ({ item, id }: Props) => {
   const aboutText = item?.about;
   const isTokenPresent = aboutText?.includes("$WIF");
   return (
@@ -20,16 +23,16 @@ const TokenOptionCard = ({ item }: Props) => {
       } cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
     >
       <div className="flex flex-col justify-center items-center w-full gap-3">
-        <button
-          type="button"
+        <Link
+          href={`/tokenaudit/${id}/${item?.url}`}
           className={`${
             !item.premium
               ? "border-zinc-700 bg-zinc-900"
               : "bg-[#0E76FD] border-[#0E76FD]"
-          } text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
+          } text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
         >
           {item?.btntitle}
-        </button>
+        </Link>
         <p className="text-neutral-300 font-[14px] text-center">
           {isTokenPresent ? (
             <>

@@ -1,7 +1,9 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { Props } from "react-apexcharts";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false }) as React.FC<Props>;
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+}) as React.FC<Props>;
 
 type props = {
   value: number;
@@ -22,12 +24,12 @@ const CircleGraph = (props: props) => {
     },
     plotOptions: {
       radialBar: {
-        startAngle: -135,
-        endAngle: 225,
+        startAngle: -115,
+        endAngle: 115,
         hollow: {
           margin: 0,
           size: "70%",
-          background: "#010101",
+          background: "transparent",
           image: undefined,
           imageOffsetX: 0,
           imageOffsetY: 0,
@@ -41,9 +43,9 @@ const CircleGraph = (props: props) => {
           },
         },
         track: {
-          background: "#000000",
-          strokeWidth: "67%",
-          margin: 0, // margin is in pixels
+          background: "#3F3F46",
+          strokeWidth: "100%",
+          margin: 0,
           dropShadow: {
             enabled: true,
             top: -3,
@@ -53,47 +55,49 @@ const CircleGraph = (props: props) => {
           },
         },
         dataLabels: {
-          show: true,
-          name: {
-            offsetY: -10,
-            show: true,
-            color: "#dbd9d9",
-            fontSize: "17px",
-          },
           value: {
             formatter: function (val: any) {
-              return parseInt(val)?.toString();
+              return `${val}%` || "";
             },
-            color: "#dbd9d9",
-            fontSize: "36px",
+            color: "#FAFAFA",
+            fontSize: "30px",
+            fontWeight: 600,
             show: true,
+            offsetY: -20,
+          },
+          show: true,
+          name: {
+            offsetY: 30,
+            show: true,
+            color: "#4ADE80",
+            fontWeight: 400,
+            fontSize: "20px",
           },
         },
       },
     },
     fill: {
-      colors: ["#ffffff"],
+      colors: ["#4ADE80"],
       opacity: 0.9,
-      type: 'solid',
+      type: "solid",
       gradient: {
-          shade: 'dark',
-          type: "horizontal",
-          shadeIntensity: 0.5,
-          gradientToColors: undefined,
-          inverseColors: true,
-          stops: [0, 50, 100],
-          opacityFrom: [0.2, 0.8],
+        shade: "dark",
+        type: "horizontal",
+        shadeIntensity: 0.5,
+        gradientToColors: undefined,
+        inverseColors: true,
+        stops: [0, 50, 100],
+        opacityFrom: [0.2, 0.8],
       },
     },
     stroke: {
       lineCap: "round",
     },
-    labels: ["Security Score"],
-    // download: false,
+    labels: ["Audit Score"],
   };
 
   return (
-    <div id="card" className="bg-transparent">
+    <div id="card" className="bg-transparent p-0 -translate-x-8">
       <div id="chart">
         <Chart
           options={options}

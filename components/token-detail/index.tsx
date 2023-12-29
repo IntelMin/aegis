@@ -9,13 +9,16 @@ const TokenDetail = (props: Props) => {
   return (
     <div className="px-10 flex flex-col gap-9 mt-12">
       <div className="grid grid-cols-4 gap-6">
-        <TokenTitle />
+        {/* Token Name / Network  */}
+        <TokenTitle tokenImgUrl={"/token-icons/token.svg"} tokenName={"OSMO"} tokenNetwork={"Osmosis"} />
         <div className="col-span-3">
           <div className="flex items-center">
+            {/* Token Price / Price Details */}
             <TokenValue />
           </div>
         </div>
       </div>
+      {/* Token Stats / Graph / Table */}
       <TokenInfo />
     </div>
   );

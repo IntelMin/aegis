@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import TokenValueBox from "../token-value-box";
+import TokenPrice from "../token-price";
 
 type Props = {};
 
@@ -28,20 +30,7 @@ const TokenValue = (props: Props) => {
   ];
   return (
     <div className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-4">
-        <h1 className="text-neutral-50 text-[28px] leading-[40px] font-[700]">
-          $1.16
-        </h1>
-        <div className="flex items-center">
-          <Image
-            src="/token-icons/profitIcon.svg"
-            alt="profit"
-            width={7}
-            height={7}
-          />
-          <h5 className="text-green-600">3.36%</h5>
-        </div>
-      </div>
+      <TokenPrice price={"$1.16"} profit="3.36" />
       <div className="flex items-center gap-3">
         <div className="flex items-center flex-col">
           <div className="flex items-center gap-3">
@@ -82,14 +71,7 @@ const TokenValue = (props: Props) => {
           </div>
         </div>
         {demoarr?.map((item) => (
-          <div key={item?.key} className="bg-zinc-900 px-4 py-[6px]">
-            <h1 className="text-neutral-200 text-[16px] font-[600] text-center">
-              {item?.value}
-            </h1>
-            <p className="uppercase text-neutral-500 text-[10px] font-[400] text-center">
-              {item?.key}
-            </p>
-          </div>
+          <TokenValueBox key={item?.key} item={item} />
         ))}
       </div>
     </div>
