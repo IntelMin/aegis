@@ -29,10 +29,9 @@ function run_rank(criticOutputList) {
             bugInfo['severity'] = 'INFO';
 
             if (bugInfo.final_score > 5 && bugInfo.final_score < 8 && bugInfo.profitability > 3 && bugInfo.profitability < 7) {
-                finding.severity = 'LOW';
-
+                bugInfo.severity = 'LOW';
             } else if (bugInfo.final_score > 8 && bugInfo.profitability > 7) {
-                finding.severity = 'MEDIUM';
+                bugInfo.severity = 'MEDIUM';
             }
         }
 

@@ -45,7 +45,7 @@ const CodeAuditForm = (props: Props) => {
 
   return (
     <>
-      <div className="flex h-screen bg-black">
+      <div className="flex h-screen bg-transparent">
         {/* <!-- Editor Container --> */}
         <div className="flex flex-col flex-1">
           <div className="p-4 text-white">

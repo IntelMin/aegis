@@ -72,6 +72,49 @@ body {
 .grid-cols-16 {
   grid-template-columns: repeat(16, minmax(0, 1fr));
 }
+
+.margin-view-overlays {
+  background-color: #1D2939 !important;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for the desired level of transparency */
+  backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  display: flex;
+  justify-self: end;
+  width: 22px;
+  
+  padding: 8px;
+  margin-left: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
+
 @keyframes marquee {
   from {
     transform: translateX(100%);
