@@ -82,10 +82,7 @@ body {
 }
 .auditReportDetailedBg {
   background-image: url('auditreportBg.svg');
-background-position: center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-}
-.grid-cols-16 {
-  grid-template-columns: repeat(16, minmax(0, 1fr));
 }

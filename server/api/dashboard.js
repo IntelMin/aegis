@@ -104,6 +104,7 @@ router.get("/top-tokens", (req, res) => {
                             name
                             symbol
                             address
+                            createdAt
                             volume
                             liquidity
                             marketCap
