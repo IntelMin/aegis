@@ -218,7 +218,7 @@ router.post("/filtertokens", async (req, res) => {
     const limit = req.body.limit || 200;
     const tokens = req.body.tokens || [];
 
-    if (address) {
+    if (network.length !== 0 && tokens.length !== 0) {
       res.status(200).send(
         await getData({
           operationName: "FilterTokens",
@@ -233,7 +233,7 @@ router.post("/filtertokens", async (req, res) => {
         })
       );
     } else {
-      res.status(500).send("Please Select pairId");
+      res.status(500).send("Invalid Parameter");
     }
   } catch (error) {
     console.log(error);
