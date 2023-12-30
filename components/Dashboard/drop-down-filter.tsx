@@ -1,33 +1,53 @@
 "use client";
 
+import { CollectionProps } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+} from "@radix-ui/react-select";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
-type Props = {};
+type DrpdownFilterProps = {
+  collections: CollectionProps[];
+  chainId: string;
+  time: string;
+  setChainId: (chainId: string ) => void;
+  setTime: (time: string) => void;
+};
 
-const DropdownFilter = (props: Props) => {
-  const tableTypes = ["Trending", "New", "Leaderboard"];
-  const tokens = [
-    {
-      name: "Polygon",
-      tokenUrl: "/token-icons/token.svg",
-    },
-    {
-      name: "Ethereum",
-      tokenUrl: "/token-icons/network-icon.svg",
-    },
-  ];
+const DropdownFilter = ({
+  collections,
+  chainId,
+  time,
+  setChainId,
+  setTime,
+}: DrpdownFilterProps) => {
+  const tableTypes = ["Trending"];
+
   const timeArr = ["30MIN", "1HR", "2HR"];
-  const [tableType, setTableType] = React.useState("Trending");
-  const [tokenType, setTokenType] = React.useState({
-    name: "Polygon",
-    tokenUrl: "/token-icons/token.svg",
-  });
-  const [timeType, setTimeType] = React.useState("30MIN");
-  const [activeDropdown, setActiveDropdown] = React.useState<string | null>(
-    null
-  );
+
+  const timeFilter = [
+    // { time: "1MIN", value: "1" },
+    // { time: "5MIN", value: "5" },
+    // { time: "15MIN", value: "15" },
+    // { time: "30MIN", value: "30" },
+    { time: "1 hr", value: "60" },
+    { time: "4 hr", value: "240" },
+    { time: "12 hr", value: "720" },
+    { time: "1 day", value: "1D" },
+  ];
+
+  const [tableType, setTableType] = useState("Trending");
+  const [chainName, setChainName] = useState("Eth");
+  const [choosenTime, setChoosenTime] = useState("1 day");
+  const [timeType, setTimeType] = useState("30MIN");
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const handleDropdownToggle = (dropdown: string) => {
     setActiveDropdown((prevDropdown) =>
@@ -35,8 +55,27 @@ const DropdownFilter = (props: Props) => {
     );
   };
 
+  const collectionMap = new Map(collections.map((item) => [item.name, item]));
+  const timeMap = new Map(timeFilter.map((item) => [item.time, item]));
+
+  function handleChainChange(value: string) {
+    const selectedItem = collectionMap.get(value);
+    if (selectedItem) {
+      setChainName(selectedItem.name);
+      setChainId(""+selectedItem.id);
+    }
+  }
+  function handleTimeChange(value: string) {
+    const timeItem = timeMap.get(value);
+    if (timeItem) {
+      setTime(timeItem.value);
+      setChoosenTime(timeItem.time);
+    }
+  }
+
+
   return (
-    <div className="flex items-center justify-between mt-10 mb-4">
+    <div className="flex items-center justify-between mt-10 mb-4  relative">
       <div className="text-white">
         <div className="relative min-w-[120px]">
           <button
@@ -45,105 +84,58 @@ const DropdownFilter = (props: Props) => {
           >
             <p className="text-neutral-200 text-[20px]">{tableType}</p>
             <p className="w-[12px] h-[12px] rounded-full bg-green-400 animate-pulse"></p>
-            <BiChevronDown className="text-neutral-400 text-[28px]" />
           </button>
-          {activeDropdown === "trending" && (
-            <div className="flex flex-col absolute top-full left-0 w-full h-full z-[100] rounded-md">
-              {tableTypes?.map((item, i) => (
-                <p
-                  key={item}
-                  onClick={() => {
-                    setTableType(item);
-                    setActiveDropdown(null);
-                  }}
-                  className={`text-neutral-200 text-[15px] ${
-                    i !== tableTypes?.length - 1
-                      ? "border-b border-zinc-500"
-                      : ""
-                  } p-2 z-[100] cursor-pointer bg-zinc-900 w-full`}
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          )}
+          
         </div>
       </div>
       <div className="flex items-center gap-6">
         <div className="relative ">
-          <button
-            type="button"
-            onClick={() => handleDropdownToggle("token")}
-            className="flex items-center gap-2 bg-zinc-900 p-2 rounded-[4px]"
-          >
-            <Image
-              src={tokenType?.tokenUrl}
-              alt="token-icon"
-              width={22}
-              height={22}
-              className="rounded-full"
-            />
-            <p className="text-neutral-200 text-[16px]">{tokenType?.name}</p>
-            <BiChevronDown className="text-neutral-400 text-[28px]" />
-          </button>
-          {activeDropdown === "token" && (
-            <div className="flex flex-col absolute top-full left-0 w-full h-full z-[100] rounded-md">
-              {tokens?.map((item, i) => (
-                <div
-                  className={` ${
-                    i !== tokens?.length - 1 ? "border-b border-zinc-500" : ""
-                  } flex items-center gap-2 bg-zinc-900 p-2 rounded-[4px] cursor-pointer`}
-                  key={item?.name}
-                  onClick={() => {
-                    setTokenType({
-                      name: item?.name,
-                      tokenUrl: item?.tokenUrl,
-                    });
-                    setActiveDropdown(null);
-                  }}
-                >
-                  <Image
-                    src={item?.tokenUrl}
-                    alt="token-icon"
-                    width={18}
-                    height={18}
-                    className="rounded-full"
-                  />
-                  <p className="text-neutral-200 text-[14px]">{item?.name}</p>
-                </div>
-              ))}
-            </div>
-          )}
+          <Select onValueChange={handleChainChange}>
+            <SelectTrigger className="w-[150px] bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
+              <div className="flex justify-between items-center uppercase">
+                {chainName}
+                <BiChevronDown className="text-neutral-400 text-[28px]" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="w-[150px] bg-zinc-900 text-white pointer rounded-[4px] h-[400px] overflow-auto">
+              <SelectGroup>
+                {collections?.map((item, i) => (
+                  <SelectItem
+                    key={item.name}
+                    className="p-2 pl-3 uppercase outline-none cursor-pointer hover:bg-zinc-800"
+                    value={item.name}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
+
         <div className="relative">
-          <button
-            type="button"
-            onClick={() => handleDropdownToggle("time")}
-            className="flex items-center gap-2 bg-zinc-900 p-2 rounded-[4px]"
-          >
-            <p className="text-neutral-200 text-[16px] uppercase">{timeType}</p>
-            <BiChevronDown className="text-neutral-400 text-[28px]" />
-          </button>
-          {activeDropdown === "time" && (
-            <div className="flex flex-col absolute top-full left-0 w-full h-full z-[100] rounded-md">
-              {timeArr?.map((item, i) => (
-                <p
-                  key={item}
-                  onClick={() => {
-                    setTimeType(item);
-                    setActiveDropdown(null);
-                  }}
-                  className={`text-neutral-200 text-[13px] ${
-                    i !== tableTypes?.length - 1
-                      ? "border-b border-zinc-500"
-                      : ""
-                  } p-2 z-[100] cursor-pointer bg-zinc-900 w-full`}
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          )}
+        <Select onValueChange={handleTimeChange}>
+      <SelectTrigger className="w-[150px] bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
+        <div className="flex justify-between items-center ">
+          {choosenTime}
+          <BiChevronDown className="text-neutral-400 text-[28px]" />
+        </div>
+      </SelectTrigger>
+
+      <SelectContent className="w-[150px] bg-zinc-900 text-white pointer rounded-[4px] overflow-auto">
+        <SelectGroup>
+          {timeFilter.map((item, i) => (
+            <SelectItem
+              key={i}
+              className="p-2 pl-3 outline-none cursor-pointer hover:bg-zinc-800"
+              value={item.time}
+            >
+              {item.time}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
         </div>
         <button
           type="button"

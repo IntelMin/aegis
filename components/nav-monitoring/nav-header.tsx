@@ -5,7 +5,7 @@ type Props = {};
 
 const NavHeader = (props: Props) => {
   return (
-    <header className="flex py-3 px-10  items-center justify-between border-b border-zinc-900">
+    <header className="flex py-3 px-10 items-center justify-between border-b border-zinc-900">
       <div className="flex gap-3 items-center">
         <div className="flex bg-zinc-900 border border-zinc-800 py-2 pl-2 pr-4 gap-2 min-w-[400px] w-fit">
           <Image

@@ -126,6 +126,7 @@ body {
 .auditReportDetailedBg {
   background-image: url('auditreportBg.svg');
   background-position: center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }

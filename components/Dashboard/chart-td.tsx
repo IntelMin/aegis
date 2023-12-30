@@ -12,6 +12,7 @@ const ChartTd = () => {
     name: `Day ${index + 1}`,
     val: Math.random() * 1000,
   }));
+  
   return (
     <ResponsiveContainer width={100} height={32}>
       <LineChart width={100} height={32} data={dummyData}>
