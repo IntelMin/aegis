@@ -1,5 +1,5 @@
 import React from "react";
-import ApexChart from "../pieChart";
+import ApexChart from "../pie-chart";
 
 type Props = {};
 

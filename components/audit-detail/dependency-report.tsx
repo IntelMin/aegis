@@ -1,5 +1,5 @@
 import React from 'react'
-import InheritanceGraph from '../projects/tokenDetail/inheritanceGraph'
+import InheritanceGraph from './inheritance-graph'
 
 type Props = {
   dependencyData: any

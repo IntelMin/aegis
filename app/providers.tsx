@@ -33,16 +33,9 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 export function Providers({ children, themeProps }: ProvidersProps) {
-
   return (
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
-          <NextUIProvider>
-            <NextThemesProvider {...themeProps}>
-              {children}
-              </NextThemesProvider>
-          </NextUIProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+    </WagmiConfig>
   );
 }

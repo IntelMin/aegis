@@ -1,115 +1,53 @@
 "use client";
 
-import { redirect, usePathname } from "next/navigation";
-import { GiStabbedNote, GiToken } from "react-icons/gi";
-import { MdSecurity } from "react-icons/md";
-import { LuTable, LuRocket } from "react-icons/lu";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { TbTargetArrow } from "react-icons/tb";
-import { HomeIcon } from "../icons/sidebar/home-icon";
-import { useSidebarContext } from "../layout/layout-context";
-import { SidebarItem } from "./sidebar-item";
-import { SidebarMenu } from "./sidebar-menu";
-import { Sidebar } from "./sidebar.styles";
-import { signOut } from "next-auth/react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { navArr } from "./side-items";
+import SidebarFooter from "./sidebar-footer";
+import SidebarOpenbtn from "./sidebar-openbtn";
+import SidebarItems from "./sidebar-items";
+import SidebarHeader from "./sidebar-header";
+import SidebarSectionTitle from "./sidebar-section-title";
 
-export const SidebarWrapper = () => {
-  const pathname = usePathname();
-  const { collapsed, setCollapsed } = useSidebarContext();
-  const handleLogout = async () => {
-    await signOut();
-    // redirect("/signin")
-  }
+type Props = {};
+
+const Sidebar = (props: Props) => {
+  const [open, setOpen] = useState(1);
+  
+  const divvars = {
+    width: open === 2 ? "250px" : "100px",
+    transition: { duration: 0.4, type: "spring" },
+  };
   return (
-    <aside className="h-screen z-[202] sticky top-0 bg-red-500">
-      {collapsed ? (
-        <div className={Sidebar.Overlay()} onClick={setCollapsed} />
-      ) : null}
-      <div
-        className={Sidebar({
-          collapsed: collapsed,
-        })}
+    <AnimatePresence initial={false}>
+      <motion.div
+        animate={divvars}
+        className={`${
+          open === 2 ? "w-[250px] px-6 " : "w-[100px]"
+        } h-screen flex flex-col justify-between items-center overflow-y-scroll border-r border-zinc-800 py-4 sticky top-0 left-0`}
       >
-        <div className={Sidebar.Header()}>
-          <img
-            className="h-[70px] mx-auto"
-            src="/aegis-logo.png"
-            alt="AEGIS AI"
-          />
-        </div>
-        <div className="flex flex-col justify-between h-full">
-          <div className={Sidebar.Body()}>
-            <SidebarItem
-              title="Dashboard"
-              icon={<HomeIcon />}
-              isActive={pathname === "/"}
-              href="/"
-            />
-            {/* <SidebarItem
-              title="Deployer"
-              icon={
-                <FaCloudUploadAlt className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-              }
-              isActive={pathname === "/deployer"}
-              href="/deployer"
-            /> */}
-            <SidebarMenu title="Audits">
-              <SidebarItem
-                isActive={pathname === "/codeAudit"}
-                title="Code Audit"
-                icon={
-                  <GiStabbedNote className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/codeAudit"
-              />
-
-              <SidebarItem
-                isActive={pathname === "/addressAudit"}
-                title="Token Audit"
-                icon={
-                  <GiToken className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/addressAudit"
-              />
-            </SidebarMenu>
-            <SidebarMenu title="Leaderboards">
-              <SidebarItem
-                isActive={pathname === "/trending"}
-                title="Trending"
-                icon={
-                  <LuRocket className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/trending"
-              />
-              <SidebarItem
-                isActive={pathname === "/liveMonitoring"}
-                title="Live Monitoring"
-                icon={
-                  <LuTable className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/liveMonitoring"
-              />
-              <SidebarItem
-                isActive={pathname === "/security"}
-                title="Security Score"
-                icon={
-                  <MdSecurity className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/security"
-              />
-              <SidebarItem
-                isActive={pathname === "/bugBounty"}
-                title="Bug Bounty"
-                icon={
-                  <TbTargetArrow className="text-[#c5c5c5] text-[22px] ml-[2px]" />
-                }
-                href="/bugBounty"
-              />
-            </SidebarMenu>
-            <button onClick={handleLogout}>Sign out</button>
+        <div>
+          <SidebarHeader open={open} />
+          <div>
+            <div className="flex flex-col gap-3 mt-12">
+              {navArr?.map((ele) => (
+                <div key={ele?.title} className="flex flex-col gap-3 mt-3">
+                  <SidebarSectionTitle ele={ele} open={open} />
+                  <div className="flex flex-col gap-3">
+                    {ele?.children?.map((item) => (
+                      <SidebarItems key={item?.name} item={item} open={open} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+        <SidebarOpenbtn open={open} setOpen={setOpen} />
+        <SidebarFooter open={open} />
+      </motion.div>
+    </AnimatePresence>
   );
 };
+
+export default Sidebar;

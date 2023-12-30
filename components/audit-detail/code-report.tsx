@@ -1,5 +1,5 @@
 import React from 'react'
-import CodeViewer from '../projects/tokenDetail/codeViewer'
+import CodeViewer from './code-viewer'
 
 type Props = {
   codeData: any
