@@ -1,9 +1,14 @@
+"use client"
+import { useSession,signOut} from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {};
 
 const NavHeader = (props: Props) => {
+  const session = useSession()
+  const router = useRouter()
   return (
     <header className="flex py-3 px-10 items-center justify-between border-b border-zinc-900">
       <div className="flex gap-3 items-center">
@@ -44,12 +49,23 @@ const NavHeader = (props: Props) => {
         >
           <Image alt="user" src="/user.png" width={24} height={24} />
         </button>
+        {session.status=="authenticated" ?(
         <button
           type="button"
           className="bg-[#0E76FD] font-[300] text-white px-12 py-3"
+          onClick={()=>signOut()}
+        >
+          Sign Out
+        </button>
+        ):(
+        <button
+          type="button"
+          className="bg-[#0E76FD] font-[300] text-white px-12 py-3"
+          onClick={()=>router.push("/signin")}
         >
           Sign In
         </button>
+        )}
       </div>
     </header>
   );

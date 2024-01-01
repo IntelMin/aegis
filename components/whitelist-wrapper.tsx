@@ -13,6 +13,7 @@ export function WhitelistWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
+
   const [whitelistStatus, setWhitelistStatus] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession()
