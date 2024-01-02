@@ -7,7 +7,8 @@ import OverViewReport from "@/components/audit-detail/overview-report";
 import { AUDIT_STATUS_RETURN_CODE } from "@/server/api/statusCodes";
 import CodeViewer from "@/components/audit-detail/code-viewer";
 import InheritanceGraph from "@/components/audit-detail/inheritance-graph";
-import AuditDetailLock from "@/components/audit-detail/audit-detail-lock";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: {
@@ -66,24 +67,40 @@ const getStatusText = (statusCode: number) => {
 };
 
 const DetailedPage = ({ params }: Props) => {
-  const isPremiumUser = true;
   const tabArr = ["Overview", "Code", "Functions", "Dependency"];
   const contractAddress = params.id;
   const [tab, setTab] = useState("Overview");
 
   const [infoData, setInfoData] = useState<ProjectData | null>(null);
   const [codeData, setCodeData] = useState<CodeData | null>(null);
-  const [functionTableData, setFunctionTableData] = useState<
-    DataProps[] | null
-  >(null);
+  const [functionTableData, setFunctionTableData] = useState<DataProps[] | null>(
+    null
+  );
   const [dependencyData, setDependencyData] = useState<any>([null]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(AUDIT_STATUS_RETURN_CODE.notRequested);
-
+  const [paiduser, setPaiduser] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
-
+ const user = useSession()
+ const router = useRouter()
   useEffect(() => {
-    if (!isPremiumUser) return;
+    const paiduser = async () => {
+      const response = await fetch("/api/paiduser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: user.data?.user?.email,
+          token: contractAddress,
+        }),
+      });
+      const paiduserResponse = await response.json();
+      console.log(paiduserResponse);
+      setPaiduser(paiduserResponse.paiduser)
+      if (paiduserResponse.paiduser === false) {
+        router.push(`/payment/${contractAddress}/pay`);
+      }
+    }
+    paiduser();
     const getAuditResults = async () => {
       try {
         const fetchData = async () => {
@@ -186,10 +203,15 @@ const DetailedPage = ({ params }: Props) => {
       if (timer.current) clearInterval(timer.current);
     };
   }, [contractAddress]);
-
-  if (!isPremiumUser) {
-    return <AuditDetailLock params={params} />;
-  }
+if(!paiduser){
+  return (
+    <div className="flex items-center justify-center w-full h-screen text-white">
+      <div className="text-lg font-bold text-center">
+        <p>Loading...</p>
+      </div>
+    </div>
+  );
+}
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-screen text-white">

@@ -57,11 +57,14 @@
     "ejs": "^3.1.9",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "ethers": "^6.9.1",
     "express": "^4.18.2",
     "framer-motion": "^10.16.5",
+    "fs": "0.0.1-security",
     "intl-messageformat": "^10.5.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.300.0",
+    "net": "^1.0.2",
     "next": "14.0.3",
     "next-auth": "4.24.5",
     "next-themes": "^0.2.1",
@@ -92,6 +95,7 @@
     "tailwind-variants": "^0.1.13",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "tls": "^0.0.1",
     "ts-node": "^10.9.2",
     "viem": "^1.19.8",
     "wagmi": "^1.4.7",
@@ -104,5 +108,10 @@
     "@types/react": "18.2.21",
     "dotenv": "^16.3.1",
     "typescript": "5.0.4"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }

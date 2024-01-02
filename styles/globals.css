@@ -142,3 +142,19 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     color: white
 }
+::-webkit-scrollbar {
+  width: 2px;  /* Horizontal scrollbar */
+  height: 3px; /* Vertical scrollbar */
+}
+
+
+::-webkit-scrollbar-track {
+  background: #f1f1f11f; /* Color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the thumb */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb on hover */
+}
