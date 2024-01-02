@@ -15,13 +15,18 @@ const TableHead = () => {
   ];
 
   return (
-    <tr className="grid grid-cols-16">
-      {columns.map((column, index) => (
-        <th key={index} className={`text-left py-3 text-neutral-400 text-[11px] font-[500] col-span-${column.colSpan} uppercase`}>
-          {column.label}
-        </th>
-      ))}
-    </tr>
+    <thead>
+      <tr className="grid grid-cols-16">
+        {columns.map((column, index) => (
+          <th
+            key={index}
+            className={`text-left py-3 text-neutral-400 text-[11px] font-[500] col-span-${column.colSpan} uppercase`}
+          >
+            {column.label}
+          </th>
+        ))}
+      </tr>
+    </thead>
   );
 };
 
