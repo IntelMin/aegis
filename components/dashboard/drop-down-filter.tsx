@@ -75,7 +75,7 @@ const DropdownFilter = ({
 
 
   return (
-    <div className="flex items-center justify-between mt-10 mb-4  relative">
+    <div className="relative flex items-center justify-between mt-10 mb-4">
       <div className="text-white">
         <div className="relative min-w-[120px]">
           <button
@@ -92,7 +92,7 @@ const DropdownFilter = ({
         <div className="relative ">
           <Select onValueChange={handleChainChange}>
             <SelectTrigger className="w-[150px] bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
-              <div className="flex justify-between items-center uppercase">
+              <div className="flex items-center justify-between uppercase">
                 {chainName}
                 <BiChevronDown className="text-neutral-400 text-[28px]" />
               </div>
@@ -116,7 +116,7 @@ const DropdownFilter = ({
         <div className="relative">
         <Select onValueChange={handleTimeChange}>
       <SelectTrigger className="w-[150px] bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
-        <div className="flex justify-between items-center ">
+        <div className="flex items-center justify-between ">
           {choosenTime}
           <BiChevronDown className="text-neutral-400 text-[28px]" />
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
-import TableHead from "./table-head";
-import TableRow from "./table-row";
+import TableHead from "@/components/dashboard/table-head";
+import TableRow from "@/components/dashboard/table-row"
 
 type DashboardDataTableProps = {
   tableData: any[];
@@ -11,7 +11,7 @@ type DashboardDataTableProps = {
 const DashboardDataTable = ({ tableData, setTableLimit, tableLimit }: DashboardDataTableProps) => {
   return (
     <>
-      <div className="mt-6 border border-zinc-800 p-3">
+      <div className="p-3 mt-6 border border-zinc-800">
         <table className="w-full">
           <TableHead />
           {tableData?.map((item, i) => (
