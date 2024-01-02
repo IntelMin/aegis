@@ -83,6 +83,12 @@ CREATE TABLE tg_users(
     chatid INTEGER NOT NULL,
     subscribed BOOLEAN NULL DEFAULT false
 );
+CREATE TABLE paid_users(
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    email TEXT NOT NULL,
+    paid_token TEXT NOT NULL
+);
 
 CREATE TRIGGER update_token_audits_modtime
 BEFORE UPDATE ON token_audits
