@@ -9,7 +9,7 @@ const _ =require('lodash');
 // Function to fetch the bug bounty data
 async function fetchBugBounty() {
     try {
-        const response = await fetch('http://localhost:9898/bugbounty'); // Fetch the bug bounty data from the API
+        const response = await fetch(`${process.env.AEGIS_SRV}/bugbounty`); // Fetch the bug bounty data from the API
         const data = await response.json();
         return await sortData(data);
     } catch (error) {
