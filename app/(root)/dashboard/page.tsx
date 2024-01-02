@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import DashboardDataTable from "@/components/dashboard/dashboard-data-table";
+import DashboardDataTable from "@/components/dashboard/dashboard-data-table"
 import DropdownFilter from "@/components/dashboard/drop-down-filter";
 import TokenMarquee from "@/components/token-marquee";
 import axios from "axios";
