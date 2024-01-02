@@ -16,6 +16,8 @@ const TableRow = ({ item, index }: TableRowProps) => {
     copy(data);
   };
 
+  console.log("item", item);
+
   return (
     <tr
       key={index}
@@ -24,12 +26,12 @@ const TableRow = ({ item, index }: TableRowProps) => {
       } grid grid-cols-16 py-2 px-[3px] text-[14px] items-center`}
     >
       {/* time */}
-      <td className={`text-neutral-100 col-span-2 break-words`}>{item.name}</td>
+      <td className={`text-neutral-100 col-span-2 break-words`}>&nbsp;{item.name}</td>
       {/* token */}
       <td className={`text-neutral-200 col-span-3`}>
         <div className="flex items-center gap-[6px]">
           <Image
-            src= { "/token-icons/token.svg" } 
+            src={item.imageSmallUrl ? item.imageSmallUrl : "/token-icons/token.svg"}
             alt={item.name}
             width={28}
             height={28}
@@ -69,7 +71,7 @@ const TableRow = ({ item, index }: TableRowProps) => {
       <td className={`text-neutral-200 col-span-2`}>
         <div className="flex flex-col p-0 m-0">
           <p className="text-[13px] text-neutral-300">
-            {parseFloat(item.marketCap).toFixed(2)}
+            {parseFloat(parseFloat(item.marketCap).toFixed(2)).toLocaleString('en')}
           </p>
           {/* <p className="text-[13px] text-neutral-500">{item.mCap.available}</p> */}
         </div>
@@ -78,16 +80,20 @@ const TableRow = ({ item, index }: TableRowProps) => {
       {/* liquidity */}
       <td className={`text-neutral-200 col-span-1`}>
         <div className="flex flex-col p-0 m-0">
-          <p className="text-[13px] text-neutral-300">{item.volume}</p>
-          <p className="text-[13px] text-neutral-500">{item.liquidity}</p>
+          <p className="text-[13px] text-neutral-300">
+            {parseFloat(parseFloat(item.volume).toFixed(2)).toLocaleString('en')}
+          </p>
+          <p className="text-[13px] text-neutral-500">
+            {parseFloat(parseFloat(item.liquidity).toFixed(2)).toLocaleString('en')}
+          </p>
         </div>
       </td>
       {/* 30min */}
-      <td className={`col-span-1 text-red-500`}>
+      <td className={`col-span-1 ${item.priceChange < 0 ? 'text-red-500' : 'text-green-500'}`}>
         {item.priceChange.toFixed(2)} %
       </td>
       {/* 1hr */}
-      <td className={`text-green-400 col-span-1`}>
+      <td className={`col-span-1 ${item.priceChange1 < 0 ? 'text-red-500' : 'text-green-500'}`}>
         {item.priceChange1.toFixed(2)} %
       </td>
       {/* 4hr */}

@@ -8,7 +8,10 @@ const nextConfig = {
         destination: "/dashboard",
       },
     ];
-  }
+  },
+  images: {
+    domains: ['token-media.defined.fi'],
+  },
 }
 
 module.exports = nextConfig
