@@ -88,3 +88,10 @@ CREATE TRIGGER update_token_audits_modtime
 BEFORE UPDATE ON token_audits
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column();
+
+CREATE TABLE paid_users (
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    paid_token TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
