@@ -4,6 +4,12 @@
     <h5 class="title-button" style="font-size: 24px">Ownership</h5>
   </ptitle>
 
+  <%
+    if (security.owner_address == "0x0000000000000000000000000000000000000000") {
+      security.owner_address = "";
+    }
+%>
+
   <div>
     <table
       class="security-table <%= security.owner_address=='' ? 'success' : 'error' %>"

@@ -10,7 +10,7 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 app.get("/", async (req, res) => {
   try {
     // get data
-    const data = loadData("../../cache/contracts/0x9813037ee2218799597d83d4a5b6f3b6778218d9");
+    const data = loadData("../../cache/contracts/0xee3200f94a1a2345e6cc486032a5df1d50cb621c");
 
     // get templates
     const templates = getTemplates();

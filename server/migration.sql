@@ -67,7 +67,7 @@ CREATE TABLE users(
     is_admin BOOLEAN NULL DEFAULT false,
     whitelisted BOOLEAN NULL DEFAULT false
 );
-CREATE TABLE report-requests(
+CREATE TABLE report_requests(
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     address TEXT NOT NULL,
@@ -83,7 +83,6 @@ CREATE TABLE tg_users(
     chatid INTEGER NOT NULL,
     subscribed BOOLEAN NULL DEFAULT false
 );
-)
 
 CREATE TRIGGER update_token_audits_modtime
 BEFORE UPDATE ON token_audits

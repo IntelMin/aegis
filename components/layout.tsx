@@ -1,11 +1,11 @@
 import React from "react";
 import Navbar from "@/components/navbar/navbar-monitoring";
-import Sidebar from "@/components/sidebar/Sidebar";
+import Sidebar from "@/components/sidebar/sidebar";
 const NewLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="w-full relative">
+      <div className="relative w-full">
         <Navbar />
         {children}
       </div>

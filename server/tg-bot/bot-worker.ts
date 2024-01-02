@@ -1,6 +1,6 @@
 
 const NodeCache = require('node-cache');
-const supabase = require('../supabase');
+// const supabase = require('supabase');
 // Create a new instance of NodeCache
 const cache = new NodeCache();
 const _ =require('lodash');

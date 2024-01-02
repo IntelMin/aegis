@@ -2,8 +2,8 @@ import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
-import Layout from "@/components/new-layout";
-import WhitelistWrapper from "@/components/WhitelistWrapper";
+import NewLayout from "@/components/layout";
+import WhitelistWrapper from "@/components/whitelist-wrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +18,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <head />
       <body className="bg-[#09090B]">
         <WhitelistWrapper>
-        <Layout>{children}</Layout>
+        <NewLayout>{children}</NewLayout>
         </WhitelistWrapper>
       </body>
     </html>

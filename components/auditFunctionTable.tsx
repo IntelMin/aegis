@@ -9,7 +9,7 @@ import {
   getKeyValue,
   Input,
 } from "@nextui-org/react";
-import { SearchIcon } from "./icons";
+import { SearchIcon } from "@/components/icons/searchicon";
 
 const columns = [
   {

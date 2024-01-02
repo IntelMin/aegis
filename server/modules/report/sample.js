@@ -47,5 +47,5 @@ const { loadData, getTemplates, renderTemplate } = require("./shared");
 
   await browser.close();
 }
-generatePDF('0x40e9187078032afe1a30cfcf76e4fe3d7ab5c6c5','AIX')
+generatePDF('0xee3200f94a1a2345e6cc486032a5df1d50cb621c','CX')
 // module.exports = generatePDF;
