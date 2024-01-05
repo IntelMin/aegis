@@ -116,8 +116,8 @@ const DashboardDataTable = ({
                       onClick={() => handleCopy(item.address)}
                     >
                       <Image
-                        src="/token-icons/blue-copy.svg"
-                        alt="copy-icon"
+                        src="/icons/copy.svg"
+                        alt="copy"
                         width={12}
                         height={12}
                       />

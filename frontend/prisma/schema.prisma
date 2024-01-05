@@ -18,3 +18,35 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model audit_requests {
+  request_id  Int      @id @default(autoincrement())
+  contract    String   @unique
+  status      String   @db.VarChar(50)
+  status_log  String?
+  created_on  DateTime @default(now())
+  updated_on  DateTime @default(now())
+
+  @@map(name: "audit_requests")
+}
+
+model report_requests {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  address     String
+  status      String?
+  link        String?
+  created_at  DateTime @default(now())
+  updated_on  DateTime @default(now())
+
+  @@map(name: "report_requests")
+}
+
+model subscriptions {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  paid_token  String
+  created_at  DateTime @default(now())
+
+  @@map(name: "subscriptions")
+}

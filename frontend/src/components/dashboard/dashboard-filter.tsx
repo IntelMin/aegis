@@ -14,19 +14,11 @@ import React, { useState } from 'react';
 import { BiChevronDown } from 'react-icons/bi';
 
 type DrpdownFilterProps = {
-  collections: CollectionProps[];
-  chainId: string;
   time: string;
-  setChainId: (chainId: string) => void;
   setTime: (time: string) => void;
 };
 
-const DropdownFilter = ({
-  chainId,
-  time,
-  setChainId,
-  setTime,
-}: DrpdownFilterProps) => {
+const DropdownFilter = ({ time, setTime }: DrpdownFilterProps) => {
   const tableTypes = ['Trending'];
 
   const timeArr = ['30MIN', '1HR', '2HR'];

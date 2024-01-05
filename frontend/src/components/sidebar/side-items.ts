@@ -9,8 +9,8 @@ export const navArr = [
         icon: true,
       },
       {
-        name: 'Live Monitoring',
-        href: 'livemonitoring',
+        name: 'Analytics',
+        href: 'analytics',
         iconUrl: 'live-monitoring',
         icon: true,
       },
@@ -27,13 +27,13 @@ export const navArr = [
     children: [
       {
         name: 'Code Audit',
-        href: 'codeaudit',
+        href: 'audit/code',
         iconUrl: 'code-audit',
         icon: true,
       },
       {
         name: 'Token Audit',
-        href: 'tokenaudit',
+        href: 'audit/token',
         iconUrl: 'token-audit',
         icon: true,
       },

@@ -1,14 +1,44 @@
 'use client';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type Props = {};
 
 const NavHeader = (props: Props) => {
   const session = useSession();
   const router = useRouter();
+  const [gasPrice, setGasPrice] = React.useState(30.2);
+
+  useEffect(() => {
+    const fetchGasPrice = async () => {
+      try {
+        const res = await fetch(
+          'https://api.etherscan.io/api?module=gastracker&action=gasoracle'
+        );
+        const data = await res.json();
+
+        if (data.message === 'NOTOK') {
+          console.log('Rate limit reached, waiting 5 seconds to retry...');
+          setTimeout(fetchGasPrice, 5000);
+        } else {
+          setGasPrice(data.result.ProposeGasPrice);
+        }
+      } catch (error) {
+        console.error('Error fetching gas price:', error);
+      }
+    };
+
+    fetchGasPrice();
+  }, []);
+
   return (
     <div className="sticky z-[10] w-full top-0 bg-black">
       <header className="flex items-center justify-between px-10 py-3 border-b border-zinc-900">
@@ -33,9 +63,16 @@ const NavHeader = (props: Props) => {
               width={24}
               height={24}
             />
-            <p className="text-green-400 text-[16px] leading-[24px] font-[400]">
-              48.1
-            </p>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <p className="text-green-400 text-[16px] leading-[24px] font-[400]">
+                    {gasPrice}
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>Safe Gas Price: {gasPrice} Gwei</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
         <div className="flex items-center gap-2">

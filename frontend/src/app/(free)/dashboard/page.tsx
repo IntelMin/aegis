@@ -8,7 +8,6 @@ import axios from 'axios';
 
 const Dashboard = () => {
   //   const [collections, setCollections] = useState<CollectionProps[]>([]);
-  const [chainId, setChainId] = useState('1');
   const [time, setTime] = useState('1D');
   const [tableData, setTableData] = useState([]);
   const [marqueeData, setMarqueeData] = useState([]);
@@ -18,7 +17,7 @@ const Dashboard = () => {
     axios.get(`api/dashboard/?resolution="${time}"`).then(response => {
       setTableData(response.data);
     });
-  }, [chainId, time, tableLimit]);
+  }, [time, tableLimit]);
 
   useEffect(() => {
     axios.get(`api/dashboard/live`).then(response => {
@@ -31,12 +30,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 gap-6 relative z-[-1]">
         <TokenMarquee marqueeData={marqueeData} />
       </div>
-      <DropdownFilter
-        setChainId={setChainId}
-        chainId={chainId}
-        time={time}
-        setTime={setTime}
-      />
+      <DropdownFilter time={time} setTime={setTime} />
       <DashboardDataTable
         tableLimit={tableLimit}
         setTableLimit={setTableLimit}
