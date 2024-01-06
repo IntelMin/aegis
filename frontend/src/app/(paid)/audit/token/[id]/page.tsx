@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/components/ui/use-toast';
+import useTokenInfo from '@/hooks/useTokenInfo';
 
 type props = {
   params: {
@@ -34,21 +36,33 @@ const SkeletonLoader = () => (
 );
 
 const TokenAuditOption = ({ params }: props) => {
+  const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
+  const { isFetching, tokenMetaData, error } = useTokenInfo(params.id, true);
+
   useEffect(() => {
-    axios
-      .get(`/api/token/info?address=${params?.id}&type=meta`)
-      .then(response => {
-        console.log(response?.data);
-        setMetadata(response?.data);
+    if (!isFetching && tokenMetaData && !error) {
+      setMetadata(tokenMetaData);
+    }
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error fetching token information',
       });
-  }, []);
+    }
+  }, [isFetching, tokenMetaData, error]);
+
+  if (error) {
+    return <div>Error loading token information</div>;
+  }
 
   return (
     <div
       className={`bg-[url(/backgrounds/audit-token-option.png)] h-screen bg-cover pt-[30px] w-full flex flex-col gap-[72px] items-center justify-center`}
     >
-      {!metadata ? (
+      {isFetching ? (
         <SkeletonLoader />
       ) : (
         <>

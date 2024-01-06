@@ -9,7 +9,7 @@ const auditRoute = require('./api/audit');
 const tokenRoute = require('./api/token');
 const reportRoute = require('./api/report');
 const bugbountyRoute = require('./api/bugbounty');
-// const infoRoute = require('./api/info');
+const infoRoute = require('./api/info');
 // const describeRoute = require("./api/describe");
 // const markdownRoute = require("./api/markdown");
 // const dependencyRoute = require("./api/dependencies");
@@ -38,13 +38,12 @@ app.use('/dashboard', dashboardRoute);
 app.use('/monitor', monitorRoute);
 app.use('/audit', auditRoute);
 app.use('/token', tokenRoute);
-
+app.use('/info', infoRoute);
 app.use('/report', reportRoute);
 app.use('/bugbounty', bugbountyRoute);
 
 // app.use('/deployer', deployerRoute);
 // app.use('/code', codeRoute);
-// app.use('/info', infoRoute);
 // app.use('/trending', trendingTokens);
 // app.use("/describe", describeRoute);
 // app.use("/markdown", markdownRoute);

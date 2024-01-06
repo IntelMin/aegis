@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
+import useTokenInfo from '@/hooks/useTokenInfo';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 
 type Props = {};
@@ -11,33 +12,54 @@ type Props = {};
 const TokenAuditorForm = (props: Props) => {
   const { toast } = useToast();
   const router = useRouter();
-  const [tokenAddress, setTokenAddress] = React.useState<string>('');
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [tokenAddress, setTokenAddress] = useState<string>('');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [submittedAddress, setSubmittedAddress] = useState<string>('');
+
+  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
+    submitting ? submittedAddress : '',
+    false
+  );
+
+  useEffect(() => {
+    if (!submitting) return;
+
+    if (!isFetching && tokenRequestInfo && !error) {
+      setSubmitting(false);
+      router.push(`/audit/token/${submittedAddress}`);
+    }
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error fetching token information',
+      });
+      setSubmitting(false);
+    }
+  }, [
+    submitting,
+    isFetching,
+    tokenRequestInfo,
+    error,
+    submittedAddress,
+    router,
+    toast,
+  ]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setIsLoading(true);
-
+    if (!tokenAddress) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please enter a valid contract address',
+      });
+      return;
+    }
     console.log(tokenAddress);
-
-    axios.get(`/api/token/info?address=${tokenAddress}&type=request`).then(
-      response => {
-        setIsLoading(false);
-        router.push(`/audit/token/${tokenAddress}`);
-      },
-      error => {
-        setIsLoading(false);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'There was an error fetching token information',
-        });
-      }
-    );
-
-    // check if valid ethereum address
-    setTokenAddress('');
+    setSubmittedAddress(tokenAddress);
+    setSubmitting(true);
   };
 
   return (
@@ -60,7 +82,7 @@ const TokenAuditorForm = (props: Props) => {
             className="text-[14px] text-white placeholder:text-neutral-600 border-none outline-none bg-zinc-900 border border-zinc-800 py-2 pl-2 pr-4 gap-2 w-[400px]"
           />
           <button
-            disabled={isLoading}
+            disabled={submitting}
             type="submit"
             className={`${
               tokenAddress === ''
@@ -68,7 +90,7 @@ const TokenAuditorForm = (props: Props) => {
                 : 'bg-[#0E76FD] text-white'
             } text-[14px] font-[300] px-12 py-[6px] w-[400px] transition-all ease-in duration-150`}
           >
-            {isLoading ? (
+            {submitting ? (
               <ScaleLoader width={4} height={10} color="white" />
             ) : (
               'Submit'

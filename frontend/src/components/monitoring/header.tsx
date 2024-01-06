@@ -15,28 +15,6 @@ type Props = {
 };
 
 const TokenValue = (props: Props) => {
-  const demoarr = [
-    {
-      value: '$8.49M',
-      key: 'MCAP',
-    },
-    {
-      value: '$407K',
-      key: 'LIQUIDITY',
-    },
-    {
-      value: '$4.28M',
-      key: 'VOL (24H)',
-    },
-    {
-      value: '$3.8K',
-      key: 'HOLDERS',
-    },
-    {
-      value: '9m',
-      key: 'AGE',
-    },
-  ];
   return (
     <div className="container p-0 mx-auto">
       <div className="flex flex-wrap items-center justify-around gap-4">
@@ -88,7 +66,7 @@ const TokenValue = (props: Props) => {
               <div className="flex items-center gap-[4px]">
                 <p className="text-blue-400 text-[14px] leading-[20px]">
                   {props?.liveData?.pairAddress
-                    ? formatAddress(props.liveData.pairAddress)
+                    ? formatAddress(props?.liveData?.pairAddress)
                     : null}
                 </p>
                 <button>
