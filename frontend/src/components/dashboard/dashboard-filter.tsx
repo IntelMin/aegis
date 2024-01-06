@@ -1,6 +1,5 @@
 'use client';
 
-import { CollectionProps } from '@/types';
 import {
   Select,
   SelectContent,

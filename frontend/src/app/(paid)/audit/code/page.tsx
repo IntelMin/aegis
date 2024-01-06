@@ -32,15 +32,20 @@ const CodeAudit = () => {
     try {
       const data = {
         type: 'code',
-        sourcecode: ContractCode,
+        source: ContractCode,
       };
 
-      const response = await fetch('/api/code', {
+      const response = await fetch('/api/audit/code', {
         method: 'POST',
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'An error occurred during code audit',
+        });
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -75,12 +80,13 @@ const CodeAudit = () => {
 
           <Button
             type="submit"
-            onClick={() => handleButtonClick('contractCode')}
+            disabled={loading}
             className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 ${
-              activeComponent === 'contractCode' ? 'active' : ''
+              loading ? 'active' : ''
             }`}
           >
-            Audit your Code {loading && <ScaleLoader />}
+            {loading ? 'Auditing' : 'Audit your code'}{' '}
+            {loading && <ScaleLoader width={4} height={10} color="white" />}
           </Button>
         </div>
         <div className="flex space-x-2 space-y-0 md:hidden ">
@@ -106,15 +112,13 @@ const CodeAudit = () => {
             <p className="animate-pulse">🟢</p>
           </Button>
         </div>
-        {activeComponent === 'contractCode' && (
-          <CodeEditor
-            ContractCode={ContractCode}
-            SetContractCode={setContractCode}
-            handleSubmit={handleSubmit}
-            findings={findings}
-          />
-        )}
-        {activeComponent === 'findings' && <Findings findings={findings} />}
+        <CodeEditor
+          source={ContractCode}
+          setContractCode={setContractCode}
+          findings={findings}
+          tree={null}
+          readonly={false}
+        />
       </div>
     </form>
   );

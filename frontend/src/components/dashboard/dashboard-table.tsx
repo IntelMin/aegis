@@ -74,8 +74,6 @@ const DashboardDataTable = ({
         {tableData?.map((item, index) => (
           <TableRow
             key={index}
-            item={item}
-            index={index}
             className={`${
               index % 2 === 0 ? 'bg-zinc-900' : ''
             } py-2 px-[3px] text-[14px] items-center border-none`}
@@ -189,9 +187,8 @@ const DashboardDataTable = ({
               {item.priceChange1.toFixed(2)} %
             </TableCell>
 
-            {/* 4hr */}
+            {/* Audit */}
             <TableCell className={`text-green-400`}>
-              {/* {item.priceChange12.toFixed(2)} % */}
               <button className="bg-green-700 text-white pl-2 pr-2 pt-1 pb-1 rounded-[4px]">
                 Audit
               </button>

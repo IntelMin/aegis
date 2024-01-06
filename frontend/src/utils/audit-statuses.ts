@@ -1,4 +1,4 @@
-module.exports.NEW_AUDIT_RETURN_CODE = {
+export const NEW_AUDIT_RETURN_CODE = {
   success: {
     code: 0,
     message: 'Contract added to audit queue',
@@ -25,7 +25,7 @@ module.exports.NEW_AUDIT_RETURN_CODE = {
   },
 };
 
-module.exports.AUDIT_STATUS_RETURN_CODE = {
+export const AUDIT_STATUS_RETURN_CODE = {
   pending: 0,
   partial: 1,
   complete: 2,

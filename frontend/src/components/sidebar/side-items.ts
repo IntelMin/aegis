@@ -10,7 +10,7 @@ export const navArr = [
       },
       {
         name: 'Analytics',
-        href: 'analytics',
+        href: 'analytics/0x55a8f6c6b3aa58ad6d1f26f6afeded78f32e19f4',
         iconUrl: 'live-monitoring',
         icon: true,
       },
