@@ -20,12 +20,7 @@ const TradersTable = ({ selected }: any) => {
 
         <div className="flex gap-2">
           <div className="flex items-center gap-1">
-            <Image
-              src="/token-icons/network-icon.svg"
-              alt="icon"
-              width={14}
-              height={14}
-            />
+            <Image src="/icons/network.svg" alt="icon" width={14} height={14} />
             <p className="text-blue-500 text-[14px]">
               {formatAddress('0xelj45d3e454u4i4u484y64dt3')}
             </p>

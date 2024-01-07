@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import TableHead from "./table-head";
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import TableHead from './table-head';
 
 type Props = {
   tableHead: string[];
@@ -25,10 +25,10 @@ const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
     <table className="w-full">
       <TableHead tableHead={tableHead} />
       <tbody>
-        {transactionTableData?.map((item) => (
+        {transactionTableData?.map(item => (
           <tr
             key={item?.id}
-            className="w-full grid grid-cols-4 p-2 border-b border-zinc-800"
+            className="grid w-full grid-cols-4 p-2 border-b border-zinc-800"
           >
             <td className="col-span-1">
               <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
               >
                 {item?.scan?.network}
                 <Image
-                  src="/token-icons/link.svg"
+                  src="/icons/link.svg"
                   alt="link"
                   width={14}
                   height={14}
