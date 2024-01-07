@@ -35,7 +35,6 @@ export const authOptions: NextAuthOptions = {
         if (!existingUser) {
           return null;
         }
-
         const passwordMatch = await compare(
           credentials.password,
           existingUser.password
@@ -48,6 +47,7 @@ export const authOptions: NextAuthOptions = {
           id: `${existingUser.id}`,
           username: existingUser.username,
           email: existingUser.email,
+          whitelisted: existingUser.whitelisted,
         };
       },
     }),
@@ -59,6 +59,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           username: user.username,
+          whitelisted: user.whitelisted,
         };
       }
 
@@ -70,6 +71,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           username: token.username,
+          whitelist: token.whitelist,
         },
       };
     },

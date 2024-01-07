@@ -14,8 +14,24 @@ model user {
   email     String   @unique
   username  String   @unique
   password  String
+  whitelisted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+model user_meta {
+  id              Int      @id @default(autoincrement())  
+  user_id         Int       @unique    
+  user_name       String?   @unique  
+  bio             String?   
+  social_twitter  String?   @unique
+  social_telegram String?   @unique
+  project_name    String?
+  project_logo    String?
+  project_email   String?
+  project_website String?
+  project_twitter String?
+  project_telegram String?
+  project_insta String?
 }
 
 model audit_requests {
