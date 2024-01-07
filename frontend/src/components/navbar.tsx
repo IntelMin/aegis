@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import Search from '@/components/search';
 
 type Props = {};
 
@@ -43,19 +44,7 @@ const NavHeader = (props: Props) => {
     <div className="sticky z-[10] w-full top-0 bg-black">
       <header className="flex items-center justify-between px-10 py-3 border-b border-zinc-900">
         <div className="flex items-center gap-3">
-          <div className="flex bg-zinc-900 border border-zinc-800 py-2 pl-2 pr-4 gap-2 min-w-[400px] w-fit">
-            <Image src="/icons/search.svg" alt="token" width={28} height={28} />
-            <input
-              type="text"
-              autoComplete="off"
-              placeholder="Search or type a command"
-              className="w-[80%] text-[14px] text-white placeholder:text-neutral-600 border-none outline-none bg-transparent"
-            />
-            <div className="flex gap-1 px-2 py-1 bg-black rounded-md">
-              <p className="text-white">⌘</p>
-              <p className="text-white">F</p>
-            </div>
-          </div>
+          <Search />
           <div className="flex items-center gap-2">
             <Image
               src="/icons/fuel.svg"
