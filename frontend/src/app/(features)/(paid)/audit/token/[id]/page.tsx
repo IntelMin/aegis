@@ -82,7 +82,7 @@ const TokenAuditOption = ({ params }: props) => {
               <Image
                 src={
                   metadata?.imageSmallUrl
-                    ? `/api/token-image?q=${metadata?.imageSmallUrl
+                    ? `/api/token/image?q=${metadata?.imageSmallUrl
                         .split('/')
                         .pop()}`
                     : `/icons/token-default.svg`

@@ -5,12 +5,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
-import debounce from 'lodash/debounce';
 import FunctionReport from '@/components/audit/detail/function-report';
 import OverViewReport from '@/components/audit/detail/overview-report';
 import CodeEditor from '@/components/audit/code-editor';
-import Findings from '@/components/audit/findings';
-// import CodeViewer from '@/components/audit/detail/code-viewer';
 import InheritanceGraph from '@/components/audit/detail/inheritance-graph';
 import { AUDIT_STATUS_RETURN_CODE } from '@/utils/audit-statuses';
 
@@ -305,7 +302,7 @@ const DetailedPage = ({ params }: Props) => {
             <Image
               src={
                 metaData.imageSmallUrl
-                  ? `/api/token-image?q=${metaData.imageSmallUrl
+                  ? `/api/token/image?q=${metaData.imageSmallUrl
                       .split('/')
                       .pop()}`
                   : `/icons/token-default.svg`

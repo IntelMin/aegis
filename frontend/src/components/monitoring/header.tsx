@@ -22,7 +22,7 @@ const TokenValue = (props: Props) => {
           <TokenTitle
             tokenImgUrl={
               props.metadata?.imageSmallUrl
-                ? `/api/token-image?q=${props.metadata?.imageSmallUrl
+                ? `/api/token/image?q=${props.metadata?.imageSmallUrl
                     .split('/')
                     .pop()}`
                 : `/icons/token-default.svg`

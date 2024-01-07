@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import CodeEditor from '@/components/audit/code-editor';
-import Findings from '@/components/audit/findings';
 
 const CodeAudit = () => {
   const { toast } = useToast();

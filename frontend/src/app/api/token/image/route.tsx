@@ -1,16 +1,11 @@
 import { NextRequest } from 'next/server';
-import { ImageResponse } from 'next/og';
-import Image from 'next/image';
-import React from 'react';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const img = searchParams.get('q');
 
-  console.log(img);
-
   if (!img) {
-    return false;
+    return new Response('Image query parameter is missing', { status: 400 });
   }
 
   const fullImageUrl = `https://token-media.defined.fi/${decodeURIComponent(

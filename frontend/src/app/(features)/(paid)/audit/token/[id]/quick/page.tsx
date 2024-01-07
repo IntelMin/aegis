@@ -1,13 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import AreaChart from '@/components/audit/detail/area-chart';
 import TokenAuditHead from '@/components/monitoring/header';
 import SecurityScore from '@/components/audit/detail/security-score';
 import AuditHistory from '@/components/audit/detail/audit-history';
-import { demoSecurityScore, demoarr } from '@/components/audit/detail/constant';
 import Link from 'next/link';
+import axios from 'axios';
+import useTokenInfo from '@/hooks/useTokenInfo';
+import { useToast } from '@/components/ui/use-toast';
 
 type Props = {
   params: {
@@ -16,14 +18,57 @@ type Props = {
 };
 
 const QuickAuditPage = ({ params }: Props) => {
+  const { toast } = useToast();
+  const contractAddress = params.id;
+  const [liveData, setLiveData] = useState<any>(null);
+  const { isFetching, tokenMetaData, error } = useTokenInfo(
+    contractAddress,
+    true
+  );
+
+  const fetchData = () => {
+    axios
+      .get(`/api/token/live/?address=${contractAddress}`)
+      .then(response => {
+        setLiveData(response?.data);
+      })
+      .catch(error => {
+        console.error('Error fetching live data:', error);
+      });
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error fetching token information',
+      });
+    }
+  }, [isFetching, tokenMetaData, error]);
+
+  useEffect(() => {
+    if (!isFetching && tokenMetaData && !error) {
+      fetchData();
+    }
+
+    const interval = setInterval(fetchData, 7000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex flex-col w-full gap-6 px-5 py-5">
       {/* Token Audit Head */}
-      <TokenAuditHead demoarr={demoarr} />
+      <TokenAuditHead
+        showTitle={true}
+        showPremium={false}
+        liveData={liveData}
+        metadata={tokenMetaData}
+      />
       <div className="grid grid-cols-11 gap-5">
         <div className="flex flex-col col-span-6 gap-5">
           {/* Security Score */}
-          <SecurityScore demoSecurityScore={demoSecurityScore} />
+          {/* <SecurityScore demoSecurityScore={demoSecurityScore} /> */}
           {/* Area Graph Representation */}
           <div className="w-full p-6 border border-zinc-900">
             <AreaChart />

@@ -143,8 +143,11 @@ const CodeAuditEditor = (props: Props) => {
           {/* <!-- Placeholder for Findings Content --> */}
           <div className="flex-1 h-full pr-5 space-y-6 overflow-y-scroll">
             {findings?.length > 0 ? (
-              findings.map((finding: any) => (
-                <div className=" bg-zinc-900 min-h-[76px] ml-5 max-w-[300px] flex-cols items-center gap-3 space-y-6 text-white p-6">
+              findings.map((finding: any, index: number) => (
+                <div
+                  key={index}
+                  className="bg-zinc-900 min-h-[76px] ml-5 max-w-[300px] flex-cols items-center gap-3 space-y-6 text-white p-6"
+                >
                   <button className="px-3 py-2 text-sm font-semibold text-white uppercase border-2 rounded-full border-zinc-600">
                     <b className="animate-pulse mx-0.5">
                       {finding.severity === 'INFO'

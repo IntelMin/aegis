@@ -91,7 +91,7 @@ const DashboardDataTable = ({
                 <Image
                   src={
                     item.imageSmallUrl
-                      ? `/api/token-image?q=${item.imageSmallUrl
+                      ? `/api/token/image?q=${item.imageSmallUrl
                           .split('/')
                           .pop()}`
                       : `/icons/token-default.svg`
