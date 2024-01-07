@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { username, email, password } = userSchema.parse(body);
-
+    console.log({ username, email, password });
     const existingUsername = await db.user.findUnique({
       where: { username: username },
     });
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       data: { username, email, password: hashedPassword },
     });
     const { password: newUserPassword, ...rest } = newUser;
-
+    console.log({ newUser })
     return NextResponse.json(
       {
         user: rest,

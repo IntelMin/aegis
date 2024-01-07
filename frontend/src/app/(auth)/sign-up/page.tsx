@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -23,24 +23,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/form';
+import { Loader2 } from 'lucide-react';
 
 interface SignUpProps {}
 
 const FormSchema = z
   .object({
-    username: z.string().min(1, "Username is required").max(100),
-    email: z.string().min(1, "Email is required").email("Invalid email"),
+    username: z.string().min(1, 'Username is required').max(100),
+    email: z.string().min(1, 'Email is required').email('Invalid email'),
     password: z
       .string()
-      .min(1, "Password is required")
-      .min(8, "Password must have than 8 characters"),
-    confirmPassword: z.string().min(1, "Password confirmation is required"),
+      .min(1, 'Password is required')
+      .min(8, 'Password must have than 8 characters'),
+    confirmPassword: z.string().min(1, 'Password confirmation is required'),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Password do not match",
+  .refine(data => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Password do not match',
   });
 
 const SignUp: FC<SignUpProps> = ({}) => {
@@ -50,19 +50,19 @@ const SignUp: FC<SignUpProps> = ({}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     setIsLoading(true);
-    const response = await fetch("/api/user", {
-      method: "POST",
+    const response = await fetch('/api/user', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: values.username,
@@ -70,17 +70,17 @@ const SignUp: FC<SignUpProps> = ({}) => {
         password: values.password,
       }),
     });
-
+    console.log(response);
     if (response.ok) {
-      router.push("/sign-in");
+      router.push('/sign-in');
       toast({
-        title: "Registration success",
+        title: 'Registration success',
       });
     } else {
       toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: "email or username already exist",
+        variant: 'destructive',
+        title: 'Something went wrong.',
+        description: 'email or username already exist',
       });
       setIsLoading(false);
     }
@@ -93,7 +93,7 @@ const SignUp: FC<SignUpProps> = ({}) => {
           <CardTitle className="text-2xl">Sign up</CardTitle>
           <CardDescription>
             Already have an account?
-            <Link className="pl-2 font-medium text-blue-600" href={"sign-in"}>
+            <Link className="pl-2 font-medium text-blue-600" href={'sign-in'}>
               Sign in.
             </Link>
           </CardDescription>
