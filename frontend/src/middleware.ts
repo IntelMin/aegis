@@ -15,6 +15,10 @@ const middleware = withAuth(
             const signinurl = new URL("/login", request.nextUrl?.origin)
             return NextResponse.redirect(signinurl.toString())
         }
+        if (token) {
+
+            return NextResponse.next()
+        }
     },
     {
         // Matches the pages config in `[...nextauth]`

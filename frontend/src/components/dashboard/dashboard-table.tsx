@@ -57,7 +57,7 @@ const DashboardDataTable = ({
       return `${Math.floor(seconds / 86400)} days ago`;
     }
   }
-
+  if (!tableData) return null;
   return (
     <Table className="p-3 mt-6 border border-zinc-800">
       <TableHeader>

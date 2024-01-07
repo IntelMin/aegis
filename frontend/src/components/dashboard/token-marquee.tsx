@@ -2,6 +2,7 @@ import React from 'react';
 import Marquee from 'react-fast-marquee';
 
 const TokenMarquee = ({ marqueeData }: any) => {
+  if (!marqueeData) return null;
   const marqueeContent = marqueeData?.map((token: any, index: number) => (
     <span key={index} className="flex items-center mr-8">
       <img

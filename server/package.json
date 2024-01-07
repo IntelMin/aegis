@@ -19,11 +19,13 @@
     "cheerio": "1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.17.1",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-curl-impersonate": "^1.4.2",
     "openai": "^4.24.1",
+    "puppeteer": "^21.7.0",
     "solc": "0.8.23-fixed",
     "viem": "^1.21.4"
   }
