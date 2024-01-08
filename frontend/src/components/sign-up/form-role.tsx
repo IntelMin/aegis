@@ -46,7 +46,10 @@ const RoleDetailsForm: React.FC<RoleDataFormProps> = ({
   const onSubmit = (formData: RoleDataTypes) => {
     const updatedData = {
       ...formData,
-      role: parseInt(formData.role as string, 10),
+      role:
+        typeof formData.role === 'string'
+          ? parseInt(formData.role, 10)
+          : formData.role,
     };
 
     setData(updatedData);

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 
 type ProjectDetailsData = {
   project_name: string;
@@ -105,7 +106,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_name"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Project Name</FormLabel>
               <FormControl>
@@ -119,7 +120,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_website"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Project Website</FormLabel>
               <FormControl>
@@ -133,7 +134,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_twitter"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>X</FormLabel>
               <FormControl>
@@ -147,7 +148,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_telegram"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Telegram</FormLabel>
               <FormControl>
@@ -161,7 +162,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_discord"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Discord</FormLabel>
               <FormControl>
@@ -175,7 +176,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_instagram"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Instagram</FormLabel>
               <FormControl>
@@ -188,7 +189,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
         <FormField
           control={form.control}
           name="project_logo"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Logo</FormLabel>
               <FormControl>

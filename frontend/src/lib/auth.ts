@@ -1,28 +1,28 @@
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "./db";
-import { compare } from "bcrypt";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { db } from './db';
+import { compare } from 'bcrypt';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/login",
-    newUser: "/sign-up",
+    signIn: '/login',
+    newUser: '/sign-up',
   },
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
         email: {
-          label: "email",
-          type: "email",
-          placeholder: "jsmith@gmail.com",
+          label: 'email',
+          type: 'email',
+          placeholder: 'jsmith@gmail.com',
         },
-        password: { label: "Password", type: "password" },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {

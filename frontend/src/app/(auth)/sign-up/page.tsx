@@ -103,7 +103,7 @@ const SignUpForm = () => {
     setStep((currentStep: number) => Math.max(currentStep - 1, 1));
   };
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async () => {
     // const payload = {
     //   ...signInData,
     //   ...data,

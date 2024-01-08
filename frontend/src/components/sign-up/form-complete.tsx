@@ -30,19 +30,19 @@ const CompleteForm: React.FC<FinishStepProps> = ({
         Hey, {personalData.name}!
       </h2>
       <div className="pb-2 text-md text-zinc-400">
-        We're excited to have another{' '}
+        We&apos;re excited to have another{' '}
         <span className="text-zinc-200">
           {roleMapping[roleData.role.toString()]}
         </span>{' '}
-        on board. Let's get you signed up!
+        on board. Let&apos;s get you signed up!
       </div>
 
       <p className="pb-2 text-md text-zinc-400">
-        Once you submit your form, we'll set you up for{' '}
+        Once you submit your form, we&apos;ll set you up for{' '}
         <strong>whitelisting</strong>.
       </p>
       <p className="pb-6 text-md text-zinc-400">
-        You'll receive an email at{' '}
+        You&apos;ll receive an email at{' '}
         <span className="font-semibold text-zinc-200">
           {personalData.email}
         </span>
