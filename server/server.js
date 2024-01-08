@@ -6,6 +6,7 @@ const cors = require('cors');
 const dashboardRoute = require('./api/dashboard');
 const monitorRoute = require('./api/monitor');
 const auditRoute = require('./api/audit');
+const monitoringRoute = require('./api/monitoring');
 const tokenRoute = require('./api/token');
 const reportRoute = require('./api/report');
 const bugbountyRoute = require('./api/bugbounty');
@@ -37,6 +38,7 @@ router.get('/ping', (req, res) => {
 app.use('/dashboard', dashboardRoute);
 app.use('/monitor', monitorRoute);
 app.use('/audit', auditRoute);
+app.use('/monitoring', monitoringRoute);
 app.use('/token', tokenRoute);
 app.use('/info', infoRoute);
 app.use('/report', reportRoute);
