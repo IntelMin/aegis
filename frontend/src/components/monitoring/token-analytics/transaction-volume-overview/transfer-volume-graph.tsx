@@ -1,6 +1,5 @@
 'use client';
-
-import { formatYAxisLabel } from '@/utils/formatYaxisLabel';
+import React, { useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -9,6 +8,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatYAxisLabel } from '@/utils/formatYaxisLabel';
 
 const data = [
   {
@@ -93,8 +94,13 @@ interface RoundedBarProps {
   fill?: string;
 }
 
-const RoundedBar: React.FC<RoundedBarProps> = props => {
-  const { x = 0, y = 0, width = 0, height = 0, fill } = props;
+const RoundedBar: React.FC<RoundedBarProps> = ({
+  x = 0,
+  y = 0,
+  width = 0,
+  height = 0,
+  fill,
+}) => {
   const radius = 3;
   const path = `M${x},${y + radius}
                 A${radius},${radius},0,0,1,${x + radius},${y}
@@ -105,19 +111,31 @@ const RoundedBar: React.FC<RoundedBarProps> = props => {
                 L${x + radius},${y + height}
                 A${radius},${radius},0,0,1,${x},${y + height - radius}
                 Z`;
-
   return <path d={path} fill={fill} />;
 };
 
-type Props = {};
-
-const TransferVolumeGraph = (props: Props) => {
+const TransferVolumeGraph: React.FC<RoundedBarProps> = () => {
   const labelStyle = {
     color: '#A3A3A3',
     textAlign: 'center',
     fontSize: '12px',
     fontStyle: 'normal',
   };
+
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setLoading(false), 2000);
+    };
+
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-full" />;
+  }
 
   return (
     <div className="w-full h-[320px]">
@@ -129,13 +147,16 @@ const TransferVolumeGraph = (props: Props) => {
             dataKey="name"
             tick={{ ...labelStyle }}
           />
+
           <YAxis
             axisLine={{ display: 'none' }}
             tickLine={{ display: 'none' }}
+            // Replace 'formatYAxisLabel' with your actual function
             tickFormatter={value => formatYAxisLabel(value)}
             tick={{ ...labelStyle }}
             orientation="right"
           />
+          <CartesianGrid stroke="#171717" vertical={false} />
           <CartesianGrid stroke="#171717" vertical={false} />
           <Bar
             dataKey="uv"

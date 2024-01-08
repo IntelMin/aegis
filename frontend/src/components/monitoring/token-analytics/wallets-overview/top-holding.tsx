@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GraphTypeHeader } from './graph-type-header';
 import Image from 'next/image';
 import { HoldingWalletChart } from './holding-wallet-chart';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
   choosenType: string;
@@ -9,6 +10,17 @@ type Props = {
 };
 
 export const TopHolding = ({ choosenType, handleTypeChange }: Props) => {
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
   return (
     <div className="grid w-full h-full grid-cols-2 gap-2">
       <div className="h-full col-span-1">
@@ -44,27 +56,39 @@ export const TopHolding = ({ choosenType, handleTypeChange }: Props) => {
               </th>
               <th className="col-span-1"></th>
             </tr>
-            <div className="overflow-y-scroll h-[265px]">
-              {[1, 2, 3, 4, 5, 6, 7, 8]?.map(item => (
-                <tr
-                  key={item}
-                  className={`w-full my-2 grid grid-cols-8 items-center p-2 ${
-                    item % 2 === 0 ? 'bg-[#0B0B0B]' : 'bg-transparent'
-                  }`}
-                >
-                  <td className="col-span-1 text-sm text-neutral-500">
-                    #{item}
-                  </td>
-                  <td className="col-span-3 text-sm text-center text-blue-300">
-                    0xde4...34edc
-                  </td>
-                  <td className="col-span-3 text-sm text-center text-neutral-100">
-                    32%
-                  </td>
-                  <td className="col-span-1 w-[12px] h-[12px] bg-sky-500 rounded-full"></td>
-                </tr>
-              ))}
-            </div>
+            {isLoading ? (
+              <div>
+                <Skeleton className="w-full h-8 mb-2 mt-2" />
+                <Skeleton className="w-full h-8 mb-2" />
+                <Skeleton className="w-full h-8 mb-2" />
+                <Skeleton className="w-full h-8 mb-2" />
+                <Skeleton className="w-full h-8 mb-2" />
+                <Skeleton className="w-full h-8 mb-2" />
+                <Skeleton className="w-full h-8" />
+              </div>
+            ) : (
+              <div className="overflow-y-scroll h-[265px]">
+                {[1, 2, 3, 4, 5, 6, 7, 8]?.map(item => (
+                  <tr
+                    key={item}
+                    className={`w-full my-2 grid grid-cols-8 items-center p-2 ${
+                      item % 2 === 0 ? 'bg-[#0B0B0B]' : 'bg-transparent'
+                    }`}
+                  >
+                    <td className="col-span-1 text-sm text-neutral-500">
+                      #{item}
+                    </td>
+                    <td className="col-span-3 text-sm text-center text-blue-300">
+                      0xde4...34edc
+                    </td>
+                    <td className="col-span-3 text-sm text-center text-neutral-100">
+                      32%
+                    </td>
+                    <td className="col-span-1 w-[12px] h-[12px] bg-sky-500 rounded-full"></td>
+                  </tr>
+                ))}
+              </div>
+            )}
           </table>
         </div>
       </div>

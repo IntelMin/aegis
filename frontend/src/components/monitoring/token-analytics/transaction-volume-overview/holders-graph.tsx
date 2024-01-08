@@ -1,7 +1,9 @@
 'use client';
+'use client';
 
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatYAxisLabel } from '@/utils/formatYaxisLabel';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AreaChart,
   Area,
@@ -90,12 +92,26 @@ const data = [
 type Props = {};
 
 const HoldersGraph = (props: Props) => {
+  const [isLoading, setLoading] = useState(true);
   const labelStyle = {
     color: '#A3A3A3',
     textAlign: 'center',
     fontSize: '12px',
     fontStyle: 'normal',
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setLoading(false), 2000);
+    };
+
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-full" />;
+  }
   return (
     <div className="w-full h-[320px] translate-x-2">
       <ResponsiveContainer width="120%" height="100%">

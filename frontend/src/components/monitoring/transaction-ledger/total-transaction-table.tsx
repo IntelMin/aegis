@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TableHead from '../table-head';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
   tableHead: string[];
@@ -21,6 +22,20 @@ type Props = {
 };
 
 const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-36" />;
+  }
   return (
     <table className="w-full">
       <TableHead tableHead={tableHead} />

@@ -1,6 +1,7 @@
 'use client';
+'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -10,6 +11,7 @@ import {
 } from 'chart.js';
 import { Bubble } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
+import { Skeleton } from '@/components/ui/skeleton';
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
@@ -71,8 +73,23 @@ export const data = {
 };
 
 export const HoldingWalletChart = (props: Props) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-[90%]" />;
+  }
   return (
     <div className="w-full h-[320px]">
+      <Bubble options={options} data={data} />
       <Bubble options={options} data={data} />
     </div>
   );

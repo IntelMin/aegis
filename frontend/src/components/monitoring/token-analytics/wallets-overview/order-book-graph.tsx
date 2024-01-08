@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const OrderBookGraph = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
   const options = {
     chart: {
       type: 'area',
@@ -162,6 +174,11 @@ export const OrderBookGraph = () => {
       },
     ],
   };
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-[330px]" />;
+  }
+
   return (
     <div className="w-full translate-y-4">
       <HighchartsReact highcharts={Highcharts} options={options} />

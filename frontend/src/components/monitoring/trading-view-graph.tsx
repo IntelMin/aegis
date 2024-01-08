@@ -1,28 +1,29 @@
-// components/TradingViewChart.tsx
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart, IChartApi } from 'lightweight-charts';
+
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface TradingViewChartProps {
   chain: string;
   pair: string;
 }
 
-
 function TradingViewChart({ pair, chain }: TradingViewChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const generateCandlestickData = (startDate: string, count: number) => {
     const data = [];
     let date = new Date(startDate);
     let previousClose = Math.random() * 100 + 100;
-  
+
     for (let i = 0; i < count; i++) {
       const open = previousClose;
       const close = open + (Math.random() - 0.5) * 5;
       const high = Math.max(open, close) + Math.random() * 2;
       const low = Math.min(open, close) - Math.random() * 2;
-  
+
       data.push({
         time: date.toISOString().split('T')[0],
         open,
@@ -30,14 +31,13 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
         low,
         close,
       });
-  
+
       previousClose = close;
       date.setDate(date.getDate() + 1);
     }
-  
     return data;
   };
-  
+
   const candlestickData = generateCandlestickData('2018-12-22', 100);
 
   useEffect(() => {
@@ -69,16 +69,7 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
         wickUpColor: 'rgb(38,166,154)',
         wickDownColor: 'rgb(255,82,82)',
       });
-
       candleSeries.setData(candlestickData);
-
-      const volumeSeries = newChart.addHistogramSeries({
-        color: '#26a69a',
-        priceFormat: {
-          type: 'volume',
-        },
-        priceScaleId: '',
-      });
 
       chartRef.current = newChart;
     }
@@ -101,6 +92,8 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
     };
 
     window.addEventListener('resize', handleResize);
+    //This is skeleton loading state will add when api is ready.
+    setLoading(false);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -111,12 +104,16 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
     <>
       <div className="flex gap-3 text-white">
         <span>{pair}</span>
-        <span className="text-gray-500"> {chain}</span>
+        <span className="text-gray-500">{chain}</span>
       </div>
-      <div
-        ref={chartContainerRef}
-        style={{ position: 'relative', width: '100%' }}
-      />
+      {loading ? (
+        <Skeleton className="w-full h-[500px]" />
+      ) : (
+        <div
+          ref={chartContainerRef}
+          style={{ position: 'relative', width: '100%' }}
+        />
+      )}
     </>
   );
 }

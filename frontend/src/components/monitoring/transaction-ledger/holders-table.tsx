@@ -1,15 +1,23 @@
+import React, { useEffect, useState } from 'react';
 import { formatAddress } from '@/utils/format-address';
-
 import Image from 'next/image';
-import React from 'react';
 import SelectTopToken from '../select-top-token';
-import TotalTransactionTable from './total-transaction-table';
-import { tableHead, totalTransactionTableData } from '../token-constant';
-import Link from 'next/link';
 import { HoldersDemoData } from './demo-table-data';
 import TableHead from '../table-head';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const HoldersTable = ({ selected }: any) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
   return (
     <div className="h-[400px] overflow-auto">
       <div className="flex items-center justify-between mb-2 ">
@@ -40,46 +48,50 @@ const HoldersTable = ({ selected }: any) => {
             ]}
           />
         </div>
-        <tbody>
-          {HoldersDemoData?.map(item => (
-            <tr
-              key={item?.rank}
-              className="grid w-full grid-cols-5 p-2 border-b border-zinc-800"
-            >
-              <td className="col-span-1">
-                <p className="text-neutral-300 text-[14px]">#{item?.rank}</p>
-              </td>
-              <td className="col-span-1">
-                <p className={`text-blue-400 text-[14px]`}>{item.address}</p>
-              </td>
-              <td className="col-span-1">
-                <p className={`text-white text-[14px]`}>{item.value_usd}</p>
-              </td>
-              <td className="col-span-1">
-                <p
-                  className={`${
-                    item.change_1d.startsWith('+')
-                      ? 'text-green-400'
-                      : 'text-red-400'
-                  } text-[14px]`}
-                >
-                  {item.change_1d}
-                </p>
-              </td>
-              <td className="col-span-1">
-                <p
-                  className={`${
-                    item.change_7d.startsWith('+')
-                      ? 'text-green-400'
-                      : 'text-red-400'
-                  } text-[14px]`}
-                >
-                  {item.change_7d}
-                </p>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        {isLoading ? (
+          <Skeleton className="w-full h-72 mt-2" />
+        ) : (
+          <tbody>
+            {HoldersDemoData?.map(item => (
+              <tr
+                key={item?.rank}
+                className="grid w-full grid-cols-5 p-2 border-b border-zinc-800"
+              >
+                <td className="col-span-1">
+                  <p className="text-neutral-300 text-[14px]">#{item?.rank}</p>
+                </td>
+                <td className="col-span-1">
+                  <p className={`text-blue-400 text-[14px]`}>{item.address}</p>
+                </td>
+                <td className="col-span-1">
+                  <p className={`text-white text-[14px]`}>{item.value_usd}</p>
+                </td>
+                <td className="col-span-1">
+                  <p
+                    className={`${
+                      item.change_1d.startsWith('+')
+                        ? 'text-green-400'
+                        : 'text-red-400'
+                    } text-[14px]`}
+                  >
+                    {item.change_1d}
+                  </p>
+                </td>
+                <td className="col-span-1">
+                  <p
+                    className={`${
+                      item.change_7d.startsWith('+')
+                        ? 'text-green-400'
+                        : 'text-red-400'
+                    } text-[14px]`}
+                  >
+                    {item.change_7d}
+                  </p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
     </div>
   );
