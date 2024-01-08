@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import TokenTitle from './token-title';
-import TokenValueBox from './token-value-box';
-import TokenPrice from './token-price';
 import { formatAddress } from '@/utils/format-address';
 import { formatNumber } from '@/utils/format-number';
 import { formatAge } from '@/utils/format-age';
+import TokenValueContainer from './token-value-container';
 
 type Props = {
   showTitle: boolean;
@@ -19,24 +17,47 @@ const TokenValue = (props: Props) => {
     <div className="container p-0 mx-auto">
       <div className="flex flex-wrap items-center justify-around gap-4">
         <div className={`${props.showTitle ? '' : 'hidden'} flex-1`}>
-          <TokenTitle
-            tokenImgUrl={
-              props.metadata?.imageSmallUrl
-                ? `/api/token/image?q=${props.metadata?.imageSmallUrl
-                    .split('/')
-                    .pop()}`
-                : `/icons/token-default.svg`
-            }
-            tokenName={props.metadata?.name}
-            tokenNetwork={props.metadata?.symbol}
-          />
+          <div className="col-span-1 flex items-center justify-between">
+            <div className="flex gap-2 items-center">
+              <Image
+                src={
+                  props.metadata?.imageSmallUrl
+                    ? `/api/token/image?q=${props.metadata?.imageSmallUrl
+                        .split('/')
+                        .pop()}`
+                    : `/icons/token-default.svg`
+                }
+                alt="token"
+                width={32}
+                height={32}
+              />
+              <h1 className="text-neutral-300 text-[24px] leading-[32px] font-600">
+                {props.metadata?.name}
+              </h1>
+              <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
+                {props.metadata?.symbol}
+              </h3>
+            </div>
+          </div>
         </div>
 
         <div className="flex-1">
-          <TokenPrice
-            price={`$${props?.liveData?.priceUsd}`}
-            profit={props?.liveData?.priceChange.h24}
-          />
+          <div className="flex items-center gap-4">
+            <h1 className="text-neutral-50 text-[28px] leading-[40px] font-[700]">
+              ${props?.liveData?.priceUsd}
+            </h1>
+            <div className="flex items-center">
+              <Image
+                src="/icons/profit.svg"
+                alt="profit"
+                width={7}
+                height={7}
+              />
+              <h5 className="text-green-600">
+                {props?.liveData?.priceChange.h24} %
+              </h5>
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-end flex-1">
@@ -83,19 +104,19 @@ const TokenValue = (props: Props) => {
         </div>
 
         <div className="flex flex-row flex-1 gap-2">
-          <TokenValueBox
+          <TokenValueContainer
             name="MCAP"
             value={formatNumber(props?.liveData?.fdv)}
           />
-          <TokenValueBox
+          <TokenValueContainer
             name="LIQUIDITY"
             value={formatNumber(props?.liveData?.liquidity.usd)}
           />
-          <TokenValueBox
+          <TokenValueContainer
             name="VOL (24H)"
             value={formatNumber(props?.liveData?.volume.h24)}
           />
-          <TokenValueBox
+          <TokenValueContainer
             name="AGE"
             value={formatAge(props?.liveData?.pairCreatedAt, true)}
           />

@@ -2,12 +2,12 @@ import { formatAddress } from '@/utils/format-address';
 
 import Image from 'next/image';
 import React from 'react';
-import SelectTopToken from './select-top-token';
+import SelectTopToken from '../select-top-token';
 import TotalTransactionTable from './total-transaction-table';
-import { tableHead, totalTransactionTableData } from './token-constant';
+import { tableHead, totalTransactionTableData } from '../token-constant';
 import Link from 'next/link';
 import { HoldersDemoData } from './demo-table-data';
-import TableHead from './table-head';
+import TableHead from '../table-head';
 
 const OwnerTable = ({ selected }: any) => {
   return (

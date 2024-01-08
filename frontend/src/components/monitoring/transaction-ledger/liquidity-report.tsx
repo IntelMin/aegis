@@ -1,7 +1,7 @@
-import React, { JSXElementConstructor, ReactNode } from "react";
-import { BubbleChart } from "./bubble-chart";
-import ClusterHold from "./cluster-hold";
-import { IoMdWarning } from "react-icons/io";
+import React, { JSXElementConstructor, ReactNode } from 'react';
+import ClusterHold from '../token-analytics/wallets-overview/cluster-hold';
+import { IoMdWarning } from 'react-icons/io';
+import { LiquidityReportChart } from './liquidity-report-chart';
 
 const LiquidityReport = ({ selected }: any) => {
   return (
@@ -22,13 +22,14 @@ const LiquidityReport = ({ selected }: any) => {
           </div>
 
           <div className="mt-3 p-4">
-          <BubbleChart type="LiquidityReport" />
+            <LiquidityReportChart />
           </div>
         </div>
         <div className="bg-zinc-900 text-[12px] text-white">
-          {" "}
+          {' '}
           <div className="p-2 bg-[#3F2828] opacity-70 border-[1px] flex gap-2 items-center border-red-500">
-           <IoMdWarning color="red"/> The top 10 clusters hold 80% of total supply.
+            <IoMdWarning color="red" /> The top 10 clusters hold 80% of total
+            supply.
           </div>
           <div className="p-2">
             <ClusterHold />

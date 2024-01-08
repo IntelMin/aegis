@@ -3,20 +3,42 @@ import { useEffect, useRef } from 'react';
 import { createChart, IChartApi } from 'lightweight-charts';
 
 interface TradingViewChartProps {
-  data: Array<{
-    time: string;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-  }>;
   chain: string;
   pair: string;
 }
 
-function TradingViewChart({ data, pair, chain }: TradingViewChartProps) {
+
+function TradingViewChart({ pair, chain }: TradingViewChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+
+  const generateCandlestickData = (startDate: string, count: number) => {
+    const data = [];
+    let date = new Date(startDate);
+    let previousClose = Math.random() * 100 + 100;
+  
+    for (let i = 0; i < count; i++) {
+      const open = previousClose;
+      const close = open + (Math.random() - 0.5) * 5;
+      const high = Math.max(open, close) + Math.random() * 2;
+      const low = Math.min(open, close) - Math.random() * 2;
+  
+      data.push({
+        time: date.toISOString().split('T')[0],
+        open,
+        high,
+        low,
+        close,
+      });
+  
+      previousClose = close;
+      date.setDate(date.getDate() + 1);
+    }
+  
+    return data;
+  };
+  
+  const candlestickData = generateCandlestickData('2018-12-22', 100);
 
   useEffect(() => {
     if (chartContainerRef.current && chartRef.current === null) {
@@ -48,7 +70,7 @@ function TradingViewChart({ data, pair, chain }: TradingViewChartProps) {
         wickDownColor: 'rgb(255,82,82)',
       });
 
-      candleSeries.setData(data);
+      candleSeries.setData(candlestickData);
 
       const volumeSeries = newChart.addHistogramSeries({
         color: '#26a69a',
@@ -67,7 +89,7 @@ function TradingViewChart({ data, pair, chain }: TradingViewChartProps) {
         chartRef.current = null;
       }
     };
-  }, [data]);
+  }, [candlestickData]);
 
   useEffect(() => {
     const handleResize = () => {

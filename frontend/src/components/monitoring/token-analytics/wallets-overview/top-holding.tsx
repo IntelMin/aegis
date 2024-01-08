@@ -1,7 +1,7 @@
 import React from 'react';
 import { GraphTypeHeader } from './graph-type-header';
 import Image from 'next/image';
-import { BubbleChart } from './bubble-chart';
+import { HoldingWalletChart } from './holding-wallet-chart';
 
 type Props = {
   choosenType: string;
@@ -16,7 +16,7 @@ export const TopHolding = ({ choosenType, handleTypeChange }: Props) => {
           choosenType={choosenType}
           handleTypeChange={handleTypeChange}
         />
-        <BubbleChart />
+        <HoldingWalletChart />
       </div>
       <div className="h-full col-span-1">
         <div className="w-full h-full p-2 bg-zinc-900">

@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectTrigger,
-  SelectValue,
   SelectItem,
-} from "@radix-ui/react-select";
-import { BiChevronDown } from "react-icons/bi";
+} from '@radix-ui/react-select';
+import { BiChevronDown } from 'react-icons/bi';
 
 const SelectTopToken = () => {
   return (
@@ -23,7 +22,7 @@ const SelectTopToken = () => {
           <SelectGroup>
             <SelectItem
               className="p-2 pl-3 uppercase outline-none cursor-pointer hover:bg-zinc-800"
-              value={"test"}
+              value={'test'}
             >
               <p className="text-white">hello</p>
             </SelectItem>

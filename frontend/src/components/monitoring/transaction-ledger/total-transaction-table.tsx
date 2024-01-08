@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import TableHead from './table-head';
+import TableHead from '../table-head';
 
 type Props = {
   tableHead: string[];

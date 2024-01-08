@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
   PointElement,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Bubble } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+} from 'chart.js';
+import { Bubble } from 'react-chartjs-2';
+import { faker } from '@faker-js/faker';
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
@@ -47,47 +47,33 @@ const generateRandomData = () => ({
 export const data = {
   datasets: [
     {
-      label: "First dataset",
+      label: 'First dataset',
       data: Array.from({ length: 10 }, generateRandomData),
-      backgroundColor: "rgba(255, 187, 11, 0.10)",
-      borderColor: "#FFBB0B",
+      backgroundColor: 'rgba(255, 187, 11, 0.10)',
+      borderColor: '#FFBB0B',
       borderWidth: 0.5,
     },
     {
-      label: "Second dataset",
+      label: 'Second dataset',
       data: Array.from({ length: 5 }, generateRandomData),
-      backgroundColor: "rgba(11, 255, 80, 0.10)",
-      borderColor: "#0BFF50",
+      backgroundColor: 'rgba(11, 255, 80, 0.10)',
+      borderColor: '#0BFF50',
       borderWidth: 0.5,
     },
     {
-      label: "Third dataset",
+      label: 'Third dataset',
       data: Array.from({ length: 5 }, generateRandomData),
-      backgroundColor: "rgba(37, 99, 235, 0.10)",
-      borderColor: "#2563EB",
+      backgroundColor: 'rgba(37, 99, 235, 0.10)',
+      borderColor: '#2563EB',
       borderWidth: 0.5,
     },
   ],
 };
 
-
-const LiquidityReportData = {
-  datasets: [
-    {
-      label: "Third dataset",
-      data: Array.from({ length: 30 }, generateRandomData),
-      backgroundColor: "rgba(37, 99, 235, 0.10)",
-      borderColor: "#2563EB",
-      borderWidth: 0.5,
-    },
-  ],
-};
-
-export const BubbleChart = (props: Props) => {
+export const HoldingWalletChart = (props: Props) => {
   return (
     <div className="w-full h-[320px]">
-      {props.type=== "LiquidityReport" ? <Bubble options={options} data={LiquidityReportData} />: <Bubble options={options} data={data} /> }
-      
+      <Bubble options={options} data={data} />
     </div>
   );
 };
