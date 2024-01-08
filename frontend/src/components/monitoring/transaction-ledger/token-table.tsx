@@ -3,14 +3,14 @@
 import Image from 'next/image';
 import React from 'react';
 import TotalTransactionTable from './total-transaction-table';
-import TableHead from './table-head';
+import TableHead from '../table-head';
 import {
   btnOption,
   tableHead,
   totalTransactionTableData,
   transactionTable,
   transactionTableHead,
-} from './token-constant';
+} from '../token-constant';
 import LiquidityReport from './liquidity-report';
 import HoldersTable from './holders-table';
 import TradersTable from './traders-table';

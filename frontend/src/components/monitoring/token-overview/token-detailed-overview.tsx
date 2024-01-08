@@ -1,12 +1,17 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
+import TokenInfoSet from './token-info-set';
+import TokenStatCard from './token-stat-card';
+import TokenSecurityScoreChart from '../token-security-score-chart';
+import { Link } from 'lucide-react';
+import Image from 'next/image';
 
-type Props = {};
-
-const TokenDescription = (props: Props) => {
+const TokenDetailOverView = () => {
   return (
     <div>
+      <TokenInfoSet />
+      {/* Token Status in Price */}
+      <TokenStatCard />
+      {/* Token Description */}
       <div>
         <h1 className="text-neutral-200 text-[16px] font-[600]">
           TOKEN DESCRIPTION
@@ -44,8 +49,10 @@ const TokenDescription = (props: Props) => {
           />
         </Link>
       </div>
+      {/* Token Gauge Chart  */}
+      <TokenSecurityScoreChart />
     </div>
   );
 };
 
-export default TokenDescription;
+export default TokenDetailOverView;

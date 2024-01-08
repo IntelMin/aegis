@@ -1,6 +1,6 @@
-import React from "react";
-import { GraphTypeHeader } from "./graph-type-header";
-import { DepthChart } from "./depth-chart";
+import React from 'react';
+import { GraphTypeHeader } from './graph-type-header';
+import { OrderBookGraph } from './order-book-graph';
 
 type Props = {
   choosenType: string;
@@ -14,7 +14,7 @@ export const OrderBook = ({ choosenType, handleTypeChange }: Props) => {
         choosenType={choosenType}
         handleTypeChange={handleTypeChange}
       />
-      <DepthChart />
+      <OrderBookGraph />
     </div>
   );
 };

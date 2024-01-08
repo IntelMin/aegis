@@ -1,16 +1,26 @@
-import React from "react";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import React, { useEffect, useState } from 'react';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import { Skeleton } from '@/components/ui/skeleton';
 
-type Props = {};
+export const OrderBookGraph = () => {
+  const [isLoading, setIsLoading] = useState(true);
 
-export const DepthChart = (props: Props) => {
+  useEffect(() => {
+    const loadData = async () => {
+      // Made this timeout to show the skeleton loading will remove when api is ready
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+
+    loadData();
+  }, []);
+
   const options = {
     chart: {
-      type: "area",
-      zoomType: "xy",
-      height: "320px",
-      backgroundColor: "rgba(0, 0, 0, 0)",
+      type: 'area',
+      zoomType: 'xy',
+      height: '320px',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     title: {
       text: null,
@@ -20,12 +30,12 @@ export const DepthChart = (props: Props) => {
       maxPadding: 0,
       plotLines: [
         {
-          color: "#888",
+          color: '#888',
           value: 0.1523,
           width: 1,
-          dashStyle: "dash",
+          dashStyle: 'dash',
           label: {
-            text: "Actual price",
+            text: 'Actual price',
             rotation: 90,
           },
         },
@@ -33,14 +43,14 @@ export const DepthChart = (props: Props) => {
       labels: {
         formatter: function (this: { value?: number | null }) {
           if (this.value != null) {
-            return "$ " + this.value.toFixed(2); // Format labels as currency numbers
+            return '$ ' + this.value.toFixed(2); // Format labels as currency numbers
           }
           return null; // Return null if value is undefined or null
         },
         style: {
-          fontSize: "14px",
+          fontSize: '14px',
           fontWeight: 400,
-          color: "#D4D4D4", // Set the font color
+          color: '#D4D4D4', // Set the font color
         },
       },
 
@@ -58,15 +68,15 @@ export const DepthChart = (props: Props) => {
         tickWidth: 0,
         minorTickLength: 0,
         tickLength: 0,
-        tickPosition: "inside",
+        tickPosition: 'inside',
         labels: {
-          align: "left",
+          align: 'left',
           x: 8,
           enabled: false,
           style: {
-            fontSize: "14px",
+            fontSize: '14px',
             fontWeight: 400,
-            color: "#D4D4D4", // Set the font color
+            color: '#D4D4D4', // Set the font color
           },
         },
       },
@@ -79,14 +89,14 @@ export const DepthChart = (props: Props) => {
         tickWidth: 0,
         minorTickLength: 0,
         tickLength: 5,
-        tickPosition: "inside",
+        tickPosition: 'inside',
         labels: {
-          align: "right",
+          align: 'right',
           x: -8,
           style: {
-            fontSize: "14px",
+            fontSize: '14px',
             fontWeight: 400,
-            color: "#D4D4D4", // Set the font color
+            color: '#D4D4D4', // Set the font color
           },
         },
       },
@@ -98,7 +108,7 @@ export const DepthChart = (props: Props) => {
       area: {
         fillOpacity: 0.2,
         lineWidth: 1,
-        step: "center",
+        step: 'center',
       },
     },
     tooltip: {
@@ -111,7 +121,7 @@ export const DepthChart = (props: Props) => {
     },
     series: [
       {
-        name: "Bids",
+        name: 'Bids',
         data: [
           [0.1524, 0.948665],
           [0.1539, 35.510715],
@@ -134,10 +144,10 @@ export const DepthChart = (props: Props) => {
           [0.16, 81.58156],
           [0.1608, 83.38156],
         ],
-        color: "#03a7a8",
+        color: '#03a7a8',
       },
       {
-        name: "Asks",
+        name: 'Asks',
         data: [
           [0.1435, 242.521842],
           [0.1436, 206.49862099999999],
@@ -160,10 +170,15 @@ export const DepthChart = (props: Props) => {
           [0.148, 9.326642],
           [0.1522, 3.76317],
         ],
-        color: "#fc5857",
+        color: '#fc5857',
       },
     ],
   };
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-[330px]" />;
+  }
+
   return (
     <div className="w-full translate-y-4">
       <HighchartsReact highcharts={Highcharts} options={options} />

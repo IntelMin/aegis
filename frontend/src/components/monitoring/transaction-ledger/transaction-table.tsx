@@ -1,9 +1,9 @@
-import React from "react";
-import TableHead from "./table-head";
+import React from 'react';
+import TableHead from '../table-head';
 import {
   transactionTablHeadType,
   transactionTableType,
-} from "./token-constant";
+} from '../token-constant';
 
 type Props = {
   transactionTableHead: transactionTablHeadType;
@@ -18,7 +18,7 @@ const TransactionTable = ({
     <table className="w-full">
       <TableHead tableHead={transactionTableHead} />
       <tbody>
-        {transactionTable?.map((item) => (
+        {transactionTable?.map(item => (
           <tr
             key={item?.id}
             className="w-full grid grid-cols-7 p-2 border-b border-zinc-800"
