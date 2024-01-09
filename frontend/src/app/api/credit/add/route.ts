@@ -32,18 +32,20 @@ export async function POST(req: NextRequest, res: Response) {
     const amount_in = Number(txn.value) / 10 ** 18;
     console.log(amount_in);
 
-    const credits_chart = [{ credits: 100, amount: 0.5 },
-    { credits: 230, amount: 1 },
-    { credits: 600, amount: 2 },]
+    const credits_chart = [
+      { credits: 100, amount: 0.5 },
+      { credits: 230, amount: 1 },
+      { credits: 600, amount: 2 },
+    ];
 
-    const credits = credits_chart.find((credit) => credit.amount === amount_in);
+    const credits = credits_chart.find(credit => credit.amount === amount_in);
 
     const user = await db.user.findFirst({ where: { email: email } });
     console.log(user);
     const data = {
       packageBought: packageName,
-      amountETH: amount_in,
-      creditsAdded: credits,
+      amount_eth: amount_in,
+      credits: credits,
       hash: hash,
       user: {
         connect: {
@@ -52,12 +54,12 @@ export async function POST(req: NextRequest, res: Response) {
       },
     };
 
-    const logtxn = await db.CreditPayment.create({
+    const logtxn = await db.credit_payment.create({
       data: {
-        amountETH: Number(amount_in),
-        creditsAdded: credits,
+        amount_eth: Number(amount_in),
+        credits: credits ? credits.credits : 0,
         hash: hash,
-        packageBought: packageName,
+        package: packageName,
         user: {
           connect: {
             id: user?.id,
@@ -65,12 +67,12 @@ export async function POST(req: NextRequest, res: Response) {
         },
       },
     });
-    const balanceUpdate = await db.CreditBalance.upsert({
+    const balanceUpdate = await db.credit_balance.upsert({
       where: {
-        userId: user?.id,
+        user_id: user?.id,
       },
       create: {
-        credits: credits,
+        credits: credits ? credits.credits : 0,
         user: {
           connect: {
             id: user?.id,
@@ -79,7 +81,7 @@ export async function POST(req: NextRequest, res: Response) {
       },
       update: {
         credits: {
-          increment: credits,
+          increment: credits ? credits.credits : 0,
         },
       },
     });
