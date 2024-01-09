@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, res: Response) {
     const amount_in = Number(txn.value) / 10 ** 18;
     console.log(amount_in);
 
-    const credits_chart = [{ credits: 100, amount: 0.1 },
+    const credits_chart = [{ credits: 100, amount: 0.5 },
     { credits: 230, amount: 1 },
     { credits: 600, amount: 2 },]
 

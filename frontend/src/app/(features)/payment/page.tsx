@@ -251,7 +251,7 @@ export default function PricingPage() {
   const plans = [
     {
       title: 'Starter',
-      ethPrice: 0.1,
+      ethPrice: 0.5,
       credits: 100,
       description: 'For quick audits and testing',
       features: [
