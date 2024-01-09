@@ -198,7 +198,7 @@ export default function PricingPage() {
   const { data: txn, sendTransaction: buy } = useSendTransaction({
     onSuccess: async txn => {
       console.log('success');
-      const res = await fetch('/api/credits/add', {
+      const res = await fetch('/api/credit/add', {
         method: 'POST',
         body: JSON.stringify({
           email: session?.data?.user?.email,
@@ -207,6 +207,7 @@ export default function PricingPage() {
           packageName: packageName,
         }),
       });
+
       console.log(res);
     },
   });
@@ -214,7 +215,7 @@ export default function PricingPage() {
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);
-      const res = await fetch('/api/credits/balance', {
+      const res = await fetch('/api/credit/balance', {
         method: 'POST',
         body: JSON.stringify({
           email: session?.data?.user?.email,
@@ -250,7 +251,7 @@ export default function PricingPage() {
   const plans = [
     {
       title: 'Starter',
-      ethPrice: 0.5,
+      ethPrice: 0.1,
       credits: 100,
       description: 'For quick audits and testing',
       features: [

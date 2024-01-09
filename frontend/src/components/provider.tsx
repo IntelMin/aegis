@@ -17,7 +17,7 @@ const { chains, publicClient } = configureChains(
 );
 const { connectors } = getDefaultWallets({
   appName: 'Aegis ai',
-  projectId: process.env.NEXT_PUBLIC_WALLET_PROJECT_ID || '',
+  projectId: process.env.NEXT_PUBLIC_WALLET_PROJECT_ID || ' ',
   chains,
 });
 export const wagmiConfig = createConfig({
