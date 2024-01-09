@@ -1,18 +1,9 @@
-import Navbar from '@/components/navbar';
-import Sidebar from '@/components/sidebar/sidebar';
+import Layout from '@/components/layout';
 
 export default function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Sidebar />
-      <div className="relative w-full">
-        <Navbar />
-        {children}
-      </div>
-    </>
-  );
+  return <Layout>{children}</Layout>;
 }

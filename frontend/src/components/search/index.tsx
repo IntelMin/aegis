@@ -47,7 +47,7 @@ const Search = (props: Props) => {
   return (
     <>
       <div
-        className="flex bg-zinc-900 border border-zinc-800 py-2 pl-2 pr-4 gap-2 min-w-[400px] w-fit"
+        className="flex bg-zinc-900 border border-zinc-800 py-2 max-md:px-2 md:pl-2 md:pr-4 gap-2 md:min-w-[400px] w-fit"
         onClick={handleClick}
       >
         <Image src="/icons/search.svg" alt="token" width={28} height={28} />
@@ -55,9 +55,9 @@ const Search = (props: Props) => {
           type="text"
           autoComplete="off"
           placeholder="Search or type a command"
-          className="w-[80%] text-[14px] text-white placeholder:text-neutral-600 border-none outline-none bg-transparent"
+          className="w-[80%] max-md:hidden text-[14px] text-white placeholder:text-neutral-600 border-none outline-none bg-transparent"
         />
-        <div className="flex gap-1 px-2 py-1 bg-black rounded-md">
+        <div className="flex gap-1 px-2 max-md:hidden py-1 bg-black rounded-md">
           <p className="text-white">⌘</p>
           <p className="text-white">K</p>
         </div>
