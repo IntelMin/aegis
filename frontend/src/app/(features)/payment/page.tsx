@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -53,13 +54,11 @@ const PricingHeader = ({
 );
 
 const PricingCard = ({
-  isYearly,
   title,
   ethPrice,
   credits,
   description,
   features,
-  actionLabel,
   popular,
   exclusive,
 }: PricingCardProps) => (
@@ -108,15 +107,7 @@ const PricingCard = ({
             <DialogDescription>Confirm your purchase</DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4 border-y border-gray-200 dark:border-gray-800">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right" htmlFor="customer-name">
-                Email
-              </Label>
-              <div className="col-span-3" id="customer-name">
-                based@aiaegis.com
-              </div>
-            </div>
+          <div className="grid gap-4 py-4 border-y border-zinc-200 dark:border-zinc-800">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right" htmlFor="invoice-number">
                 Package
@@ -143,7 +134,11 @@ const PricingCard = ({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="secondary">Cancel</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
             <Button type="submit">Confirm</Button>
           </DialogFooter>
         </DialogContent>
