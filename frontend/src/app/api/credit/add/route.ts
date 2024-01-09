@@ -12,7 +12,7 @@ export const publicClient = createPublicClient({
 export async function POST(req: NextRequest, res: Response) {
   const request = await req.json();
   const { email, amount, packageName, hash } = request;
-
+  console.log(request);
   const txn = await publicClient.getTransaction({
     hash: hash,
   });
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest, res: Response) {
     const txnr = await publicClient.waitForTransactionReceipt({
       hash: hash,
     });
+    console.log(txnr);
     if (txnr.status != 'success') {
       return NextResponse.json({ status: 'failed' });
     }
@@ -81,9 +82,8 @@ export async function POST(req: NextRequest, res: Response) {
         status: 'success',
         balance: balanceUpdate.credits,
       });
-    } else {
-      return NextResponse.json({ status: 'failed' });
     }
+    return NextResponse.json({ status: 'failed' });
   } else {
     return NextResponse.json({ status: 'failed' });
   }
