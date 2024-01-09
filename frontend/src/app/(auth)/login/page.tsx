@@ -55,7 +55,7 @@ const SignIn: FC<SignInProps> = ({}) => {
     const signInData = await signIn('credentials', {
       email: values.email,
       password: values.password,
-      redirect: false,
+      redirect: '/dashboard',
     });
 
     if (signInData?.error) {
@@ -65,9 +65,6 @@ const SignIn: FC<SignInProps> = ({}) => {
         description: 'Please check your email and password.',
       });
       setIsLoading(false);
-    } else {
-      router.refresh();
-      router.push('/dashboard');
     }
   };
 

@@ -17,7 +17,7 @@ const PendingContent = (user: any) => {
           <Image alt="user-icon" src="/icons/user.png" width={20} height={20} />
         </div>
         <h1 className="font-[600] text-[24px] leading-[48px] text-[#FFFFFF]">
-          Welcome, {user?.username}!
+          Welcome, {user.user.username}!
         </h1>
         <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
           Your account is pending

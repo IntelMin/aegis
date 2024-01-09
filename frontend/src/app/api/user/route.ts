@@ -58,6 +58,7 @@ export async function POST(req: Request) {
         username: true,
         email: true,
         role: true,
+        whitelisted: true,
       },
     });
 
