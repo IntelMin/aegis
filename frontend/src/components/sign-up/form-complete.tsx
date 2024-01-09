@@ -15,7 +15,7 @@ type FinishStepProps = {
   personalData: PersonalDataTypes;
   roleData: RoleDataTypes;
   socialData: SocialDataTypes;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 };
 
 const CompleteForm: React.FC<FinishStepProps> = ({
@@ -27,7 +27,7 @@ const CompleteForm: React.FC<FinishStepProps> = ({
   return (
     <div>
       <h2 className="pb-2 text-lg font-bold text-zinc-300">
-        Hey, {personalData.name}!
+        Hey, {personalData.username}!
       </h2>
       <div className="pb-2 text-md text-zinc-400">
         We&apos;re excited to have another{' '}
@@ -50,8 +50,8 @@ const CompleteForm: React.FC<FinishStepProps> = ({
       </p>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button type="submit">
-          <CheckIcon className="w-4 h-4 mr-2" onClick={onSubmit} />
+        <Button type="submit" onClick={onSubmit}>
+          <CheckIcon className="w-4 h-4 mr-2" />
           Confirm
         </Button>
       </div>

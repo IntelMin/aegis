@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 import {
   PersonalDataTypes,
   RoleDataTypes,
@@ -16,67 +17,16 @@ import RoleDetailsForm from '@/components/sign-up/form-role';
 import SocialDetailsForm from '@/components/sign-up/form-socials';
 import ProjectDetailsForm from '@/components/sign-up/form-project';
 import CompleteForm from '@/components/sign-up/form-complete';
-// import uploadImage from '@/utils/uploadImage';
-
-export type SignInData = {
-  email: string;
-  password: string;
-  password2: string;
-  project_name: string;
-  website: string;
-  token_address: string;
-  tele_account: string;
-  project_x: string;
-  project_insta: string;
-  role: string;
-  // individual
-  name: string;
-  twitter: string;
-  tele_id: string;
-  about: string;
-  // vc
-  vc_contact_name: string;
-  vc_email: string;
-  // team
-  project_email: string;
-  logo_url: File | null;
-  is_checked: boolean;
-};
-
-const init: SignInData = {
-  email: '',
-  password: '',
-  password2: '',
-  project_name: '',
-  website: '',
-  token_address: '',
-  tele_account: '',
-  project_x: '',
-  project_insta: '',
-  role: '',
-  // individual
-  name: '',
-  twitter: '',
-  tele_id: '',
-  about: '',
-  // vc
-  vc_contact_name: '',
-  vc_email: '',
-  // team
-  project_email: '',
-  logo_url: null,
-  is_checked: false,
-};
 
 const SignUpForm = () => {
   const { toast } = useToast();
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [personalData, setPersonalData] = useState<PersonalDataTypes>({
-    name: '',
+    username: '',
     email: '',
     password: '',
     password2: '',
-    bio: '',
   });
   const [roleData, setRoleData] = useState<RoleDataTypes>({ role: 1 });
   const [socialData, setSocialData] = useState<SocialDataTypes>({
@@ -104,34 +54,52 @@ const SignUpForm = () => {
   };
 
   const handleSubmit = async () => {
-    // const payload = {
-    //   ...signInData,
-    //   ...data,
-    // };
+    const payload = {
+      ...personalData,
+      ...roleData,
+      ...socialData,
+      ...projectData,
+    };
+
+    console.log(payload);
+
     // if (payload.logourl !== null) {
     //   payload.logourl = await uploadImage(payload.logourl);
     // }
-    // try {
-    //   const res = await fetch('/api/signup', {
-    //     method: 'POST',
-    //     body: JSON.stringify(payload),
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    //   if (res.status === 200) {
-    //     console.log('success');
-    //     // toast.success('Sign Up Successfull!');
-    //     router.push('/signin');
-    //   } else {
-    //     // toast.error(await res.text());
-    //   }
-    // } catch (err) {
-    //   if (err) {
-    //     console.log(err);
-    //     // toast.error('Sign Up Failed!');
-    //   }
-    // }
+    try {
+      const res = await fetch('/api/user', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status === 201) {
+        console.log('success');
+        toast({
+          title: 'Success',
+          description: 'Your account has been created!',
+          duration: 5000,
+        });
+        router.replace('/login');
+      } else {
+        router.replace('/sign-up');
+        toast({
+          title: 'Error',
+          description: 'Your account has not been created!',
+          duration: 3000,
+        });
+      }
+    } catch (err) {
+      if (err) {
+        router.replace('/sign-up');
+        toast({
+          title: 'Error',
+          description: 'Your account has not been created!',
+          duration: 3000,
+        });
+      }
+    }
   };
 
   // Render form based on the current step
@@ -174,7 +142,7 @@ const SignUpForm = () => {
             />
           );
         }
-      case 5: // Assuming step 5 is your finish step
+      case 5:
         return (
           <CompleteForm
             personalData={personalData}

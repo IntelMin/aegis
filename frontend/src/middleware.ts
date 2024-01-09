@@ -4,12 +4,11 @@ import { NextResponse } from 'next/server';
 const allowedPaths: (string | RegExp)[] = [
   '/login',
   '/sign-up',
-  '/api/user',
-  '/api/auth/session',
-  '/api/auth/__log',
-  //   /^\/api\/auth\/.*/, // RegExp for wildcard
-  /^\/icons\/.*/, // RegExp for wildcard
-  /^\/background\/.*/, // RegExp for wildcard
+  /^\/api\/.*/,
+  /\.png$/,
+  /\.svg$/,
+  /\.css$/,
+  /\.ico$/,
 ];
 
 function isPathAllowed(
@@ -30,9 +29,13 @@ const middleware = withAuth(
     const pathname = request.nextUrl?.pathname;
     console.log({ token, pathname });
 
+    if (pathname === '/logout' || pathname === '/pending') {
+      return NextResponse.next();
+    }
+
     if (token) {
-      if (!token.whitelisted) {
-        const pending = new URL('/pending', request.nextUrl?.origin);
+      if (!token.whitelisted && pathname !== '/pending') {
+        const pending = new URL('/pending', request.nextUrl.origin);
         return NextResponse.redirect(pending.toString());
       } else {
         return NextResponse.next();
