@@ -1,67 +1,87 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model user {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String   @unique
-  password  String
-  whitelisted Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+    id              Int              @id @default(autoincrement())
+    email           String           @unique
+    username        String           @unique
+    password        String
+    role            Int              @default(1)
+    whitelisted     Boolean          @default(false)
+    created_at      DateTime         @default(now())
+    updated_at      DateTime         @default(now())
+    user_meta       user_meta?
+    credit_balances credit_balance[]
+    credit_payments credit_payment[]
 }
+
 model user_meta {
-  id              Int      @id @default(autoincrement())  
-  user_id         Int       @unique    
-  user_name       String?   @unique  
-  bio             String?   
-  social_twitter  String?   @unique
-  social_telegram String?   @unique
-  project_name    String?
-  project_logo    String?
-  project_email   String?
-  project_website String?
-  project_twitter String?
-  project_telegram String?
-  project_insta String?
+    id                Int     @id @default(autoincrement())
+    user_id           Int     @unique
+    social_twitter    String?
+    social_telegram   String?
+    social_discord    String?
+    social_instagram  String?
+    project_name      String?
+    project_logo      String?
+    project_email     String?
+    project_website   String?
+    project_twitter   String?
+    project_telegram  String?
+    project_instagram String?
+    user              user    @relation(fields: [user_id], references: [id])
+}
+
+model credit_balance {
+    id      Int  @id @default(autoincrement())
+    user_id Int  @unique
+    credits Int  @default(0)
+    user    user @relation(fields: [user_id], references: [id])
+
+    @@index([user_id], name: "idx_credit_balance_user")
+}
+
+model credit_payment {
+    id         Int      @id @default(autoincrement())
+    user_id    Int
+    package    String
+    amount_eth Float
+    credits    Int
+    hash       String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    user       user     @relation(fields: [user_id], references: [id])
+
+    @@index([user_id], name: "idx_credit_payment_user")
 }
 
 model audit_requests {
-  request_id  Int      @id @default(autoincrement())
-  contract    String   @unique
-  status      String   @db.VarChar(50)
-  status_log  String?
-  created_on  DateTime @default(now())
-  updated_on  DateTime @default(now())
+    request_id Int      @id @default(autoincrement())
+    contract   String   @unique
+    status     String   @db.VarChar(50)
+    status_log String?
+    created_on DateTime @default(now())
+    updated_on DateTime @default(now())
 
-  @@map(name: "audit_requests")
+    @@map(name: "audit_requests")
 }
 
 model report_requests {
-  id          Int      @id @default(autoincrement())
-  user_id     Int
-  address     String
-  status      String?
-  link        String?
-  created_at  DateTime @default(now())
-  updated_on  DateTime @default(now())
+    id         Int      @id @default(autoincrement())
+    user_id    Int
+    address    String
+    status     String?
+    link       String?
+    created_at DateTime @default(now())
+    updated_on DateTime @default(now())
 
-  @@map(name: "report_requests")
-}
-
-model subscriptions {
-  id          Int      @id @default(autoincrement())
-  user_id     Int
-  paid_token  String
-  created_at  DateTime @default(now())
-
-  @@map(name: "subscriptions")
+    @@map(name: "report_requests")
 }

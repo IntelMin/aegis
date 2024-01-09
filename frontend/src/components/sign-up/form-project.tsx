@@ -11,71 +11,12 @@ import {
   FormControl,
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-
-type ProjectDetailsData = {
-  project_name: string;
-  project_website: string;
-  project_telegram: string;
-  project_twitter: string;
-  project_instagram: string;
-  project_discord: string;
-  project_logo: string;
-};
-
-const projectDetailsSchema = z
-  .object({
-    project_name: z.string().min(1, 'Project name is required'),
-    project_website: z
-      .string()
-      .url('Invalid URL format')
-      .min(1, 'Project website is required'),
-    project_telegram: z
-      .string()
-      .min(3, 'Telegram username must be at least 3 characters')
-      .optional(),
-    project_twitter: z
-      .string()
-      .min(3, 'Twitter username must be at least 3 characters')
-      .optional(),
-    project_instagram: z
-      .string()
-      .min(3, 'Instagram username must be at least 3 characters')
-      .optional(),
-    project_discord: z
-      .string()
-      .min(3, 'Discord username must be at least 3 characters')
-      .optional(),
-    project_logo: z
-      .string()
-      .url('Invalid URL format')
-      .min(1, 'Project logo is required'),
-  })
-  .refine(
-    data => {
-      return (
-        data.project_telegram ||
-        data.project_twitter ||
-        data.project_instagram ||
-        data.project_discord
-      );
-    },
-    {
-      message:
-        'At least one social media contact (Telegram, Twitter, Instagram, or Discord) is required',
-      path: [
-        'project_telegram',
-        'project_twitter',
-        'project_instagram',
-        'project_discord',
-      ],
-    }
-  );
+import { ProjectDataTypes, projectDetailsSchema } from './types';
 
 type ProjectDetailsFormProps = {
-  data: ProjectDetailsData;
-  setData: (data: ProjectDetailsData) => void;
+  data: ProjectDataTypes;
+  setData: (data: ProjectDataTypes) => void;
   nextStep: () => void;
   prevStep: () => void;
 };
@@ -86,7 +27,7 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
   nextStep,
   prevStep,
 }) => {
-  const form = useForm<ProjectDetailsData>({
+  const form = useForm<ProjectDataTypes>({
     resolver: zodResolver(projectDetailsSchema),
     defaultValues: data,
   });
@@ -95,123 +36,144 @@ const ProjectDetailsForm: React.FC<ProjectDetailsFormProps> = ({
     form.reset(data);
   }, [data, form]);
 
-  const onSubmit = (formData: ProjectDetailsData) => {
+  const onSubmit = (formData: ProjectDataTypes) => {
     setData(formData);
     nextStep();
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="project_name"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Project Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Name of the project" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <div className="flex items-center justify-center flex-col h-[90%] px-[10px] mb-8">
+        <h1 className="font-[600] text-[24px] leading-[48px] text-[#FFFFFF]">
+          What&apos;s cooking?
+        </h1>
+        <p className="font-[400] text-[14px] leading-[24px] text-[#A6A6A6]">
+          Tell us what you&apos;re working on
+        </p>
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="project_name"
+            render={({ field }: { field: any }) => (
+              <FormItem>
+                <FormLabel>Project Name</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Name of the project" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="project_website"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Project Website</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Website" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="project_website"
+            render={({ field }: { field: any }) => (
+              <FormItem>
+                <FormLabel>Project Website</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Website" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="project_twitter"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>X</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="X (formerly twitter)" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <div className="flex flex-wrap -mx-2">
+            <div className="w-1/2 px-2 py-2">
+              <FormField
+                control={form.control}
+                name="project_twitter"
+                render={({ field }: { field: any }) => (
+                  <FormItem>
+                    <FormLabel>X</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="X (formerly twitter)" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <FormField
-          control={form.control}
-          name="project_telegram"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Telegram</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Telegram" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <div className="w-1/2 px-2 py-2">
+              <FormField
+                control={form.control}
+                name="project_telegram"
+                render={({ field }: { field: any }) => (
+                  <FormItem>
+                    <FormLabel>Telegram</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Telegram" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <FormField
-          control={form.control}
-          name="project_discord"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Discord</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Discord" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <div className="w-1/2 px-2 py-2">
+              <FormField
+                control={form.control}
+                name="project_discord"
+                render={({ field }: { field: any }) => (
+                  <FormItem>
+                    <FormLabel>Discord</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Discord" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <FormField
-          control={form.control}
-          name="project_instagram"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Instagram</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Instagram" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="project_logo"
-          render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Logo</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Logo" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <div className="w-1/2 px-2 py-2">
+              <FormField
+                control={form.control}
+                name="project_instagram"
+                render={({ field }: { field: any }) => (
+                  <FormItem>
+                    <FormLabel>Instagram</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Instagram" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="outline" className="mr-4">
-            <ChevronLeftIcon className="w-4 h-4 mr-2" onClick={prevStep} /> Back
-          </Button>
+          <FormField
+            control={form.control}
+            name="project_logo"
+            render={({ field }: { field: any }) => (
+              <FormItem>
+                <FormLabel>Logo</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Logo" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <Button variant="secondary" type="submit">
-            Next
-            <ChevronRightIcon className="w-4 h-4 ml-2" onClick={prevStep} />
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant="outline" className="mr-4" onClick={prevStep}>
+              <ChevronLeftIcon className="w-4 h-4 mr-2" /> Back
+            </Button>
+
+            <Button variant="secondary" onClick={form.handleSubmit(onSubmit)}>
+              Next
+              <ChevronRightIcon className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 };
 

@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
         email: {
           label: 'email',
           type: 'email',
-          placeholder: 'jsmith@gmail.com',
+          placeholder: 'based@aiaegis.org',
         },
         password: { label: 'Password', type: 'password' },
       },
@@ -47,6 +47,7 @@ export const authOptions: NextAuthOptions = {
           id: `${existingUser.id}`,
           username: existingUser.username,
           email: existingUser.email,
+          role: existingUser.role,
           whitelisted: existingUser.whitelisted,
         };
       },
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           username: user.username,
+          role: user.role,
           whitelisted: user.whitelisted,
         };
       }
@@ -71,7 +73,8 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           username: token.username,
-          whitelist: token.whitelist,
+          role: token.role,
+          whitelisted: token.whitelisted,
         },
       };
     },

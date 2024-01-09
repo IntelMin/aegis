@@ -14,12 +14,7 @@ import {
 } from '@/components/ui/form';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { RoleDataTypes } from './types';
-
-const roleDataSchema = z.object({
-  role: z.number().min(1, 'Role is required').max(5, 'Role is required'),
-});
+import { RoleDataTypes, roleDataSchema } from './types';
 
 type RoleDataFormProps = {
   data: RoleDataTypes;
@@ -241,13 +236,13 @@ const RoleDetailsForm: React.FC<RoleDataFormProps> = ({
                       <Image
                         width={22}
                         height={22}
-                        src="/icons/social-web.svg"
+                        src="/icons/role/vc.svg"
                         alt="vc"
                         style={
                           field.value === 5
                             ? {
                                 filter:
-                                  'invert(100%) brightness(150%) contrast(100%)',
+                                  'invert(100%) brightness(1000%) contrast(100%)',
                               }
                             : {}
                         }
@@ -261,14 +256,13 @@ const RoleDetailsForm: React.FC<RoleDataFormProps> = ({
           />
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="outline" className="mr-4">
-              <ChevronLeftIcon className="w-4 h-4 mr-2" onClick={prevStep} />{' '}
-              Back
+            <Button variant="outline" className="mr-4" onClick={prevStep}>
+              <ChevronLeftIcon className="w-4 h-4 mr-2" /> Back
             </Button>
 
-            <Button variant="secondary" type="submit">
+            <Button variant="secondary" onClick={form.handleSubmit(onSubmit)}>
               Next
-              <ChevronRightIcon className="w-4 h-4 ml-2" onClick={prevStep} />
+              <ChevronRightIcon className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </form>

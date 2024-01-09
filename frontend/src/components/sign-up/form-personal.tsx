@@ -11,21 +11,11 @@ import {
   FormControl,
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { PersonalDataTypes } from './types';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
-
-const personalDetailsSchema = z
-  .object({
-    name: z.string().min(1, 'Name is required'),
-    email: z.string().email('Invalid email format').min(1, 'Email is required'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    password2: z.string().min(1, 'Please confirm your password'),
-  })
-  .refine(data => data.password === data.password2, {
-    message: "Passwords don't match",
-    path: ['password2'],
-  });
+import {
+  PersonalDataTypes,
+  personalDetailsSchema,
+} from '@/components/sign-up/types';
 
 type PersonalDetailsFormProps = {
   data: PersonalDataTypes;
@@ -67,12 +57,12 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="name"
+            name="username"
             render={({ field }: { field: any }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Name" />
+                  <Input {...field} placeholder="Username" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,9 +116,9 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
           />
 
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="secondary" type="submit">
+            <Button variant="secondary" onClick={form.handleSubmit(onSubmit)}>
+              <ChevronRightIcon className="w-4 h-4 mr-2" />
               Next
-              <ChevronRightIcon className="w-4 h-4 ml-2" onClick={nextStep} />
             </Button>
           </div>
         </form>

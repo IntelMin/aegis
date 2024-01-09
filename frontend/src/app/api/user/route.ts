@@ -1,67 +1,76 @@
-import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
-import { hash } from "bcrypt";
-import * as z from "zod";
+import { db } from '@/lib/db';
+import { NextResponse } from 'next/server';
+import { hash } from 'bcrypt';
+import {
+  personalDetailsSchema,
+  roleDataSchema,
+  socialDetailsSchema,
+  projectDetailsSchema,
+} from '@/components/sign-up/types';
 
-const userSchema = z.object({
-  username: z.string().min(1, "Username is required").max(100),
-  email: z.string().min(1, "Email is required").email("Invalid email"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Password must have than 8 characters"),
-});
+const baseSchema = personalDetailsSchema
+  .and(roleDataSchema)
+  .and(socialDetailsSchema);
+
+const userSchema = baseSchema.refine(
+  data => {
+    if (data.role === 3 || data.role === 4) {
+      return projectDetailsSchema.safeParse(data).success;
+    }
+    return true;
+  },
+  {
+    message: 'Invalid project details for the specified role',
+  }
+);
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { username, email, password } = userSchema.parse(body);
-    console.log({ username, email, password });
-    const existingUsername = await db.user.findUnique({
-      where: { username: username },
+    const { username, email, password, password2, role, ...metaFields } =
+      userSchema.parse(body);
+
+    // Check for existing username and email
+    const existingUser = await db.user.findFirst({
+      where: { OR: [{ username }, { email }] },
     });
-    if (existingUsername) {
+    if (existingUser) {
       return NextResponse.json(
-        {
-          user: null,
-          message: "username already exist",
-        },
+        { user: null, message: 'Username or email already exists' },
         { status: 409 }
       );
     }
 
-    const existingEmail = await db.user.findUnique({
-      where: { email: email },
-    });
-    if (existingEmail) {
-      return NextResponse.json(
-        {
-          user: null,
-          message: "email already exist",
-        },
-        { status: 409 }
-      );
-    }
-
+    // Create user
     const hashedPassword = await hash(password, 10);
-
     const newUser = await db.user.create({
-      data: { username, email, password: hashedPassword },
-    });
-    const { password: newUserPassword, ...rest } = newUser;
-    console.log({ newUser })
-    return NextResponse.json(
-      {
-        user: rest,
-        message: "user created succesfully",
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        role,
+        user_meta: {
+          create: metaFields,
+        },
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    console.log({ newUser });
+    return NextResponse.json(
+      { user: newUser, message: `You're signed up!` },
       { status: 201 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
-      {
-        message: "something went error",
-      },
+      //   { message: 'An error occurred' },
+      { message: error },
       { status: 500 }
     );
   }

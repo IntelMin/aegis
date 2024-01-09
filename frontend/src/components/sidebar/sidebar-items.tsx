@@ -12,13 +12,19 @@ type Props = {
     icon: boolean;
   };
   open: number;
+  setShow?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SidebarItems = ({ item, open }: Props) => {
+const SidebarItems = ({ item, open, setShow }: Props) => {
   const pathName = usePathname();
   return (
     <Link
       href={`/${item?.href}`}
+      onClick={() => {
+        if (setShow) {
+          setShow(false);
+        }
+      }}
       className={`hover:border-l-[2px] hover:bg-zinc-900 hover:border-blue-600 transition-all ease-in duration-250 flex items-center gap-2 py-3  ${
         item?.href === `${pathName?.split('/')[1]}`
           ? 'border-l-[2px] border-blue-600 bg-zinc-900'
