@@ -29,12 +29,12 @@ const middleware = withAuth(
     const pathname = request.nextUrl?.pathname;
     console.log({ token, pathname });
 
-    if (pathname === '/logout' || pathname === '/pending') {
+    if (pathname.startsWith('/logout') || pathname.startsWith('/pending')) {
       return NextResponse.next();
     }
 
     if (token) {
-      if (!token.whitelisted && pathname !== '/pending') {
+      if (!token.whitelisted && pathname.startsWith('/logout') === false) {
         const pending = new URL('/pending', request.nextUrl.origin);
         return NextResponse.redirect(pending.toString());
       } else {
