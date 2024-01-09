@@ -9,9 +9,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-  const balance = await db.CreditBalance.findUnique({
-    where: { userId: user.id },
+  const balance = await db.credit_balance.findUnique({
+    where: { user_id: user.id },
   });
   console.log(balance);
-  return NextResponse.json({ balance: balance.credits }, { status: 200 });
+  return NextResponse.json({ balance: balance?.credits ?? 0 }, { status: 200 });
 }

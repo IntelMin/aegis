@@ -1,16 +1,18 @@
-import NextAuth from "next-auth";
+import NextAuth from 'next-auth';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface User {
     username: string;
+    role: number;
+    whitelisted: boolean;
   }
 
   interface Session {
-    user: User & {
-      username: string;
-    };
+    user: User;
     token: {
       username: string;
+      role: number;
+      whitelisted: boolean;
     };
   }
 }
