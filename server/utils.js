@@ -256,15 +256,25 @@ async function definedRequest(graphql) {
   return null;
 }
 
-async function bitqueryRequest(graphql) {
-  const response = await axiospostapi('https://graphql.bitquery.io', graphql, {
+async function bitqueryRequest(data, type) {
+  let bitqueryURL = null;
+  if (type == 1) bitqueryURL = 'https://graphql.bitquery.io';
+  else if (type == 2) bitqueryURL = 'https://streaming.bitquery.io/graphql';
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: bitqueryURL,
     headers: {
       'Content-Type': 'application/json',
       'X-API-KEY': process.env.BITQUERY_API_KEY,
       Authorization:
-        'Bearer ory_at_CS4A3FafgB732O_SVGViUK3M4hdD7WtdWgkDRbMPFGA.PYXK0nQJw6RQAgpiVAWbTFG5oiF48Eg8bYMT0xGF2so',
+        'Bearer ory_at_o5VxYQ43EQg-JJfmeoIggpAlOag6upBXnVWIKPqV_UI.r6NsnWW78a9ChmHgVf3qVLnm3ifH727rPTRA1on38Ks',
     },
-  });
+    data: data,
+  };
+
+  const response = await axios.request(config);
 
   if (response && response.data) {
     if (response.data) {

@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { bitqueryRequest } = require('../../utils');
 
-const getData = async query => {
-  const response = await bitqueryRequest(query);
+const getData = async (data, type) => {
+  const response = await bitqueryRequest(data, type);
 
   if (response == null) {
     throw new Error('wrong respond');
@@ -18,21 +18,40 @@ router.post('/get-token-price-usdt', async (req, res) => {
 
   if (token && usdtAddress) {
     res.status(200).send(
-      await getData({
-        query:
-          'query getTokenPriceUSDT($token: String!, $usdtAddress: String!) {\n  ethereum {\n    dexTrades(\n      baseCurrency: {is: $token}\n      quoteCurrency: {is: $usdtAddress}\n      options: {desc: ["block.height", "transaction.index"], limit: 1}\n    ) {\n      block {\n        height\n        timestamp {\n          time(format: "%Y-%m-%d %H:%M:%S")\n        }\n      }\n      transaction {\n        index\n      }\n      baseCurrency {\n        symbol\n      }\n      quoteCurrency {\n        symbol\n      }\n      quotePrice\n    }\n  }\n}\n',
-        variables: {
-          token: token,
-          usdtAddress: usdtAddress,
+      await getData(
+        {
+          query:
+            'query getTokenPriceUSDT($token: String!, $usdtAddress: String!) {\n  ethereum {\n    dexTrades(\n      baseCurrency: {is: $token}\n      quoteCurrency: {is: $usdtAddress}\n      options: {desc: ["block.height", "transaction.index"], limit: 1}\n    ) {\n      block {\n        height\n        timestamp {\n          time(format: "%Y-%m-%d %H:%M:%S")\n        }\n      }\n      transaction {\n        index\n      }\n      baseCurrency {\n        symbol\n      }\n      quoteCurrency {\n        symbol\n      }\n      quotePrice\n    }\n  }\n}\n',
+          variables: {
+            token: token,
+            usdtAddress: usdtAddress,
+          },
         },
-      })
+        1
+      )
     );
   } else {
     res.status(500).send('Invalid Parameter');
   }
 });
 
-router.get('/top-holders', async (req, res) => {});
+router.post('/token-holders-for-usdt', async (req, res) => {
+  const count = req.body.count;
+  const date = req.body.date;
+  const tokenSmartContract = req.body.tokenSmartContract;
+
+  if (count && date && tokenSmartContract) {
+    let data = JSON.stringify({
+      query:
+        '{\n  EVM(dataset: archive, network: eth) {\n    TokenHolders(\n      orderBy: {descending: Balance_Amount}\n      limit: {count: 10}\n      date: "2023-12-22"\n      tokenSmartContract: "0xdac17f958d2ee523a2206206994597c13d831ec7"\n    ) {\n      Holder {\n        Address\n      }\n      Balance {\n        Amount\n      }\n    }\n  }\n}\n',
+      variables: '{}',
+    });
+
+    res.status(200).send(await getData(data, 2));
+  } else {
+    res.status(500).send('Invalid Parameter');
+  }
+});
 
 router.get('/hoders', async (req, res) => {});
 
