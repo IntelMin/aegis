@@ -60,8 +60,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           username: user.username,
-          role: user.role,
-          whitelisted: user.whitelisted,
         };
       }
 
@@ -73,8 +71,6 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           username: token.username,
-          role: token.role,
-          whitelisted: token.whitelisted,
         },
       };
     },
