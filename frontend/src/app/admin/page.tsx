@@ -9,11 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { getServerSession } from 'next-auth';
+
 import { useSession } from 'next-auth/react';
-import { FC, use, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 interface AdminProps {}
 interface UserstableProps {
@@ -37,13 +35,13 @@ const Admin: FC<AdminProps> = ({}) => {
       },
       body: JSON.stringify({ user_id }),
     });
-    console.log(toggle);
     if (!toggle.ok) {
-      console.log('error');
     } else {
       setUserstable(prevUsers =>
         prevUsers?.map(user =>
-          user.id === user_id ? { ...user, whitelisted: true } : user
+          user.id === user_id
+            ? { ...user, whitelisted: !user.whitelisted }
+            : user
         )
       );
     }
@@ -58,11 +56,14 @@ const Admin: FC<AdminProps> = ({}) => {
         },
       });
       const data = await users.json();
-      console.log(data);
       setUserstable(data);
     }
     getUsers();
   }, []);
+
+  useEffect(() => {
+    console.log('this is my user table', userstable);
+  }, [userstable]);
 
   if (session?.user) {
     return (
@@ -92,57 +93,27 @@ const Admin: FC<AdminProps> = ({}) => {
                 </TableHead>
               </TableHeader>
               <TableBody>
-                <TableRow className="grid grid-cols-3 items-center border-b-1 ">
-                  {' '}
-                  <TableCell className="py-2 px-4 text-neutral-100 text-center">
-                    Yuvraj Jwala
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-neutral-200 text-center">
-                    yuvrajjwala@gmail.com
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-green-400 text-center">
-                    <Switch
-                      checked={true}
-                      // onCheckedChange={toggleWhiteList}
-                      aria-readonly
-                    />
-                  </TableCell>
-                </TableRow>
-
-                <TableRow className="grid grid-cols-3 items-center border-b border-1 bg-[#0E0E0E]">
-                  {' '}
-                  <TableCell className="py-2 px-4 text-neutral-100 text-center">
-                    Kyono Suke
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-neutral-200 text-center">
-                    Kyono@gmail.com
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-green-400 text-center">
-                    <Switch
-                      checked={false}
-                      // onCheckedChange={toggleWhiteList}
-                      aria-readonly
-                    />
-                  </TableCell>
-                </TableRow>
-
-                <TableRow className="grid grid-cols-3 items-center border-b-1 ">
-                  {' '}
-                  <TableCell className="py-2 px-4 text-neutral-100 text-center">
-                    Aslam Mod.
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-neutral-200 text-center">
-                    aslam@gmail.com
-                  </TableCell>
-                  <TableCell className="py-2 px-4 text-green-400 text-center">
-                    <Switch
-                      checked={true}
-                      onClick={() => toggleWhiteList(1)}
-                      // onCheckedChange={toggleWhiteList}
-                      aria-readonly
-                    />
-                  </TableCell>
-                </TableRow>
+                {userstable?.map(user => (
+                  <TableRow
+                    key={user.email}
+                    className="grid grid-cols-3 items-center border-b-1 "
+                  >
+                    {' '}
+                    <TableCell className="py-2 px-4 text-neutral-100 text-center">
+                      {user.username}
+                    </TableCell>
+                    <TableCell className="py-2 px-4 text-neutral-200 text-center">
+                      {user.email}
+                    </TableCell>
+                    <TableCell className="py-2 px-4 text-green-400 text-center">
+                      <Switch
+                        checked={user.whitelisted}
+                        onCheckedChange={() => toggleWhiteList(user.id)}
+                        aria-readonly
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </div>
