@@ -26,6 +26,7 @@ const TokenAuditorForm = (props: Props) => {
 
     if (!isFetching && tokenRequestInfo && !error) {
       setSubmitting(false);
+
       router.push(`/audit/token/${submittedAddress}`);
     }
 

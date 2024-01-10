@@ -32,9 +32,13 @@ export const authOptions: NextAuthOptions = {
         const existingUser = await db.user.findUnique({
           where: { email: credentials?.email },
         });
+
         if (!existingUser) {
           return null;
         }
+        const user_credit = await db.credit_balance.findFirst({
+          where: { user_id: existingUser.id },
+        });
         const passwordMatch = await compare(
           credentials.password,
           existingUser.password
@@ -49,17 +53,25 @@ export const authOptions: NextAuthOptions = {
           email: existingUser.email,
           role: existingUser.role,
           whitelisted: existingUser.whitelisted,
+          credits: user_credit ? user_credit.credits : 0,
         };
       },
     }),
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, session, trigger }) {
+      if (trigger === 'update' && session.user.credits) {
+        return {
+          ...token,
+          credits: session.user.credits,
+        };
+      }
       if (user) {
         return {
           ...token,
           username: user.username,
+          credits: token.credits,
         };
       }
 
@@ -71,6 +83,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           username: token.username,
+          credits: token.credits,
         },
       };
     },

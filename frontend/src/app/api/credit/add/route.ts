@@ -63,6 +63,7 @@ export async function POST(req: NextRequest, res: Response) {
         user: {
           connect: {
             id: user?.id,
+            email: email,
           },
         },
       },
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest, res: Response) {
         user: {
           connect: {
             id: user?.id,
+            email: email,
           },
         },
       },

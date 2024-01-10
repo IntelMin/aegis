@@ -5,8 +5,10 @@ import DashboardDataTable from '@/components/dashboard/dashboard-table';
 import DropdownFilter from '@/components/dashboard/dashboard-filter';
 import TokenMarquee from '@/components/dashboard/token-marquee';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 const Dashboard = () => {
+  const session = useSession();
   //   const [collections, setCollections] = useState<CollectionProps[]>([]);
   const [time, setTime] = useState('1D');
   const [tableData, setTableData] = useState([]);

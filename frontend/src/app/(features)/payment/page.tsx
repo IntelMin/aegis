@@ -209,6 +209,9 @@ export default function PricingPage() {
       });
 
       console.log(res);
+      const data = await res.json();
+      setBalance(data?.balance);
+      session.update({ ...session.data, credits: data?.balance });
     },
   });
 
@@ -223,16 +226,13 @@ export default function PricingPage() {
       });
       const data = await res.json();
       setBalance(data?.balance);
+      session.update({ ...session.data, credits: data?.balance });
     };
     if (session?.data?.user?.email) {
       getBalance();
     }
   }, [session?.data?.user?.email]);
-  const {
-    isError,
-    isSuccess,
-    fetchStatus: waittx,
-  } = useWaitForTransaction({ hash: txn?.hash });
+
   const handleConfirm = async () => {
     console.log('confirm');
     setLoading(true);

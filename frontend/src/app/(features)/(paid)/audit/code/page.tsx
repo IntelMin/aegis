@@ -1,18 +1,36 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import CodeEditor from '@/components/audit/code-editor';
+import { useSession } from 'next-auth/react';
 
 const CodeAudit = () => {
   const { toast } = useToast();
-
+  const session = useSession();
   const [activeComponent, setActiveComponent] =
     React.useState<string>('contractCode');
   const [ContractCode, setContractCode] = React.useState<string>('');
   const [findings, setFindings] = React.useState<any>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [balance, setBalance] = React.useState<number>(0);
+  useEffect(() => {
+    const getBalance = async () => {
+      console.log(session?.data?.user?.email);
+      const res = await fetch('/api/credit/balance', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: session?.data?.user?.email,
+        }),
+      });
+      const data = await res.json();
+      setBalance(data?.balance);
+    };
+    if (session?.data?.user?.email) {
+      getBalance();
+    }
+  }, [session?.data?.user?.email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
