@@ -1,3 +1,5 @@
+'use client';
+
 import { Switch } from '@/components/ui/switch';
 import {
   Table,
@@ -8,17 +10,59 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { authOptions } from '@/lib/auth';
+import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { FC } from 'react';
+import { useSession } from 'next-auth/react';
+import { FC, use, useEffect, useState } from 'react';
 
 interface AdminProps {}
-
-const Admin: FC<AdminProps> = async ({}) => {
-  const session = await getServerSession(authOptions);
-
-  function toggleWhiteList() {
-    // ADD WHITELIST FUNCTION HERE ASLAM
-  }
+interface UserstableProps {
+  id: number;
+  username: string;
+  email: string;
+  whitelisted: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+const Admin: FC<AdminProps> = ({}) => {
+  const { data: session } = useSession();
+  const [userstable, setUserstable] = useState<UserstableProps[]>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const toggleWhiteList = async (user_id: number) => {
+    setLoading(true);
+    const toggle = await fetch('/api/admin/whitelistuser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_id }),
+    });
+    console.log(toggle);
+    if (!toggle.ok) {
+      console.log('error');
+    } else {
+      setUserstable(prevUsers =>
+        prevUsers?.map(user =>
+          user.id === user_id ? { ...user, whitelisted: true } : user
+        )
+      );
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    async function getUsers() {
+      const users = await fetch('/api/admin/getusers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await users.json();
+      console.log(data);
+      setUserstable(data);
+    }
+    getUsers();
+  }, []);
 
   if (session?.user) {
     return (
@@ -93,6 +137,7 @@ const Admin: FC<AdminProps> = async ({}) => {
                   <TableCell className="py-2 px-4 text-green-400 text-center">
                     <Switch
                       checked={true}
+                      onClick={() => toggleWhiteList(1)}
                       // onCheckedChange={toggleWhiteList}
                       aria-readonly
                     />
