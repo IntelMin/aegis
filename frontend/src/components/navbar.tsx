@@ -16,6 +16,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Search from '@/components/search';
+import { PersonIcon, ArchiveIcon, ReaderIcon } from '@radix-ui/react-icons';
+import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 type Props = {
@@ -49,6 +51,16 @@ const NavHeader = ({ show, setShow }: Props) => {
     fetchGasPrice();
   }, []);
 
+  const getGasPriceColor = () => {
+    if (gasPrice < 30) {
+      return 'text-green-400';
+    } else if (gasPrice >= 30 && gasPrice <= 49) {
+      return 'text-orange-400';
+    } else {
+      return 'text-red-400';
+    }
+  };
+
   return (
     <div className="sticky z-[10] w-full top-0 bg-black">
       <header className="flex py-3 px-4 md:px-10 items-center justify-between border-b border-zinc-900">
@@ -67,7 +79,9 @@ const NavHeader = ({ show, setShow }: Props) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <p className="text-green-400 text-[16px] leading-[24px] font-[400]">
+                  <p
+                    className={`${getGasPriceColor()} text-[16px] leading-[24px] font-[400]`}
+                  >
                     {gasPrice}
                   </p>
                 </TooltipTrigger>
@@ -120,56 +134,53 @@ const NavHeader = ({ show, setShow }: Props) => {
                 />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" style={{ background: 'black' }}>
-              <div className="flex items-center justify-start gap-2 p-2">
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem disabled>
                 <div className="flex flex-col space-y-1 leading-none">
                   {session?.data?.user?.username && (
-                    <p className="font-medium truncate text-sm text-neutral-500 hover:text-white cursor-pointer">
+                    <p className="font-medium truncate text-sm text-zinc-400 cursor-pointer">
                       {session?.data?.user?.username}
                     </p>
                   )}
                   {session?.data?.user?.email && (
-                    <p className="w-[200px] truncate text-sm text-neutral-500 hover:text-white cursor-pointer">
+                    <p className="w-[200px] truncate text-sm text-zinc-400 cursor-pointer">
                       {session?.data?.user?.email}
                     </p>
                   )}
                 </div>
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <h1>
-                  <Link href="/audit/token">Audits</Link>
-                </h1>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <Link href="/user/profile">
+                <DropdownMenuItem>
+                  <PersonIcon className="w-4 h-4 mr-2" />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/user/history">
+                <DropdownMenuItem>
+                  <ArchiveIcon className="w-4 h-4 mr-2" />
+                  History
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/user/payments">
+                <DropdownMenuItem>
+                  <ReaderIcon className="w-4 h-4 mr-2" />
+                  Payments
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
-                onSelect={event => {
+                onSelect={(event: { preventDefault: () => void }) => {
                   event.preventDefault();
                   signOut().catch(console.error);
                 }}
-                className="text-red-600 cursor-pointer"
+                className="font-semibold cursor-pointer"
               >
+                <LogOut className="w-4 h-4 mr-2" />
                 Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* {session.status == 'authenticated' ? (
-            <button
-              type="button"
-              className="bg-[#0E76FD] font-[300] text-white px-12 py-3"
-              onClick={() => signOut()}
-            >
-              Sign Out
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="bg-[#0E76FD] font-[300] text-white px-12 py-3"
-              onClick={() => router.push('/signin')}
-            >
-              Sign In
-            </button>
-          )} */}
         </div>
       </header>
     </div>

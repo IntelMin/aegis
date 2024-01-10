@@ -1,3 +1,6 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -8,22 +11,26 @@ import {
 } from '@/components/ui/table';
 
 import React from 'react';
+import { BiPencil } from 'react-icons/bi';
 
 const UserAccountTable = () => {
   return (
-    <div className="w-full overflow-x-auto mt-6">
-      <Table className="p-3 mt-6 border border-zinc-800 w-full">
-        <TableHeader className="grid grid-cols-3 bg-gray-800">
+    <div className="w-full overflow-x-auto">
+      <div className="flex flex-col pb-8">
+        <h1 className="text-lg font-semibold">Your history</h1>
+        <p className="text-md text-zinc-500">Items you have unlocked</p>
+      </div>
+      <Table className="p-3 border border-zinc-800 w-full">
+        <TableHeader className="grid grid-cols-3 bg-zinc-800">
           {' '}
-          {/* 3 columns grid */}
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
-            User Name
+            Date
           </TableHead>
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
-            User Email
+            Type
           </TableHead>
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
-            User Type
+            Details
           </TableHead>
         </TableHeader>
         <TableBody>
@@ -35,7 +42,6 @@ const UserAccountTable = () => {
             <TableCell className="py-2 px-4 text-neutral-200 text-center">
               yuvrajjwala@gmail.com
             </TableCell>
-            <TableCell className="py-2 px-4 text-center">User</TableCell>
           </TableRow>
 
           <TableRow className="grid grid-cols-3 items-center border-b border-1 bg-[#0E0E0E]">
@@ -46,9 +52,7 @@ const UserAccountTable = () => {
             <TableCell className="py-2 px-4 text-neutral-200 text-center">
               Kyono@gmail.com
             </TableCell>
-            <TableCell className="py-2 px-4 text-green-400 text-center">
-              Admin
-            </TableCell>
+            <TableCell className="py-2 px-4 text-green-400 text-center"></TableCell>
           </TableRow>
 
           <TableRow className="grid grid-cols-3 items-center border-b-1 ">
@@ -59,7 +63,7 @@ const UserAccountTable = () => {
             <TableCell className="py-2 px-4 text-neutral-200 text-center">
               aslam@gmail.com
             </TableCell>
-            <TableCell className="py-2 px-4 text-center">User</TableCell>
+            <TableCell className="py-2 px-4 text-green-400 text-center"></TableCell>
           </TableRow>
         </TableBody>
       </Table>

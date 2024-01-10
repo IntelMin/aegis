@@ -28,6 +28,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { set } from 'zod';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useToast } from '@/components/ui/use-toast';
 
 type PricingCardProps = {
   isYearly?: boolean;
@@ -68,6 +69,8 @@ const PricingCard = ({
   handlePackageSelect,
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
+  const toast = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <Card
       className={cn(
@@ -125,13 +128,24 @@ const PricingCard = ({
         <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
         test
       </Button> */}
-        <Dialog>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={() => {
+            if (!isConnected) {
+              console.log('not connected');
+              toast.toast({
+                variant: 'destructive',
+                title: 'Not connected',
+                description: 'Please connect your wallet to continue',
+              });
+            } else {
+              handlePackageSelect(title, Number(ethPrice));
+              setDialogOpen(!dialogOpen);
+            }
+          }}
+        >
           <DialogTrigger asChild className="w-full">
-            <Button
-              onClick={() => handlePackageSelect(title, Number(ethPrice))}
-            >
-              Purchase
-            </Button>
+            <Button>Purchase</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -171,15 +185,9 @@ const PricingCard = ({
                   Close
                 </Button>
               </DialogClose>
-              {isConnected ? (
-                <Button onClick={handleConfirm} type="submit">
-                  Confirm
-                </Button>
-              ) : (
-                <Button>
-                  <ConnectButton />
-                </Button>
-              )}
+              <Button onClick={handleConfirm} type="submit">
+                Confirm
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -295,14 +303,15 @@ export default function PricingPage() {
   ];
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <div className="mb-4">
-        <ConnectButton />
-      </div>
-
       <PricingHeader
         title="Aegis Packages"
         subtitle="Choose the package that's right for you"
       />
+
+      <div className="mb-4">
+        <ConnectButton />
+      </div>
+
       <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
         {plans.map(plan => {
           return (
