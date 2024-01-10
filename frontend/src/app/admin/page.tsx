@@ -61,10 +61,6 @@ const Admin: FC<AdminProps> = ({}) => {
     getUsers();
   }, []);
 
-  useEffect(() => {
-    console.log('this is my user table', userstable);
-  }, [userstable]);
-
   if (session?.user) {
     return (
       <>
