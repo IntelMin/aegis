@@ -22,7 +22,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useSendTransaction, useWaitForTransaction } from 'wagmi';
+import { useAccount, useSendTransaction, useWaitForTransaction } from 'wagmi';
 import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -49,7 +49,7 @@ const PricingHeader = ({
   title: string;
   subtitle: string;
 }) => (
-  <section className="text-center">
+  <section className="text-center flex flex-col gap-2">
     <h2 className="text-3xl font-bold">{title}</h2>
     <p className="text-lg text-zinc-300 pt-1">{subtitle}</p>
     <br />
@@ -67,6 +67,7 @@ const PricingCard = ({
   handleConfirm,
   handlePackageSelect,
 }: PricingCardProps) => {
+  const { address, isConnected } = useAccount();
   return (
     <Card
       className={cn(
@@ -170,9 +171,15 @@ const PricingCard = ({
                   Close
                 </Button>
               </DialogClose>
-              <Button onClick={handleConfirm} type="submit">
-                Confirm
-              </Button>
+              {isConnected ? (
+                <Button onClick={handleConfirm} type="submit">
+                  Confirm
+                </Button>
+              ) : (
+                <Button>
+                  <ConnectButton />
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -288,7 +295,9 @@ export default function PricingPage() {
   ];
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <ConnectButton />
+      <div className="mb-4">
+        <ConnectButton />
+      </div>
 
       <PricingHeader
         title="Aegis Packages"

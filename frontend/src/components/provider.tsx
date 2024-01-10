@@ -5,7 +5,11 @@ import { FC, ReactNode } from 'react';
 import NextTopLoader from 'nextjs-toploader';
 
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import {
+  darkTheme,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { mainnet, goerli, sepolia, bscTestnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -36,7 +40,15 @@ const Provider: FC<ProviderProps> = ({ children }) => {
   return (
     <SessionProvider>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider
+          modalSize="compact"
+          chains={chains}
+          theme={darkTheme({
+            accentColor: '#06B266',
+            accentColorForeground: 'white',
+            borderRadius: 'large',
+          })}
+        >
           <QueryClientProvider client={queryClient}>
             <NextTopLoader showSpinner={false} />
             {children}
