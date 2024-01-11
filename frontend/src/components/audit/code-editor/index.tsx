@@ -14,6 +14,7 @@ type Props = {
 };
 
 const CodeAuditEditor = (props: Props) => {
+  const [toggle, setToggle] = useState('code');
   const [treeViewData, setTreeViewData] = useState<any>([]);
   const [sourceCode, setSourceCode] = useState<string>('');
   const [findings, setFindings] = useState<any>([]);
@@ -69,9 +70,39 @@ const CodeAuditEditor = (props: Props) => {
 
   return (
     <>
-      <div className="flex justify-center w-full h-screen bg-transparent">
+      <div className="md:hidden grid grid-cols-2 gap-4 px-3">
+        <button
+          type="button"
+          onClick={() => setToggle('code')}
+          className={`${
+            toggle === 'code' ? 'bg-zinc-800' : 'bg-zinc-800 opacity-[0.3]'
+          }  p-3 text-[16px]`}
+        >
+          Code
+        </button>
+        <button
+          type="button"
+          onClick={() => setToggle('findings')}
+          className={`${
+            toggle === 'findings' ? 'bg-zinc-800' : 'bg-zinc-800 opacity-[0.3]'
+          } flex items-center gap-2 justify-center p-3 text-[16px]`}
+        >
+          Findings
+          <div
+            className="w-[20px] h-[20px] rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(22, 163, 74, 0.20)' }}
+          >
+            <p className="w-[10px] h-[10px] rounded-full bg-[#22C55E] animate-pulse z-20"></p>
+          </div>
+        </button>
+      </div>
+      <div className="flex h-screen bg-black overflow-x-auto max-md:mx-4">
         {isReadOnly && (
-          <div className="flex flex-col w-[20%]">
+          <div
+            className={` ${
+              toggle === 'code' ? 'max-md:flex' : 'max-md:hidden'
+            } flex flex-col w-full md:w-[20%]`}
+          >
             <div className="p-4 text-sm text-white">
               <h1 className="font-bold text-md">Call Tree</h1>
             </div>
@@ -84,7 +115,11 @@ const CodeAuditEditor = (props: Props) => {
           </div>
         )}
         {/* <!-- Editor Container --> */}
-        <div className="flex flex-col min-h-[667px] w-[60%]">
+        <div
+          className={` ${
+            toggle === 'code' ? 'max-md:flex' : 'max-md:hidden'
+          } flex flex-col flex-1 min-w-[400px] md:w-[60%]`}
+        >
           <div className="p-4 text-sm text-white">
             <h1 className="font-bold text-md">Contract</h1>
           </div>
@@ -132,16 +167,20 @@ const CodeAuditEditor = (props: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 max-w-[300px]">
+        <div
+          className={`${
+            toggle === 'findings' ? 'max-md:flex' : 'max-md:hidden'
+          }  md:flex flex-col w-full md:w-[20%] `}
+        >
           {/* <!-- Header for Findings --> */}
           <div className="p-4 text-sm text-white">
             <h1 className="font-bold text-md">
-              Findings{' '}
+              Findings{'  '}
               {!isReadOnly && <span className="mt-1 animate-pulse">🟢</span>}
             </h1>
           </div>
           {/* <!-- Placeholder for Findings Content --> */}
-          <div className="flex-1 h-full pr-5 space-y-6 overflow-y-scroll">
+          <div className="flex-1 h-full max-md:px-0 pr-5 space-y-6 overflow-y-scroll">
             {findings?.length > 0 ? (
               findings.map((finding: any, index: number) => (
                 <div

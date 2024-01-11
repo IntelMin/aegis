@@ -28,7 +28,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="px-10 py-10">
+    <div className="px-6 md:px-10 py-10">
       <div className="grid grid-cols-1 gap-6 relative z-[-1]">
         <TokenMarquee marqueeData={marqueeData} />
       </div>

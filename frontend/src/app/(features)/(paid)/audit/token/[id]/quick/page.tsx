@@ -57,7 +57,7 @@ const QuickAuditPage = ({ params }: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full gap-6 px-5 py-5">
+    <div className="flex flex-col w-full gap-6 px-3 md:px-5 py-5">
       {/* Token Audit Head */}
       <TokenAuditHead
         showTitle={true}
@@ -66,7 +66,7 @@ const QuickAuditPage = ({ params }: Props) => {
         metadata={tokenMetaData}
       />
       <div className="grid grid-cols-11 gap-5">
-        <div className="flex flex-col col-span-6 gap-5">
+        <div className="flex flex-col col-span-11 md:col-span-6 gap-5">
           {/* Security Score */}
           {/* <SecurityScore demoSecurityScore={demoSecurityScore} /> */}
           {/* Area Graph Representation */}
@@ -74,14 +74,14 @@ const QuickAuditPage = ({ params }: Props) => {
             <AreaChart />
           </div>
         </div>
-        <div className="flex flex-col col-span-5 gap-5">
+        <div className="flex flex-col col-span-11 max-md:bg-[#0C0C0C] md:col-span-5 gap-5">
           {/* Audit History */}
           <AuditHistory />
           {/* Detail Audit Card */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-[#001735] to-[#000]">
+          <div className="flex items-center justify-between bg-gradient-to-r from-[#001735] to-[#000] max-md:hidden">
             <div className="flex flex-col gap-5 px-6 py-4 w-[58%]">
               <Link
-                href={`/tokenaudit/${params?.id}/detailed`}
+                href={`/audit/token/${params?.id}/detailed`}
                 className={`bg-[#0E76FD] border-[#0E76FD] flex items-center justify-center text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
               >
                 Detailed Audit
@@ -93,7 +93,7 @@ const QuickAuditPage = ({ params }: Props) => {
             </div>
             <div className="w-1/2 h-full">
               <Image
-                src="/detailAuditBgFull.svg"
+                src="/backgrounds/audit-detail.png"
                 alt="detail-card-bg"
                 width={200}
                 height={160}

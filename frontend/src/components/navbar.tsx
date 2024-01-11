@@ -124,12 +124,12 @@ const NavHeader = ({ show, setShow }: Props) => {
               <div className="flex items-center justify-start gap-2 p-2">
                 <div className="flex flex-col space-y-1 leading-none">
                   {session?.data?.user?.username && (
-                    <p className="font-medium truncate text-sm text-neutral-500 hover:text-white cursor-pointer">
+                    <p className="font-medium truncate text-sm select-none text-neutral-500 cursor-pointer">
                       {session?.data?.user?.username}
                     </p>
                   )}
                   {session?.data?.user?.email && (
-                    <p className="w-[200px] truncate text-sm text-neutral-500 hover:text-white cursor-pointer">
+                    <p className="w-[200px] truncate text-sm select-none text-neutral-500 cursor-pointer">
                       {session?.data?.user?.email}
                     </p>
                   )}

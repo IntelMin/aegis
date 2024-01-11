@@ -37,7 +37,7 @@ const OverViewReport = (props: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full gap-6 px-10 py-12">
+    <div className="flex flex-col w-full gap-6 px-3 md:px-10 py-12">
       <TokenAuditHead
         showTitle={true}
         showPremium={false}
@@ -45,7 +45,7 @@ const OverViewReport = (props: Props) => {
         metadata={props?.data.metadata}
       />
       <div className="grid grid-cols-11 gap-5">
-        <div className="flex flex-col col-span-6 gap-5">
+        <div className="flex flex-col col-span-11 md:col-span-6 gap-5">
           {/* Security Score */}
           <SecurityScore demoSecurityScore={demoSecurityScore} />
           {/* Area Graph Representation */}
@@ -53,7 +53,7 @@ const OverViewReport = (props: Props) => {
             <AreaChartComponent />
           </div>
         </div>
-        <div className="flex flex-col col-span-5 gap-5">
+        <div className="flex flex-col col-span-11 md:col-span-5 gap-5">
           {/* Audit History */}
           <AuditHistory />
           {/* Audit Details */}
@@ -61,11 +61,14 @@ const OverViewReport = (props: Props) => {
             <h3 className="text-neutral-200 text-[20px] font-[600] border-b border-zinc-900 pb-3">
               Audit Details
             </h3>
-            <div className="flex items-center justify-between">
+            <div className="flex max-md:flex-col items-center justify-between">
               <AuditDetailChart />
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-3 max-md:w-full">
                 {labels?.map((item, i) => (
-                  <div key={item} className="flex items-center gap-3">
+                  <div
+                    key={item}
+                    className="flex items-center max-md:w-full max-md:justify-between gap-3"
+                  >
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-[16px] h-[16px] rounded-full`}

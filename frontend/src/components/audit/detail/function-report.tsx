@@ -48,9 +48,9 @@ type Props = {
 
 const FunctionReport = ({ data }: Props) => {
   return (
-    <div className="flex justify-center w-full p-6">
-      <div className="border border-zinc-800 p-3 w-[80%]">
-        <table className="w-full">
+    <div className="flex justify-center p-6 w-full">
+      <div className="border border-zinc-800 p-3 overflow-x-auto md:w-[80%]">
+        <table className="w-full max-md:w-[520px]">
           <tr className="grid grid-cols-5 w-full bg-zinc-900 py-2 px-[6px]">
             {columns?.map((item, i) => (
               <th
@@ -65,7 +65,7 @@ const FunctionReport = ({ data }: Props) => {
           </tr>
           {data?.map((item: DataProps, i: number) => (
             <tr
-              key={i}
+              key={item?.key}
               className={`grid grid-cols-5 w-full py-4 px-[6px] ${
                 i !== data?.length - 1 ? 'border-b border-zinc-800' : ''
               }`}

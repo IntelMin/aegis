@@ -16,10 +16,10 @@ type Props = {
 const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
   return (
     <div className="container p-0 mx-auto">
-      <div className="flex flex-wrap items-center justify-around gap-4">
+      <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
         <div className={`${showTitle ? '' : 'hidden'} flex-1`}>
           <div className="col-span-1 flex items-center justify-between">
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-start md:items-center">
               <Image
                 src={
                   metadata?.imageSmallUrl
@@ -32,20 +32,22 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
                 width={32}
                 height={32}
               />
-              {metadata?.name ? (
-                <h1 className="text-neutral-300 text-[24px] leading-[32px] font-600">
-                  {metadata.name}
-                </h1>
-              ) : (
-                <Skeleton className="w-20 h-6" />
-              )}
-              {metadata?.symbol ? (
-                <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
-                  {metadata.symbol}
-                </h3>
-              ) : (
-                <Skeleton className="w-10 h-5" />
-              )}
+              <div className="flex gap-2 max-md:flex-col md:items-center">
+                {metadata?.name ? (
+                  <h1 className="text-neutral-300 text-[24px] leading-[32px] font-600">
+                    {metadata.name}
+                  </h1>
+                ) : (
+                  <Skeleton className="w-20 h-6" />
+                )}
+                {metadata?.symbol ? (
+                  <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
+                    {metadata.symbol}
+                  </h3>
+                ) : (
+                  <Skeleton className="w-10 h-5" />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -75,7 +77,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
           </div>
         </div>
 
-        <div className="flex justify-end flex-1">
+        <div className="flex max-md:hidden flex-1">
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-3">
               <p className="text-neutral-100 text-[14px] w-[70px] text-right">
@@ -129,7 +131,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row flex-1 gap-2">
+        <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
           {liveData ? (
             <>
               <TokenValueContainer
