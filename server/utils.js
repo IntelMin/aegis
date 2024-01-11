@@ -267,18 +267,17 @@ async function bitqueryRequest(data, type) {
     url: bitqueryURL,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': process.env.BITQUERY_API_KEY,
+      'X-API-KEY': 'BQYCM5b6nhLQPR7V9zCTG1kgEgOJvNUY',
       Authorization:
-        'Bearer ory_at_o5VxYQ43EQg-JJfmeoIggpAlOag6upBXnVWIKPqV_UI.r6NsnWW78a9ChmHgVf3qVLnm3ifH727rPTRA1on38Ks',
+        'Bearer ory_at_4b1fr2aub507i9xgAJe6qArHPsCXSqwsTNhmlllab6s.30nGgq4X_Yn5X8Ah7yi1h1bY3QBsW7ikb0yf5ElHtrg',
     },
     data: data,
   };
 
   const response = await axios.request(config);
-
   if (response && response.data) {
     if (response.data) {
-      return response.data;
+      return JSON.stringify(response.data);
     }
     throw new Error(response.errors[0].message);
   }
