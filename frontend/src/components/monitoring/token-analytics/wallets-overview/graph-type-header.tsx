@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectTrigger,
   SelectItem,
-} from "@radix-ui/react-select";
-import { BiChevronDown } from "react-icons/bi";
+} from '@/components/ui/select';
+import { BiChevronDown } from 'react-icons/bi';
 
 const graphType = [
-  { type: "Top Holding Wallet", value: "Top Holding Wallet" },
-  { type: "Order Book", value: "Order Book" },
+  { type: 'Top Holding Wallet', value: 'Top Holding Wallet' },
+  { type: 'Order Book', value: 'Order Book' },
 ];
 
 export const GraphTypeHeader = (props: {

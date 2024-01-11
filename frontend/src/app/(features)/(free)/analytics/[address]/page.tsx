@@ -3,13 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-} from '@radix-ui/react-select';
+
 import { BiChevronDown } from 'react-icons/bi';
 
 import TokenAuditHead from '@/components/monitoring/header';
@@ -20,6 +14,13 @@ import TokenDetailTable from '@/components/monitoring/transaction-ledger/token-t
 import TokenDetailOverView from '@/components/monitoring/token-overview/token-detailed-overview';
 import TransferVolumeGraph from '@/components/monitoring/token-analytics/transaction-volume-overview/transfer-volume-graph';
 import HoldersGraph from '@/components/monitoring/token-analytics/transaction-volume-overview/holders-graph';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+} from '@/components/ui/select';
 
 type Props = {
   params: {
@@ -113,100 +114,6 @@ const Analytics = ({ params }: Props) => {
             liveData={liveData}
             metadata={tokenMetaData}
           />
-
-          <div className="grid grid-cols-4 gap-6 pb-3">
-            <div className="flex flex-col col-span-1 gap-4">
-              {/* Token Detailed Info */}
-              <TokenDetailOverView />
-            </div>
-
-            <div className="col-span-3">
-              {/* candle stick graph */}
-
-              <TradingViewChart
-                pair={'OSMO/USD'}
-                chain={'V3 Uniswap (Ethereum)'}
-              />
-
-              {/* Middle Section Graph */}
-              <div className="grid grid-cols-3 gap-4">
-                {/* Transfer Volume, Holders Graph */}
-                <div className="flex flex-col col-span-1 gap-6 p-2 my-3 border border-zinc-900">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <h1
-                        className={`text-[16px] ${
-                          volumeType === 'Transfer volume'
-                            ? 'text-neutral-100'
-                            : 'text-neutral-600'
-                        } transition-all ease-in duration-100 cursor-pointer`}
-                        onClick={() => setVolumeType('Transfer volume')}
-                      >
-                        Transfer volume
-                      </h1>
-                      <h1
-                        className={`text-[16px] ${
-                          volumeType === 'Holders'
-                            ? 'text-neutral-100'
-                            : 'text-neutral-600'
-                        } transition-all ease-in duration-100 cursor-pointer`}
-                        onClick={() => setVolumeType('Holders')}
-                      >
-                        Holders
-                      </h1>
-                    </div>
-                    <div className="relative z-20">
-                      <Select onValueChange={handleDropdownChange}>
-                        <SelectTrigger className="w-[60px] bg-zinc-900 rounded-[4px] outline-none p-2 py-1 text-white">
-                          <div className="flex items-center justify-between text-sm">
-                            {choosenTime}
-                            <BiChevronDown className="text-neutral-400 text-[28px]" />
-                          </div>
-                        </SelectTrigger>
-                        <SelectContent className="w-[60px] bg-zinc-900 text-white pointer rounded-[4px] overflow-auto">
-                          <SelectGroup>
-                            {timeFilter.map((item, i) => (
-                              <SelectItem
-                                key={i}
-                                className="p-2 pl-3 outline-none cursor-pointer hover:bg-zinc-800"
-                                value={item.time}
-                              >
-                                {item.time}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  {/* Graph Section */}
-                  {volumeType === 'Transfer volume' ? (
-                    <TransferVolumeGraph />
-                  ) : (
-                    <HoldersGraph />
-                  )}
-                </div>
-                <div className="col-span-2 border border-zinc-900 p-2 flex flex-col gap-6 my-3 bg-[#0C0C0C]">
-                  {/* Top Holding Wallets / Order Book */}
-                  {/* Graph Section */}
-                  {choosenType === 'Top Holding Wallet' ? (
-                    <TopHolding
-                      choosenType={choosenType}
-                      handleTypeChange={handleTypeChange}
-                    />
-                  ) : (
-                    <OrderBook
-                      choosenType={choosenType}
-                      handleTypeChange={handleTypeChange}
-                    />
-                  )}
-                </div>
-              </div>
-              {/* Token detail in Table format */}
-              <TokenDetailTable />
-            </div>
-          </div>
 
           <div className="grid grid-cols-4 gap-6 pb-3">
             <div className="flex flex-col col-span-1 gap-4">

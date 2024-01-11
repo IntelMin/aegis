@@ -5,7 +5,7 @@ import {
   SelectGroup,
   SelectTrigger,
   SelectItem,
-} from '@radix-ui/react-select';
+} from '@/components/ui/select';
 import { BiChevronDown } from 'react-icons/bi';
 
 const SelectTopToken = () => {
