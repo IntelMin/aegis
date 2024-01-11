@@ -9,19 +9,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (!user) {
         return NextResponse.error()
     }
-    // if (String(user.role) !== 'admin') {
-    //     return NextResponse.error()
-    // }
+    if (user.role != 1) {
+        return NextResponse.error()
+    }
     const request = await req.json()
     const { user_id } = request
     if (!user_id) {
         return NextResponse.error()
     }
     try {
+        const user = await db.user.findUnique({
+            where: { id: user_id }
+        })
         const toggle_user = await db.user.update({
             where: { id: user_id },
             data: {
-                whitelisted: true,
+                whitelisted: !user?.whitelisted,
                 updated_at: new Date()
             }
         })

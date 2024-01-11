@@ -18,10 +18,17 @@ const CodeAudit = () => {
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);
-      const res = await fetch('/api/credit/balance', {
+      const r = await fetch('/api/credit/pay', {
         method: 'POST',
         body: JSON.stringify({
           email: session?.data?.user?.email,
+          amount: 1,
+        }),
+      });
+      const res = await fetch('/api/credit/balance', {
+        method: 'POST',
+        body: JSON.stringify({
+          type: 'code',
         }),
       });
       const data = await res.json();
