@@ -35,6 +35,11 @@ const SidebarItems = ({ item, open, setShow }: Props) => {
         <Image
           alt={item?.iconUrl}
           src={`/icons/nav/${item?.iconUrl}.svg`}
+          style={
+            item?.href === `${pathName?.split('/')[1]}`
+              ? { filter: 'invert(100%) brightness(1000%) contrast(100%)' }
+              : {}
+          }
           width={18}
           height={18}
         />

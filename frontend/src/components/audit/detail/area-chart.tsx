@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import React, { useState } from 'react';
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 type Props = {};
 
 const AreaChartComponent = (props: Props) => {
-  const timeArr = ["1M", "6M", "1Y", "All"];
-  const [time, setTime] = useState("1M");
+  const timeArr = ['1M', '6M', '1Y', 'All'];
+  const [time, setTime] = useState('1M');
   const chartData = Array.from({ length: 20 }, (_, index) => ({
     name: `${index + 1}`,
     val: Math.random() * 100,
   }));
   return (
     <div className="w-full flex flex-col gap-8">
-      <div className="flex items-center justify-between">
+      <div className="flex max-md:flex-col max-md:gap-3 md:items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="text-neutral-200 text-[16px]">AAVE/USD</h3>
           <p className="text-neutral-600 text-[16px]">V3 Uniswap (Ethereum)</p>
         </div>
         <div className="flex items-center gap-2">
-          {timeArr?.map((item) => (
+          {timeArr?.map(item => (
             <button
               key={item}
               type="button"
               onClick={() => setTime(item)}
               className={`${
-                item === time ? "bg-zinc-700" : ""
+                item === time ? 'bg-zinc-700' : ''
               } text-neutral-200 w-[40px] rounded-md py-[3px] px-2 text-sm font-medium text-[16px]`}
             >
               {item}
@@ -34,7 +34,7 @@ const AreaChartComponent = (props: Props) => {
           ))}
         </div>
       </div>
-      <div className="w-full -translate-x-[24px]">
+      <div className="max-md:w-[110%] md:w-full -translate-x-[32px] md:-translate-x-[24px]">
         <ResponsiveContainer width="105%" height={300}>
           <AreaChart
             width={790}
@@ -53,14 +53,14 @@ const AreaChartComponent = (props: Props) => {
               </linearGradient>
             </defs>
             <XAxis
-              axisLine={{ display: "none" }}
-              tickLine={{ display: "none" }}
+              axisLine={{ display: 'none' }}
+              tickLine={{ display: 'none' }}
               dataKey="name"
             />
             <YAxis
-              axisLine={{ display: "none" }}
-              tickLine={{ display: "none" }}
-              domain={["auto", "auto"]}
+              axisLine={{ display: 'none' }}
+              tickLine={{ display: 'none' }}
+              domain={['auto', 'auto']}
             />
             {/* <Tooltip /> */}
             <Area

@@ -9,9 +9,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (!user) {
         return NextResponse.error()
     }
-    // if (String(user.role) !== 'admin') {
-    //     return NextResponse.error()
-    // }
+    if (user.role != 1) {
+        return NextResponse.error()
+    }
     const userstable = await db.user.findMany()
     return NextResponse.json(userstable)
 }

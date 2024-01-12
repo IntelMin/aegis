@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.margin-view-overlays {
+  background: #1d2939 !important;
+}
+
+.premium-unlock-con {
+  background-image: url('../assets/backgrounds/premiun-unlock.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: contain;
+}

@@ -18,10 +18,17 @@ const CodeAudit = () => {
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);
-      const res = await fetch('/api/credit/balance', {
+      const r = await fetch('/api/credit/pay', {
         method: 'POST',
         body: JSON.stringify({
           email: session?.data?.user?.email,
+          amount: 1,
+        }),
+      });
+      const res = await fetch('/api/credit/balance', {
+        method: 'POST',
+        body: JSON.stringify({
+          type: 'code',
         }),
       });
       const data = await res.json();
@@ -87,7 +94,7 @@ const CodeAudit = () => {
   return (
     <form onSubmit={handleSubmit} className="w-full mt-4">
       <div className="space-y-8 md:px-5 md:py-5">
-        <div className="items-center justify-center w-full space-y-8 text-center flex-cols md:flex md:justify-between md:px-3">
+        <div className="items-center justify-center w-full space-y-8 text-center flex-cols md:flex md:justify-between px-3">
           <div className="space-y-3 text-start">
             <h1 className="text-2xl text-white text-semibold">Code Audit</h1>
             <h1 className="text-md text-neutral-300">
@@ -106,7 +113,7 @@ const CodeAudit = () => {
             {loading && <ScaleLoader width={4} height={10} color="white" />}
           </Button>
         </div>
-        <div className="flex space-x-2 space-y-0 md:hidden ">
+        {/* <div className="flex space-x-2 space-y-0 md:hidden ">
           <Button
             onClick={() => handleButtonClick('contractCode')}
             className={`text-neutral-200 text-md font-semibold md:px-28 w-full p-2 bg-zinc-900 space-y-4 ${
@@ -128,7 +135,7 @@ const CodeAudit = () => {
             Findings
             <p className="animate-pulse">🟢</p>
           </Button>
-        </div>
+        </div> */}
         <CodeEditor
           source={ContractCode}
           setContractCode={setContractCode}

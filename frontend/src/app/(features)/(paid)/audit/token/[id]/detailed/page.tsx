@@ -297,7 +297,7 @@ const DetailedPage = ({ params }: Props) => {
     <div className="flex flex-col w-full text-white">
       <div className="bg-[url(/backgrounds/audit-banner.svg)] bg-cover flex justify-center items-center w-full h-[240px] relative">
         {/* Token Name */}
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex items-center justify-center flex-col">
           <div className="flex items-center gap-3">
             <Image
               src={
@@ -316,12 +316,12 @@ const DetailedPage = ({ params }: Props) => {
               {metaData?.symbol}
             </p>
           </div>
-          <p className="text-blue-400 text-[16px] font-[300] px-4 py-2">
+          <p className="text-blue-400 text-[16px] font-[300] md:px-4 py-2">
             {params?.id}
           </p>
         </div>
         {/* Tabs */}
-        <div className="absolute bottom-0 flex items-center gap-12 -translate-x-1/2 left-1/2">
+        <div className="max-md:hidden absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-12">
           {tabArr?.map(item => (
             <button
               key={item}
@@ -336,6 +336,21 @@ const DetailedPage = ({ params }: Props) => {
             </button>
           ))}
         </div>
+      </div>
+      <div className="hidden max-md:grid grid-cols-2 items-center justify-center gap-5 p-4">
+        {tabArr?.map(item => (
+          <button
+            key={item}
+            onClick={() => setTab(item)}
+            className={`${
+              tab === item
+                ? 'text-neutral-50 border-b-[4px] border-blue-600 bg-zinc-900'
+                : 'text-neutral-500 border-b-[4px] border-transparent'
+            } col-span-1 text-[18px] transition-all ease-in duration-150 px-1 py-2`}
+          >
+            {item}
+          </button>
+        ))}
       </div>
       {renderComponent()}
     </div>

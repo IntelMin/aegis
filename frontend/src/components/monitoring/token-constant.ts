@@ -21,7 +21,7 @@ const totalTransactionTableData = [
     id: 0,
     wallet: {
       name: "Binance",
-      tokenIconUrl: "/token-icons/token-table.svg",
+      tokenIconUrl: "/icons/token/binance.svg",
     },
     balance: "12,050,452,000.198",
     value: "103456789.23",
@@ -34,7 +34,7 @@ const totalTransactionTableData = [
     id: 1,
     wallet: {
       name: "Coinbase exchange",
-      tokenIconUrl: "/token-icons/token-tabl2.svg",
+      tokenIconUrl: "/icons/token/binance.svg",
     },
     balance: "10,230,089,254.02",
     value: "$1.289,879,091",

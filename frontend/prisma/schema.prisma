@@ -10,17 +10,19 @@ datasource db {
 }
 
 model user {
-    id              Int              @id @default(autoincrement())
-    email           String           @unique
-    username        String           @unique
-    password        String
-    role            Int              @default(1)
-    whitelisted     Boolean          @default(false)
-    created_at      DateTime         @default(now())
-    updated_at      DateTime         @default(now())
-    user_meta       user_meta?
-    credit_balances credit_balance[]
-    credit_payments credit_payment[]
+    id                  Int                   @id @default(autoincrement())
+    email               String                @unique
+    username            String                @unique
+    password            String
+    role                Int                   @default(1)
+    whitelisted         Boolean               @default(false)
+    created_at          DateTime              @default(now())
+    updated_at          DateTime              @default(now())
+    user_meta           user_meta?
+    credit_balances     credit_balance[]
+    credit_payments     credit_payment[]
+    credit_transactions credit_transactions[]
+    paid_audits         paid_audits[]
 }
 
 model user_meta {
@@ -61,6 +63,32 @@ model credit_payment {
     user       user     @relation(fields: [user_id], references: [id])
 
     @@index([user_id], name: "idx_credit_payment_user")
+}
+
+model credit_transactions {
+    id         Int      @id @default(autoincrement())
+    user_id    Int
+    type       String
+    cost       Int
+    created_at DateTime @default(now())
+    user       user     @relation(fields: [user_id], references: [id])
+
+    @@index([user_id], name: "idx_credit_transactions_user")
+}
+
+model paid_audits {
+    id                    Int      @id @default(autoincrement())
+    user_id               Int
+    address               String
+    type                  String
+    credit_transaction_id Int?
+    status                String?
+    link                  String?
+    created_at            DateTime @default(now())
+    updated_on            DateTime @default(now())
+    user                  user     @relation(fields: [user_id], references: [id])
+
+    @@index([user_id], name: "idx_paid_audits_user")
 }
 
 model audit_requests {

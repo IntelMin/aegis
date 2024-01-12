@@ -1,7 +1,7 @@
-import React from "react";
-import dynamic from "next/dynamic";
-import { Props } from "react-apexcharts";
-const Chart = dynamic(() => import("react-apexcharts"), {
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { Props } from 'react-apexcharts';
+const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 }) as React.FC<Props>;
 
@@ -13,11 +13,11 @@ type props = {
 const PieGraph = (props: props) => {
   const series = [props.value];
 
-  const options: Props["options"] = {
+  const options: Props['options'] = {
     chart: {
       width: 180,
       height: 180,
-      type: "radialBar",
+      type: 'radialBar',
       toolbar: {
         show: true,
       },
@@ -28,12 +28,12 @@ const PieGraph = (props: props) => {
         endAngle: 115,
         hollow: {
           margin: 0,
-          size: "70%",
-          background: "transparent",
+          size: '70%',
+          background: 'transparent',
           image: undefined,
           imageOffsetX: 0,
           imageOffsetY: 0,
-          position: "front",
+          position: 'front',
           dropShadow: {
             enabled: false,
             top: 3,
@@ -43,8 +43,8 @@ const PieGraph = (props: props) => {
           },
         },
         track: {
-          background: "#3F3F46",
-          strokeWidth: "100%",
+          background: '#3F3F46',
+          strokeWidth: '100%',
           margin: 0,
           dropShadow: {
             enabled: true,
@@ -57,10 +57,10 @@ const PieGraph = (props: props) => {
         dataLabels: {
           value: {
             formatter: function (val: any) {
-              return (props.labels ? `${val}%` :  `${val}/100`) || "";
+              return (props.labels ? `${val}%` : `${val}/100`) || '';
             },
-            color: "#FAFAFA",
-            fontSize: "30px",
+            color: '#FAFAFA',
+            fontSize: '30px',
             fontWeight: 600,
             show: true,
             offsetY: props.labels ? -20 : 0,
@@ -69,20 +69,20 @@ const PieGraph = (props: props) => {
           name: {
             offsetY: 30,
             show: props.labels,
-            color: "#4ADE80",
+            color: '#4ADE80',
             fontWeight: 400,
-            fontSize: "20px",
+            fontSize: '20px',
           },
         },
       },
     },
     fill: {
-      colors: ["#4ADE80"],
+      colors: ['#4ADE80'],
       opacity: 0.9,
-      type: "solid",
+      type: 'solid',
       gradient: {
-        shade: "dark",
-        type: "horizontal",
+        shade: 'dark',
+        type: 'horizontal',
         shadeIntensity: 0.5,
         gradientToColors: undefined,
         inverseColors: true,
@@ -91,20 +91,20 @@ const PieGraph = (props: props) => {
       },
     },
     stroke: {
-      lineCap: "round",
+      lineCap: 'round',
     },
-    labels: ["Audit Score"],
+    labels: ['Audit Score'],
   };
 
   return (
-    <div id="card" className="bg-transparent p-0 m-0 -translate-x-8">
+    <div id="card" className="bg-transparent p-0 m-0 md:-translate-x-8">
       <div id="chart">
         <Chart
           options={options}
           series={series}
           type="radialBar"
           height={props.height}
-          width={"100%"}
+          width={'100%'}
         />
       </div>
     </div>

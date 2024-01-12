@@ -77,7 +77,7 @@ export const HoldingWalletChart = (props: Props) => {
 
   useEffect(() => {
     const loadData = async () => {
-      // Made this timeout to show the skeleton loading will remove when api is ready
+      // Made this timeout to show the skeleton loading will remove when api is ready.
       setTimeout(() => setIsLoading(false), 1000);
     };
 
@@ -89,7 +89,6 @@ export const HoldingWalletChart = (props: Props) => {
   }
   return (
     <div className="w-full h-[320px]">
-      <Bubble options={options} data={data} />
       <Bubble options={options} data={data} />
     </div>
   );

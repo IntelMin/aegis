@@ -23,14 +23,14 @@ export const TopHolding = ({ choosenType, handleTypeChange }: Props) => {
 
   return (
     <div className="grid w-full h-full grid-cols-2 gap-2">
-      <div className="h-full col-span-1">
+      <div className="flex flex-col col-span-2 md:col-span-1">
         <GraphTypeHeader
           choosenType={choosenType}
           handleTypeChange={handleTypeChange}
         />
         <HoldingWalletChart />
       </div>
-      <div className="h-full col-span-1">
+      <div className="h-full col-span-2 md:col-span-1">
         <div className="w-full h-full p-2 bg-zinc-900">
           <div className="flex w-full items-center bg-zinc-800 rounded-[2px] p-2 gap-2">
             <Image

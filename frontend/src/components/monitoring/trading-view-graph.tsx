@@ -101,7 +101,7 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col w-full">
       <div className="flex gap-3 text-white">
         <span>{pair}</span>
         <span className="text-gray-500">{chain}</span>
@@ -114,7 +114,7 @@ function TradingViewChart({ pair, chain }: TradingViewChartProps) {
           style={{ position: 'relative', width: '100%' }}
         />
       )}
-    </>
+    </div>
   );
 }
 

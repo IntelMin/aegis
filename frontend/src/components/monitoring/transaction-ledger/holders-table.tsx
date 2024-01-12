@@ -5,6 +5,7 @@ import SelectTopToken from '../select-top-token';
 import { HoldersDemoData } from './demo-table-data';
 import TableHead from '../table-head';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 const HoldersTable = ({ selected }: any) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +21,7 @@ const HoldersTable = ({ selected }: any) => {
 
   return (
     <div className="h-[400px] overflow-auto">
-      <div className="flex items-center justify-between mb-2 ">
+      <div className="flex max-md:flex-col max-md:gap-2 max-md:mb-4 md:items-center justify-between mb-2 ">
         <div className="flex gap-2">
           <h1 className="text-white">OSMO</h1>
           <h1 className="text-gray-500">{selected}</h1>
@@ -36,8 +37,11 @@ const HoldersTable = ({ selected }: any) => {
           <SelectTopToken />
         </div>
       </div>
-      <table className="w-full">
-        <div className="sticky top-0">
+      {isLoading ? (
+        <Skeleton className="w-full h-36" />
+      ) : (
+        <Table className="w-full">
+          {/* <div className="sticky top-0"> */}
           <TableHead
             tableHead={[
               'Rank',
@@ -47,26 +51,24 @@ const HoldersTable = ({ selected }: any) => {
               'Change 7D',
             ]}
           />
-        </div>
-        {isLoading ? (
-          <Skeleton className="w-full h-72 mt-2" />
-        ) : (
-          <tbody>
+          {/* </div> */}
+
+          <TableBody>
             {HoldersDemoData?.map(item => (
-              <tr
+              <TableRow
                 key={item?.rank}
-                className="grid w-full grid-cols-5 p-2 border-b border-zinc-800"
+                className="w-full  p-2 border-b border-zinc-800"
               >
-                <td className="col-span-1">
+                <TableCell className="col-span-1">
                   <p className="text-neutral-300 text-[14px]">#{item?.rank}</p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="col-span-1">
                   <p className={`text-blue-400 text-[14px]`}>{item.address}</p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="col-span-1">
                   <p className={`text-white text-[14px]`}>{item.value_usd}</p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="col-span-1 min-w-[120px]">
                   <p
                     className={`${
                       item.change_1d.startsWith('+')
@@ -76,8 +78,8 @@ const HoldersTable = ({ selected }: any) => {
                   >
                     {item.change_1d}
                   </p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="col-span-1 min-w-[120px]">
                   <p
                     className={`${
                       item.change_7d.startsWith('+')
@@ -87,12 +89,12 @@ const HoldersTable = ({ selected }: any) => {
                   >
                     {item.change_7d}
                   </p>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        )}
-      </table>
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };

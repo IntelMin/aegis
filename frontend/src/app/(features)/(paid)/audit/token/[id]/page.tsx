@@ -60,24 +60,31 @@ const TokenAuditOption = ({ params }: props) => {
 
   return (
     <div
-      className={`bg-[url(/backgrounds/audit-token-option.png)] h-screen bg-cover pt-[30px] w-full flex flex-col gap-[72px] items-center justify-center`}
+      className={`bg-[url(/backgrounds/audit-token-option.png)]  max-md:min-h-screen md:h-[calc(100vh-80px)] bg-cover max-md:pt-[80px] max-md:px-4 pt-[30px] w-full flex flex-col gap-8 md:gap-[72px] items-center justify-center`}
     >
       {isFetching ? (
         <SkeletonLoader />
       ) : (
         <>
-          <div className="flex items-center gap-4">
-            <h1 className="text-blue-400 text-[16px font-[300] px-4 py-2">
+          <div className="flex max-md:justify-end md:items-center gap-4 max-md:w-full">
+            <h1 className="text-blue-400 text-[16px font-[300] px-4 py-2 max-md:hidden text-wrap">
               {params?.id}
             </h1>
             <Link
               href="/audit/token"
-              className="text-zinc-50 text-[16px] bg-zinc-900 font-[500] py-2 w-[120px] text-center"
+              className="text-zinc-50 text-[16px] bg-zinc-900 font-[500] py-2 max-md:px-3 w-fit md:w-[120px] text-center"
             >
-              Cancel
+              <h1 className="max-md:hidden">Cancel</h1>
+              <Image
+                src="/icons/cross.svg"
+                alt="close-icon"
+                width={24}
+                height={24}
+                className="md:hidden"
+              />
             </Link>
           </div>
-          <div className="flex flex-col items-center gap-12">
+          <div className="flex flex-col items-center gap-3 md:gap-12">
             <div className="flex items-center gap-4">
               <Image
                 src={
@@ -98,7 +105,13 @@ const TokenAuditOption = ({ params }: props) => {
                 {metadata?.symbol}
               </p>
             </div>
-            <div className="flex items-center gap-10">
+            {/* //! TODO: Wrap token address */}
+            <div className="md:hidden text-blue-400 text-ellipsis w-[80%] overflow-hidden mb-6">
+              <span className="text-blue-400 text-[14px] font-[300] md:px-4 md:py-2 whitespace-normal">
+                {params?.id}
+              </span>
+            </div>
+            <div className="flex items-center max-md:flex-col gap-10">
               {/* Detailed */}
               <div
                 className={`from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}

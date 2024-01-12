@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import PieGraph from '../piegraph';
+import PieGraph from '../security-pie-chart';
 
 type Props = {};
 

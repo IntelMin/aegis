@@ -11,18 +11,24 @@ import {
   transactionTable,
   transactionTableHead,
 } from '../token-constant';
+import { Select, SelectContent, SelectItem } from '@/components/ui/select';
+
+import { SelectTrigger } from '@radix-ui/react-select';
+
 import LiquidityReport from './liquidity-report';
 import HoldersTable from './holders-table';
 import TradersTable from './traders-table';
 import OwnerTable from './owner-table';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { BiChevronDown } from 'react-icons/bi';
 
 type Props = {};
 
 const TokenDetailTable = (props: Props) => {
   const [selected, setSelected] = React.useState('TotalTransaction');
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-4 w-full">
+      <div className="hidden md:flex items-center gap-4">
         {btnOption?.map(item => (
           <button
             key={item?.text}
@@ -35,7 +41,37 @@ const TokenDetailTable = (props: Props) => {
           </button>
         ))}
       </div>
-      <div className="flex flex-col gap-4 p-3 border border-zinc-800">
+      <div className="md:hidden">
+        <Select onValueChange={value => setSelected(value)}>
+          <SelectTrigger className="w-full">
+            <div className="flex items-center justify-between w-full text-lg bg-blue-600 p-2">
+              {selected}
+              <BiChevronDown className="text-neutral-400 text-[28px]" />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem className="text-lg" value="TotalTransaction">
+              Total Transactions
+            </SelectItem>
+            <SelectItem className="text-lg" value="Transactions">
+              Transactions
+            </SelectItem>
+            <SelectItem className="text-lg" value="LiquidityReport">
+              Liquidity Report
+            </SelectItem>
+            <SelectItem className="text-lg" value="Holders">
+              Holders
+            </SelectItem>
+            <SelectItem className="text-lg" value="Trades">
+              Trades
+            </SelectItem>
+            <SelectItem className="text-lg" value="Owner">
+              Owner
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-4 p-3 border border-zinc-800 max-md:w-[400px] w-full max-md:overflow-hidden">
         {(selected === 'TotalTransaction' || selected === 'Transactions') && (
           <>
             <div className="flex items-center justify-between">
@@ -63,44 +99,44 @@ const TokenDetailTable = (props: Props) => {
                 transactionTableData={totalTransactionTableData}
               />
             ) : (
-              <table className="w-full">
+              <Table className="w-full">
                 <TableHead tableHead={transactionTableHead} />
-                <tbody>
+                <TableBody>
                   {transactionTable?.map(item => (
-                    <tr
+                    <TableRow
                       key={item?.id}
-                      className="grid w-full grid-cols-7 p-2 border-b border-zinc-800"
+                      className=" w-full p-2 border-b border-zinc-800"
                     >
-                      <td className="text-blue-300 text-[14px]">
+                      <TableCell className="text-blue-300 text-[14px]">
                         {item?.txnHash}
-                      </td>
-                      <td className="text-neutral-300 text-[14px]">
+                      </TableCell>
+                      <TableCell className="text-neutral-300 text-[14px]">
                         {item?.age}
-                      </td>
-                      <td className="text-blue-200 text-[14px]">
+                      </TableCell>
+                      <TableCell className="text-blue-200 text-[14px]">
                         {item?.block}
-                      </td>
-                      <td className="text-neutral-400 text-[14px]">
+                      </TableCell>
+                      <TableCell className="text-neutral-400 text-[14px]">
                         <span className="bg-zinc-800 px-[6px] py-1">
                           {item?.method}
                         </span>
-                      </td>
-                      <td className="text-blue-300 text-[14px]">
+                      </TableCell>
+                      <TableCell className="text-blue-300 text-[14px]">
                         {item?.from}
-                      </td>
-                      <td className="text-blue-300 text-[14px] -translate-x-3">
+                      </TableCell>
+                      <TableCell className="text-blue-300 text-[14px] -translate-x-3">
                         <span className="bg-slate-800 mr-1 px-[6px] py-1">
                           IN
                         </span>
                         {item?.to}
-                      </td>
-                      <td className="text-neutral-300 text-[14px]">
+                      </TableCell>
+                      <TableCell className="text-neutral-300 text-[14px]">
                         {item?.value}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             )}
           </>
         )}

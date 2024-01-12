@@ -1,16 +1,15 @@
 'use client';
 
+import Image from 'next/image';
+import React, { useState } from 'react';
+
 import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectTrigger,
-  SelectValue,
   SelectItem,
-} from '@radix-ui/react-select';
-import Image from 'next/image';
-import React, { useState } from 'react';
-import { BiChevronDown } from 'react-icons/bi';
+  SelectTrigger,
+} from '@/components/ui/select';
 
 type DrpdownFilterProps = {
   time: string;
@@ -56,7 +55,7 @@ const DropdownFilter = ({ time, setTime }: DrpdownFilterProps) => {
   }
 
   return (
-    <div className="relative flex items-center justify-between mt-10 mb-4">
+    <div className="relative flex max-md:flex-col max-md:gap-4 md:items-center justify-between mt-10 md:mb-4">
       <div className="text-white">
         <div className="relative min-w-[120px]">
           <button
@@ -69,12 +68,11 @@ const DropdownFilter = ({ time, setTime }: DrpdownFilterProps) => {
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <div className="relative">
+        <div className="relative max-md:w-1/2 ">
           <Select onValueChange={handleTimeChange}>
-            <SelectTrigger className="w-[150px] bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
+            <SelectTrigger className="w-full md:w-[150px] max-md:px-4 bg-zinc-900 rounded-[4px] outline-none p-2 text-white">
               <div className="flex items-center justify-between ">
                 {choosenTime}
-                <BiChevronDown className="text-neutral-400 text-[28px]" />
               </div>
             </SelectTrigger>
 
@@ -93,20 +91,6 @@ const DropdownFilter = ({ time, setTime }: DrpdownFilterProps) => {
             </SelectContent>
           </Select>
         </div>
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-zinc-900 p-2 rounded-[4px]"
-        >
-          <p className="text-green-400 text-[16px] capitalize">Gain</p>
-          <Image
-            src="/token-icons/green-link.svg"
-            alt="token-icon"
-            width={22}
-            height={22}
-            className="rounded-full"
-          />
-          <BiChevronDown className="text-neutral-400 text-[28px]" />
-        </button>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
-import dynamic from "next/dynamic";
-import { Props } from "react-apexcharts";
+import dynamic from 'next/dynamic';
+import { Props } from 'react-apexcharts';
+import { isViewportValid } from '@/utils/media-query';
 
-const Chart = dynamic(() => import("react-apexcharts"), {
+const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 }) as React.FC<Props>;
 
@@ -10,14 +11,15 @@ type Series = {
 };
 
 const ApexChart = (props: Series) => {
+  const isMobile = isViewportValid(768);
   const series = [175, 191, 34, 34];
-  const customSegmentNames = ["HIGH", "MEDIUM", "LOW", "INORMATIONAL"];
-  const colors = ["#60A5FA", "#4ADE80", "#F97316", "#A855F7"];
+  const customSegmentNames = ['HIGH', 'MEDIUM', 'LOW', 'INORMATIONAL'];
+  const colors = ['#60A5FA', '#4ADE80', '#F97316', '#A855F7'];
 
-  const options: Props["options"] = {
+  const options: Props['options'] = {
     chart: {
       width: 481,
-      type: "radialBar",
+      type: 'radialBar',
     },
     plotOptions: {
       pie: {
@@ -26,19 +28,19 @@ const ApexChart = (props: Series) => {
       },
     },
     stroke: {
-      lineCap: "round",
+      lineCap: 'round',
       width: 1,
-      show: false
+      show: false,
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     tooltip: {
       enabled: true,
     },
     colors: colors,
     title: {
-      text: "",
+      text: '',
     },
     labels: customSegmentNames,
     responsive: [
@@ -46,12 +48,12 @@ const ApexChart = (props: Series) => {
         breakpoint: 480,
         options: {
           chart: {
-            width: 240,
+            width: 340,
           },
           legend: {
             enabled: false,
-            position: "bottom",
-            fontSize: "14px",
+            position: 'bottom',
+            fontSize: '14px',
           },
         },
       },
@@ -59,13 +61,13 @@ const ApexChart = (props: Series) => {
   };
 
   return (
-    <div id="chart" className="-translate-x-8">
+    <div id="chart" className="md:-translate-x-8">
       <Chart
         options={options}
         series={series}
         type="donut"
-        width={"500px"}
-        height={180}
+        width={isMobile ? '100%' : '500px'}
+        height={isMobile ? 400 : 180}
       />
     </div>
   );
