@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { HoldersDemoData } from './demo-table-data';
 import TableHead from '../table-head';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 const TradersTable = ({ selected }: any) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,7 @@ const TradersTable = ({ selected }: any) => {
 
   return (
     <div className="h-[400px] overflow-auto">
-      <div className="flex items-center justify-between mb-2 ">
+      <div className="flex max-md:flex-col max-md:gap-3 md:items-center justify-between mb-2 ">
         <div className="flex gap-2">
           <h1 className="text-white">OSMO</h1>
           <h1 className="text-gray-500">{selected}</h1>
@@ -40,8 +41,11 @@ const TradersTable = ({ selected }: any) => {
           <SelectTopToken />
         </div>
       </div>
-      <table className="w-full">
-        <div className="sticky top-0">
+      {isLoading ? (
+        <Skeleton className="w-full h-96" />
+      ) : (
+        <Table className="w-full">
+          {/* <div className="sticky top-0"> */}
           <TableHead
             tableHead={[
               '',
@@ -52,31 +56,28 @@ const TradersTable = ({ selected }: any) => {
               'Time',
             ]}
           />
-        </div>
-        {isLoading ? (
-          <Skeleton className="w-full h-96" />
-        ) : (
-          <tbody>
+          {/* </div> */}
+          <TableBody>
             {HoldersDemoData?.map(item => (
-              <tr
+              <TableRow
                 key={item?.rank}
-                className="grid w-full grid-cols-6 p-2 border-b border-zinc-800"
+                className="w-full p-2 border-b border-zinc-800"
               >
-                <td className="col-span-1">
+                <TableCell className="">
                   <p className="text-neutral-300 text-[14px]">
                     OSMO/<span className="text-gray-500">MATIC</span>
                   </p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="">
                   <p className={`text-blue-400 text-[14px]`}>{item.address}</p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="">
                   <p className={`text-white text-[14px]`}>860,459,098</p>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="min-w-[90px]">
                   <p className="text-[14px] text-white">$ 2.23</p>
-                </td>
-                <td className="flex items-center col-span-1 gap-2">
+                </TableCell>
+                <TableCell className="flex items-center  gap-2">
                   <Image
                     src="/token-icons/token-table.svg"
                     alt="icon"
@@ -84,15 +85,15 @@ const TradersTable = ({ selected }: any) => {
                     height={14}
                   />{' '}
                   <span className="text-white text-[14px]">Binance</span>
-                </td>
-                <td className="col-span-1">
+                </TableCell>
+                <TableCell className="">
                   <p className="text-white">12min</p>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        )}
-      </table>
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };

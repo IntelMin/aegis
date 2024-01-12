@@ -6,8 +6,8 @@ import { LiquidityReportChart } from './liquidity-report-chart';
 const LiquidityReport = ({ selected }: any) => {
   return (
     <div>
-      <div className="flex justify-between gap-4">
-        <div className="w-[65%]">
+      <div className="flex max-md:flex-col justify-between gap-4">
+        <div className="w-full md:w-[65%]">
           <div className="flex gap-2 justify-between">
             <div className="flex gap-2">
               <h1 className="text-[16px] text-neutral-300 font-[400]">OSMO</h1>

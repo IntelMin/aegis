@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import TableHead from '../table-head';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 type Props = {
   tableHead: string[];
@@ -37,15 +38,12 @@ const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
     return <Skeleton className="w-full h-36" />;
   }
   return (
-    <table className="w-full">
+    <Table className="w-full">
       <TableHead tableHead={tableHead} />
-      <tbody>
+      <TableBody>
         {transactionTableData?.map(item => (
-          <tr
-            key={item?.id}
-            className="grid w-full grid-cols-4 p-2 border-b border-zinc-800"
-          >
-            <td className="col-span-1">
+          <TableRow key={item?.id} className="p-2 border-b border-zinc-800">
+            <TableCell className="col-span-1">
               <div className="flex items-center gap-2">
                 <Image
                   src={item?.wallet?.tokenIconUrl}
@@ -57,14 +55,14 @@ const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
                   {item?.wallet?.name}
                 </p>
               </div>
-            </td>
-            <td className="col-span-1">
+            </TableCell>
+            <TableCell className="col-span-1">
               <p className="text-neutral-300 text-[14px]">{item?.balance}</p>
-            </td>
-            <td className="col-span-1">
+            </TableCell>
+            <TableCell className="col-span-1">
               <p className={`text-green-400 text-[14px]`}>${item?.value}</p>
-            </td>
-            <td className="col-span-1">
+            </TableCell>
+            <TableCell className="col-span-1">
               <Link
                 href={item?.scan?.url}
                 className="flex items-center gap-2 text-blue-300 text-[12px]"
@@ -77,11 +75,11 @@ const TotalTransactionTable = ({ tableHead, transactionTableData }: Props) => {
                   height={14}
                 />
               </Link>
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 };
 

@@ -7,13 +7,13 @@ import Image from 'next/image';
 
 const TokenDetailOverView = () => {
   return (
-    <div>
+    <>
       <TokenInfoSet />
       {/* Token Status in Price */}
       <TokenStatCard />
       {/* Token Description */}
       <div>
-        <h1 className="text-neutral-200 text-[16px] font-[600]">
+        <h1 className="text-neutral-200 text-[16px] font-[600] mt-2">
           TOKEN DESCRIPTION
         </h1>
         <p className="text-neutral-400 text-[12px]">
@@ -51,7 +51,7 @@ const TokenDetailOverView = () => {
       </div>
       {/* Token Gauge Chart  */}
       <TokenSecurityScoreChart />
-    </div>
+    </>
   );
 };
 
