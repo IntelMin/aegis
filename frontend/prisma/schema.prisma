@@ -83,7 +83,6 @@ model paid_audits {
     type                  String
     credit_transaction_id Int?
     status                String?
-    link                  String?
     created_at            DateTime @default(now())
     updated_on            DateTime @default(now())
     user                  user     @relation(fields: [user_id], references: [id])
@@ -106,8 +105,8 @@ model report_requests {
     id         Int      @id @default(autoincrement())
     user_id    Int
     address    String
-    status     String?
-    link       String?
+    name       String?
+    status     String
     created_at DateTime @default(now())
     updated_on DateTime @default(now())
 

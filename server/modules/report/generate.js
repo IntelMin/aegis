@@ -1,17 +1,16 @@
-const puppeteer = require("puppeteer");
-const ejs = require("ejs");
-const fs = require("fs");
+const puppeteer = require('puppeteer');
+const ejs = require('ejs');
+const fs = require('fs');
 
-path = require("path");
-const { loadData, getTemplates, renderTemplate } = require("./shared");
+path = require('path');
+const { loadData, getTemplates, renderTemplate } = require('./shared');
 
- async function generatePDF(address) {
-
+async function generatePDF(address, name) {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   // get data
-  const contract_dir = path.join(__dirname, `../../cache/contracts/${address}`)
+  const contract_dir = path.join(__dirname, `../../cache/contracts/${address}`);
   const data = loadData(contract_dir);
 
   // get templates
@@ -26,24 +25,19 @@ const { loadData, getTemplates, renderTemplate } = require("./shared");
   }
 
   // combine templates into render.ejs
-  const combinedContent = await renderTemplate("render.ejs",renderedTemplates);
+  const combinedContent = await renderTemplate('render.ejs', renderedTemplates);
   await page.setContent(combinedContent);
 
-  await page.addStyleTag({ path: path.join(__dirname, "assets", "style.css") });
+  await page.addStyleTag({ path: path.join(__dirname, 'assets', 'style.css') });
   // Generate the PDF
   await page.pdf({
+    path: `./cache/reports/${address}/${name}.pdf`,
 
-    path: `./modules/report/pdf/${address}.pdf`,
-
-    format: "A4",
+    format: 'A4',
     printBackground: true,
     preferCSSPageSize: true,
   });
   await browser.close();
 }
 
-
 module.exports = generatePDF;
-
-
-

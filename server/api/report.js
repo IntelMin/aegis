@@ -1,50 +1,42 @@
-const express = require("express");
-const router = express.Router();
+// GET request to retrieve the status of a report
+router.get('/:address', async (req, res) => {
+  const address = req.params.address;
 
-const supabase = require("../supabase");
+  const { data: report, error } = await supabase
+    .from('report_request')
+    .select('*')
+    .eq('address', address);
 
-router.get("/:address/:user_id", async (req, res) => {
+  if (!report) {
+    return res.status(404).json({
+      error: 'No report request found.',
+    });
+  }
 
-    const address = req.params.address;
-    const user_id = req.params.user_id;
+  if (report.status != 'completed') {
+    return res.status(200).json({
+      data: 'Please wait, the report is processing.',
+    });
+  }
 
-    const [whitelistedUsersResponse, auditRequestsResponse] = await Promise.all([
-        supabase.from('aegis').select('*').eq('user_id', user_id),
-        supabase.from('audit_requests').select('*').eq('contract', address).eq('status', 'completed')
-    ]);
+  const name = report.name;
+  const filepath = path.join(`./cache/report/${address}/${name}.pdf`);
 
-    const {data: whitelisted_users, error: error_whitelist} = whitelistedUsersResponse;
-    const {data: auditRequests, error: error_req} = auditRequestsResponse;
-    if(error_whitelist) {
-        throw new Error(error_whitelist.message);
-    }
-    if (error_req) {
-        throw new Error(error_req.message);
-    }
-    if(whitelisted_users.length === 0) {
-        return res.status(403).send("Forbidden");
-    }
-    if(!whitelisted_users[0].whitelisted) {
-        return res.status(403).send("Forbidden");
-    }
-    if (auditRequests.length === 0) {
-        return res.status(404).send("Not found");
-    }
-    const {data: reportRequests, error: error_report} = await supabase.from('report_requests').select('*').eq('address', address);
-    if(error_report) {
-        throw new Error(error_report.message);
-    }
+  // Check if the PDF file exists
+  if (fs.existsSync(filepath)) {
+    // Set the appropriate headers for the response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${path.basename(filepath)}`
+    );
 
-    if(reportRequests.length === 0) {
-        const {data: reportRequests, error: error_report} = await supabase.from('report_requests').insert([{address: address, status: "requested", user_id: user_id}]);
-        if(error_report) {
-            throw new Error(error_report.message);
-        }
-        return res.status(200).send("Report requested");
-    }else {
+    // Stream the PDF file to the response
+    const fileStream = fs.createReadStream(filepath);
+    fileStream.pipe(res);
+  } else {
+    return res.status(404).json({ error: 'Report not found' });
+  }
+});
 
-        return res.status(200).send(reportRequests[0].link);   
-    }
-})  
 module.exports = router;
-
