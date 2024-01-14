@@ -9,11 +9,11 @@ export async function GET(req: NextRequest) {
   const name = searchParams.get('name');
   const category = searchParams.get('category');
   const language = searchParams.get('language');
-  const limit = parseInt(searchParams.get('limit')) || 20;
-  const offset = parseInt(searchParams.get('offset')) || 0;
+  const limit = parseInt(searchParams.get('limit') || '10', 10);
+  const offset = parseInt(searchParams.get('offset') || '0', 10);
 
   try {
-    const whereClause = {
+    const whereClause: any = {
       ...(name && { name: { contains: name, mode: 'insensitive' } }),
       ...(category && { category_list: { has: category } }),
       ...(language && { language_list: { has: language } }),

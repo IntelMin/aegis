@@ -3,48 +3,53 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Monitor from '@/components/watchdog/monitor';
 import BlockStatus from '@/components/watchdog/status';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 interface WatchdogProps {}
 
 const Watchdog: FC<WatchdogProps> = ({}) => {
   const websocket_url = 'ws://localhost:4444';
-  const statusRef = useRef(null);
-  const monitorRef = useRef(null);
+  const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
+  const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
   const [settings, setSettings] = useState({
     active: false,
     address: true,
-    honeypots: true,
+    honeypot: true,
     contracts: true,
   });
+  const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    let socket;
-
     if (settings.active) {
       // Establish connection with socket.io server
-      socket = io(websocket_url);
+      setSocket(io(websocket_url));
 
-      socket.on('connect', () => {
-        console.log('Connected to the server!');
-      });
+      if (socket) {
+        socket.on('connect', () => {
+          console.log('Connected to the server!');
+        });
 
-      // Handle disconnection
-      socket.on('disconnect', () => {
-        console.log('Disconnected from the server');
-      });
+        // Handle disconnection
+        socket.on('disconnect', () => {
+          console.log('Disconnected from the server');
+        });
 
-      // Handle block status updates
-      socket.on('block_status', data => {
-        statusRef?.current?.updateBlock(data);
-        console.log('Received block from socket');
-      });
+        // Handle block status updates
+        socket.on('block_status', data => {
+          if (statusRef.current?.updateBlock) {
+            statusRef.current.updateBlock(data);
+          }
+          console.log('Received block from socket');
+        });
 
-      // Handle log updates
-      socket.on('log', data => {
-        monitorRef?.current?.updateLog(data);
-        console.log('Received log from socket');
-      });
+        // Handle log updates
+        socket.on('log', data => {
+          if (monitorRef.current?.updateLog) {
+            monitorRef.current.updateLog(data);
+          }
+          console.log('Received log from socket');
+        });
+      }
     } else {
       // Disconnect if the socket is established
       if (socket) {

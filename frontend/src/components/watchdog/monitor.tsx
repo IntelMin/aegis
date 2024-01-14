@@ -10,16 +10,29 @@ import React, {
 import ReactDOM from 'react-dom';
 import Terminal, { TerminalInput, TerminalOutput } from './terminal';
 
-const Monitor = React.forwardRef((props, ref) => {
+interface MonitorProps {
+  settings: {
+    active: boolean;
+    address: boolean;
+    honeypot: boolean;
+    contracts: boolean;
+  };
+  setSettings: (settings: any) => void;
+}
+
+const Monitor = React.forwardRef(function MonitorComponent(
+  props: MonitorProps,
+  ref
+) {
   const { settings, setSettings } = props;
-  const terminalRef = useRef(null);
+  const terminalRef = useRef<{ clearOutput?: () => void }>({});
 
   const [lineData, setLineData] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     // prettier-ignore
     const initialData = (
-      <TerminalOutput>
+      <TerminalOutput key={1}>
       <pre>
       {`
           _    _____ ____ ___ ____      / \__
@@ -67,7 +80,9 @@ const Monitor = React.forwardRef((props, ref) => {
   // }, []);
 
   const handleClearOutput = () => {
-    terminalRef.current?.clearOutput();
+    if (terminalRef.current?.clearOutput) {
+      terminalRef.current?.clearOutput();
+    }
   };
 
   const updateLog = (data: any) => {
@@ -76,7 +91,7 @@ const Monitor = React.forwardRef((props, ref) => {
       console.log('Updating data: ', d);
       if (d.type === 'tx') {
         setLineData([
-          <TerminalOutput>
+          <TerminalOutput key={1}>
             <pre>
               {d.data.hash}
               {'\n'}
@@ -93,7 +108,7 @@ const Monitor = React.forwardRef((props, ref) => {
         ]);
       } else {
         setLineData([
-          <TerminalOutput>
+          <TerminalOutput key={1}>
             <pre>{d}</pre>
           </TerminalOutput>,
         ]);
@@ -116,7 +131,7 @@ const Monitor = React.forwardRef((props, ref) => {
     // let ld = [...lineData];
 
     const commandInput = [
-      <TerminalOutput>
+      <TerminalOutput key={1}>
         <pre className="text-zinc-300">~/aegis-wg $ {command}</pre>
       </TerminalOutput>,
     ];
@@ -133,14 +148,14 @@ const Monitor = React.forwardRef((props, ref) => {
 
           setLineData([
             ...commandInput,
-            <TerminalOutput>
+            <TerminalOutput key={1}>
               <pre>Starting watchdog...</pre>
             </TerminalOutput>,
           ]);
         } else {
           setLineData([
             ...commandInput,
-            <TerminalOutput>
+            <TerminalOutput key={1}>
               <pre className="text-[#ff5151]">
                 Error: Watchdog already running.
               </pre>
@@ -157,14 +172,14 @@ const Monitor = React.forwardRef((props, ref) => {
 
           setLineData([
             ...commandInput,
-            <TerminalOutput>
+            <TerminalOutput key={1}>
               <pre>Stopped watchdog.</pre>
             </TerminalOutput>,
           ]);
         } else {
           setLineData([
             ...commandInput,
-            <TerminalOutput>
+            <TerminalOutput key={1}>
               <pre className="text-[#ff5151]">
                 Error: Watchdog already stopped.
               </pre>
@@ -179,7 +194,7 @@ const Monitor = React.forwardRef((props, ref) => {
         }));
         setLineData([
           ...commandInput,
-          <TerminalOutput>
+          <TerminalOutput key={1}>
             {'Contracts monitoring turned ' +
               (settings.contracts ? 'off' : 'on')}
           </TerminalOutput>,
@@ -191,7 +206,7 @@ const Monitor = React.forwardRef((props, ref) => {
           address: !settings.address,
         }));
         setLineData([
-          <TerminalOutput>
+          <TerminalOutput key={1}>
             {'Address monitoring turned ' + (settings.address ? 'off' : 'on')}
           </TerminalOutput>,
         ]);
@@ -202,7 +217,7 @@ const Monitor = React.forwardRef((props, ref) => {
           honeypot: !settings.honeypot,
         }));
         setLineData([
-          <TerminalInput>
+          <TerminalInput key={1}>
             {'Honeypot monitoring turned ' + (settings.honeypot ? 'off' : 'on')}
           </TerminalInput>,
         ]);
@@ -214,7 +229,7 @@ const Monitor = React.forwardRef((props, ref) => {
         if (input) {
           setLineData([
             ...commandInput,
-            <TerminalOutput>Unrecognized command</TerminalOutput>,
+            <TerminalOutput key={1}>Unrecognized command</TerminalOutput>,
           ]);
         }
     }

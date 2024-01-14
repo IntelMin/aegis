@@ -3,15 +3,9 @@
 import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'qs';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
 import PulseLoader from 'react-spinners/PulseLoader';
-
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import Banner from '@/components/attacks/banner';
 import BountyFilter from '@/components/bounty/filter';
 import BountyTableProps from '@/components/bounty/table';
 
@@ -21,8 +15,16 @@ const Bounty: FC<BountyProps> = ({}) => {
   const toast = useToast();
   const [fromDate, setFromDate] = useState<Date>();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
-  const [filterResults, setFilterResults] = useState<any[]>([]);
-  const [bountyStats, setBountyStats] = useState<any[]>([]);
+  const [filterResults, setFilterResults] = useState<{
+    bounties: any[];
+    total: number;
+    offset: number;
+    pages: number;
+  }>({ bounties: [], total: 0, offset: 0, pages: 0 });
+  const [bountyStats, setBountyStats] = useState<{
+    total: number;
+    total_amount: number;
+  }>({ total: 0, total_amount: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
@@ -33,7 +35,7 @@ const Bounty: FC<BountyProps> = ({}) => {
     });
   }, []);
 
-  const fetchData = async filterOptions => {
+  const fetchData = async (filterOptions: any) => {
     setIsLoading(true);
 
     console.log('--------');

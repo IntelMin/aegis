@@ -6,15 +6,14 @@ export async function GET(req: NextRequest) {
 
   console.log(`searchParams: ${searchParams}`);
 
-  const name = searchParams.get('name');
-  const category = searchParams.get('category');
-  const limit = parseInt(searchParams.get('limit')) || 10;
-  const offset = parseInt(searchParams.get('offset')) || 0;
+  const name = searchParams.get('name') || '';
+  const category = searchParams.get('category') || '';
+  const limit = parseInt(searchParams.get('limit') || '10', 10);
+  const offset = parseInt(searchParams.get('offset') || '0', 10);
 
   try {
-    const whereClause = {
-      ...(name && { name: { contains: name, mode: 'insensitive' } }),
-      ...(category && { attack_vector: { is: category } }),
+    const whereClause: any = {
+      ...(category && { attack_vector: category }),
     };
 
     const [attacks, total] = await Promise.all([

@@ -9,7 +9,19 @@ import React, {
 import { CubeAscii } from 'cube-ascii-react';
 import { formatAge } from '@/utils/format-age';
 
-const BlockStatus = React.forwardRef((props, ref) => {
+interface BlockStatusProps {
+  settings: {
+    active: boolean;
+    address: boolean;
+    honeypot: boolean;
+    contracts: boolean;
+  };
+}
+
+const BlockStatus = React.forwardRef(function BlockStatusComponent(
+  props: BlockStatusProps,
+  ref
+) {
   const divRef = React.useRef<HTMLDivElement>(null);
   const preTagRef = React.useRef<HTMLPreElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);

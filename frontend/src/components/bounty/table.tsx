@@ -23,12 +23,21 @@ import { formatAge } from '@/utils/format-age';
 interface BountyTableProps {
   loading: boolean;
   options: any[];
-  results: any[];
+  results: {
+    bounties: any[];
+    offset: number;
+    pages: number;
+    total: number;
+  };
 }
 
 const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
-  const current_page = results.offset + 1;
-  const last_page = results.pages;
+  const current_page = results?.offset + 1;
+  const last_page = results?.pages;
+
+  const handlePageClick = (page: number) => {
+    console.log('Page:', page);
+  };
 
   if (loading) {
     return (

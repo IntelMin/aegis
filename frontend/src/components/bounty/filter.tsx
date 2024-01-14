@@ -259,7 +259,7 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
         </div>
         <Slider
           //   defaultValue={bounty}
-          defaultValues={[0, 0]}
+          defaultValue={[0, 0]}
           max={stats.max_reward}
           step={100}
           onValueChange={(values: number[]) => {
@@ -279,7 +279,7 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
         </div>
         <Slider
           //   defaultValue={bounty}
-          defaultValues={[0, 0]}
+          defaultValue={[0, 0]}
           max={stats.max_paid}
           step={100}
           onValueChange={(values: number[]) => {

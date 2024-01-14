@@ -16,8 +16,17 @@ const Attacks: FC<AttacksProps> = ({}) => {
   const toast = useToast();
   const [fromDate, setFromDate] = useState<Date>();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
-  const [filterResults, setFilterResults] = useState<any[]>([]);
-  const [attackStats, setAttackStats] = useState<any[]>([]);
+  const [filterResults, setFilterResults] = useState<{
+    attacks: any[];
+    total: number;
+    offset: number;
+    pages: number;
+    results: any[];
+  }>({ attacks: [], total: 0, offset: 0, pages: 0, results: [] });
+  const [attackStats, setAttackStats] = useState<{
+    total: number;
+    total_amount: number;
+  }>({ total: 0, total_amount: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
@@ -75,7 +84,7 @@ const Attacks: FC<AttacksProps> = ({}) => {
               {!isInitialLoad ? (
                 <CountUp
                   start={0}
-                  end={attackStats.total_amount}
+                  end={attackStats?.total_amount}
                   duration={2.75}
                   separator=","
                   decimals={2}
@@ -89,7 +98,7 @@ const Attacks: FC<AttacksProps> = ({}) => {
               stolen in{' '}
               <span className="font-bold text-zinc-400">
                 {!isInitialLoad ? (
-                  <>{attackStats.total.toLocaleString('en-US')}</>
+                  <>{attackStats?.total?.toLocaleString('en-US')}</>
                 ) : (
                   <>...</>
                 )}
