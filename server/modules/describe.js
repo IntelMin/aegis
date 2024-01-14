@@ -1,7 +1,7 @@
 // server/modules/functions.js
-const { getCachedOrFreshData } = require("./utils");
-const parser = require("@solidity-parser/parser");
-const parser = require("@solidity-parser/parser");
+const { getCachedOrFreshData } = require('./lib/utils');
+const parser = require('@solidity-parser/parser');
+const parser = require('@solidity-parser/parser');
 
 async function getFunctions(content) {
   // const ast = parser.parse(content, { loc: true, range: true });
@@ -23,24 +23,24 @@ async function getFunctions(content) {
     ContractDefinition(node) {
       const name = node.name;
       let bases = node.baseContracts
-        .map((spec) => {
+        .map(spec => {
           return spec.baseName.namePath;
         })
-        .join(", ");
+        .join(', ');
 
-      bases = bases.length ? `(${bases})` : "";
+      bases = bases.length ? `(${bases})` : '';
 
-      let specs = "";
-      if (node.kind === "library") {
-        specs += "[Lib]";
-      } else if (node.kind === "interface") {
-        specs += "[Int]";
+      let specs = '';
+      if (node.kind === 'library') {
+        specs += '[Lib]';
+      } else if (node.kind === 'interface') {
+        specs += '[Int]';
       }
 
       // console.log(` + ${specs} ${name} ${bases}`);
       const lineNumber = node.loc.start.line;
       currentContract = {
-        type: "contract",
+        type: 'contract',
         name: name,
         bases: bases,
         specs: specs,
@@ -53,7 +53,7 @@ async function getFunctions(content) {
       // console.log(` + ${specs} ${name} ${bases} at line ${lineNumber}`);
     },
 
-    "ContractDefinition:exit": function (node) {
+    'ContractDefinition:exit': function (node) {
       // console.log("");
       currentContract = null;
       // console.log("ContractDefinition:exit");
@@ -63,46 +63,46 @@ async function getFunctions(content) {
       let name;
 
       if (node.isConstructor) {
-        name = "<Constructor>";
+        name = '<Constructor>';
       } else if (node.isFallback) {
-        name = "<Fallback>";
+        name = '<Fallback>';
       } else if (node.isReceiveEther) {
-        name = "<Receive Ether>";
+        name = '<Receive Ether>';
       } else {
         name = node.name;
       }
 
-      let spec = "";
-      if (node.visibility === "public" || node.visibility === "default") {
-        spec += "[Pub]";
-      } else if (node.visibility === "external") {
-        spec += "[Ext]";
-      } else if (node.visibility === "private") {
-        spec += "[Prv]";
-      } else if (node.visibility === "internal") {
-        spec += "[Int]";
+      let spec = '';
+      if (node.visibility === 'public' || node.visibility === 'default') {
+        spec += '[Pub]';
+      } else if (node.visibility === 'external') {
+        spec += '[Ext]';
+      } else if (node.visibility === 'private') {
+        spec += '[Prv]';
+      } else if (node.visibility === 'internal') {
+        spec += '[Int]';
       }
 
-      let payable = "";
-      if (node.stateMutability === "payable") {
-        payable = " ($)";
+      let payable = '';
+      if (node.stateMutability === 'payable') {
+        payable = ' ($)';
       }
 
-      let mutating = "";
+      let mutating = '';
       if (!node.stateMutability) {
-        mutating = " #";
+        mutating = ' #';
       }
 
-      let modifiers = "";
+      let modifiers = '';
       for (let m of node.modifiers) {
-        if (!!modifiers) modifiers += ",";
+        if (!!modifiers) modifiers += ',';
         modifiers += m.name;
       }
 
       // console.log(`    - ${spec} ${name}${payable}${mutating}`);
       const lineNumber = node.loc.start.line;
       const functionDef = {
-        type: "func",
+        type: 'func',
         name: name,
         spec: spec,
         payable: payable,
@@ -121,8 +121,8 @@ async function getFunctions(content) {
   });
 
   // Print a legend for symbols being used
-  let mutationSymbol = " #";
-  let payableSymbol = " ($)";
+  let mutationSymbol = ' #';
+  let payableSymbol = ' ($)';
 
   // console.log(`
   // ${payableSymbol} = payable function

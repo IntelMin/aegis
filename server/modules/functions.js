@@ -1,6 +1,6 @@
-const { getCachedOrFreshData } = require("../utils");
-const parser = require("@solidity-parser/parser");
-const path = require("path");
+const { getCachedOrFreshData } = require('../lib/utils');
+const parser = require('@solidity-parser/parser');
+const path = require('path');
 
 async function generateFunctions(
   content,
@@ -14,7 +14,7 @@ async function generateFunctions(
     throw err;
   }
 
-  console.log("Contract AST loaded");
+  console.log('Contract AST loaded');
 
   var modifiers = [];
   var added = [];
@@ -57,25 +57,25 @@ async function generateFunctions(
     ContractDefinition(node) {
       const name = node.name;
       let bases = node.baseContracts
-        .map((spec) => {
+        .map(spec => {
           return spec.baseName.namePath;
         })
-        .join(", ");
+        .join(', ');
 
-      let specs = "";
-      if (node.kind === "library") {
-        specs += "Library";
-      } else if (node.kind === "interface") {
-        specs += "Interface";
+      let specs = '';
+      if (node.kind === 'library') {
+        specs += 'Library';
+      } else if (node.kind === 'interface') {
+        specs += 'Interface';
       } else {
-        specs += "Implementation";
+        specs += 'Implementation';
       }
 
       contractsTable += `||||||
 | **${name}** | ${specs} | ${bases} |||
 `;
       let row = {
-        type: "contract",
+        type: 'contract',
         name: name,
         spec: specs,
         mutating: null,
@@ -92,42 +92,42 @@ async function generateFunctions(
       isConstructor = false;
 
       if (node.isConstructor) {
-        name = "<Constructor>";
+        name = '<Constructor>';
       } else if (node.isFallback) {
-        name = "<Fallback>";
+        name = '<Fallback>';
       } else if (node.isReceiveEther) {
-        name = "<Receive Ether>";
+        name = '<Receive Ether>';
       } else {
         name = node.name;
       }
 
-      let spec = "";
-      if (node.visibility === "public" || node.visibility === "default") {
-        spec += "Public ❗️";
+      let spec = '';
+      if (node.visibility === 'public' || node.visibility === 'default') {
+        spec += 'Public ❗️';
         isPublic = true;
-      } else if (node.visibility === "external") {
-        spec += "External ❗️";
+      } else if (node.visibility === 'external') {
+        spec += 'External ❗️';
         isPublic = true;
-      } else if (node.visibility === "private") {
-        spec += "Private 🔐";
-      } else if (node.visibility === "internal") {
-        spec += "Internal 🔒";
+      } else if (node.visibility === 'private') {
+        spec += 'Private 🔐';
+      } else if (node.visibility === 'internal') {
+        spec += 'Internal 🔒';
       }
 
-      let payable = "";
-      if (node.stateMutability === "payable") {
-        payable = "💵";
+      let payable = '';
+      if (node.stateMutability === 'payable') {
+        payable = '💵';
       }
 
-      let mutating = "";
+      let mutating = '';
       if (!node.stateMutability) {
-        mutating = "🛑";
+        mutating = '🛑';
       }
 
       contractsTable += `| └ | ${name} | ${spec} | ${mutating} ${payable} |`;
 
       let row = {
-        type: "func",
+        type: 'func',
         name: name,
         spec: spec,
         mutating: mutating,
@@ -137,13 +137,13 @@ async function generateFunctions(
       tableRows.push(row);
     },
 
-    "FunctionDefinition:exit": function (node) {
+    'FunctionDefinition:exit': function (node) {
       if (!isConstructor && isPublic && !doesModifierExist) {
-        contractsTable += "NO❗️";
+        contractsTable += 'NO❗️';
       } else if (isPublic && options.negModifiers) {
         for (var i = 0; i < modifiers.length; i++) {
           if (added.indexOf(modifiers[i]) == -1) {
-            contractsTable += " ~~" + modifiers[i] + "~~ ";
+            contractsTable += ' ~~' + modifiers[i] + '~~ ';
           }
         }
         added = [];
@@ -160,19 +160,19 @@ async function generateFunctions(
     },
   });
 
-  const reportContents = `${"#".repeat(
+  const reportContents = `${'#'.repeat(
     options.deepness
   )} Function Description Report
 
-${"#".repeat(options.deepness + 1)} Files Description Table
+${'#'.repeat(options.deepness + 1)} Files Description Table
 
 ${filesTable}
 
-${"#".repeat(options.deepness + 1)} Contracts Description Table
+${'#'.repeat(options.deepness + 1)} Contracts Description Table
 
 ${contractsTable}
 
-${"#".repeat(options.deepness + 1)} Legend
+${'#'.repeat(options.deepness + 1)} Legend
 
 |  Symbol  |  Meaning  |
 |:--------:|-----------|
@@ -195,7 +195,7 @@ async function getFunctions(address, source_code) {
 
     return true;
   } catch (error) {
-    console.error("Error in getFunctions:", error);
+    console.error('Error in getFunctions:', error);
     return false;
   }
 }

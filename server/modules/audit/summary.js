@@ -1,12 +1,12 @@
-const { getCachedOrFreshData } = require("../../utils");
-const { summaryPrompt } = require("./prompts");
-const OpenAI = require("openai");
-const fs = require("fs").promises;
-const fss = require("fs");
-const path = require("path");
-const openai = require("../../openai");
+const { getCachedOrFreshData } = require('../../lib/utils');
+const { summaryPrompt } = require('./prompts');
+const OpenAI = require('openai');
+const fs = require('fs').promises;
+const fss = require('fs');
+const path = require('path');
+const openai = require('../../lib/openai');
 
-const getFunctionsData = async (props) => {
+const getFunctionsData = async props => {
   let internalCount = 0;
   let publicCount = 0;
   let pureCount = 0;
@@ -14,21 +14,21 @@ const getFunctionsData = async (props) => {
   let payableCount = 0;
   let totalFunctions = 0;
 
-  props.functions.tableRows.forEach((row) => {
-    if (row.type === "func") {
+  props.functions.tableRows.forEach(row => {
+    if (row.type === 'func') {
       totalFunctions++;
-      if (row.spec.includes("Internal 🔒")) {
+      if (row.spec.includes('Internal 🔒')) {
         internalCount++;
-      } else if (row.spec.includes("Public ❗️")) {
+      } else if (row.spec.includes('Public ❗️')) {
         publicCount++;
       }
     }
   });
-  props.source.data.abi.forEach((item) => {
-    if (item.type === "function") {
-      if (item.stateMutability === "pure") {
+  props.source.data.abi.forEach(item => {
+    if (item.type === 'function') {
+      if (item.stateMutability === 'pure') {
         pureCount++;
-      } else if (item.stateMutability === "view") {
+      } else if (item.stateMutability === 'view') {
         viewCount++;
       } else if (item.payable) {
         payableCount++;
@@ -61,116 +61,116 @@ const getFunctionsData = async (props) => {
   ];
 };
 
-const getFindingsData = async (findings) => {
+const getFindingsData = async findings => {
   let highCount = 0;
   let mediumCount = 0;
   let lowCount = 0;
 
-  findings.forEach((finding) => {
-    if (finding.severity === "HIGH") {
+  findings.forEach(finding => {
+    if (finding.severity === 'HIGH') {
       highCount++;
-    } else if (finding.severity === "MEDIUM") {
+    } else if (finding.severity === 'MEDIUM') {
       mediumCount++;
-    } else if (finding.severity === "LOW") {
+    } else if (finding.severity === 'LOW') {
       lowCount++;
     }
   });
   return [highCount, mediumCount, lowCount];
 };
 
-const getGPTSummary = async (prompt) => {
+const getGPTSummary = async prompt => {
   const params = (OpenAI.Chat.ChatCompletionCreateParams = {
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: prompt }],
   });
   const completion = await openai.chat.completions.create(params);
   return completion.choices[0]?.message?.content;
 };
 
-const generateString = async (data) => {
-  let description = "";
+const generateString = async data => {
+  let description = '';
 
   const sell_tax = data.sell_tax * 100;
   description +=
     sell_tax == 0
-      ? "No sell tax, which is great. "
+      ? 'No sell tax, which is great. '
       : `Sell tax is ${sell_tax}%, ${
           sell_tax >= 9
-            ? "extremely high."
+            ? 'extremely high.'
             : sell_tax >= 5
-            ? "a bit high."
-            : "normal."
+            ? 'a bit high.'
+            : 'normal.'
         }`;
 
-  description += "\n";
+  description += '\n';
 
   const buy_tax = data.buy_tax * 100;
   description +=
     buy_tax == 0
-      ? "No buy tax, which is great. "
+      ? 'No buy tax, which is great. '
       : `Buy tax is ${buy_tax}%, ${
           buy_tax >= 9
-            ? "extremely high."
+            ? 'extremely high.'
             : buy_tax >= 5
-            ? "a bit high."
-            : "normal."
+            ? 'a bit high.'
+            : 'normal.'
         }`;
 
-  description += "\n";
+  description += '\n';
 
   description +=
     data.is_honeypot == 0
-      ? "Not a honeypot, which is typical."
-      : "DANGER: This is a honeypot. Owners can withhold funds.";
+      ? 'Not a honeypot, which is typical.'
+      : 'DANGER: This is a honeypot. Owners can withhold funds.';
 
-  description += "\n";
+  description += '\n';
 
   description +=
     data.is_antiwhale == 0
-      ? "Not antiwhale, which is concerning. "
-      : "Antiwhale measures are in place, which is good. ";
+      ? 'Not antiwhale, which is concerning. '
+      : 'Antiwhale measures are in place, which is good. ';
 
-  description += "\n";
+  description += '\n';
 
   description +=
     data.is_mintable == 0
-      ? "Not mintable, maintaining token scarcity. "
-      : "Mintable, which can increase token supply.";
+      ? 'Not mintable, maintaining token scarcity. '
+      : 'Mintable, which can increase token supply.';
 
-  description += "\n";
+  description += '\n';
 
   description +=
     data.blacklisted == 1
-      ? "Blacklisting function exists, not ideal but also normal."
-      : "No blacklisting, allowing unrestricted trading.";
+      ? 'Blacklisting function exists, not ideal but also normal.'
+      : 'No blacklisting, allowing unrestricted trading.';
 
-  description += "\n";
+  description += '\n';
 
   description +=
     data.is_in_dex == 1
-      ? "Listed in a dex, which is normal."
-      : "Not listed in a dex, which is unusual.";
+      ? 'Listed in a dex, which is normal.'
+      : 'Not listed in a dex, which is unusual.';
 
-  description += "\n";
+  description += '\n';
 
   const holder_count = (Number(data.holder_count) / 1000) * 1000;
   description +=
     Number(data.holder_count) > 1000
       ? `Over ${holder_count} holders, indicating good adoption.`
-      : "Less than 1000 holders, indicating low adoption.";
+      : 'Less than 1000 holders, indicating low adoption.';
 
-  description += "\n";
+  description += '\n';
 
   description +=
     Number(data.lp_holder_count) > 0
       ? `More than ${data.lp_holder_count} LP holders, which is positive.`
-      : "Less than 2 LP holders, which is slightly concerning. It may still be very early in the project.";
+      : 'Less than 2 LP holders, which is slightly concerning. It may still be very early in the project.';
 
-  description += "\n";
+  description += '\n';
 
   if (data.number_of_high_severity_issues > 0) {
     description += `${data.number_of_high_severity_issues} high severity issue${
-      data.number_of_high_severity_issues > 1 ? "s" : ""
+      data.number_of_high_severity_issues > 1 ? 's' : ''
     } that are very risky and warrant immediate attention, `;
   } else {
     description += `no high severity issues, which is excellent news, `;
@@ -180,7 +180,7 @@ const generateString = async (data) => {
     description += `${
       data.number_of_medium_severity_issues
     } medium severity issue${
-      data.number_of_medium_severity_issues > 1 ? "s" : ""
+      data.number_of_medium_severity_issues > 1 ? 's' : ''
     } suggesting caution, `;
   } else {
     description += `no medium severity issues, `;
@@ -190,7 +190,7 @@ const generateString = async (data) => {
     description += `and ${
       data.number_of_low_severity_issues
     } low severity issue${
-      data.number_of_low_severity_issues > 1 ? "s" : ""
+      data.number_of_low_severity_issues > 1 ? 's' : ''
     }, which are not typically a cause for immediate concern. `;
   } else {
     description += `and no low severity issues. `;
@@ -215,10 +215,16 @@ const generateString = async (data) => {
 };
 
 async function createSummary(address) {
-  const security = require("../../cache/contracts/" + address + "/security.json");
-  const functions = require("../../cache/contracts/" + address + "/functions.json");
-  const source = require("../../cache/contracts/" + address + "/source.json");
-  const findings = require("../../cache/contracts/" + address + "/findings.json");
+  const security = require('../../cache/contracts/' +
+    address +
+    '/security.json');
+  const functions = require('../../cache/contracts/' +
+    address +
+    '/functions.json');
+  const source = require('../../cache/contracts/' + address + '/source.json');
+  const findings = require('../../cache/contracts/' +
+    address +
+    '/findings.json');
 
   const functionsData = await getFunctionsData({
     functions: functions,
@@ -254,16 +260,16 @@ async function createSummary(address) {
   };
   const notes = await generateString(data);
   const refineprompt = summaryPrompt
-    .replace("***notes***", notes)
-    .replace("***name***", data.token_name)
-    .replace("***symbol***", data.token_symbol);
+    .replace('***notes***', notes)
+    .replace('***name***', data.token_name)
+    .replace('***symbol***', data.token_symbol);
   console.log(refineprompt);
   const summary = await getGPTSummary(refineprompt);
 
   return { text: summary, table: data };
 }
 
-const getSummary = async (address) => {
+const getSummary = async address => {
   try {
     const cacheFile = path.join(
       __dirname,
@@ -274,7 +280,7 @@ const getSummary = async (address) => {
 
     return true;
   } catch (error) {
-    console.error("Error in getSummary:", error);
+    console.error('Error in getSummary:', error);
     return false;
   }
 };

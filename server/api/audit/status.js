@@ -14,7 +14,6 @@ const {
   NEW_AUDIT_RETURN_CODE,
   AUDIT_STATUS_RETURN_CODE,
 } = require('./statusCodes');
-const supabase = require('../../supabase');
 
 async function getAuditRequest(address) {
   const { data, error } = await supabase

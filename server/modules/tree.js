@@ -1,6 +1,6 @@
-const { getCachedOrFreshData } = require("../utils");
-const parser = require("@solidity-parser/parser");
-const path = require("path");
+const { getCachedOrFreshData } = require('../lib/utils');
+const parser = require('@solidity-parser/parser');
+const path = require('path');
 
 async function generateTree(content) {
   const ast = (() => {
@@ -12,7 +12,7 @@ async function generateTree(content) {
     }
   })();
 
-  console.log("Contract AST loaded -- generateTree");
+  console.log('Contract AST loaded -- generateTree');
 
   const astTree = [];
   let currentContract = null;
@@ -21,24 +21,24 @@ async function generateTree(content) {
     ContractDefinition(node) {
       const name = node.name;
       let bases = node.baseContracts
-        .map((spec) => {
+        .map(spec => {
           return spec.baseName.namePath;
         })
-        .join(", ");
+        .join(', ');
 
-      bases = bases.length ? `(${bases})` : "";
+      bases = bases.length ? `(${bases})` : '';
 
-      let specs = "";
-      if (node.kind === "library") {
-        specs += "[Lib]";
-      } else if (node.kind === "interface") {
-        specs += "[Int]";
+      let specs = '';
+      if (node.kind === 'library') {
+        specs += '[Lib]';
+      } else if (node.kind === 'interface') {
+        specs += '[Int]';
       }
 
       // console.log(` + ${specs} ${name} ${bases}`);
       const lineNumber = node.loc.start.line;
       currentContract = {
-        type: "contract",
+        type: 'contract',
         name: name,
         bases: bases,
         specs: specs,
@@ -51,7 +51,7 @@ async function generateTree(content) {
       // console.log(` + ${specs} ${name} ${bases} at line ${lineNumber}`);
     },
 
-    "ContractDefinition:exit": function (node) {
+    'ContractDefinition:exit': function (node) {
       // console.log("");
       currentContract = null;
       // console.log("ContractDefinition:exit");
@@ -61,46 +61,46 @@ async function generateTree(content) {
       let name;
 
       if (node.isConstructor) {
-        name = "<Constructor>";
+        name = '<Constructor>';
       } else if (node.isFallback) {
-        name = "<Fallback>";
+        name = '<Fallback>';
       } else if (node.isReceiveEther) {
-        name = "<Receive Ether>";
+        name = '<Receive Ether>';
       } else {
         name = node.name;
       }
 
-      let spec = "";
-      if (node.visibility === "public" || node.visibility === "default") {
-        spec += "[Pub]";
-      } else if (node.visibility === "external") {
-        spec += "[Ext]";
-      } else if (node.visibility === "private") {
-        spec += "[Prv]";
-      } else if (node.visibility === "internal") {
-        spec += "[Int]";
+      let spec = '';
+      if (node.visibility === 'public' || node.visibility === 'default') {
+        spec += '[Pub]';
+      } else if (node.visibility === 'external') {
+        spec += '[Ext]';
+      } else if (node.visibility === 'private') {
+        spec += '[Prv]';
+      } else if (node.visibility === 'internal') {
+        spec += '[Int]';
       }
 
-      let payable = "";
-      if (node.stateMutability === "payable") {
-        payable = " ($)";
+      let payable = '';
+      if (node.stateMutability === 'payable') {
+        payable = ' ($)';
       }
 
-      let mutating = "";
+      let mutating = '';
       if (!node.stateMutability) {
-        mutating = " #";
+        mutating = ' #';
       }
 
-      let modifiers = "";
+      let modifiers = '';
       for (let m of node.modifiers) {
-        if (!!modifiers) modifiers += ",";
+        if (!!modifiers) modifiers += ',';
         modifiers += m.name;
       }
 
       // console.log(`    - ${spec} ${name}${payable}${mutating}`);
       const lineNumber = node.loc.start.line;
       const functionDef = {
-        type: "func",
+        type: 'func',
         name: name,
         spec: spec,
         payable: payable,
@@ -130,10 +130,9 @@ async function getTree(address, source_code) {
 
     await getCachedOrFreshData(cacheFile, generateTree, source_code);
 
-    return true
-    
+    return true;
   } catch (error) {
-    console.error("Error in getTree:", error);
+    console.error('Error in getTree:', error);
     return false;
   }
 }
