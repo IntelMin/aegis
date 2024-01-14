@@ -14,15 +14,12 @@ type Props = {
 };
 
 const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
-  const [pdfUrl, setPdfUrl] = React.useState('');
-  useEffect(() => {
-    if (pdfUrl) {
-      window.open(pdfUrl, '_blank');
-    }
-  }, [pdfUrl]);
+  const [loading, setLoading] = React.useState(false);
+
   const requestReport = async () => {
     const contractAddress = metadata?.address;
     try {
+      setLoading(true);
       const response = await fetch('/api/audit/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,12 +62,13 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
               document.body.removeChild(link);
               // setPdfUrl(pdfUrl);
               clearInterval(intervalId);
+              setLoading(false);
             }
           }
         }, 5000);
-        console.log('Report requested successfully.');
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error requesting report:', error);
     }
   };
@@ -193,12 +191,15 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
         </div>
 
         <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
-          <div
-            className=" m-0 ml-5 flex items-center justify-center text-center bg-sky-400 font-weight-400 w-1/2 rounded-lg px-5 md:w-1/3 "
+          <button
+            className={` m-0 ml-5 flex items-center justify-center text-center ${
+              loading ? 'bg-sky-200' : 'bg-sky-400 '
+            } font-weight-400 w-1/2 rounded-lg px-5 md:w-1/3 `}
             onClick={requestReport}
+            disabled={loading}
           >
-            Get Report
-          </div>
+            {!loading ? 'Request Report' : 'Loading...'}
+          </button>
           {liveData ? (
             <>
               <TokenValueContainer
