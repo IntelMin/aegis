@@ -5,13 +5,18 @@ export const formatNumber = (input: number | string): string => {
     return 'Invalid number';
   }
 
+  const format = (value: number, suffix: string) => {
+    // Convert to string using toFixed, then remove trailing zeros and decimal point if not needed
+    return Number(value.toFixed(2)).toString() + suffix;
+  };
+
   if (num >= 1e9) {
-    return (num / 1e9).toFixed(2) + 'B';
+    return format(num / 1e9, 'B');
   } else if (num >= 1e6) {
-    return (num / 1e6).toFixed(2) + 'M';
+    return format(num / 1e6, 'M');
   } else if (num >= 1e3) {
-    return (num / 1e3).toFixed(2) + 'K';
+    return format(num / 1e3, 'K');
   } else {
-    return num.toFixed(2);
+    return format(num, '');
   }
 };

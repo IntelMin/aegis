@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { bitqueryRequest } = require('../../utils');
+const { bitqueryRequest } = require('../../lib/utils');
 
 const getData = async (data, type) => {
   const response = await bitqueryRequest(data, type);

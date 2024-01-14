@@ -3,14 +3,21 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const dashboardRoute = require('./api/dashboard');
 const monitorRoute = require('./api/monitor');
 const auditRoute = require('./api/audit');
 const monitoringRoute = require('./api/monitoring');
 const tokenRoute = require('./api/token');
 const reportRoute = require('./api/report');
-const bugbountyRoute = require('./api/bugbounty');
 const infoRoute = require('./api/info');
+const {
+  router: dashboardRoute,
+  initLive: initDashboardLive,
+  initTrending: initDashboardTrending,
+} = require('./api/dashboard');
+const { router: bountyRoute, init: initBounty } = require('./api/bounty');
+const { router: attacksRoute, init: initAttacks } = require('./api/attacks');
+
+// const bugbountyRoute = require('./api/bugbounty');
 // const describeRoute = require("./api/describe");
 // const markdownRoute = require("./api/markdown");
 // const dependencyRoute = require("./api/dependencies");
@@ -42,8 +49,8 @@ app.use('/monitoring', monitoringRoute);
 app.use('/token', tokenRoute);
 app.use('/info', infoRoute);
 app.use('/report', reportRoute);
-app.use('/bugbounty', bugbountyRoute);
-
+app.use('/bounty', bountyRoute);
+app.use('/attacks', attacksRoute);
 // app.use('/deployer', deployerRoute);
 // app.use('/code', codeRoute);
 // app.use('/trending', trendingTokens);
@@ -51,6 +58,26 @@ app.use('/bugbounty', bugbountyRoute);
 // app.use("/markdown", markdownRoute);
 // app.use("/dependency", dependencyRoute);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+async function init() {
+  try {
+    console.log('Initializing...');
+
+    await Promise.all([
+      //   initDashboardLive(),
+      //   initDashboardTrending(),
+      //   initBounty(),
+      initAttacks(),
+    ]);
+
+    console.log('Initialization complete.');
+
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('Failed to initialize:', error);
+    process.exit(1);
+  }
+}
+
+init();

@@ -10,6 +10,7 @@
   },
   "author": "ocvc",
   "dependencies": {
+    "@normalizex/honeypot-is": "^1.0.3",
     "@solidity-parser/parser": "^0.17.0",
     "@supabase/supabase-js": "^2.39.2",
     "avsc": "^5.7.7",
@@ -20,16 +21,17 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
+    "ethers": "^6.9.2",
     "express": "^4.17.1",
+    "http": "0.0.1-security",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-curl-impersonate": "^1.4.2",
     "openai": "^4.24.1",
     "puppeteer": "^21.7.0",
+    "socket.io": "^4.7.4",
     "solc": "0.8.23-fixed",
-    "viem": "^1.21.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+    "viem": "^1.21.4",
+    "ws": "^8.16.0"
   }
 }

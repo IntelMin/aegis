@@ -112,3 +112,36 @@ model report_requests {
 
     @@map(name: "report_requests")
 }
+
+model bounties {
+    id                           Int       @id @default(autoincrement())
+    bounty_id                    String
+    name                         String
+    link                         String?
+    max_reward                   Int?
+    vault_tvl                    Int?
+    logo                         String?
+    date                         DateTime?
+    last_updated_date            DateTime?
+    response_time_metric_enabled Boolean
+    med_response_time            Int?
+    total_paid_metric_enabled    Boolean
+    total_paid_amount            Int?
+    rating                       Float?
+    firm                         Json
+    category_list                String[]
+    language_list                String[]
+    source_code_list             String[]
+    reference_list               String[]
+}
+
+model attacks {
+    id            Int      @id @default(autoincrement())
+    date          DateTime
+    target        String
+    description   String
+    amount        String
+    attack_vector String
+    reference     String?
+    hash          String   @unique
+}

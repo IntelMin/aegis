@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
-const { readCache } = require('../utils');
+const { readCache } = require('../lib/utils');
 const getInfo = require('../modules/info');
 
 router.get('/request/:address', async (req, res) => {

@@ -63,9 +63,12 @@ const NavHeader = ({ show, setShow }: Props) => {
 
   return (
     <div className="sticky z-[10] w-full top-0 bg-black">
-      <header className="flex py-3 px-4 md:px-10 items-center justify-between border-b border-zinc-900">
+      <header
+        className="flex py-3 px-4 md:px-10 items-center justify-between border-b border-zinc-900"
+        suppressHydrationWarning={true}
+      >
         <div className="flex items-center gap-3">
-          <button type="button" className="md:hidden">
+          <button className="md:hidden">
             <Image src="/logo.png" alt="logo" width={40} height={40} />
           </button>
           <Search />
@@ -91,10 +94,7 @@ const NavHeader = ({ show, setShow }: Props) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="relative bg-zinc-800 p-3 rounded-[4px] flex items-center"
-          >
+          <button className="relative bg-zinc-800 p-3 rounded-[4px] flex items-center">
             <Image alt="bell" src="/icons/bell.svg" width={24} height={24} />
             {/* no. of notifs */}
             {/* <p className="absolute top-[6px] right-[6px] bg-red-600 text-white rounded-[4px] text-[12px] px-[5px]">
@@ -103,7 +103,6 @@ const NavHeader = ({ show, setShow }: Props) => {
           </button>
           {/* Toggle */}
           <button
-            type="button"
             onClick={() => setShow(!show)}
             className="bg-zinc-800 p-3 rounded-[4px] gap-2 flex items-center md:hidden"
           >
@@ -121,11 +120,8 @@ const NavHeader = ({ show, setShow }: Props) => {
           </button>
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <button
-                type="button"
-                className="bg-zinc-800 p-3 rounded-[4px] flex items-center max-md:hidden"
-              >
+            <DropdownMenuTrigger asChild>
+              <button className="bg-zinc-800 p-3 rounded-[4px] flex items-center max-md:hidden">
                 <Image
                   alt="user"
                   src="/icons/user.png"

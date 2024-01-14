@@ -14,25 +14,25 @@ export const navArr = [
         iconUrl: 'live-monitoring',
         icon: true,
       },
-      {
-        name: 'Pen testing',
-        href: 'pentesting',
-        iconUrl: 'pen-testing',
-        icon: true,
-      },
+      //   {
+      //     name: 'Pen testing',
+      //     href: 'pentesting',
+      //     iconUrl: 'pen-testing',
+      //     icon: true,
+      //   },
     ],
   },
   {
     title: 'Audit',
     children: [
       {
-        name: 'Code Audit',
+        name: 'Code',
         href: 'audit/code',
         iconUrl: 'code-audit',
         icon: true,
       },
       {
-        name: 'Token Audit',
+        name: 'Token',
         href: 'audit/token',
         iconUrl: 'token-audit',
         icon: true,
@@ -40,24 +40,24 @@ export const navArr = [
     ],
   },
   {
-    title: 'Leaderboards',
+    title: 'Watch',
     children: [
       {
-        name: 'Trending',
-        href: 'trending',
-        iconUrl: 'trending',
+        name: 'Watchdog',
+        href: 'watchdog',
+        iconUrl: 'scanner',
         icon: true,
       },
       {
-        name: 'Security source',
-        href: 'security',
-        iconUrl: 'security',
+        name: 'Attacks',
+        href: 'attacks',
+        iconUrl: 'attacks',
         icon: true,
       },
       {
-        name: 'Bug Bounty',
-        href: 'bugBounty',
-        iconUrl: 'bug-bounty',
+        name: 'Bounty',
+        href: 'bounty',
+        iconUrl: 'bounty',
         icon: true,
       },
     ],

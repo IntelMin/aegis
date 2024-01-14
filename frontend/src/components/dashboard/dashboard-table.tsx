@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Table,
@@ -134,7 +136,8 @@ const DashboardDataTable = ({
             <TableCell
               className={`text-neutral-200 col-span-2 z-[0] relative `}
             >
-              <Sparkline data={item.sparkline} />
+              {/* TODO: Fix sparkline null */}
+              {/* item?.sparkline  && {<Sparkline data={item.sparkline} /> */}
             </TableCell>
 
             {/* m-cap */}
