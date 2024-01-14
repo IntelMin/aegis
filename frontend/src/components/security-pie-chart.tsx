@@ -19,7 +19,7 @@ const PieGraph = (props: props) => {
       height: 180,
       type: 'radialBar',
       toolbar: {
-        show: true,
+        show: false,
       },
     },
     plotOptions: {
@@ -97,7 +97,7 @@ const PieGraph = (props: props) => {
   };
 
   return (
-    <div id="card" className="bg-transparent p-0 m-0 md:-translate-x-8">
+    <div id="card" className="bg-transparent p-0 m-0">
       <div id="chart">
         <Chart
           options={options}

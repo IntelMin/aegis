@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatYAxisLabel } from '@/utils/formatYaxisLabel';
+import axios from 'axios';
 
 const data = [
   {
@@ -123,11 +124,18 @@ const TransferVolumeGraph: React.FC<RoundedBarProps> = () => {
   };
 
   const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
+    const config = {
+      exchangeAddress: '0xcA143Ce32Fe78f17019d7d551a6402fC5350c73',
+      baseCurrency: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+      quoteCurrency: '0xB09FE1613fe03E7361319d2a3eDeC17a22f36809',
+    };
     const loadData = async () => {
-      // Made this timeout to show the skeleton loading will remove when api is ready
-      setTimeout(() => setLoading(false), 2000);
+      const response = await axios.post(`/monitoring/volume`, config);
+      console.log('response', response);
+      setLoading(false);
     };
 
     loadData();
