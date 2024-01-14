@@ -177,6 +177,7 @@ const DetailedPage = ({ params }: Props) => {
         }),
       });
       const auditData = await response.json();
+      console.log({ auditData });
 
       setStatus(auditData.status);
       switch (auditData.status) {

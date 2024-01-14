@@ -1,9 +1,16 @@
-// GET request to retrieve the status of a report
+// GET request to retrieve the status of a
+
+const express = require('express');
+const router = express.Router();
+const supabase = require('../supabase');
+const path = require('path');
+const fs = require('fs');
+
 router.get('/:address', async (req, res) => {
   const address = req.params.address;
 
   const { data: report, error } = await supabase
-    .from('report_request')
+    .from('report_requests')
     .select('*')
     .eq('address', address);
 
@@ -12,16 +19,19 @@ router.get('/:address', async (req, res) => {
       error: 'No report request found.',
     });
   }
-
-  if (report.status != 'completed') {
+  console.log(report[0].status);
+  if (report[0].status !== 'completed') {
     return res.status(200).json({
       data: 'Please wait, the report is processing.',
     });
   }
 
-  const name = report.name;
-  const filepath = path.join(`./cache/report/${address}/${name}.pdf`);
-
+  const name = report[0].name;
+  const filepath = path.join(
+    __dirname,
+    `../cache/reports/${address}/${name}.pdf`
+  );
+  console.log(filepath);
   // Check if the PDF file exists
   if (fs.existsSync(filepath)) {
     // Set the appropriate headers for the response

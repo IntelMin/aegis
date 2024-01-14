@@ -7,20 +7,39 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const request = await req.json();
   const { address } = request;
   const session = await getServerSession(authOptions);
-  const user_id = session?.user?.id;
-  const paid_user = await db.paid_audits.findFirst({
-    where: {
-      user_id: Number(user_id),
-      address: address,
-      type: 'report',
-    },
-  });
-  if (!paid_user) {
+  const email = session?.user?.email;
+  if (!email) {
     return NextResponse.json({
       status: 'failed',
-      message: "You have't paid for this report yet.",
+      message: 'User not logged in.',
     });
   }
+  const user = await db.user.findFirst({
+    where: {
+      email: email,
+    },
+  });
+  if (!user) {
+    return NextResponse.json({
+      status: 'failed',
+      message: 'User not found.',
+    });
+  }
+  const user_id = user.id;
+  console.log('user_id', session);
+  // const paid_user = await db.paid_audits.findFirst({
+  //   where: {
+  //     user_id: Number(user_id),
+  //     address: address,
+  //     type: 'report',
+  //   },
+  // });
+  // if (!paid_user) {
+  //   return NextResponse.json({
+  //     status: 'failed',
+  //     message: "You have't paid for this report yet.",
+  //   });
+  // }
   const report_request = await db.report_requests.findFirst({
     where: {
       address: address,
@@ -67,6 +86,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 export async function GET(req: NextRequest, res: NextResponse) {
   const url = new URL(req.nextUrl);
   const address = url.searchParams.get('address');
+  console.log('address1', address);
   if (!address) {
     return NextResponse.json({
       status: 'failed',
@@ -90,17 +110,40 @@ export async function GET(req: NextRequest, res: NextResponse) {
       message: 'Report requested successfully.',
     });
   }
-  if (report_request.status === 'completed') {
-    // const report = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL}/api/audit/report/${address}`,
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   }
-    // );
-    const reportUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/audit/report/${address}`;
-    return NextResponse.rewrite(reportUrl);
-  }
+  const report = await fetch(
+    `${process.env.AEGIS_SRV}/api/audit/report/${address}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  console.log('report', report_request);
+  const report_response = await report.blob();
+  const reportData = await report_response.arrayBuffer();
+  const reportBase64 = btoa(
+    String.fromCharCode.apply(null, Array.from(new Uint8Array(reportData)))
+  );
+
+  return NextResponse.json({
+    status: 'success',
+    message: 'Report encoded to base64 successfully.',
+    report: reportBase64,
+    name: `${report_request.name}`,
+  });
+  // console.log('report_request', report_request);
+  // if (report_request.status === 'completed') {
+  //   const reportUrl = new URL(
+  //     `${process.env.AEGIS_SRV}/api/audit/report/${address}`
+  //   );
+  //   return NextResponse.redirect(reportUrl);
+  // }
+  // console.log('report_request', report_request);
+  // if (report_request.status === 'completed') {
+  //   const reportUrl = new URL(
+  //     `${process.env.AEGIS_SRV}/api/audit/report/${address}`
+  //   );
+  //   return NextResponse.redirect(reportUrl);
+  // }
 }

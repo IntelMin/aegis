@@ -30,6 +30,11 @@ async function generatePDF(address, name) {
 
   await page.addStyleTag({ path: path.join(__dirname, 'assets', 'style.css') });
   // Generate the PDF
+  const dir = `./cache/reports/${address}/`;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
   await page.pdf({
     path: `./cache/reports/${address}/${name}.pdf`,
 

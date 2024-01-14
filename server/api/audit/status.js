@@ -1,27 +1,21 @@
 const express = require('express');
-const {
-  isERC20Token,
-  insertRequestdb,
-  fileExists,
-  isContractOpenSource,
-  readCache,
-  supabase,
-} = require('../../utils');
+
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
-
 const {
   NEW_AUDIT_RETURN_CODE,
   AUDIT_STATUS_RETURN_CODE,
 } = require('./statusCodes');
-const { get } = require('http');
+const supabase = require('../../supabase');
 
 async function getAuditRequest(address) {
   const { data, error } = await supabase
     .from('audit_requests')
     .select('*')
     .eq('contract', address);
+  console.log(error);
+  console.log({ data });
 
   return { data, error };
 }

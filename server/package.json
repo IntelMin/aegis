@@ -28,5 +28,8 @@
     "puppeteer": "^21.7.0",
     "solc": "0.8.23-fixed",
     "viem": "^1.21.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

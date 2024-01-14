@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { formatNumber } from '@/utils/format-number';
 import { formatAge } from '@/utils/format-age';
@@ -14,6 +14,67 @@ type Props = {
 };
 
 const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
+  const [pdfUrl, setPdfUrl] = React.useState('');
+  useEffect(() => {
+    if (pdfUrl) {
+      window.open(pdfUrl, '_blank');
+    }
+  }, [pdfUrl]);
+  const requestReport = async () => {
+    const contractAddress = metadata?.address;
+    try {
+      const response = await fetch('/api/audit/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address: contractAddress,
+        }),
+      });
+      const data = await response.json();
+      if (data.status === 'success') {
+        const intervalId = setInterval(async () => {
+          const response = await fetch(
+            `/api/audit/report?address=${contractAddress}`,
+            {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+            }
+          );
+          console.log(response);
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.status === 'success') {
+              const pdfData = data.report; // base64-encoded PDF data
+              const pdfBlob = new Blob([atob(pdfData)], {
+                type: 'application/pdf',
+              });
+              const pdfUrl = URL.createObjectURL(pdfBlob);
+              const link = document.createElement('a');
+              link.href = pdfUrl;
+              link.download =
+                data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
+
+              // Append the link to the body
+              document.body.appendChild(link);
+
+              // Programmatically click the link to start the download
+              link.click();
+
+              // Remove the link when done
+              document.body.removeChild(link);
+              // setPdfUrl(pdfUrl);
+              clearInterval(intervalId);
+            }
+          }
+        }, 5000);
+        console.log('Report requested successfully.');
+      }
+    } catch (error) {
+      console.error('Error requesting report:', error);
+    }
+  };
+
   return (
     <div className="container p-0 mx-auto">
       <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
@@ -132,6 +193,12 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
         </div>
 
         <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
+          <div
+            className=" m-0 ml-5 flex items-center justify-center text-center bg-sky-400 font-weight-400 w-1/2 rounded-lg px-5 md:w-1/3 "
+            onClick={requestReport}
+          >
+            Get Report
+          </div>
           {liveData ? (
             <>
               <TokenValueContainer
