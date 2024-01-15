@@ -11,9 +11,10 @@ const Banner: React.FC = () => {
       sky = new StarrySky(canvasRef.current);
     }
 
+    // TODO: Fix dismounting
     return () => {
       if (sky) {
-        window.cancelAnimationFrame(sky.rafId);
+        // window.cancelAnimationFrame(sky?.rafId);
       }
     };
   }, []);

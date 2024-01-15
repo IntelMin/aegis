@@ -18,12 +18,22 @@ import Link from 'next/link';
 interface AttacksTableProps {
   loading: boolean;
   options: any[];
-  results: any[];
+  results: {
+    attacks: any[];
+    total: number;
+    offset: number;
+    pages: number;
+    results: any[];
+  };
 }
 
 const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
-  const current_page = results.offset + 1;
-  const last_page = results.pages;
+  const current_page = results?.offset + 1;
+  const last_page = results?.pages;
+
+  const handlePageClick = (page: number) => {
+    console.log(page);
+  };
 
   if (loading) {
     return (
@@ -47,8 +57,11 @@ const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
       )} */}
 
       <div className="flex flex-col pl-4 pt-1">
-        {results.attacks.map((attack: any) => (
-          <div className="border border-zinc-800 p-4 mb-6 rounded-lg">
+        {results.attacks.map((attack: any, index: number) => (
+          <div
+            key={index}
+            className="border border-zinc-800 p-4 mb-6 rounded-lg"
+          >
             <div className="flex pb-2 justify-between">
               <h1 className="text-lg font-bold text-zinc-200">
                 {attack.target}

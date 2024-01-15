@@ -96,6 +96,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/qs": "^6.9.11",
     "html-loader": "^4.2.0",
     "prisma": "^5.7.1"
   },

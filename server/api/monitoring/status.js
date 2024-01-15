@@ -90,16 +90,25 @@ router.post('/volume', async (req, res) => {
   const exchangeAddress = req.body.exchangeAddress;
   const baseCurrency = req.body.baseCurrency;
   const quoteCurrency = req.body.quoteCurrency;
+  console.log(req.body);
+  // return false;
+  try {
+    if (exchangeAddress && baseCurrency && quoteCurrency) {
+      let data = JSON.stringify({
+        query: `{\n  ethereum(network: bsc) {\n    dexTrades(\n      options: { limit: 48, desc: "timeInterval.minute" }\n      exchangeAddress: { is: "${exchangeAddress}" }\n      baseCurrency: { is: "${baseCurrency}" }\n      quoteCurrency: { is: "${quoteCurrency}" }\n    ) {\n      timeInterval {\n        minute(count: 30)\n      }\n      baseCurrency {\n        symbol\n        address\n      }\n      quoteCurrency {\n        symbol\n        address\n      }\n      trades: count\n      tradeAmount(in: USD)\n      volume: quoteAmount\n      quotePrice\n      maximum_price: quotePrice(calculate: maximum)\n      minimum_price: quotePrice(calculate: minimum)\n      open_price: minimum(of: block, get: quote_price)\n      close_price: maximum(of: block, get: quote_price)\n    }\n  }\n}\n`,
+        variables: '{}',
+      });
+      console.log('body data', data);
+      let test = await getData(data, 1);
+      console.log('test data', test);
+      return false;
 
-  if (exchangeAddress && baseCurrency && quoteCurrency) {
-    let data = JSON.stringify({
-      query: `{\n  ethereum(network: bsc) {\n    dexTrades(\n      options: { limit: 48, desc: "timeInterval.minute" }\n      exchangeAddress: { is: "${exchangeAddress}" }\n      baseCurrency: { is: "${baseCurrency}" }\n      quoteCurrency: { is: "${quoteCurrency}" }\n    ) {\n      timeInterval {\n        minute(count: 30)\n      }\n      baseCurrency {\n        symbol\n        address\n      }\n      quoteCurrency {\n        symbol\n        address\n      }\n      trades: count\n      tradeAmount(in: USD)\n      volume: quoteAmount\n      quotePrice\n      maximum_price: quotePrice(calculate: maximum)\n      minimum_price: quotePrice(calculate: minimum)\n      open_price: minimum(of: block, get: quote_price)\n      close_price: maximum(of: block, get: quote_price)\n    }\n  }\n}\n`,
-      variables: '{}',
-    });
-
-    res.status(200).send(await getData(data, 1));
-  } else {
-    res.status(500).send('Invalid Parameter');
+      res.status(200).send(await getData(data, 1));
+    } else {
+      res.status(500).send('Invalid Parameter');
+    }
+  } catch (error) {
+    // console.log('API ERROR', error);
   }
 });
 
