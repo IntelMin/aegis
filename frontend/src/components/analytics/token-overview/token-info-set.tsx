@@ -1,110 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
-const TokenInfoSet = () => {
+import axios from 'axios';
+import { formatAddress } from '@/utils/format-address';
+import { formatNumber } from '@/utils/format-number';
+
+interface TokenDetails {
+  address: string;
+  circulating_market_cap: string;
+  decimals: string;
+  exchange_rate: string;
+  holders: string;
+  name: string;
+  symbol: string;
+  total_supply: string;
+  type: string;
+}
+
+interface TokenInfoSetProps {
+  tokenDetails: {
+    token?: TokenDetails;
+  };
+}
+
+const TokenInfoSet: React.FC<TokenInfoSetProps> = ({
+  tokenDetails,
+}: TokenInfoSetProps) => {
+  const { token } = tokenDetails || {};
+  const [infoArr, setInfoArr] = useState<
+    Array<{ key: string; value: string | null }>
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
-      // Made this timeout to show the skeleton loading will remove when api is ready
-      setTimeout(() => setLoading(false), 2000);
+    const fetchData = async () => {
+      try {
+        if (!token) return;
+
+        const infoArray = [
+          { key: 'Address', value: token.address },
+          {
+            key: 'Circulating Market Cap',
+            value: token.circulating_market_cap,
+          },
+          { key: 'Decimals', value: token.decimals },
+          { key: 'Exchange Rate', value: token.exchange_rate },
+          { key: 'Holders', value: token.holders },
+          { key: 'Name', value: token.name },
+          { key: 'Symbol', value: token.symbol },
+          { key: 'Total Supply', value: token.total_supply },
+          { key: 'Type', value: token.type },
+        ];
+
+        setInfoArr(infoArray);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
     };
 
-    loadData();
-  }, []);
+    fetchData();
+  }, [token]);
 
-  const infoArr = [
-    {
-      key: 'Total supply',
-      value: '595,265,721 OSMO',
-      profit: 'null',
-    },
-    {
-      key: 'Circulating Supply',
-      value: '492,590,761 OSMO',
-      profit: 'null',
-    },
-    {
-      key: 'LP Holder',
-      value: '3',
-      profit: 'null',
-    },
-    {
-      key: 'Honepot',
-      value: 'False',
-      profit: 'true',
-    },
-    {
-      key: 'Anti Whale Check',
-      value: 'True',
-      profit: 'true',
-    },
-    {
-      key: 'Opensource',
-      value: 'True',
-      profit: 'true',
-    },
-    {
-      key: 'Ownership renounced',
-      value: 'False',
-      profit: 'false',
-    },
-    {
-      key: 'High Severity Issues',
-      value: '0',
-      profit: 'null',
-    },
-    {
-      key: 'Medium Severity Issues',
-      value: '2',
-      profit: 'null',
-    },
-    {
-      key: 'Mintable',
-      value: 'False',
-      profit: 'true',
-    },
-    {
-      key: 'Blacklist',
-      value: 'True',
-      profit: 'false',
-    },
-  ];
+  if (loading) {
+    return (
+      <div className="w-full">
+        <Skeleton className="w-full h-96" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
       <div className="w-full flex flex-col gap-4">
-        {infoArr?.map(item => (
-          <div
-            className="w-full flex items-center justify-between"
-            key={item.key}
-          >
-            <div className="flex gap-[4px] items-center">
-              <p className="text-neutral-500 text-[12px]">{item.key}</p>
-              <Image
-                src="/icons/info.svg"
-                alt="info-icon"
-                width={13}
-                height={13}
-              />
-            </div>
-            {loading ? (
-              <Skeleton className="w-20 h-4" />
-            ) : (
-              <p
-                className={`${
-                  item.profit === 'null'
-                    ? 'text-neutral-200'
-                    : item.profit === 'true'
-                    ? 'text-green-300'
-                    : 'text-red-300'
-                } text-[14px]`}
-              >
-                {item.value}
+        {infoArr
+          .filter(item => item.value !== null)
+          .map(item => (
+            <div
+              key={item.key}
+              className="w-full flex items-center justify-between"
+            >
+              <div className="flex gap-[4px] items-center">
+                <p className="text-neutral-500 text-[12px]">{item.key}</p>
+                <Image
+                  src="/icons/info.svg"
+                  alt="info-icon"
+                  width={13}
+                  height={13}
+                />
+              </div>
+              <p className="text-neutral-500 text-[14px]">
+                {item.key === 'Address' ||
+                item.key === 'Total Supply' ||
+                item.key === 'Circulating Market Cap'
+                  ? item.key === 'Address'
+                    ? formatAddress(item.value || '')
+                    : formatNumber(item.value as string)
+                  : item.value}
               </p>
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
       </div>
     </div>
   );

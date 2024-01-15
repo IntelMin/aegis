@@ -44,6 +44,7 @@ const Analytics = ({ params }: Props) => {
   const { toast } = useToast();
   const contractAddress = params.address;
   const [liveData, setLiveData] = useState<any>(null);
+  const [tokenDetails, setTokenDetails] = useState<any>(null);
   const { isFetching, tokenMetaData, error } = useTokenInfo(
     contractAddress,
     true
@@ -111,6 +112,19 @@ const Analytics = ({ params }: Props) => {
   }, [isFetching, tokenMetaData, error]);
 
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const tokenData = await axios.post(`/api/audit/fetch`, {
+          address: contractAddress,
+        });
+        setTokenDetails(tokenData.data);
+      } catch (error) {}
+    };
+
+    loadData();
+  }, []);
+
+  useEffect(() => {
     if (!isFetching && tokenMetaData && !error) {
       fetchData();
     }
@@ -154,7 +168,11 @@ const Analytics = ({ params }: Props) => {
                 } md:flex flex-col col-span-4 md:col-span-1 gap-4`}
               >
                 {/* Token Detailed Info */}
-                <TokenDetailOverView />
+                <TokenDetailOverView
+                  tokenMetaData={tokenMetaData}
+                  tokenDetails={tokenDetails}
+                  liveData={liveData}
+                />
               </div>
               <div className="col-span-4 md:col-span-3">
                 {/* candle stick graph */}
