@@ -3,12 +3,22 @@
 import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'qs';
+import dynamic from 'next/dynamic';
 import { useToast } from '@/components/ui/use-toast';
 import PulseLoader from 'react-spinners/PulseLoader';
-import AttacksFilter from '@/components/attacks/filter';
-import AttacksTable from '@/components/attacks/table';
+import GridLoader from 'react-spinners/GridLoader';
+// import AttacksFilter from '@/components/attacks/filter';
+// import AttacksTable from '@/components/attacks/table';
 import Banner from '@/components/attacks/banner';
 import CountUp from 'react-countup';
+
+const AttacksTable = dynamic(() => import('@/components/attacks/table'), {
+  loading: () => <GridLoader color="white" />,
+});
+
+const AttacksFilter = dynamic(() => import('@/components/attacks/filter'), {
+  loading: () => <GridLoader color="white" />,
+});
 
 interface AttacksProps {}
 

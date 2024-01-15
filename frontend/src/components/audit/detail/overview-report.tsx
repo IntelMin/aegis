@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TokenAuditHead from '@/components/monitoring/header';
+import TokenAuditHead from '@/components/analytics/header';
 import { demoSecurityScore, demoarr } from './constant';
 import SecurityScore from './security-score';
 import AreaChartComponent from './area-chart';

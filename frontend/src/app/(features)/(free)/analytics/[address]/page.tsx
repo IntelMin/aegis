@@ -6,14 +6,14 @@ import useTokenInfo from '@/hooks/useTokenInfo';
 
 import { BiChevronDown } from 'react-icons/bi';
 
-import TokenAuditHead from '@/components/monitoring/header';
-import TradingViewChart from '@/components/monitoring/trading-view-graph';
-import { TopHolding } from '@/components/monitoring/token-analytics/wallets-overview/top-holding';
-import { OrderBook } from '@/components/monitoring/token-analytics/wallets-overview/order-book';
-import TokenDetailTable from '@/components/monitoring/transaction-ledger/token-table';
-import TokenDetailOverView from '@/components/monitoring/token-overview/token-detailed-overview';
-import TransferVolumeGraph from '@/components/monitoring/token-analytics/transaction-volume-overview/transfer-volume-graph';
-import HoldersGraph from '@/components/monitoring/token-analytics/transaction-volume-overview/holders-graph';
+import TokenAuditHead from '@/components/analytics/header';
+import TradingViewChart from '@/components/analytics/trading-view-graph';
+import { TopHolding } from '@/components/analytics/token-analytics/wallets-overview/top-holding';
+import { OrderBook } from '@/components/analytics/token-analytics/wallets-overview/order-book';
+import TokenDetailTable from '@/components/analytics/transaction-ledger/token-table';
+import TokenDetailOverView from '@/components/analytics/token-overview/token-detailed-overview';
+import TransferVolumeGraph from '@/components/analytics/token-analytics/transaction-volume-overview/transfer-volume-graph';
+import HoldersGraph from '@/components/analytics/token-analytics/transaction-volume-overview/holders-graph';
 import {
   Select,
   SelectContent,
@@ -251,7 +251,7 @@ const Analytics = ({ params }: Props) => {
                     )}
                   </div>
                   <div className="col-span-3 md:col-span-2 border border-zinc-900 p-2 flex flex-col gap-6 my-3 bg-[#0C0C0C]">
-                    {/* Top Holding Wallets / Order Book */}
+                    {/* Top Holding Wallets / Order Book
                     {/* Graph Section */}
                     {choosenType === 'Top Holding Wallet' ? (
                       <TopHolding
