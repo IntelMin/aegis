@@ -8,6 +8,16 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import Image from 'next/image';
 import BountyFilter from '@/components/bounty/filter';
 import BountyTableProps from '@/components/bounty/table';
+import { Button } from '@/components/ui/button';
+import { FaFilter } from 'react-icons/fa6';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface BountyProps {}
 
@@ -127,18 +137,36 @@ const Bounty: FC<BountyProps> = ({}) => {
       </div>
 
       <div className="p-8 w-full max-w-[1200px] m-auto">
-        <div className="flex gap-2">
+        <div className="flex max-md:flex-col gap-2">
           {isInitialLoad ? (
             <div className="flex justify-center items-center w-full">
               <PulseLoader color="white" />
             </div>
           ) : (
             <>
-              <div className="max-md:hidden">
-                <BountyFilter
-                  onApplyFilters={handleApplyFilters}
-                  stats={bountyStats}
-                />
+              <div className="">
+                <div className="w-full md:hidden flex justify-end">
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button className="text-sm bg-white flex items-center gap-2">
+                        <FaFilter />
+                        Filters
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[90%]">
+                      <BountyFilter
+                        onApplyFilters={handleApplyFilters}
+                        stats={bountyStats}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <div className="max-md:hidden">
+                  <BountyFilter
+                    onApplyFilters={handleApplyFilters}
+                    stats={bountyStats}
+                  />
+                </div>
               </div>
 
               <main className="flex flex-1 flex-col gap-4 pt-4 max-md:px-4 md:pl-4 md:gap-8 md:pt-6 max-md:w-full">
