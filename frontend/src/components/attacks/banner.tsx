@@ -20,12 +20,14 @@ const Banner: React.FC = () => {
   }, []);
 
   return (
-    <div className="absolute w-screen max-h-[300px] overflow-hidden bg-black z-[-99]">
-      <div className="relative w-screen max-h-[300px] overflow-hidden bg-black z-[-99]">
+    <div className="absolute w-full max-h-[300px] overflow-hidden bg-black z-[-99]">
+      <div className="relative w-full max-h-[300px] overflow-hidden bg-black z-[-99]">
         <canvas ref={canvasRef} className="w-full h-full"></canvas>
         <div
           className="absolute bottom-0 w-full h-1/3 pointer-events-none"
-          style={{ background: 'linear-gradient(180deg, transparent, black)' }}
+          style={{
+            background: 'linear-gradient(180deg, transparent, black)',
+          }}
         ></div>
       </div>
     </div>

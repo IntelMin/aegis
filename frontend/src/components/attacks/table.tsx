@@ -43,7 +43,7 @@ const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
     );
   }
   return (
-    <div className="pt-6 pl-2">
+    <div className="pt-6 md:pl-2">
       {/* {options.length && options?.searchTerm.length > 0 && (
         <div className="flex items-center justify-between pb-3 border-b border-zinc-900">
           <h3 className="text-neutral-200 text-[20px] font-[600]">

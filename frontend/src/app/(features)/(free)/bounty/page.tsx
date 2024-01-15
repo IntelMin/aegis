@@ -10,14 +10,7 @@ import BountyFilter from '@/components/bounty/filter';
 import BountyTableProps from '@/components/bounty/table';
 import { Button } from '@/components/ui/button';
 import { FaFilter } from 'react-icons/fa6';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 interface BountyProps {}
 
