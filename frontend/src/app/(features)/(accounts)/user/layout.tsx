@@ -55,8 +55,8 @@ export default function UserProfileLayout({
       <hr className="border-b-1 border-zinc-900 mt-4" />
 
       {/* Sidebar */}
-      <div className="flex gap-2">
-        <nav className="flex flex-col py-5 px-5 border-r border-zinc-900 text-sm font-medium gap-3">
+      <div className="flex max-md:flex-col gap-2">
+        <nav className="flex md:flex-col py-5 px-5 border-r border-zinc-900 text-sm font-medium gap-3">
           <Link
             className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg  ${
               pathname == '/user/profile'

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const supabase = require('../supabase');
 const path = require('path');
 const fs = require('fs');
 
