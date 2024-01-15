@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import AreaChart from '@/components/audit/detail/area-chart';
-import TokenAuditHead from '@/components/monitoring/header';
+import TokenAuditHead from '@/components/analytics/header';
 import SecurityScore from '@/components/audit/detail/security-score';
 import AuditHistory from '@/components/audit/detail/audit-history';
 import Link from 'next/link';

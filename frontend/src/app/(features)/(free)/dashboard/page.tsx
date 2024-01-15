@@ -1,11 +1,31 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import DashboardDataTable from '@/components/dashboard/dashboard-table';
-import DropdownFilter from '@/components/dashboard/dashboard-filter';
-import TokenMarquee from '@/components/dashboard/token-marquee';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
+import GridLoader from 'react-spinners/GridLoader';
+
+const DashboardDataTable = dynamic(
+  () => import('@/components/dashboard/dashboard-table'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
+
+const DropdownFilter = dynamic(
+  () => import('@/components/dashboard/dashboard-filter'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
+
+const TokenMarquee = dynamic(
+  () => import('@/components/dashboard/token-marquee'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
 
 const Dashboard = () => {
   const session = useSession();

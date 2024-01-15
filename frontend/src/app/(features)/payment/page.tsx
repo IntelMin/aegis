@@ -27,8 +27,16 @@ import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { set } from 'zod';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useToast } from '@/components/ui/use-toast';
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import dynamic from 'next/dynamic';
+
+const ConnectButton = dynamic(
+  () => import('@/components/payment/connect-wallet'),
+  {
+    loading: () => <ScaleLoader color="white" />,
+  }
+);
 
 type PricingCardProps = {
   isYearly?: boolean;

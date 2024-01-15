@@ -13,7 +13,6 @@ import {
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { mainnet, goerli, sepolia, bscTestnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const { chains, publicClient } = configureChains(
   [mainnet, goerli, sepolia, bscTestnet],
@@ -29,8 +28,6 @@ export const wagmiConfig = createConfig({
   connectors,
   publicClient,
 });
-
-const queryClient = new QueryClient();
 
 interface ProviderProps {
   children: ReactNode;
@@ -49,10 +46,8 @@ const Provider: FC<ProviderProps> = ({ children }) => {
             borderRadius: 'large',
           })}
         >
-          <QueryClientProvider client={queryClient}>
-            <NextTopLoader showSpinner={false} />
-            {children}
-          </QueryClientProvider>
+          <NextTopLoader showSpinner={false} />
+          {children}
         </RainbowKitProvider>
       </WagmiConfig>
     </SessionProvider>

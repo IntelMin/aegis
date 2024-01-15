@@ -5,11 +5,34 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
-import FunctionReport from '@/components/audit/detail/function-report';
-import OverViewReport from '@/components/audit/detail/overview-report';
-import CodeEditor from '@/components/audit/code-editor';
-import InheritanceGraph from '@/components/audit/detail/inheritance-graph';
 import { AUDIT_STATUS_RETURN_CODE } from '@/utils/audit-statuses';
+import dynamic from 'next/dynamic';
+import GridLoader from 'react-spinners/GridLoader';
+
+const FunctionReport = dynamic(
+  () => import('@/components/audit/detail/function-report'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
+
+const OverViewReport = dynamic(
+  () => import('@/components/audit/detail/overview-report'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
+
+const CodeEditor = dynamic(() => import('@/components/audit/code-editor'), {
+  loading: () => <GridLoader color="white" />,
+});
+
+const InheritanceGraph = dynamic(
+  () => import('@/components/audit/detail/inheritance-graph'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
 
 type Props = {
   params: {

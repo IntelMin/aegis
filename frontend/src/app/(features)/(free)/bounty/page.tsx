@@ -6,8 +6,16 @@ import qs from 'qs';
 import { useToast } from '@/components/ui/use-toast';
 import PulseLoader from 'react-spinners/PulseLoader';
 import Image from 'next/image';
-import BountyFilter from '@/components/bounty/filter';
-import BountyTableProps from '@/components/bounty/table';
+import GridLoader from 'react-spinners/GridLoader';
+import dynamic from 'next/dynamic';
+
+const BountyFilter = dynamic(() => import('@/components/bounty/filter'), {
+  loading: () => <GridLoader color="white" />,
+});
+
+const BountyTable = dynamic(() => import('@/components/bounty/table'), {
+  loading: () => <GridLoader color="white" />,
+});
 
 interface BountyProps {}
 
@@ -20,7 +28,8 @@ const Bounty: FC<BountyProps> = ({}) => {
     total: number;
     offset: number;
     pages: number;
-  }>({ bounties: [], total: 0, offset: 0, pages: 0 });
+    results: any[];
+  }>({ bounties: [], total: 0, offset: 0, pages: 0, results: [] });
   const [bountyStats, setBountyStats] = useState<{
     total: number;
     total_amount: number;
@@ -140,7 +149,7 @@ const Bounty: FC<BountyProps> = ({}) => {
               />
 
               <main className="flex flex-1 flex-col gap-4 pt-4 pl-4 md:gap-8 md:pt-6">
-                <BountyTableProps
+                <BountyTable
                   loading={isLoading}
                   options={filterOptions}
                   results={filterResults}
