@@ -1,5 +1,5 @@
 import React from 'react';
-import PieGraph from '@/components/security-pie-chart';
+import PieGraph from '@/components/analytics/security-pie-chart';
 
 type Props = {
   demoSecurityScore: {

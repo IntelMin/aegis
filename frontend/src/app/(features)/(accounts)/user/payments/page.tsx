@@ -81,8 +81,11 @@ const UserAccountTable = () => {
           </TableHead>
         </TableHeader>
         <TableBody>
-          {paymenthist.map((item: paymenthisttype) => (
-            <TableRow className="grid grid-cols-4 items-center border-b-1 ">
+          {paymenthist.map((item: paymenthisttype, index: number) => (
+            <TableRow
+              className="grid grid-cols-4 items-center border-b-1 "
+              key={index}
+            >
               {' '}
               <TableCell className="py-2 px-4 text-neutral-100 text-center">
                 {new Date(item.created_at).toLocaleDateString()}

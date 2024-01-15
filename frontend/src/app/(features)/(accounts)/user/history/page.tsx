@@ -38,6 +38,7 @@ const UserAccountTable = () => {
     }
     fetchData();
   }, []);
+
   if (history.length === 0) {
     return (
       <div className="w-full overflow-x-auto">
@@ -75,8 +76,11 @@ const UserAccountTable = () => {
           </TableHead>
         </TableHeader>
         <TableBody>
-          {history.map((item: Historytype) => (
-            <TableRow className="grid grid-cols-3 items-center border-b-1 ">
+          {history.map((item: Historytype, index: number) => (
+            <TableRow
+              className="grid grid-cols-3 items-center border-b-1 "
+              key={index}
+            >
               {' '}
               <TableCell className="py-2 px-4 text-red-400 text-center">
                 {item.cost}
