@@ -72,7 +72,7 @@ const Bounty: FC<BountyProps> = ({}) => {
   }, [filterOptions]);
 
   return (
-    <div>
+    <>
       <div className="flex justify-center items-center w-full">
         <div className="mt-10 justify-center items-center w-full">
           <div className="p-4 text-center">
@@ -134,12 +134,14 @@ const Bounty: FC<BountyProps> = ({}) => {
             </div>
           ) : (
             <>
-              <BountyFilter
-                onApplyFilters={handleApplyFilters}
-                stats={bountyStats}
-              />
+              <div className="max-md:hidden">
+                <BountyFilter
+                  onApplyFilters={handleApplyFilters}
+                  stats={bountyStats}
+                />
+              </div>
 
-              <main className="flex flex-1 flex-col gap-4 pt-4 pl-4 md:gap-8 md:pt-6">
+              <main className="flex flex-1 flex-col gap-4 pt-4 max-md:px-4 md:pl-4 md:gap-8 md:pt-6 max-md:w-full">
                 <BountyTableProps
                   loading={isLoading}
                   options={filterOptions}
@@ -150,7 +152,7 @@ const Bounty: FC<BountyProps> = ({}) => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

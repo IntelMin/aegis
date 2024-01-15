@@ -47,7 +47,7 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
     );
   }
   return (
-    <div className="pt-6 pl-2">
+    <div className="pt-6 md:pl-2 max-md:w-full overflow-x-auto">
       {/* {options.length && options?.searchTerm.length > 0 && (
         <div className="flex items-center justify-between pb-3 border-b border-zinc-900">
           <h3 className="text-neutral-200 text-[20px] font-[600]">
@@ -59,8 +59,8 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
           </div>
         </div>
       )} */}
-      <Table className="border border-zinc-800 w-full">
-        <TableHeader className="grid grid-cols-6 bg-zinc-800">
+      <Table className="border border-zinc-800 w-full overflow-auto max-md:mb-4">
+        <TableHeader className=" bg-zinc-800">
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
             Project
           </TableHead>
@@ -82,11 +82,8 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
         </TableHeader>
         <TableBody>
           {results.bounties.map((bounty: any) => (
-            <TableRow
-              key={bounty.id}
-              className="grid grid-cols-6 items-center border-b-1"
-            >
-              <TableCell className="text-neutral-100 text-center flex items-center justify-right">
+            <TableRow key={bounty.id} className="items-center border-b-1">
+              <TableCell className="text-neutral-100 text-center flex items-center justify-right max-md:min-w-[200px]">
                 <img
                   src={bounty.logo}
                   alt={bounty.name}
