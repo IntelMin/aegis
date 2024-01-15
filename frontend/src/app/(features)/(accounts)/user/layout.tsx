@@ -15,9 +15,6 @@ export default function UserProfileLayout({
   const pathname = usePathname();
   const [balance, setBalance] = React.useState<number>(0);
 
-  console.log('-----------');
-  console.log(session);
-
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);

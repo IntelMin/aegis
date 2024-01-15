@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +15,40 @@ import Link from 'next/link';
 import React from 'react';
 import { BiPackage, BiPencil, BiPurchaseTag } from 'react-icons/bi';
 
+type paymenthisttype = {
+  type: string;
+  created_at: Date;
+  amount_eth: number;
+  credits: number;
+  id: number;
+  user_id: number;
+  package: string;
+  hash: string;
+};
 const UserAccountTable = () => {
+  const [paymenthist, setPaymenthist] = React.useState([]);
+  React.useEffect(() => {
+    async function fetchData() {
+      const res = await fetch('/api/credit/history/credit');
+      const json = await res.json();
+      console.log(json);
+      setPaymenthist(json.txn);
+    }
+    fetchData();
+  }, []);
+  console.log(paymenthist);
+  if (paymenthist.length === 0) {
+    return (
+      <div className="w-full overflow-x-auto">
+        <div className="flex flex-col pb-8">
+          <h1 className="text-lg font-semibold">Your payments</h1>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-md text-zinc-500">No payments yet</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex flex-row pb-8 justify-between">
@@ -47,53 +81,25 @@ const UserAccountTable = () => {
           </TableHead>
         </TableHeader>
         <TableBody>
-          <TableRow className="grid grid-cols-4 items-center border-b-1 ">
-            {' '}
-            <TableCell className="py-2 px-4 text-neutral-100 text-center">
-              12/7/2024
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Veteran
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Ξ5
-            </TableCell>
-            <TableCell className="py-2 px-4 text-green-400 text-center">
-              540
-            </TableCell>
-          </TableRow>
-
-          <TableRow className="grid grid-cols-4 items-center border-b border-1 bg-[#0E0E0E]">
-            {' '}
-            <TableCell className="py-2 px-4 text-neutral-100 text-center">
-              12/5/2024
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Seasoned
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Ξ1
-            </TableCell>
-            <TableCell className="py-2 px-4 text-green-400 text-center">
-              230
-            </TableCell>
-          </TableRow>
-
-          <TableRow className="grid grid-cols-4 items-center border-b-1 ">
-            {' '}
-            <TableCell className="py-2 px-4 text-neutral-100 text-center">
-              12/1/2024
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Basic
-            </TableCell>
-            <TableCell className="py-2 px-4 text-neutral-200 text-center">
-              Ξ0.5
-            </TableCell>
-            <TableCell className="py-2 px-4 text-green-400 text-center">
-              100
-            </TableCell>
-          </TableRow>
+          {paymenthist.map((item: paymenthisttype) => (
+            <TableRow className="grid grid-cols-4 items-center border-b-1 ">
+              {' '}
+              <TableCell className="py-2 px-4 text-neutral-100 text-center">
+                {new Date(item.created_at).toLocaleDateString()}
+              </TableCell>
+              <TableCell className="py-2 px-4 text-neutral-200 text-center">
+                {item.package}
+              </TableCell>
+              <TableCell className="py-2 px-4 text-neutral-200 text-center">
+                <a href={'https://etherscan.io/tx/' + item.hash}>
+                  Ξ{item.amount_eth}
+                </a>
+              </TableCell>
+              <TableCell className="py-2 px-4 text-green-400 text-center">
+                {item.credits}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
