@@ -77,10 +77,7 @@ async function apiRequest(url, params) {
   }
 }
 async function fetchAndCacheData(type, endpoint, address) {
-  const filename = path.join(
-    __dirname,
-    `/cache/contracts/${address}/${type}.json`
-  );
+  const filename = `./cache/contracts/${address}/${type}.json`;
   const currentTime = new Date().getTime();
   let filedata = await readCache(filename);
   const expiry = 3600000;
@@ -94,7 +91,7 @@ async function fetchAndCacheData(type, endpoint, address) {
     }; // Customize this based on the endpoint
     const response_data = await apiRequest(endpoint, request_data);
 
-    console.log(`Fetched ${type} from API: `, response_data);
+    console.log(`Fetched ${type} from API:`);
 
     // don't cache if there is no data
     if (!response_data) {
