@@ -6,6 +6,7 @@ import SecurityScore from './security-score';
 import AreaChartComponent from './area-chart';
 import AuditHistory from './audit-history';
 import AuditDetailChart from './audit-detail-chart';
+import useLiveData from '@/hooks/useLiveData';
 
 type Props = {
   token: string;
@@ -17,30 +18,12 @@ const OverViewReport = (props: Props) => {
   const labels = ['HEALTH', 'SECURITY', 'STRENGTH', 'STABILITY', 'TRUST'];
   const series = [76, 67, 61, 90, 96];
 
-  const [liveData, setLiveData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = () => {
-      axios
-        .get(`/api/token/live/?address=${props?.token}`)
-        .then(response => {
-          setLiveData(response?.data);
-        })
-        .catch(error => {
-          console.error('Error fetching live data:', error);
-        });
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 7000);
-    return () => clearInterval(interval);
-  }, []);
+  const liveData = useLiveData(props?.token);
 
   return (
     <div className="flex flex-col w-full gap-6 px-3 md:px-10 py-12">
       <TokenAuditHead
         showTitle={true}
-        showPremium={false}
         liveData={liveData}
         metadata={props?.data.metadata}
       />

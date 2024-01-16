@@ -6,14 +6,8 @@ export async function GET(req: NextRequest) {
   const address = searchParams.get('address');
   const type = searchParams.get('type');
 
-  console.log('address: ', address);
-  console.log('type: ', type);
-
   try {
-    let url = `${process.env.AEGIS_SRV}/info/request/${address}`;
-    if (type === 'meta') {
-      url = `${process.env.AEGIS_SRV}/info/meta/${address}`;
-    }
+    let url = `${process.env.AEGIS_SRV}/info/${type}/${address}`;
     const response = await axios.get(url);
 
     return NextResponse.json(response.data);

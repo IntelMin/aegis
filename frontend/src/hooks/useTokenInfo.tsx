@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function useTokenInfo(tokenAddress: string, fetchMeta = false) {
+function useTokenInfo(tokenAddress: string, type: string, fetch = false) {
   const [isFetching, setIsFetching] = useState(false);
   const [tokenRequestInfo, setTokenRequestInfo] = useState(null);
-  const [tokenMetaData, setTokenMetaData] = useState(null);
+  const [tokenInfo, settokenInfo] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -18,13 +18,15 @@ function useTokenInfo(tokenAddress: string, fetchMeta = false) {
         console.log(response.data);
         setTokenRequestInfo(response.data);
 
-        if (fetchMeta) {
-          return axios.get(`/api/token/info?address=${tokenAddress}&type=meta`);
+        if (fetch) {
+          return axios.get(
+            `/api/token/info?address=${tokenAddress}&type=${type}`
+          );
         }
       })
       .then(response => {
         if (response) {
-          setTokenMetaData(response.data);
+          settokenInfo(response.data);
         }
       })
       .catch(err => {
@@ -33,9 +35,9 @@ function useTokenInfo(tokenAddress: string, fetchMeta = false) {
       .finally(() => {
         setIsFetching(false);
       });
-  }, [tokenAddress, fetchMeta]);
+  }, [tokenAddress, fetch]);
 
-  return { isFetching, tokenRequestInfo, tokenMetaData, error };
+  return { isFetching, tokenRequestInfo, tokenInfo, error };
 }
 
 export default useTokenInfo;

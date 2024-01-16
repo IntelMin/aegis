@@ -44,15 +44,24 @@ router.get('/request/:address', async (req, res) => {
   }
 });
 
-router.get('/meta/:address', async (req, res) => {
+router.get('/:type/:address', async (req, res) => {
   const address = req.params.address;
-  let filename = `./cache/contracts/${address}/meta.json`;
-  console.log('-- meta fetch: ', filename);
+  const info_type = req.params.type;
+
+  let filename = `./cache/contracts/${address}/${info_type}.json`;
+
+  console.log(`-- info fetch: ${info_type} ${address}`);
+
   try {
     let filedata = await readCache(filename);
 
-    let token_info = filedata.data.tokens;
-    token_info = token_info[Object.keys(token_info)[0]];
+    let token_info;
+    if (info_type === 'meta') {
+      token_info = filedata.data.tokens;
+      token_info = token_info[Object.keys(token_info)[0]];
+    } else {
+      token_info = filedata;
+    }
 
     res.status(200).send(token_info);
   } catch (err) {
