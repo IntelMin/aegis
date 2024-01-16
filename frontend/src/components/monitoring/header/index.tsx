@@ -192,9 +192,9 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
 
         <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
           <button
-            className={` m-0 ml-5 flex items-center justify-center text-center ${
-              loading ? 'bg-sky-200' : 'bg-sky-400 '
-            } font-weight-400 w-1/2 rounded-lg px-5 md:w-1/3 `}
+            className={` m-0 md:ml-5 flex items-center justify-center text-center ${
+              loading ? 'bg-sky-200' : 'bg-[#0E76FD]'
+            } font-weight-400 w-1/2 rounded-lg px-2 md:w-1/3 text-[16px]`}
             onClick={requestReport}
             disabled={loading}
           >
