@@ -1,11 +1,39 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
 import Provider from '@/components/provider';
 import { ThemeProvider } from '@/components/theme-provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const satoshi = localFont({
+  src: [
+    {
+      path: '../fonts/Satoshi-Black.otf',
+      weight: '900',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Satoshi-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Satoshi-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Satoshi-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Satoshi-Light.otf',
+      weight: '300',
+      style: 'normal',
+    },
+  ],
+});
 
 export const metadata: Metadata = {
   title: 'Aegis - AI Powered Defi Aisstant',
@@ -19,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-black`}>
+      <body className={`${satoshi.className} bg-black`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
