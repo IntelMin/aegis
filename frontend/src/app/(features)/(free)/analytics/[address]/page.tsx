@@ -21,6 +21,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
+import { Sections } from '@/components/sections';
 
 type Props = {
   params: {
@@ -135,22 +136,11 @@ const Analytics = ({ params }: Props) => {
 
   return (
     <>
-      <div className="grid grid-cols-3 md:hidden pt-5 border-b border-zinc-800">
-        {sectionsArr?.map(item => (
-          <button
-            key={item.val}
-            type="button"
-            onClick={() => setShowSection(item.val)}
-            className={`bg-transparent text-[16px] font-[600] pb-3 px-2 col-span-1 ${
-              showSection === item.val
-                ? 'text-neutral-50 border-[#2563EB]'
-                : 'text-neutral-500 border-transparent'
-            } border-b-2 transition-all ease-in duration-200`}
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
+      <Sections
+        sectionsArr={sectionsArr}
+        setShowSection={setShowSection}
+        showSection={showSection}
+      />
       <div className="flex flex-col px-4 md:px-10 mt-12 gap-9">
         {!isFetching && (
           <>
