@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
-import axios from 'axios';
 import { formatAddress } from '@/utils/format-address';
 import { formatNumber } from '@/utils/format-number';
 
@@ -23,7 +22,7 @@ interface TokenInfoSetProps {
   };
 }
 
-const TokenInfoSet: React.FC<TokenInfoSetProps> = ({
+const TokenAttributes: React.FC<TokenInfoSetProps> = ({
   tokenDetails,
 }: TokenInfoSetProps) => {
   const { token } = tokenDetails || {};
@@ -62,13 +61,13 @@ const TokenInfoSet: React.FC<TokenInfoSetProps> = ({
     fetchData();
   }, [token]);
 
-  if (loading) {
-    return (
-      <div className="w-full">
-        <Skeleton className="w-full h-96" />
-      </div>
-    );
-  }
+  //   if (loading) {
+  //     return (
+  //       <div className="w-full">
+  //         <Skeleton className="w-full h-96" />
+  //       </div>
+  //     );
+  //   }
 
   return (
     <div className="w-full">
@@ -105,4 +104,4 @@ const TokenInfoSet: React.FC<TokenInfoSetProps> = ({
   );
 };
 
-export default TokenInfoSet;
+export default TokenAttributes;

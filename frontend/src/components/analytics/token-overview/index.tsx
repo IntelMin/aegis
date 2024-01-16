@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import TokenInfoSet from './token-info-set';
-import TokenStatCard from './token-stat-card';
+import Attributes from './attributes';
+import Statistics from './statistics';
 import TokenSecurityScoreChart from '../token-security-score-chart';
 
 const ICON_SIZE = 18;
@@ -17,14 +17,14 @@ const TokenDetailOverView = ({
     <>
       {/* Token Description */}
       <div>
-        <p className="text-neutral-400 text-[12px]">
+        <p className="text-neutral-400 text-[12px] leading-relaxed tracking-wide">
           {explorerData?.description || ''}
         </p>
       </div>
 
       {/* Social Links */}
       {socialLinks && (
-        <div className="flex items-center gap-4 mb-3">
+        <div className="flex items-center gap-4 mt-3">
           {socialLinks.website && (
             <Link
               href={socialLinks.website}
@@ -73,10 +73,10 @@ const TokenDetailOverView = ({
       )}
 
       {/* Token Info Set */}
-      <TokenInfoSet tokenDetails={tokenDetails} />
+      <Attributes tokenDetails={tokenDetails} />
 
       {/* Token Status in Price */}
-      <TokenStatCard liveData={liveData} />
+      <Statistics liveData={liveData} />
 
       {/* Token Gauge Chart */}
       <TokenSecurityScoreChart />

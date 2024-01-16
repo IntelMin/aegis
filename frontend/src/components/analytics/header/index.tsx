@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
+import copy from 'copy-to-clipboard';
+import { useToast } from '@/components/ui/use-toast';
 import { formatNumber } from '@/utils/format-number';
 import { formatAge } from '@/utils/format-age';
-import TokenValueContainer from './token-value-container';
-import { Skeleton } from '@/components/ui/skeleton';
 import { formatAddress } from '@/utils/format-address';
-import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { BiBadgeCheck, BiChevronDown, BiChevronUp } from 'react-icons/bi';
+import TokenValueContainer from './token-value-container';
 
 type Props = {
   showTitle: boolean;
@@ -14,6 +16,7 @@ type Props = {
 };
 
 const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
+  const toast = useToast();
   const [loading, setLoading] = React.useState(false);
 
   const requestReport = async () => {
@@ -73,6 +76,13 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
     }
   };
 
+  const handleCopy = (text: string) => () => {
+    copy(text);
+    toast.toast({
+      title: 'Copied to clipboard',
+    });
+  };
+
   return (
     <div className="container p-0 mx-auto">
       <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
@@ -104,6 +114,9 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                     <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
                       {metadata.symbol}
                     </h3>
+                    {metadata?.explorerData?.blueCheckmark && (
+                      <BiBadgeCheck className="text-blue-300" />
+                    )}
                   </>
                 ) : (
                   <Skeleton className="w-10 h-5" />
@@ -123,17 +136,23 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
               <Skeleton className="w-32 h-8" />
             )}
             <div className="flex items-center">
-              {liveData?.priceChange?.h24 ? (
+              {liveData?.priceChange?.h24 !== undefined ? (
                 <>
-                  <Image
-                    src="/icons/profit.svg"
-                    alt="profit"
-                    width={7}
-                    height={7}
-                  />
-                  <h5 className="text-green-600">
-                    {liveData.priceChange.h24} %
-                  </h5>
+                  {liveData.priceChange.h24 >= 0 ? (
+                    <>
+                      <BiChevronUp className="text-green-700" />
+                      <h5 className="text-green-700">
+                        {liveData.priceChange.h24}%
+                      </h5>
+                    </>
+                  ) : (
+                    <>
+                      <BiChevronDown className="text-red-700" />
+                      <h5 className="text-red-700">
+                        {Math.abs(liveData.priceChange.h24)}%
+                      </h5>
+                    </>
+                  )}
                 </>
               ) : (
                 <Skeleton className="w-10 h-4" />
@@ -142,57 +161,55 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
           </div>
         </div>
 
-        <div className="flex max-md:hidden flex-1">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-3">
-              <p className="text-neutral-100 text-[14px] w-[70px] text-right">
-                {metadata ? (
-                  metadata?.symbol
-                ) : (
-                  <Skeleton className="w-14 h-6" />
-                )}
-                :{' '}
-              </p>
-              <div className="flex items-center gap-[4px]">
-                <p className="text-blue-400 text-[14px] leading-[20px]">
-                  {metadata ? (
-                    formatAddress(metadata?.address)
-                  ) : (
-                    <Skeleton className="w-36 h-4" />
-                  )}
-                </p>
-                <button>
-                  <Image
-                    src="/icons/copy.svg"
-                    alt="copy"
-                    width={16}
-                    height={16}
-                  />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <p className="text-neutral-100 text-[14px] w-[70px] text-right">
-                PAIR:{' '}
-              </p>
-              <div className="flex items-center gap-[4px]">
-                <p className="text-blue-400 text-[14px] leading-[20px]">
-                  {liveData?.pairAddress ? (
-                    formatAddress(liveData?.pairAddress)
-                  ) : (
-                    <Skeleton className="w-24 h-4" />
-                  )}
-                </p>
-                <button>
-                  <Image
-                    src="/icons/copy.svg"
-                    alt="copy"
-                    width={16}
-                    height={16}
-                  />
-                </button>
-              </div>
-            </div>
+        <div className="flex max-md:hidden flex-end">
+          <div className="flex flex-row items-center">
+            {metadata && liveData ? (
+              <>
+                <div className="flex flex-col mr-1">
+                  <p className="text-zinc-500 text-[14px] w-[70px] text-right">
+                    {metadata?.symbol}:
+                  </p>
+                  <p className="text-zinc-500 text-[14px] w-[70px] text-right">
+                    PAIR:{' '}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  {/* TODO: "Ox" the x doesn't appear in the same way for both addresses */}
+                  <div
+                    className="flex text-blue-400 cursor-pointer"
+                    onClick={handleCopy(metadata.address)}
+                  >
+                    0x
+                    {formatAddress(metadata.address).substring(2).toUpperCase()}
+                    <Image
+                      src="/icons/copy.svg"
+                      alt="copy"
+                      width={16}
+                      height={16}
+                      className="ml-1"
+                    />
+                  </div>
+                  <div
+                    className="flex text-blue-400 cursor-pointer"
+                    onClick={handleCopy(liveData?.pairAddress)}
+                  >
+                    0x
+                    {formatAddress(liveData?.pairAddress)
+                      .substring(2)
+                      .toUpperCase()}
+                    <Image
+                      src="/icons/copy.svg"
+                      alt="copy"
+                      width={16}
+                      height={16}
+                      className="ml-1"
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Skeleton className="w-24 h-6" />
+            )}
           </div>
         </div>
 
