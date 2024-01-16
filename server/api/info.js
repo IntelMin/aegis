@@ -8,7 +8,35 @@ router.get('/request/:address', async (req, res) => {
   const address = req.params.address;
   console.log('-- info request: ', address);
 
-  const token_info = await getInfo(address);
+  //   let directory = `./cache/contracts/${address}`;
+  //   let files = {
+  //     info: `${directory}/info.json`,
+  //     meta: `${directory}/meta.json`,
+  //     rugpull: `${directory}/rugpull.json`,
+  //     security: `${directory}/security.json`,
+  //     source: `${directory}/source.json`,
+  //   };
+
+  //   let info_exists = false;
+  //   let token_info;
+  //   if (fs.existsSync(directory)) {
+  //     info_exists = true;
+  //     for (const key of Object.keys(files)) {
+  //       if (!fs.existsSync(files[key])) {
+  //         info_exists = false;
+  //         break;
+  //       }
+  //     }
+  //   }
+
+  //   if (!info_exists) {
+  //     console.log('info not found, fetching');
+  //     token_info = getInfo(address);
+  //   } else {
+  //   }
+
+  let token_info = await getInfo(address);
+
   if (!token_info) {
     return res.status(404).json({ error: 'token not found' });
   } else {

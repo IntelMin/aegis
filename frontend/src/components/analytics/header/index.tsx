@@ -5,15 +5,15 @@ import { formatAge } from '@/utils/format-age';
 import TokenValueContainer from './token-value-container';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatAddress } from '@/utils/format-address';
+import { Button } from '@/components/ui/button';
 
 type Props = {
   showTitle: boolean;
-  showPremium: boolean;
   metadata: any;
   liveData: any;
 };
 
-const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
+const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
   const [loading, setLoading] = React.useState(false);
 
   const requestReport = async () => {
@@ -100,9 +100,11 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
                   <Skeleton className="w-20 h-6" />
                 )}
                 {metadata?.symbol ? (
-                  <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
-                    {metadata.symbol}
-                  </h3>
+                  <>
+                    <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
+                      {metadata.symbol}
+                    </h3>
+                  </>
                 ) : (
                   <Skeleton className="w-10 h-5" />
                 )}
@@ -121,14 +123,18 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
               <Skeleton className="w-32 h-8" />
             )}
             <div className="flex items-center">
-              <Image
-                src="/icons/profit.svg"
-                alt="profit"
-                width={7}
-                height={7}
-              />
               {liveData?.priceChange?.h24 ? (
-                <h5 className="text-green-600">{liveData.priceChange.h24} %</h5>
+                <>
+                  <Image
+                    src="/icons/profit.svg"
+                    alt="profit"
+                    width={7}
+                    height={7}
+                  />
+                  <h5 className="text-green-600">
+                    {liveData.priceChange.h24} %
+                  </h5>
+                </>
               ) : (
                 <Skeleton className="w-10 h-4" />
               )}
@@ -158,7 +164,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
                 <button>
                   <Image
                     src="/icons/copy.svg"
-                    alt="network-icon"
+                    alt="copy"
                     width={16}
                     height={16}
                   />
@@ -180,7 +186,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
                 <button>
                   <Image
                     src="/icons/copy.svg"
-                    alt="network-icon"
+                    alt="copy"
                     width={16}
                     height={16}
                   />
@@ -191,7 +197,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
         </div>
 
         <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
-          <button
+          {/* <button
             className={` m-0 ml-5 flex items-center justify-center text-center ${
               loading ? 'bg-sky-200' : 'bg-sky-400 '
             } font-weight-400 w-1/2 rounded-lg px-5 md:w-1/3 `}
@@ -199,7 +205,7 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
             disabled={loading}
           >
             {!loading ? 'Request Report' : 'Loading...'}
-          </button>
+          </button> */}
           {liveData ? (
             <>
               <TokenValueContainer
@@ -233,4 +239,4 @@ const TokenValue = ({ showTitle, metadata, liveData }: Props) => {
   );
 };
 
-export default TokenValue;
+export default TokenHeader;

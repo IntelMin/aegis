@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 
-import TokenAuditHead from '@/components/analytics/header';
+import TokenHeader from '@/components/analytics/header';
 
 type Props = {
   params: {
@@ -22,7 +22,20 @@ const Analytics = ({ params }: Props) => {
     true
   );
 
-  return <></>;
+  return (
+    <div className="flex flex-col px-4 md:px-10 mt-4 gap-9">
+      <TokenHeader
+        showTitle={true}
+        liveData={liveData}
+        metadata={tokenMetaData}
+      />
+
+      <div className="grid grid-cols-4 gap-6 pb-3">
+        <div>{/* Token Detailed Info */}</div>
+        <div className="col-span-4 md:col-span-3"></div>
+      </div>
+    </div>
+  );
 };
 
 export default Analytics;

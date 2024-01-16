@@ -23,7 +23,7 @@ const SecurityScore = ({ demoSecurityScore }: Props) => {
       </div>
       {/* Chart & Other Detail */}
       <div className="flex max-md:flex-col items-center justify-between w-full pb-3 border-b border-zinc-900">
-        <PieGraph value={30} height={280} />
+        {/* <PieGraph value={30} height={280} /> */}
         <div className="flex flex-col w-full md:w-1/2 gap-4">
           {demoSecurityScore?.map(item => (
             <div className="flex items-center justify-between" key={item?.key}>
