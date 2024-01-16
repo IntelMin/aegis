@@ -21,8 +21,9 @@ const QuickAuditPage = ({ params }: Props) => {
   const { toast } = useToast();
   const contractAddress = params.id;
   const [liveData, setLiveData] = useState<any>(null);
-  const { isFetching, tokenMetaData, error } = useTokenInfo(
+  const { isFetching, tokenInfo, error } = useTokenInfo(
     contractAddress,
+    'meta',
     true
   );
 
@@ -45,10 +46,10 @@ const QuickAuditPage = ({ params }: Props) => {
         description: 'There was an error fetching token information',
       });
     }
-  }, [isFetching, tokenMetaData, error]);
+  }, [isFetching, tokenInfo, error]);
 
   useEffect(() => {
-    if (!isFetching && tokenMetaData && !error) {
+    if (!isFetching && tokenInfo && !error) {
       fetchData();
     }
 
@@ -61,9 +62,8 @@ const QuickAuditPage = ({ params }: Props) => {
       {/* Token Audit Head */}
       <TokenAuditHead
         showTitle={true}
-        showPremium={false}
         liveData={liveData}
-        metadata={tokenMetaData}
+        metadata={tokenInfo}
       />
       <div className="grid grid-cols-11 gap-5">
         <div className="flex flex-col col-span-11 md:col-span-6 gap-5">

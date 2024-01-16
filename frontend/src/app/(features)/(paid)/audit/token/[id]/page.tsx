@@ -1,6 +1,5 @@
 'use client';
 
-import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
@@ -38,11 +37,15 @@ const SkeletonLoader = () => (
 const TokenAuditOption = ({ params }: props) => {
   const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
-  const { isFetching, tokenMetaData, error } = useTokenInfo(params.id, true);
+  const { isFetching, tokenInfo, error } = useTokenInfo(
+    params.id,
+    'meta',
+    true
+  );
 
   useEffect(() => {
-    if (!isFetching && tokenMetaData && !error) {
-      setMetadata(tokenMetaData);
+    if (!isFetching && tokenInfo && !error) {
+      setMetadata(tokenInfo);
     }
 
     if (error) {
@@ -52,7 +55,7 @@ const TokenAuditOption = ({ params }: props) => {
         description: 'There was an error fetching token information',
       });
     }
-  }, [isFetching, tokenMetaData, error]);
+  }, [isFetching, tokenInfo, error]);
 
   if (error) {
     return <div>Error loading token information</div>;

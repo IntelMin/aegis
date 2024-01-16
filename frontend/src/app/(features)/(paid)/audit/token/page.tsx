@@ -18,6 +18,7 @@ const TokenAuditorForm = (props: Props) => {
 
   const { isFetching, tokenRequestInfo, error } = useTokenInfo(
     submitting ? submittedAddress : '',
+    'meta',
     false
   );
 
