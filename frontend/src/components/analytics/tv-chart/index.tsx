@@ -1,10 +1,15 @@
-import dynamic from 'next/dynamic'
-
-import { ChartProps } from './TVChart'
+import dynamic from 'next/dynamic';
+import { ChartProps } from './TVChart';
 
 // @ts-ignore
-const TVChartContainer = dynamic<TVChart>(() => import('./TVChart').then((mod) => mod.TVChart), {
-	ssr: false,
-})
+const TVChartContainer = dynamic<TVChart>(
+  () => import('./TVChart').then(mod => mod.TVChart),
+  {
+    ssr: false,
+  }
+);
 
-export default (props: ChartProps) => <TVChartContainer {...props} />
+const ChartComponent = (props: ChartProps) => <TVChartContainer {...props} />;
+ChartComponent.displayName = 'ChartComponent';
+
+export default ChartComponent;

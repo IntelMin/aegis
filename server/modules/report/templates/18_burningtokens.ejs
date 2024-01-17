@@ -1,27 +1,24 @@
 <!-- FILEPATH: /c:/Users/aslam/Desktop/DEnz/aegis/server/modules/report/templates/10_ownership.ejs -->
 <div class="overall-security-page">
   <div>
-    <h2>Burning Tokens</h2>
+    <h2>Modify Balance</h2>
     <p>
-      Burning tokens is the process of permanently destroying a certain number
-      of tokens, reducing the total supply of a cryptocurrency or token. This is
-      usually done to increase the value of the remaining tokens, as the reduced
-      supply can create scarcity and potentially drive up demand.
+If the owner can modify the token holders balance, it can be used to steal tokens from the token holders. The owner can also burn tokens without any allowance.
     </p>
 
     <table
       class="security-table <%= security.is_blacklisted != 1 ? 'success' : 'error' %>"
     >
       <tr>
-        <td>Can burn tokens?</td>
+        <td>Can modify balances?</td>
         <td>
-          <%= rugpull.is_blacklisted != 1 ? "❌ The owner can burn tokens" : "✅ The owner cannot burn tokens" %>
+          <%= Number(security.owner_change_balance) > 0? "❌ The owner can modify token balance" : "✅ The owner cannot modify token balance" %>
         </td>
       </tr>
       <tr>
         <td>Description</td>
         <td>
-          <%= rugpull.is_blacklisted != 1 ? "The owner is able to burn tokens without any allowance": "The owner is not able to burn tokens without any allowance"
+          <%= Number(rugpull.is_blacklisted) >0 ? "The owner is able to modify token balance without any allowance": "The owner is not able to  modify token balance  without any allowance"
           %>
         </td>
       </tr>

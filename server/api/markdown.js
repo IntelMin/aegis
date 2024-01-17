@@ -1,32 +1,31 @@
-const express = require("express");
-const axios = require("axios");
+const express = require('express');
+const axios = require('axios');
 const router = express.Router();
-const { fetchData } = require("../utils");
-const parser = require("@solidity-parser/parser");
+const { fetchData } = require('../lib/utils');
+const parser = require('@solidity-parser/parser');
 
-router.get("/:address", async (req, res) => {
+router.get('/:address', async (req, res) => {
   // express.json();
 
   const address = req.params.address;
 
-  console.log("markdown address: ", address);
+  console.log('markdown address: ', address);
 
   // const { address } = req.body;
 
   if (!address) {
-    return res.status(400).send("No address provided");
+    return res.status(400).send('No address provided');
   }
 
   let filename = `./cache/contracts/${address}/source.json`;
   let url = `https://eth.blockscout.com/api/v2/smart-contracts/${address}`;
 
-  let source_code = "";
+  let source_code = '';
 
   try {
     let filedata = await fetchData(filename, url);
 
-    source_code = filedata["source_code"];
-
+    source_code = filedata['source_code'];
     let content = source_code;
     // console.log("content: ", content);
     let noColorOutput = false;
@@ -42,7 +41,7 @@ router.get("/:address", async (req, res) => {
       }
     })();
 
-    console.log("Contract AST loaded");
+    console.log('Contract AST loaded');
 
     var modifiers = [];
     var added = [];
@@ -85,25 +84,25 @@ router.get("/:address", async (req, res) => {
       ContractDefinition(node) {
         const name = node.name;
         let bases = node.baseContracts
-          .map((spec) => {
+          .map(spec => {
             return spec.baseName.namePath;
           })
-          .join(", ");
+          .join(', ');
 
-        let specs = "";
-        if (node.kind === "library") {
-          specs += "Library";
-        } else if (node.kind === "interface") {
-          specs += "Interface";
+        let specs = '';
+        if (node.kind === 'library') {
+          specs += 'Library';
+        } else if (node.kind === 'interface') {
+          specs += 'Interface';
         } else {
-          specs += "Implementation";
+          specs += 'Implementation';
         }
 
         contractsTable += `||||||
   | **${name}** | ${specs} | ${bases} |||
   `;
         let row = {
-          type: "contract",
+          type: 'contract',
           name: name,
           spec: specs,
           mutating: null,
@@ -120,42 +119,42 @@ router.get("/:address", async (req, res) => {
         isConstructor = false;
 
         if (node.isConstructor) {
-          name = "<Constructor>";
+          name = '<Constructor>';
         } else if (node.isFallback) {
-          name = "<Fallback>";
+          name = '<Fallback>';
         } else if (node.isReceiveEther) {
-          name = "<Receive Ether>";
+          name = '<Receive Ether>';
         } else {
           name = node.name;
         }
 
-        let spec = "";
-        if (node.visibility === "public" || node.visibility === "default") {
-          spec += "Public ❗️";
+        let spec = '';
+        if (node.visibility === 'public' || node.visibility === 'default') {
+          spec += 'Public ❗️';
           isPublic = true;
-        } else if (node.visibility === "external") {
-          spec += "External ❗️";
+        } else if (node.visibility === 'external') {
+          spec += 'External ❗️';
           isPublic = true;
-        } else if (node.visibility === "private") {
-          spec += "Private 🔐";
-        } else if (node.visibility === "internal") {
-          spec += "Internal 🔒";
+        } else if (node.visibility === 'private') {
+          spec += 'Private 🔐';
+        } else if (node.visibility === 'internal') {
+          spec += 'Internal 🔒';
         }
 
-        let payable = "";
-        if (node.stateMutability === "payable") {
-          payable = "💵";
+        let payable = '';
+        if (node.stateMutability === 'payable') {
+          payable = '💵';
         }
 
-        let mutating = "";
+        let mutating = '';
         if (!node.stateMutability) {
-          mutating = "🛑";
+          mutating = '🛑';
         }
 
         contractsTable += `| └ | ${name} | ${spec} | ${mutating} ${payable} |`;
 
         let row = {
-          type: "func",
+          type: 'func',
           name: name,
           spec: spec,
           mutating: mutating,
@@ -165,13 +164,13 @@ router.get("/:address", async (req, res) => {
         tableRows.push(row);
       },
 
-      "FunctionDefinition:exit": function (node) {
+      'FunctionDefinition:exit': function (node) {
         if (!isConstructor && isPublic && !doesModifierExist) {
-          contractsTable += "NO❗️";
+          contractsTable += 'NO❗️';
         } else if (isPublic && options.negModifiers) {
           for (var i = 0; i < modifiers.length; i++) {
             if (added.indexOf(modifiers[i]) == -1) {
-              contractsTable += " ~~" + modifiers[i] + "~~ ";
+              contractsTable += ' ~~' + modifiers[i] + '~~ ';
             }
           }
           added = [];
@@ -188,19 +187,19 @@ router.get("/:address", async (req, res) => {
       },
     });
 
-    const reportContents = `${"#".repeat(
+    const reportContents = `${'#'.repeat(
       options.deepness
     )} Function Description Report
   
-  ${"#".repeat(options.deepness + 1)} Files Description Table
+  ${'#'.repeat(options.deepness + 1)} Files Description Table
   
   ${filesTable}
   
-  ${"#".repeat(options.deepness + 1)} Contracts Description Table
+  ${'#'.repeat(options.deepness + 1)} Contracts Description Table
   
   ${contractsTable}
   
-  ${"#".repeat(options.deepness + 1)} Legend
+  ${'#'.repeat(options.deepness + 1)} Legend
   
   |  Symbol  |  Meaning  |
   |:--------:|-----------|
@@ -212,10 +211,10 @@ router.get("/:address", async (req, res) => {
 
     res.status(200).send({
       report: reportContents,
-      table: tableRows
+      table: tableRows,
     });
   } catch (error) {
-    res.status(500).send("Error: " + error.message);
+    res.status(500).send('Error: ' + error.message);
   }
 });
 
