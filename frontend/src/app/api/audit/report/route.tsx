@@ -27,19 +27,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
   const user_id = user.id;
   console.log('user_id', session);
-  // const paid_user = await db.paid_audits.findFirst({
-  //   where: {
-  //     user_id: Number(user_id),
-  //     address: address,
-  //     type: 'report',
-  //   },
-  // });
-  // if (!paid_user) {
-  //   return NextResponse.json({
-  //     status: 'failed',
-  //     message: "You have't paid for this report yet.",
-  //   });
-  // }
+  const paid_user = await db.paid_audits.findFirst({
+    where: {
+      user_id: Number(user_id),
+      address: address,
+      type: 'report',
+    },
+  });
+  if (!paid_user) {
+    return NextResponse.json({
+      status: 'failed',
+      message: "You have't paid for this report yet.",
+    });
+  }
   const report_request = await db.report_requests.findFirst({
     where: {
       address: address,
@@ -93,6 +93,39 @@ export async function GET(req: NextRequest, res: NextResponse) {
       message: 'Address not provided.',
     });
   }
+  const session = await getServerSession(authOptions);
+  const email = session?.user?.email;
+  if (!email) {
+    return NextResponse.json({
+      status: 'failed',
+      message: 'User not logged in.',
+    });
+  }
+  const user = await db.user.findFirst({
+    where: {
+      email: email,
+    },
+  });
+  if (!user) {
+    return NextResponse.json({
+      status: 'failed',
+      message: 'User not found.',
+    });
+  }
+  const user_id = user.id;
+  const paid_user = await db.paid_audits.findFirst({
+    where: {
+      user_id: Number(user_id),
+      address: address,
+      type: 'report',
+    },
+  });
+  // if (!paid_user) {
+  //   return NextResponse.json({
+  //     status: 'failed',
+  //     message: "You have't paid for this report yet.",
+  //   });
+  // }
   const report_request = await db.report_requests.findFirst({
     where: {
       address: address,
