@@ -98,7 +98,7 @@ const AttacksFilter: FC<AttacksFilterProps> = ({ onApplyFilters, stats }) => {
           <SelectContent>
             <SelectGroup>
               <SelectItem value="*">All</SelectItem>
-              {stats.categories.map((category: any) => (
+              {stats.categories?.map((category: any) => (
                 <SelectItem value={category.name} key={category.name}>
                   <div className="flex flex-row">
                     <span>{category.name}</span>

@@ -1,11 +1,10 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import Provider from '@/components/provider';
+import '../styles.css';
 import { ThemeProvider } from '@/components/theme-provider';
-
-const inter = Inter({ subsets: ['latin'] });
+import { satoshi } from '@/fonts/satoshi';
 
 export const metadata: Metadata = {
   title: 'Aegis - AI Powered Defi Aisstant',
@@ -19,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-black`}>
+      <body className={`${satoshi.className} bg-black`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

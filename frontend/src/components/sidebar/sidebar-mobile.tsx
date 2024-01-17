@@ -23,6 +23,10 @@ const MobileSidebar = ({ setShow }: Props) => {
         <div className="grid grid-cols-2 gap-6 px-24">
           <button
             type="button"
+            onClick={() => {
+              router.push('/user/profile');
+              if (setShow) setShow(false);
+            }}
             className="col-span-2 bg-zinc-800 p-3 rounded-[4px] flex justify-center gap-2 items-center text-white text-[16px] font-[300]"
           >
             <Image

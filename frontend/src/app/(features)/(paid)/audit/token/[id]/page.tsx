@@ -117,12 +117,12 @@ const TokenAuditOption = ({ params }: props) => {
             <div className="flex items-center max-md:flex-col gap-10">
               {/* Detailed */}
               <div
-                className={`from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
+                className={`from-[#001735] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
                   <Link
                     href={`/audit/token/${params?.id}/detailed`}
-                    className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                    className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                   >
                     Detailed Audit
                   </Link>
@@ -138,12 +138,12 @@ const TokenAuditOption = ({ params }: props) => {
 
               {/* Quick */}
               <div
-                className={`from-[#001735] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
+                className={` from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
                   <Link
                     href={`/audit/token/${params?.id}/quick`}
-                    className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                    className={`border-zinc-700  bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                   >
                     Quick Audit
                   </Link>
