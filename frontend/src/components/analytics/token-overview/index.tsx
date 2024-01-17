@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 import Attributes from './attributes';
 import Statistics from './statistics';
 import TokenSecurityScoreChart from '../token-security-score-chart';
@@ -17,9 +18,17 @@ const TokenDetailOverView = ({
     <>
       {/* Token Description */}
       <div>
-        <p className="text-neutral-400 text-[12px] leading-relaxed tracking-wide">
-          {explorerData?.description || ''}
-        </p>
+        {explorerData ? (
+          <p className="text-neutral-400 text-[12px] leading-relaxed tracking-wide">
+            {explorerData?.description || ''}
+          </p>
+        ) : (
+          <>
+            <Skeleton className="w-[90%] h-4" />
+            <Skeleton className="w-[90%] h-4 mt-2" />
+            <Skeleton className="w-1/2 h-4 mt-2" />
+          </>
+        )}
       </div>
 
       {/* Social Links */}
@@ -73,7 +82,7 @@ const TokenDetailOverView = ({
       )}
 
       {/* Token Info Set */}
-      <Attributes tokenDetails={tokenDetails} />
+      <Attributes tokenAddress={tokenMetaData?.address} />
 
       {/* Token Status in Price */}
       <Statistics liveData={liveData} />

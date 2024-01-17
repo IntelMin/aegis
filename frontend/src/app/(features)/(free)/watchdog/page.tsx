@@ -36,22 +36,24 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
   ];
 
   useEffect(() => {
-    if (settings.active) {
-      // Establish connection with socket.io server
-      setSocket(io(websocket_url));
+    let localSocket: Socket | null = null;
 
-      if (socket) {
-        socket.on('connect', () => {
+    if (settings.active) {
+      localSocket = io(websocket_url);
+      setSocket(localSocket);
+
+      if (localSocket) {
+        localSocket.on('connect', () => {
           console.log('Connected to the server!');
         });
 
         // Handle disconnection
-        socket.on('disconnect', () => {
+        localSocket.on('disconnect', () => {
           console.log('Disconnected from the server');
         });
 
         // Handle block status updates
-        socket.on('block_status', data => {
+        localSocket.on('block_status', data => {
           if (statusRef.current?.updateBlock) {
             statusRef.current.updateBlock(data);
           }
@@ -59,8 +61,10 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         });
 
         // Handle log updates
-        socket.on('log', data => {
+        localSocket.on('log', data => {
+          console.log('log received');
           if (monitorRef.current?.updateLog) {
+            console.log('trying...');
             monitorRef.current.updateLog(data);
           }
           console.log('Received log from socket');

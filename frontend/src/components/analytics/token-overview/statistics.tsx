@@ -27,7 +27,7 @@ const Statistic: React.FC<{
   );
 };
 
-const TokenStatCard = ({ liveData }: any) => {
+const TokenStatistics = ({ liveData }: any) => {
   const [active, setActive] = useState('24h');
   const [loading, setLoading] = useState(true);
   const btnArr = ['1h', '6h', '24h'];
@@ -36,8 +36,6 @@ const TokenStatCard = ({ liveData }: any) => {
     '6h': 'h6',
     '24h': 'h24',
   };
-
-  console.log(liveData);
 
   useEffect(() => {
     setLoading(!liveData);
@@ -92,4 +90,4 @@ const TokenStatCard = ({ liveData }: any) => {
   );
 };
 
-export default TokenStatCard;
+export default TokenStatistics;

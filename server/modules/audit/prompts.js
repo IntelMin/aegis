@@ -1,11 +1,11 @@
 // Basic Prompt
-const topkPrompt1 = "Output {topk} most severe vulnerabilities.\n";
+const topkPrompt1 = 'Output {topk} most severe vulnerabilities.\n';
 const topkPrompt2 =
   'If no vulnerability is detected, you should only output in this json format {"output_list": []}.\n';
 
 // Auditor Prompt
 const auditorPrompt = `You are a smart contract auditor, identify and explain severe vulnerabilities in the provided smart contract. Make sure that they are exploitable in real world and beneficial to attackers. Provide each identified vulnerability with intermediate reasoning and its associated function. Remember, you must provide the entire function code and do not use "...". Make your reasoning comprehensive and detailed. Smart contract code:\n\n`;
-const auditorFormatConstraint = `\nYou should only output in below json format:
+const auditorFormatConstraint = `\nYou should only output in below quote escaped fully formed json format:
 {
     "output_list": [
         {
@@ -60,7 +60,7 @@ Output:
 "profitability": 0
 `;
 
-const criticFormatConstraint = `\nYou should only output in below json format:
+const criticFormatConstraint = `\nYou should only output in below quote escaped fully formed json format:
 {
     "output_list": [
         {
@@ -111,5 +111,5 @@ module.exports = {
   criticZeroShotPrompt,
   criticFewShotPrompt,
   criticFormatConstraint,
-  summaryPrompt
+  summaryPrompt,
 };

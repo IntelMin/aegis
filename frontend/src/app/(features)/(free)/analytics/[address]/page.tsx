@@ -8,6 +8,8 @@ import useLiveData from '@/hooks/useLiveData';
 import TokenHeader from '@/components/analytics/header';
 import TokenOverview from '@/components/analytics/token-overview';
 
+import TVChart from '@/components/analytics/tv-chart';
+
 type Props = {
   params: {
     address: string;
@@ -23,7 +25,10 @@ const Analytics = ({ params }: Props) => {
     'meta',
     true
   );
+
   const liveData = useLiveData(contractAddress);
+
+  const [isChartReady, setIsChartReady] = useState(false);
 
   return (
     <div className="flex flex-col px-4 md:px-10 mt-4 gap-6">
@@ -38,7 +43,19 @@ const Analytics = ({ params }: Props) => {
             liveData={liveData}
           />
         </div>
-        <div className="col-span-4 md:col-span-3"></div>
+        <div className="col-span-4 md:col-span-3">
+          <div>
+            <TVChart
+              openOrders={[]}
+              initialPrice={'500'}
+              onChartReady={() => {
+                setIsChartReady(true);
+              }}
+              showOrderLines={false}
+              onToggleShowOrderLines={() => {}} // TODO
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
