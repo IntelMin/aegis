@@ -141,7 +141,7 @@ const ReportsPage = () => {
           <TableHead>Get Report</TableHead>
         </TableHeader>
         <TableBody>
-          {reports.map((report: Report, index: number) => (
+          {reports?.map((report: Report, index: number) => (
             <TableRow key={index}>
               <TableCell>
                 <div className="flex items-center gap-1">
