@@ -95,7 +95,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
             <span
               style={{
                 outline: 'none',
-                background: 'url(/backgrounds/scanner.webp)',
+                background: 'url(/backgrounds/watchdog.webp)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'top center',
                 WebkitBackgroundClip: 'text',
