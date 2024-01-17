@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 import { AUDIT_STATUS_RETURN_CODE } from '@/utils/audit-statuses';
+import usePaidUser from '@/hooks/usePaiduser';
 import dynamic from 'next/dynamic';
 import GridLoader from 'react-spinners/GridLoader';
 
@@ -122,11 +123,12 @@ const DetailedPage = ({ params }: Props) => {
   const [status, setStatus] = useState(AUDIT_STATUS_RETURN_CODE.notRequested);
   const [statusProgress, setStatusProgress] = useState(0);
   const [statusEta, setStatusEta] = useState<number | null>(null);
-  const [paiduser, setPaiduser] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
-  const user = useSession();
   const router = useRouter();
-
+  const paiduser = usePaidUser(contractAddress);
+  if (paiduser === false) {
+    router.push(`/audit/token/${params.id}`);
+  }
   const getAuditResults = async () => {
     try {
       const fetchData = async () => {
@@ -230,24 +232,6 @@ const DetailedPage = ({ params }: Props) => {
   };
 
   useEffect(() => {
-    // const paiduser = async () => {
-    //   const response = await fetch('/api/paiduser', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({
-    //       email: user.data?.user?.email,
-    //       token: contractAddress,
-    //     }),
-    //   });
-    //   const paiduserResponse = await response.json();
-    //   console.log(paiduserResponse);
-    //   setPaiduser(paiduserResponse.paiduser);
-    //   if (paiduserResponse.paiduser === false) {
-    //     router.push(`/payment/${contractAddress}/pay`);
-    //   }
-    // };
-    // paiduser();
-
     if (contractAddress) {
       pollStatus();
     }
@@ -256,6 +240,7 @@ const DetailedPage = ({ params }: Props) => {
       if (timer.current) clearInterval(timer.current);
     };
   }, [contractAddress]);
+
   //   if (!paiduser) {
   //     return (
   //       <div className="flex items-center justify-center w-full h-screen text-white">

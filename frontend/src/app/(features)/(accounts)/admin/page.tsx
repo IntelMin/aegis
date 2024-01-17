@@ -55,12 +55,17 @@ const Admin: FC<AdminProps> = ({}) => {
           'Content-Type': 'application/json',
         },
       });
-      const data = await users.json();
+
+      console.log(users);
+      const data = await users?.json();
+      console.log(data);
       setUserstable(data);
     }
     getUsers();
   }, []);
-
+  console.log(userstable);
+  if (userstable?.length === 0)
+    return <div className="text-2xl font-bold">No users found!!!</div>;
   if (session?.user) {
     return (
       <>
