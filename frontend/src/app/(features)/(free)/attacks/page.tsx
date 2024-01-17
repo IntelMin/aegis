@@ -27,8 +27,9 @@ interface AttacksProps {}
 
 const Attacks: FC<AttacksProps> = ({}) => {
   const toast = useToast();
-  const [fromDate, setFromDate] = useState<Date>();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
   const [filterResults, setFilterResults] = useState<{
     attacks: any[];
     total: number;
@@ -53,15 +54,11 @@ const Attacks: FC<AttacksProps> = ({}) => {
   const fetchData = async (filterOptions: any[]) => {
     setIsLoading(true);
 
-    console.log('--------');
-    console.log(filterOptions);
+    const queryString = qs.stringify(
+      { ...filterOptions, limit, offset },
+      { arrayFormat: 'comma', skipNulls: true }
+    );
 
-    const queryString = qs.stringify(filterOptions, {
-      arrayFormat: 'comma',
-      skipNulls: true,
-    });
-
-    console.log(queryString);
     try {
       const response = await axios.get(`api/attacks/filter?${queryString}`);
       setFilterResults(response.data);
@@ -84,7 +81,7 @@ const Attacks: FC<AttacksProps> = ({}) => {
 
   useEffect(() => {
     fetchData(filterOptions);
-  }, [filterOptions]);
+  }, [filterOptions, offset, limit]);
 
   return (
     <div>
@@ -159,6 +156,10 @@ const Attacks: FC<AttacksProps> = ({}) => {
                   loading={isLoading}
                   options={filterOptions}
                   results={filterResults}
+                  setLimit={setLimit}
+                  setOffset={setOffset}
+                  limit={limit}
+                  offset={offset}
                 />
               </main>
             </>

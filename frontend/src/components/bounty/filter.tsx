@@ -4,7 +4,6 @@ import { FC, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -33,20 +32,28 @@ interface BountyFilterProps {
   stats: any;
 }
 
+const categoryList = [
+  'Bug bounty',
+  'Asset Management',
+  'Oracle',
+  'Synthetic Assets',
+  'Stablecoin',
+];
+
 const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [name, setName] = useState<string | undefined>();
   const [platform, setPlatform] = useState<string | undefined>();
   const [language, setLanguage] = useState<string | undefined>();
   const [category, setCategory] = useState<string | undefined>();
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [funds, setFunds] = useState(0);
-  const [bounty, setBounty] = useState(0);
-  const [isPaid, setIsPaid] = useState(false);
+  const [bounty, setBounty] = useState<number | undefined>();
+  const [isPaid, setIsPaid] = useState<boolean | undefined>();
 
   const handleApplyFilters = () => {
     const filters = filterSchema.parse({
-      searchTerm,
+      name,
       platform,
       language,
       category,
@@ -56,20 +63,25 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
       bounty,
       isPaid,
     });
-
     onApplyFilters(filters);
   };
 
-  const handleResetFilters = () => {
-    setSearchTerm('');
+  const resetFilters = () => {
+    setName(undefined);
     setPlatform(undefined);
     setLanguage(undefined);
     setCategory(undefined);
     setFromDate(undefined);
     setToDate(undefined);
     setFunds(0);
-    setBounty(0);
-    setIsPaid(false);
+    setBounty(undefined);
+    setIsPaid(undefined);
+  };
+
+  const handleResetFilters = () => {
+    const initialFilters = filterSchema.parse({});
+    resetFilters();
+    onApplyFilters(initialFilters);
   };
 
   return (
@@ -84,8 +96,10 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
         <input
           type="text"
           autoComplete="off"
-          placeholder="Search..."
+          placeholder="Search Project"
           className=" max-md:hidden placeholder:text-neutral-600 border-none outline-none bg-transparent"
+          onChange={e => setName(e.target.value)}
+          value={name || ''}
         />
       </div>
 
@@ -141,25 +155,25 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
 
       <div className="space-y-2">
         <Label htmlFor="platform">Language</Label>
-        <Select>
+        <Select onValueChange={setLanguage}>
           <SelectTrigger className="w-full text-zinc-500">
             <SelectValue placeholder="Select a language" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectItem value="*">All</SelectItem>
-              <SelectItem value="solidity">
+              <SelectItem value="Solidity">
                 <div className="flex flex-row">
                   <span>Solidity</span>
                 </div>
               </SelectItem>
-              <SelectItem value="rust">
+              <SelectItem value="Rust">
                 <div className="flex flex-row">
                   <span>Rust</span>
                 </div>
               </SelectItem>
 
-              <SelectItem value="vyper">
+              <SelectItem value="Vyper">
                 <div className="flex flex-row">
                   <span>Vyper</span>
                 </div>
@@ -171,14 +185,14 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
 
       <div className="space-y-2">
         <Label htmlFor="platform">Category</Label>
-        <Select>
+        <Select onValueChange={setCategory}>
           <SelectTrigger className="w-full text-zinc-500">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectItem value="*">All</SelectItem>
-              {stats.categories?.map((category: any) => (
+              {categoryList?.map((category: any) => (
                 <SelectItem value={category} key={category}>
                   <div className="flex flex-row">
                     <span>{category}</span>
@@ -250,7 +264,7 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
         </Popover>
       </div>
 
-      <div className="space-y-2 pb-3">
+      {/* <div className="space-y-2 pb-3">
         <div className="flex justify-between">
           <Label htmlFor="platform">Funds</Label>
           <span className="text-xs text-zinc-500 flex-end">
@@ -258,7 +272,6 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
           </span>
         </div>
         <Slider
-          //   defaultValue={bounty}
           defaultValue={[0, 0]}
           max={stats.max_reward}
           step={100}
@@ -268,30 +281,30 @@ const BountyFilter: FC<BountyFilterProps> = ({ onApplyFilters, stats }) => {
             }
           }}
         />
-      </div>
+      </div> */}
 
       <div className="space-y-2 pb-3">
         <div className="flex justify-between">
           <Label htmlFor="platform">Bounty</Label>
           <span className="text-xs text-zinc-500 flex-end">
-            {formatNumber(bounty)}
+            {bounty ? formatNumber(bounty) : 0}
           </span>
         </div>
+
         <Slider
-          //   defaultValue={bounty}
-          defaultValue={[0, 0]}
-          max={stats.max_paid}
-          step={100}
+          defaultValue={[1000]}
           onValueChange={(values: number[]) => {
             if (values.length === 1) {
               setBounty(values[0]);
             }
           }}
+          max={10000000}
+          step={10000}
         />
       </div>
 
       <div className="flex items-center space-x-2 pb-3">
-        <Switch id="airplane-mode" />
+        <Switch onCheckedChange={() => setIsPaid(!isPaid)} id="airplane-mode" />
         <Label htmlFor="airplane-mode">Paid</Label>
       </div>
 

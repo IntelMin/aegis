@@ -29,14 +29,36 @@ interface BountyTableProps {
     pages: number;
     total: number;
   };
+  setLimit: any;
+  setOffset: any;
+  limit: any;
+  offset: any;
 }
 
-const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
+const BountyTable: FC<BountyTableProps> = ({
+  loading,
+  options,
+  results,
+  setLimit,
+  setOffset,
+  limit,
+  offset,
+}) => {
   const current_page = results?.offset + 1;
   const last_page = results?.pages;
 
-  const handlePageClick = (page: number) => {
-    console.log('Page:', page);
+  const handleNextClick = (page: number) => {
+    const newOffset = offset + 1;
+    setOffset(newOffset);
+  };
+  const handlePreviousClick = (page: number) => {
+    const newOffset = offset - 1;
+    setOffset(newOffset);
+  };
+
+  const handleClick = (page: number) => {
+    const newOffset = offset;
+    setOffset(newOffset);
   };
 
   if (loading) {
@@ -121,26 +143,31 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
           ))}
         </TableBody>
       </Table>
-      <Pagination>
+      <Pagination className="mt-4">
         <PaginationContent>
           {current_page > 1 && (
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                className="cursor-pointer"
+                onClick={() => handlePreviousClick(current_page - 1)}
+              />
             </PaginationItem>
           )}
 
           {Array.from({ length: last_page }).map((_, index) => {
             const page = index + 1;
+            const isActive = page === current_page;
             if (
               page === current_page ||
               page === current_page - 1 ||
               page === current_page + 1
             ) {
               return (
-                <PaginationItem key={page}>
+                <PaginationItem key={index}>
                   <PaginationLink
-                    href="#"
-                    onClick={() => handlePageClick(page)}
+                    className={`cursor-pointer ${
+                      isActive ? 'bg-zinc-800' : ''
+                    }`}
                   >
                     {page}
                   </PaginationLink>
@@ -150,17 +177,16 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
             return null;
           })}
 
-          {/* <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem> */}
-
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
 
           {current_page < last_page && (
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                className="cursor-pointer"
+                onClick={() => handleNextClick(current_page + 1)}
+              />
             </PaginationItem>
           )}
         </PaginationContent>

@@ -25,14 +25,36 @@ interface AttacksTableProps {
     pages: number;
     results: any[];
   };
+  setLimit: any;
+  setOffset: any;
+  limit: any;
+  offset: any;
 }
 
-const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
+const AttacksTable: FC<AttacksTableProps> = ({
+  loading,
+  options,
+  results,
+  setLimit,
+  setOffset,
+  limit,
+  offset,
+}) => {
   const current_page = results?.offset + 1;
   const last_page = results?.pages;
 
-  const handlePageClick = (page: number) => {
-    console.log(page);
+  const handleNextClick = (page: number) => {
+    const newOffset = offset + 1;
+    setOffset(newOffset);
+  };
+  const handlePreviousClick = (page: number) => {
+    const newOffset = offset - 1;
+    setOffset(newOffset);
+  };
+
+  const handleClick = (page: number) => {
+    const newOffset = offset;
+    setOffset(newOffset);
   };
 
   if (loading) {
@@ -43,19 +65,7 @@ const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
     );
   }
   return (
-    <div className="pt-6 md:pl-2">
-      {/* {options.length && options?.searchTerm.length > 0 && (
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-900">
-          <h3 className="text-neutral-200 text-[20px] font-[600]">
-            Search: {options?.searchTerm}
-          </h3>
-          <div className="flex items-center gap-1">
-            <p className="text-neutral-200 text-[16px]">Total:</p>
-            <span className="text-green-400 text-[16px]">{results?.total}</span>
-          </div>
-        </div>
-      )} */}
-
+    <div className="pt-6 pl-2">
       <div className="flex flex-col pl-4 pt-1">
         {results.attacks.map((attack: any, index: number) => (
           <div
@@ -88,26 +98,31 @@ const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
         ))}
       </div>
 
-      <Pagination>
+      <Pagination className="mt-4">
         <PaginationContent>
           {current_page > 1 && (
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                className="cursor-pointer"
+                onClick={() => handlePreviousClick(current_page - 1)}
+              />
             </PaginationItem>
           )}
 
           {Array.from({ length: last_page }).map((_, index) => {
             const page = index + 1;
+            const isActive = page === current_page;
             if (
               page === current_page ||
               page === current_page - 1 ||
               page === current_page + 1
             ) {
               return (
-                <PaginationItem key={page}>
+                <PaginationItem key={index}>
                   <PaginationLink
-                    href="#"
-                    onClick={() => handlePageClick(page)}
+                    className={`cursor-pointer ${
+                      isActive ? 'bg-zinc-800' : ''
+                    }`}
                   >
                     {page}
                   </PaginationLink>
@@ -117,17 +132,16 @@ const AttacksTable: FC<AttacksTableProps> = ({ loading, options, results }) => {
             return null;
           })}
 
-          {/* <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem> */}
-
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
 
           {current_page < last_page && (
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                className="cursor-pointer"
+                onClick={() => handleNextClick(current_page + 1)}
+              />
             </PaginationItem>
           )}
         </PaginationContent>

@@ -9,6 +9,10 @@ export async function GET(req: NextRequest) {
   const name = searchParams.get('name');
   const category = searchParams.get('category');
   const language = searchParams.get('language');
+  const isPaid = searchParams.get('isPaid');
+  const fromDate = searchParams.get('fromDate');
+  const toDate = searchParams.get('toDate');
+  const rewards = searchParams.get('bounty');
   const limit = parseInt(searchParams.get('limit') || '10', 10);
   const offset = parseInt(searchParams.get('offset') || '0', 10);
 
@@ -17,6 +21,18 @@ export async function GET(req: NextRequest) {
       ...(name && { name: { contains: name, mode: 'insensitive' } }),
       ...(category && { category_list: { has: category } }),
       ...(language && { language_list: { has: language } }),
+      ...(rewards && { max_reward: { lte: parseInt(rewards) } }),
+      ...(isPaid !== null &&
+        isPaid !== undefined && {
+          total_paid_metric_enabled: isPaid === 'true',
+        }),
+      ...(fromDate &&
+        toDate && {
+          date: {
+            gte: new Date(fromDate).toISOString(),
+            lte: new Date(toDate).toISOString(),
+          },
+        }),
     };
 
     const [bounties, total] = await Promise.all([

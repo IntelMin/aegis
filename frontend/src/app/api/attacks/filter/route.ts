@@ -4,16 +4,26 @@ import { db } from '@/lib/db';
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  console.log(`searchParams: ${searchParams}`);
-
-  const name = searchParams.get('name') || '';
-  const category = searchParams.get('category') || '';
+  const target = searchParams.get('target') || '';
+  const attackVector = searchParams.get('attackVector') || '';
   const limit = parseInt(searchParams.get('limit') || '10', 10);
   const offset = parseInt(searchParams.get('offset') || '0', 10);
+  const fromDate = searchParams.get('fromDate');
+  const toDate = searchParams.get('toDate');
 
   try {
     const whereClause: any = {
-      ...(category && { attack_vector: category }),
+      ...(target && { target: { contains: target, mode: 'insensitive' } }),
+      ...(attackVector && {
+        attack_vector: { contains: attackVector, mode: 'insensitive' },
+      }),
+      ...(fromDate &&
+        toDate && {
+          date: {
+            gte: new Date(fromDate).toISOString(),
+            lte: new Date(toDate).toISOString(),
+          },
+        }),
     };
 
     const [attacks, total] = await Promise.all([

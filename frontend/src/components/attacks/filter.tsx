@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, use, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
@@ -33,43 +33,43 @@ interface AttacksFilterProps {
   stats: any;
 }
 
+const attackVectorList = [
+  'Rug Pull',
+  'Social Engineering',
+  'Twitter',
+  'Price Manipulation',
+  'Contract Vulnerability',
+  'Unknown',
+];
+
 const AttacksFilter: FC<AttacksFilterProps> = ({ onApplyFilters, stats }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [platform, setPlatform] = useState<string | undefined>();
-  const [language, setLanguage] = useState<string | undefined>();
-  const [category, setCategory] = useState<string | undefined>();
+  const [target, setTarget] = useState<string | undefined>();
+  const [attackVector, setAttackVector] = useState<string | undefined>();
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
-  const [funds, setFunds] = useState(0);
-  const [bounty, setBounty] = useState(0);
-  const [isPaid, setIsPaid] = useState(false);
 
   const handleApplyFilters = () => {
     const filters = filterSchema.parse({
-      searchTerm,
-      platform,
-      language,
-      category,
+      target,
+      attackVector,
       fromDate,
       toDate,
-      funds,
-      bounty,
-      isPaid,
     });
 
     onApplyFilters(filters);
   };
 
-  const handleResetFilters = () => {
-    setSearchTerm('');
-    setPlatform(undefined);
-    setLanguage(undefined);
-    setCategory(undefined);
+  const resetFilters = () => {
+    setTarget(undefined);
+    setAttackVector(undefined);
     setFromDate(undefined);
     setToDate(undefined);
-    setFunds(0);
-    setBounty(0);
-    setIsPaid(false);
+  };
+
+  const handleResetFilters = () => {
+    const initialFilters = filterSchema.parse({});
+    resetFilters();
+    onApplyFilters(initialFilters);
   };
 
   return (
@@ -84,24 +84,26 @@ const AttacksFilter: FC<AttacksFilterProps> = ({ onApplyFilters, stats }) => {
         <input
           type="text"
           autoComplete="off"
-          placeholder="Search..."
+          placeholder="Search target"
+          onChange={e => setTarget(e.target.value)}
+          value={target || ''}
           className=" max-md:hidden placeholder:text-neutral-600 border-none outline-none bg-transparent"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="platform">Category</Label>
-        <Select>
+        <Label htmlFor="platform">Attack Vector</Label>
+        <Select onValueChange={setAttackVector}>
           <SelectTrigger className="w-full text-zinc-500">
-            <SelectValue placeholder="Select a category" />
+            {attackVector || 'Select attack vector'}
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectItem value="*">All</SelectItem>
-              {stats.categories?.map((category: any) => (
-                <SelectItem value={category.name} key={category.name}>
+              {attackVectorList?.map((vector: any, index) => (
+                <SelectItem value={vector} key={index}>
                   <div className="flex flex-row">
-                    <span>{category.name}</span>
+                    <span>{vector}</span>
                   </div>
                 </SelectItem>
               ))}
