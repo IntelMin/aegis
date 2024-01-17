@@ -37,6 +37,12 @@ export const navArr = [
         iconUrl: 'token-audit',
         icon: true,
       },
+      {
+        name: 'Reports',
+        href: 'audit/reports',
+        iconUrl: 'token-audit',
+        icon: true,
+      },
     ],
   },
   {
