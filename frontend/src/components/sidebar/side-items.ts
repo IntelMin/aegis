@@ -40,7 +40,7 @@ export const navArr = [
       {
         name: 'Reports',
         href: 'audit/reports',
-        iconUrl: 'token-audit',
+        iconUrl: 'reports',
         icon: true,
       },
     ],
