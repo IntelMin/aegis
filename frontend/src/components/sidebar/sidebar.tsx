@@ -15,7 +15,7 @@ const Sidebar = (props: Props) => {
   const [open, setOpen] = useState(1);
 
   const divvars = {
-    width: open === 2 ? '250px' : '100px',
+    width: open === 2 ? '230px' : '100px',
     transition: { duration: 0.4, type: 'spring' },
   };
   return (
@@ -23,7 +23,7 @@ const Sidebar = (props: Props) => {
       <motion.div
         animate={divvars}
         className={`${
-          open === 2 ? 'w-[250px] px-6 ' : 'w-[100px]'
+          open === 2 ? 'w-[230px] px-6 ' : 'w-[100px]'
         } h-screen flex flex-col justify-between items-center overflow-y-scroll border-r border-zinc-800 py-4 sticky top-0 left-0`}
       >
         <div>

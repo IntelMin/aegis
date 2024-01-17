@@ -14,7 +14,7 @@ const UserLayout = ({ children }: Props) => {
 
   return (
     <>
-      <div className="max-md:hidden">
+      <div className="max-md:hidden monitor">
         <Sidebar />
       </div>
       {show && (
