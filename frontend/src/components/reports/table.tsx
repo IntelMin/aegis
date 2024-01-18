@@ -19,6 +19,8 @@ import copy from 'copy-to-clipboard';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
 import { set } from 'date-fns';
+import { formatDate } from '@/utils/format-date';
+import { formatTime } from '@/utils/format-time';
 
 type Props = {
   tablehead: string[];
@@ -111,8 +113,8 @@ export const ReportsTable = ({
             tokenName: report.name,
             tokenInfo: data.text,
             tokenAddress: report.address,
-            auditDate: new Date(report.created_at).toLocaleDateString(),
-            auditTime: new Date(report.created_at).toLocaleTimeString(),
+            auditDate: formatDate(report.created_at),
+            auditTime: formatTime(report.created_at),
             percentageData: [
               data.table.number_of_high_severity_issues,
               data.table.number_of_medium_severity_issues,
