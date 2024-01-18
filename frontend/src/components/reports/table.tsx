@@ -72,12 +72,12 @@ export const ReportsTable = ({
   const [tableData, setTableData] = React.useState<ReportState[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [reportLoading, setReportLoading] = React.useState(false);
+
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
     return data.map(item => (item / total) * 100);
   };
-  console.log('tableData', tableData);
-  console.log('loading', loading);
+
   useEffect(() => {
     async function fetchReports() {
       setLoading(true);
@@ -131,8 +131,8 @@ export const ReportsTable = ({
   }, []);
   useEffect(() => {
     console.log('tableData', tableData);
-    if (tokenState.tokenAddress) {
-      if (!tokenState.tokenInfo) {
+    if (tokenState?.tokenAddress) {
+      if (!tokenState?.tokenInfo) {
         if (!loading) {
           setTokenState({
             tokenIcon: tokenState.tokenIcon,
@@ -144,7 +144,7 @@ export const ReportsTable = ({
         }
       }
     }
-  }, [loading, tableData, tokenState.tokenAddress]);
+  }, [loading, tableData, tokenState?.tokenAddress]);
 
   return (
     <>
