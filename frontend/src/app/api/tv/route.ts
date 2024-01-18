@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const cache: Record<string, any> = {}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
@@ -8,7 +10,12 @@ export async function GET(req: NextRequest) {
   const from = searchParams.get('from')
   const to = searchParams.get('to')
 
-  const pairInfo = await fetch(`https://app.geckoterminal.com/api/p1/eth/pools/${pair}`).then(res => res.json())
+  const pairInfo = cache[pair!] ?? await fetch(`https://app.geckoterminal.com/api/p1/eth/pools/${pair}`).then(res => res.json())
+
+  if (!cache[pair!]) {
+    cache[pair!] = pairInfo
+  }
+
   const a = pairInfo.data.id
   const b = pairInfo.data.relationships.pairs.data[0].id
 

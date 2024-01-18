@@ -9,8 +9,6 @@ import {
   SubscribeBarsCallback,
 } from './charting_library/charting_library'
 
-import { ChartBar } from './types'
-
 const supportedResolutions = [
   '1',
   '5',
@@ -44,6 +42,7 @@ const splitBaseQuote = (symbolName: string) => {
 const DataFeedFactory = (
   chartScale: number,
   pairAddress: string,
+  interval: number
 ): IBasicDataFeed => {
   return {
     onReady: (cb: OnReadyCallback) => {
@@ -94,9 +93,21 @@ const DataFeedFactory = (
     },
     subscribeBars: (
       symbolInfo: LibrarySymbolInfo,
-      _resolution: ResolutionString,
+      res: ResolutionString,
       onTick: SubscribeBarsCallback
     ) => {
+      fetch(`/api/tv?pair=${pairAddress}&res=${res}&from=${Math.floor(Date.now() / 1000 - interval)}&to=${Math.floor(Date.now() / 1000)}}`).then(res => res.json())
+        .then(res => {
+          onTick(
+            {
+              high: res.h,
+              low: res.l,
+              open: res.o,
+              close: res.c,
+              time: new Date(res.dt).getTime()
+            }
+          )
+        })
     },
     unsubscribeBars: () => { },
     searchSymbols: (
