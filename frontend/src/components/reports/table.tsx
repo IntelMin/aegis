@@ -193,7 +193,7 @@ export const ReportsTable = ({
               <TableCell>
                 <Image
                   src={
-                    data.imageSmallUrl
+                    data.tokenIcon
                       ? `/api/token/image?q=${data.tokenIcon.split('/').pop()}`
                       : `/icons/token-default.svg`
                   }

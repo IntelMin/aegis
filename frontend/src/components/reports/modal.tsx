@@ -67,8 +67,10 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
           <div className="p-3 rounded-full border border-dashed border-zinc-800 w-fit">
             <Image
               src={
-                data.imageSmallUrl
-                  ? `/api/token/image?q=${data.tokenIcon.split('/').pop()}`
+                tokenState.tokenIcon
+                  ? `/api/token/image?q=${tokenState.tokenIcon
+                      .split('/')
+                      .pop()}`
                   : `/icons/token-default.svg`
               }
               alt="token-icons"

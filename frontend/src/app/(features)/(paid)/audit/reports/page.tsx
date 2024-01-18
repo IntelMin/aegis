@@ -27,58 +27,6 @@ const ReportsPage = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const requestNewReport = async (address: string) => {
-    const contractAddress = address;
-    try {
-      const response = await fetch('/api/audit/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: contractAddress,
-        }),
-      });
-      const data = await response.json();
-      if (data.status === 'success') {
-        const intervalId = setInterval(async () => {
-          const response = await fetch(
-            `/api/audit/report?address=${contractAddress}`,
-            {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-            }
-          );
-          console.log(response);
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.status === 'success') {
-              const pdfData = data.report; // base64-encoded PDF data
-              const pdfBlob = new Blob([atob(pdfData)], {
-                type: 'application/pdf',
-              });
-              const pdfUrl = URL.createObjectURL(pdfBlob);
-              const link = document.createElement('a');
-              link.href = pdfUrl;
-              link.download =
-                data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-              // Append the link to the body
-              document.body.appendChild(link);
-
-              // Programmatically click the link to start the download
-              link.click();
-
-              // Remove the link when done
-              document.body.removeChild(link);
-              clearInterval(intervalId);
-            }
-          }
-        }, 5000);
-      }
-    } catch (error) {
-      console.error('Error requesting report:', error);
-    }
-  };
 
   const handleOutsideClick = (event: MouseEvent) => {
     const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
