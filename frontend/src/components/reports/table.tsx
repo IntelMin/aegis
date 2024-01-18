@@ -86,7 +86,7 @@ export const ReportsTable = ({
     async function fetchReports() {
       setLoading(true);
       setReportLoading(true);
-      const response = await fetch('/api/getallReports');
+      const response = await fetch('/api/reports');
       const data = await response.json();
       const table_report = data.reports.map((report: Report) => {
         return {
