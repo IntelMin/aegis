@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect } from 'react';
+import React, { SetStateAction, use, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -18,18 +18,26 @@ import { formatAddress } from '@/utils/format-address';
 import copy from 'copy-to-clipboard';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
+import { set } from 'date-fns';
 
 type Props = {
   tablehead: string[];
   loading?: boolean;
-
+  tokenState: {
+    tokenIcon: string;
+    tokenName: string;
+    tokenInfo?: string;
+    tokenAddress: string;
+    loading?: boolean;
+  };
   setShowModal: React.Dispatch<SetStateAction<boolean>>;
   setTokenState: React.Dispatch<
     SetStateAction<{
       tokenIcon: string;
       tokenName: string;
-      tokenInfo: string;
+      tokenInfo?: string;
       tokenAddress: string;
+      loading?: boolean;
     }>
   >;
 };
@@ -45,17 +53,18 @@ type Report = {
 interface ReportState {
   tokenIcon: string;
   tokenName: string;
-  tokenInfo: string;
+  tokenInfo?: string;
   tokenAddress: string;
   auditDate: string;
   auditTime: string;
-  percentageData: number[];
+  percentageData?: number[];
   imageSmallUrl?: string;
 }
 export const ReportsTable = ({
   tablehead,
   setShowModal,
   setTokenState,
+  tokenState,
 }: Props) => {
   const handleCopy = (data: string) => {
     copy(data);
@@ -75,6 +84,16 @@ export const ReportsTable = ({
       setReportLoading(true);
       const response = await fetch('/api/getallReports');
       const data = await response.json();
+      const table_report = data.reports.map((report: Report) => {
+        return {
+          tokenIcon: report.image_url,
+          tokenName: report.name,
+          tokenAddress: report.address,
+          auditDate: new Date(report.created_at).toLocaleDateString(),
+          auditTime: new Date(report.created_at).toLocaleTimeString(),
+        };
+      });
+      setTableData(table_report);
       console.log(data);
       setReportLoading(false);
 
@@ -110,6 +129,23 @@ export const ReportsTable = ({
       return data;
     }
   }, []);
+  useEffect(() => {
+    console.log('tableData', tableData);
+    if (tokenState.tokenAddress) {
+      if (!tokenState.tokenInfo) {
+        if (!loading) {
+          setTokenState({
+            tokenIcon: tokenState.tokenIcon,
+            tokenName: tokenState.tokenName,
+            tokenInfo: tokenState.tokenInfo,
+            tokenAddress: tokenState.tokenAddress,
+            loading: true,
+          });
+        }
+      }
+    }
+  }, [loading, tableData, tokenState.tokenAddress]);
+
   return (
     <>
       <Table>
@@ -148,6 +184,7 @@ export const ReportsTable = ({
                   tokenName: data?.tokenName,
                   tokenInfo: data?.tokenInfo,
                   tokenAddress: data?.tokenAddress,
+                  loading: loading,
                 });
               }}
               key={i}
@@ -197,8 +234,14 @@ export const ReportsTable = ({
                 </div>
               </TableCell>
               <TableCell>
-                {loading ? (
+                {!data.percentageData ? (
                   <Skeleton className="w-full" />
+                ) : data.percentageData[0] == 0 &&
+                  data.percentageData[1] == 0 &&
+                  data.percentageData[2] == 0 ? (
+                  <>
+                    <div className="w-full min-w-[300px] h-[20px] bg-gray-200 flex items-center"></div>
+                  </>
                 ) : (
                   <TooltipProvider>
                     <Tooltip>

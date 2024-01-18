@@ -10,9 +10,15 @@ import {
   // tableData,
   tablehead,
 } from '@/components/reports/constant';
-
+type tokenState = {
+  tokenIcon: string;
+  tokenName: string;
+  tokenInfo?: string | undefined;
+  tokenAddress: string;
+  loading?: boolean;
+};
 const ReportsPage = () => {
-  const [tokenState, setTokenState] = useState({
+  const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',
     tokenName: '',
     tokenInfo: '',
@@ -73,38 +79,7 @@ const ReportsPage = () => {
       console.error('Error requesting report:', error);
     }
   };
-  const requestReport = async (address: string) => {
-    const response = await fetch(`/api/audit/report?address=${address}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log(response);
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      if (data.status === 'success') {
-        const pdfData = data.report; // base64-encoded PDF data
-        const pdfBlob = new Blob([atob(pdfData)], {
-          type: 'application/pdf',
-        });
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        link.download =
-          data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-        // Append the link to the body
-        document.body.appendChild(link);
-
-        // Programmatically click the link to start the download
-        link.click();
-
-        // Remove the link when done
-        document.body.removeChild(link);
-      }
-    }
-  };
   const handleOutsideClick = (event: MouseEvent) => {
     const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
 
@@ -152,6 +127,7 @@ const ReportsPage = () => {
           tablehead={tablehead}
           setShowModal={setShowModal}
           setTokenState={setTokenState}
+          tokenState={tokenState}
         />
       </div>
       {showModal && (

@@ -1,23 +1,58 @@
 import { formatAddress } from '@/utils/format-address';
 import copy from 'copy-to-clipboard';
 import Image from 'next/image';
-import React from 'react';
+import React, { use, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
 type Props = {
   tokenState: {
     tokenIcon: string;
     tokenName: string;
-    tokenInfo: string;
+    tokenInfo?: string;
     tokenAddress: string;
+    loading?: boolean;
   };
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Modal = ({ tokenState, setShowModal }: Props) => {
+  const requestReport = async (address: string) => {
+    const response = await fetch(`/api/audit/report?address=${address}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(response);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      if (data.status === 'success') {
+        const pdfData = data.report; // base64-encoded PDF data
+        const pdfBlob = new Blob([atob(pdfData)], {
+          type: 'application/pdf',
+        });
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        link.download =
+          data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
+
+        // Append the link to the body
+        document.body.appendChild(link);
+
+        // Programmatically click the link to start the download
+        link.click();
+
+        // Remove the link when done
+        document.body.removeChild(link);
+      }
+    }
+  };
   const handleCopy = (data: string) => {
     copy(data);
   };
+  useEffect(() => {}, [tokenState.loading]);
+
   return (
     <div className="modal fixed w-[340px] h-full right-4 top-36 z-[20] rounded-[4px]">
       <div
@@ -69,20 +104,29 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
           </button>
         </div>
         <div className="flex flex-col justify-center gap-6">
-          <div className="h-[200px] overflow-y-scroll">
-            {tokenState?.tokenInfo
-              ?.split('.')
-              ?.slice(0, -1)
-              ?.map((item, i) => (
-                <p
-                  className="text-sm text-zinc-300 font-[300] flex items-center"
-                  key={i}
-                >
-                  {item}.
-                </p>
-              ))}
-          </div>
-          <button className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full">
+          {tokenState.loading ? (
+            <p className="text-zinc-300 text-sm font-[300] flex items-center justify-center">
+              Loading...
+            </p>
+          ) : (
+            <div className="h-[200px] overflow-y-scroll">
+              {tokenState?.tokenInfo
+                ?.split('.')
+                ?.slice(0, -1)
+                ?.map((item, i) => (
+                  <p
+                    className="text-sm text-zinc-300 font-[300] flex items-center"
+                    key={i}
+                  >
+                    {item}.
+                  </p>
+                ))}
+            </div>
+          )}
+          <button
+            className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
+            onClick={() => requestReport(tokenState?.tokenAddress)}
+          >
             <Image
               src="/icons/nav/reports.svg"
               alt="report-icon"
