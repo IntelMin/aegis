@@ -75,6 +75,9 @@ export const ReportsTable = ({
 
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
+    if (total === 0) {
+      return data.map((item, index) => (index === 0 ? 100 : 0));
+    }
     return data.map(item => (item / total) * 100);
   };
 
@@ -163,16 +166,19 @@ export const ReportsTable = ({
           {reportLoading && (
             <TableRow className="border-b border-[#262626]">
               <TableCell>
-                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-[25px]" />
               </TableCell>
               <TableCell>
-                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-[25px]" />
               </TableCell>
               <TableCell>
-                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-[25px]" />
               </TableCell>
               <TableCell>
-                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-[25px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-full h-[25px]" />
               </TableCell>
             </TableRow>
           )}
@@ -237,12 +243,6 @@ export const ReportsTable = ({
               <TableCell>
                 {!data.percentageData ? (
                   <Skeleton className="w-full" />
-                ) : data.percentageData[0] == 0 &&
-                  data.percentageData[1] == 0 &&
-                  data.percentageData[2] == 0 ? (
-                  <>
-                    <div className="w-full min-w-[300px] h-[20px] bg-gray-200 flex items-center"></div>
-                  </>
                 ) : (
                   <TooltipProvider>
                     <Tooltip>
