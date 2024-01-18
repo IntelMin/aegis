@@ -50,6 +50,7 @@ interface ReportState {
   auditDate: string;
   auditTime: string;
   percentageData: number[];
+  imageSmallUrl?: string;
 }
 export const ReportsTable = ({
   tablehead,
@@ -61,6 +62,7 @@ export const ReportsTable = ({
   };
   const [tableData, setTableData] = React.useState<ReportState[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [reportLoading, setReportLoading] = React.useState(false);
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
     return data.map(item => (item / total) * 100);
@@ -70,28 +72,32 @@ export const ReportsTable = ({
   useEffect(() => {
     async function fetchReports() {
       setLoading(true);
+      setReportLoading(true);
       const response = await fetch('/api/getallReports');
       const data = await response.json();
       console.log(data);
+      setReportLoading(false);
 
-      let table_data: ReportState[] = [];
+      const table_data: ReportState[] = await Promise.all(
+        data.reports.map(async (report: Report) => {
+          const data = await fetchFindings(report.address);
+          console.log(data);
+          return {
+            tokenIcon: report.image_url,
+            tokenName: report.name,
+            tokenInfo: data.text,
+            tokenAddress: report.address,
+            auditDate: new Date(report.created_at).toLocaleDateString(),
+            auditTime: new Date(report.created_at).toLocaleTimeString(),
+            percentageData: [
+              data.table.number_of_high_severity_issues,
+              data.table.number_of_medium_severity_issues,
+              data.table.number_of_low_severity_issues,
+            ],
+          };
+        })
+      );
 
-      data.reports.forEach(async (report: Report) => {
-        const data = await fetchFindings(report.address);
-        table_data.push({
-          tokenIcon: report.image_url,
-          tokenName: report.name,
-          tokenInfo: data.text,
-          tokenAddress: report.address,
-          auditDate: new Date(report.created_at).toLocaleDateString(),
-          auditTime: new Date(report.created_at).toLocaleTimeString(),
-          percentageData: [
-            data.table?.number_of_high_severity_issues,
-            data.table?.number_of_medium_severity_issues,
-            data.table?.number_of_low_severity_issues,
-          ],
-        });
-      });
       setTableData(table_data);
       setLoading(false);
     }
@@ -104,7 +110,6 @@ export const ReportsTable = ({
       return data;
     }
   }, []);
-  if (loading) return <Skeleton className="w-full h-full" />;
   return (
     <>
       <Table>
@@ -114,8 +119,26 @@ export const ReportsTable = ({
           ))}
         </TableHeader>
         <TableBody
-          className={tableData.length === 0 ? 'bg-transparent' : 'bg-[#151515]'}
+          className={
+            tableData.length === 0 ? 'bg-transparent h-full' : 'bg-[#151515]'
+          }
         >
+          {reportLoading && (
+            <TableRow className="border-b border-[#262626]">
+              <TableCell>
+                <Skeleton className="w-full h-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-full h-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-full h-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-full h-full" />
+              </TableCell>
+            </TableRow>
+          )}
           {tableData?.map((data, i) => (
             <TableRow
               onClick={() => {
@@ -132,15 +155,18 @@ export const ReportsTable = ({
             >
               <TableCell>
                 <Image
-                  src={data?.tokenIcon}
-                  alt="token-icon"
-                  width={20}
-                  height={20}
+                  src={
+                    data.imageSmallUrl
+                      ? `/api/token/image?q=${data.tokenIcon.split('/').pop()}`
+                      : `/icons/token-default.svg`
+                  }
+                  alt={data.tokenName}
+                  width={28}
+                  height={28}
+                  className="rounded-full"
                 />
               </TableCell>
-              {/* <TableCell className="text-[12px] font-[400] text-zinc-100">
-                  {data?.tokenInfo}
-                </TableCell> */}
+
               <TableCell className="text-[12px] font-[400] text-zinc-100">
                 {data?.tokenName}
               </TableCell>
@@ -171,60 +197,70 @@ export const ReportsTable = ({
                 </div>
               </TableCell>
               <TableCell>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="w-full">
-                      <div className="w-full min-w-[300px] h-[20px] flex items-center">
-                        <div
-                          className={`h-[20px] bg-[#353535]`}
-                          style={{
-                            width: `${dataToPercent(data.percentageData)[0]}%`,
-                          }}
-                        />
-                        <div
-                          className={`h-[20px] bg-[#0096B7]`}
-                          style={{
-                            width: `${dataToPercent(data.percentageData)[1]}%`,
-                          }}
-                        />
-                        <div
-                          className={`h-[20px] bg-[#D49900]`}
-                          style={{
-                            width: `${dataToPercent(data.percentageData)[2]}%`,
-                          }}
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      sideOffset={8}
-                      className="translate-x-4 p-2"
-                    >
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <div className="rounded-full w-[12px] h-[12px] bg-[#353535]" />
-                          <p className="text-zinc-200 text-sm">
-                            High: {data.percentageData[0]}
-                          </p>
+                {loading ? (
+                  <Skeleton className="w-full" />
+                ) : (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="w-full">
+                        <div className="w-full min-w-[300px] h-[20px] flex items-center">
+                          <div
+                            className={`h-[20px] bg-[#353535]`}
+                            style={{
+                              width: `${
+                                dataToPercent(data.percentageData)[0]
+                              }%`,
+                            }}
+                          />
+                          <div
+                            className={`h-[20px] bg-[#0096B7]`}
+                            style={{
+                              width: `${
+                                dataToPercent(data.percentageData)[1]
+                              }%`,
+                            }}
+                          />
+                          <div
+                            className={`h-[20px] bg-[#D49900]`}
+                            style={{
+                              width: `${
+                                dataToPercent(data.percentageData)[2]
+                              }%`,
+                            }}
+                          />
                         </div>
-                        <Separator />
-                        <div className="flex items-center gap-2">
-                          <div className="rounded-full w-[12px] h-[12px] bg-[#0096B7]" />
-                          <p className="text-zinc-200 text-sm">
-                            Medium: {data.percentageData[1]}
-                          </p>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="bottom"
+                        sideOffset={8}
+                        className="translate-x-4 p-2"
+                      >
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-[12px] h-[12px] bg-[#353535]" />
+                            <p className="text-zinc-200 text-sm">
+                              High: {data.percentageData[0]}
+                            </p>
+                          </div>
+                          <Separator />
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-[12px] h-[12px] bg-[#0096B7]" />
+                            <p className="text-zinc-200 text-sm">
+                              Medium: {data.percentageData[1]}
+                            </p>
+                          </div>
+                          <Separator />
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-[12px] h-[12px] bg-[#D49900]" />
+                            <p className="text-zinc-200 text-sm">
+                              Low: {data.percentageData[2]}
+                            </p>
+                          </div>
                         </div>
-                        <Separator />
-                        <div className="flex items-center gap-2">
-                          <div className="rounded-full w-[12px] h-[12px] bg-[#D49900]" />
-                          <p className="text-zinc-200 text-sm">
-                            Low: {data.percentageData[2]}
-                          </p>
-                        </div>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </TableCell>
             </TableRow>
           ))}

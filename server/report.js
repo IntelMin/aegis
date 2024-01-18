@@ -1,5 +1,5 @@
 // Add report worker logic hereconst { report } = require("process");
-const supabase = require('./supabase');
+const supabase = require('./lib/supabase');
 const generatePDF = require('./modules/report/generate');
 const fs = require('fs');
 // const { Octokit } = require('@octokit/rest');
@@ -77,14 +77,16 @@ async function pushToGithub(address) {
 }
 
 const getName = address => {
-  const filePath = `./cache/contracts/${address}/info.json`;
+  const filePath = `./cache/contracts/${address}/meta.json`;
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    const info = JSON.parse(fileContent);
-    const name = info?.data?.symbol;
+    const meta = JSON.parse(fileContent);
+    const info = meta?.data.tokens[0];
+    const name = info?.symbol;
+    const image_url = info?.imageSmallUrl;
     // Use the name variable here
     console.log('Name:', name);
-    return name;
+    return { name, image_url };
   } catch (error) {
     console.error('Error reading info.json:', error);
     return address;
