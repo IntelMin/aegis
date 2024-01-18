@@ -70,6 +70,7 @@ const Analytics = ({ params }: Props) => {
           {/* Trading View chart */}
           {liveData?.pairAddress && (
             <TVChart
+              symbol={liveData.baseToken.symbol}
               pairAddress={liveData.pairAddress}
               initialPrice="500"
               onChartReady={() => {

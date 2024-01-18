@@ -14,6 +14,7 @@ export type ChartProps = {
   initialPrice: string;
   onChartReady?: () => void;
   pairAddress: string;
+  symbol: string;
 };
 
 export type Props = ChartProps & {
@@ -35,6 +36,7 @@ export function TVChart({
   studiesOverrides = {},
   initialPrice,
   pairAddress,
+  symbol,
   onChartReady = () => {
     return;
   },
@@ -47,7 +49,7 @@ export function TVChart({
     'paneProperties.backgroundType': 'solid',
   };
 
-  const marketAsset = 'ETH';
+  const marketAsset = symbol;
 
   const decimals =
     Number(initialPrice) > 100 && Number(initialPrice) < 1000
@@ -60,7 +62,7 @@ export function TVChart({
 
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: marketAsset + ':sUSD',
-      datafeed: DataFeedFactory(1, chartScale, pairAddress),
+      datafeed: DataFeedFactory(chartScale, pairAddress),
       interval: interval as ResolutionString,
       container: containerId,
       library_path: libraryPath,
