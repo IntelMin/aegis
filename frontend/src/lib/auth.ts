@@ -1,8 +1,9 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { db } from './db';
+import { db } from './db'; // Make sure this path is correct for your db instance
 import { compare } from 'bcrypt';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
@@ -18,74 +19,73 @@ export const authOptions: NextAuthOptions = {
       name: 'Credentials',
       credentials: {
         email: {
-          label: 'email',
+          label: 'Email',
           type: 'email',
           placeholder: 'based@aiaegis.org',
         },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
+      async authorize(credentials, req) {
+        if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
 
-        const existingUser = await db.user.findUnique({
-          where: { email: credentials?.email },
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
         });
 
-        if (!existingUser) {
+        if (!user) {
           return null;
         }
-        const user_credit = await db.credit_balance.findFirst({
-          where: { user_id: existingUser.id },
-        });
-        const passwordMatch = await compare(
+
+        const isPasswordMatch = await compare(
           credentials.password,
-          existingUser.password
+          user.password
         );
-        if (!passwordMatch) {
+
+        if (!isPasswordMatch) {
           return null;
         }
+
+        const userCredit = await db.credit_balance.findFirst({
+          where: { user_id: user.id },
+        });
 
         return {
-          id: `${existingUser.id}`,
-          username: existingUser.username,
-          email: existingUser.email,
-          role: existingUser.role,
-          whitelisted: existingUser.whitelisted,
-          credits: user_credit ? user_credit.credits : 0,
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          whitelisted: user.whitelisted,
+          credits: userCredit ? userCredit.credits : 0,
         };
       },
     }),
   ],
 
   callbacks: {
-    async jwt({ token, user, session, trigger }) {
-      if (trigger === 'update' && session.user.credits) {
-        return {
-          ...token,
-          credits: session.user.credits,
-        };
-      }
+    async jwt({ token, user }) {
       if (user) {
-        return {
-          ...token,
-          username: user.username,
-          credits: token.credits,
-        };
+        token.id = user.id;
+        token.username = user.username;
+        token.email = user.email;
+        token.role = user.role;
+        token.whitelisted = user.whitelisted;
+        token.credits = user.credits;
       }
-
       return token;
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          username: token.username,
-          credits: token.credits,
-        },
+      session.user = {
+        ...session.user,
+        id: token.id as string,
+        username: token.username as string,
+        role: token.role as number,
+        whitelisted: token.whitelisted as boolean,
+        credits: token.credits as number,
       };
+
+      return session;
     },
   },
 };
