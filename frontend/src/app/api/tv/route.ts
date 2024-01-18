@@ -1,27 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CurlImpersonate } from 'node-curl-impersonate';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const query = [
-    ["sym", "usd"],
-    ["span", searchParams.get('span')],
-    ["pair", searchParams.get('pair')],
-    ["ts", searchParams.get('ts')],
-    ["res", searchParams.get('res')]
-  ].map(([name, value]) => `${name}=${value}`).join("&")
 
-  const url = `https://www.dextools.io/chain-bsc/api/generic/history/candles/v4?${query}`;
-  console.log(url)
-  const options = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-    impersonate: 'chrome-110',
-    verbose: false,
-  };
+  const pair = searchParams.get('pair')
+  const res = searchParams.get('res')
+  const from = searchParams.get('from')
+  const to = searchParams.get('to')
 
-  const curl = new CurlImpersonate(url, options);
-  const response = await curl.makeRequest()
-  console.log('*************', response)
-  return NextResponse.json(JSON.parse(response.response));
+  const pairInfo = await fetch(`https://app.geckoterminal.com/api/p1/eth/pools/${pair}`).then(res => res.json())
+  const a = pairInfo.data.id
+  const b = pairInfo.data.relationships.pairs.data[0].id
+
+  const { data } = await fetch(`https://app.geckoterminal.com/api/p1/candlesticks/${a}/${b}?resolution=${res}&from_timestamp=${from}&to_timestamp=${to}`).then(res => res.json())
+
+  return NextResponse.json(data);
 }

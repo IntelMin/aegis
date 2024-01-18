@@ -163,22 +163,21 @@ const DataFeedFactory = (
     },
     getBars: function (
       symbolInfo: LibrarySymbolInfo,
-      _resolution: ResolutionString,
+      res: ResolutionString,
       { from, to }: PeriodParams,
       onHistoryCallback: HistoryCallback,
       onErrorCallback: (error: any) => any
     ) {
-      const query = [
-        ["span", "month"],
-        ["pair", pairAddress],
-        ["ts", from],
-        ["res", _resolution]
-      ].map(([name, value]) => `${name}=${value}`).join("&")
-
-      fetch(`/api/tv?${query}`)
+      fetch(`/api/tv?pair=${pairAddress}&res=${res}&from=${from}&to=${to}}`)
         .then(res => res.json())
         .then(res => {
-          onHistoryCallback(res.data.candles)
+          onHistoryCallback(res.map({
+            high: res.h,
+            low: res.l,
+            open: res.o,
+            close: res.c,
+            time: new Date(res.dt).getTime()
+          }, { noData: false }))
         })
 
       // const { base } = splitBaseQuote(symbolInfo.name)
