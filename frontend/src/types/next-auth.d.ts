@@ -6,6 +6,7 @@ declare module 'next-auth' {
    * from the authorization callback
    */
   interface User {
+    id: number;
     username: string;
     role: number;
     whitelisted: boolean;
@@ -16,7 +17,7 @@ declare module 'next-auth' {
    * The shape of the JWT token object
    */
   interface JWT {
-    id: string;
+    id: number;
     username: string;
     role: number;
     whitelisted: boolean;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { GraphTypeHeader } from '../token-analytics/wallets-overview/graph-type-header';
+// import { GraphTypeHeader } from '../token-analytics/wallets-overview/graph-type-header';
 import Image from 'next/image';
-import { HoldingWalletChart } from './wallets/bubble';
+import HoldingWalletChart from './wallets/bubble';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
@@ -24,10 +24,10 @@ export const TopHolding = ({ choosenType, handleTypeChange }: Props) => {
   return (
     <div className="grid w-full h-full grid-cols-2 gap-2">
       <div className="flex flex-col col-span-2 md:col-span-1">
-        <GraphTypeHeader
+        {/* <GraphTypeHeader
           choosenType={choosenType}
           handleTypeChange={handleTypeChange}
-        />
+        /> */}
         <HoldingWalletChart />
       </div>
       <div className="h-full col-span-2 md:col-span-1">
