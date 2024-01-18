@@ -18,7 +18,17 @@ type tokenState = {
   tokenAddress: string;
   loading?: boolean;
 };
+type usertype = {
+  id?: number;
+  email?: string;
+  username?: string;
+  password?: string;
+  role?: string;
+  created_at?: Date;
+  updated_at?: Date;
+};
 const RequestReportPage = (props: Props) => {
+  const [user, setUser] = useState<usertype>({}); // user state
   const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',
     tokenName: '',
@@ -134,7 +144,19 @@ const RequestReportPage = (props: Props) => {
   };
 
   const [showModal, setShowModal] = useState(false);
-
+  useEffect(() => {
+    async function getuser() {
+      const response = await fetch('/api/profile');
+      const data = await response.json();
+      if (data.user) {
+        console.log(data.user);
+        setUser(data.user);
+        return data.user;
+      }
+    }
+    getuser();
+  }, []);
+  console.log(user);
   useEffect(() => {
     if (!submitting) return;
     console.log({ isFetching, tokenRequestInfo, error });
@@ -230,12 +252,17 @@ const RequestReportPage = (props: Props) => {
           View All Reports
         </Link>
         <div className="w-[80%]">
-          <ReportsTable
-            tablehead={tablehead}
-            setShowModal={setShowModal}
-            setTokenState={setTokenState}
-            tokenState={tokenState}
-          />
+          {user ? (
+            <ReportsTable
+              tablehead={tablehead}
+              setShowModal={setShowModal}
+              setTokenState={setTokenState}
+              tokenState={tokenState}
+              user_id={user.id}
+            />
+          ) : (
+            <> </>
+          )}
         </div>
       </div>
       {showModal && (

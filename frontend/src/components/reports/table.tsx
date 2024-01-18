@@ -18,13 +18,13 @@ import { formatAddress } from '@/utils/format-address';
 import copy from 'copy-to-clipboard';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
-import { set } from 'date-fns';
 import { formatDate } from '@/utils/format-date';
 import { formatTime } from '@/utils/format-time';
 
 type Props = {
   tablehead: string[];
   loading?: boolean;
+  user_id?: number;
   tokenState: {
     tokenIcon: string;
     tokenName: string;
@@ -63,19 +63,32 @@ interface ReportState {
   imageSmallUrl?: string;
   user_id?: number;
 }
-export const ReportsTable = ({
-  tablehead,
-  setShowModal,
+type ReportRow = {
+  data: ReportState;
+  loading?: boolean;
+  i: number;
+  setTokenState: React.Dispatch<
+    SetStateAction<{
+      tokenIcon: string;
+      tokenName: string;
+      tokenInfo?: string;
+      tokenAddress: string;
+      loading?: boolean;
+    }>
+  >;
+  setShowModal: React.Dispatch<SetStateAction<boolean>>;
+};
+
+const ReportsRow = ({
+  data,
+  i,
+  loading,
   setTokenState,
-  tokenState,
-}: Props) => {
+  setShowModal,
+}: ReportRow) => {
   const handleCopy = (data: string) => {
     copy(data);
   };
-  const [tableData, setTableData] = React.useState<ReportState[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [reportLoading, setReportLoading] = React.useState(false);
-
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
     if (total === 0) {
@@ -83,6 +96,130 @@ export const ReportsTable = ({
     }
     return data.map(item => (item / total) * 100);
   };
+  return (
+    <TableRow
+      onClick={() => {
+        setShowModal(true);
+        setTokenState({
+          tokenIcon: data?.tokenIcon,
+          tokenName: data?.tokenName,
+          tokenInfo: data?.tokenInfo,
+          tokenAddress: data?.tokenAddress,
+          loading: loading,
+        });
+      }}
+      key={i}
+      className="border-b border-[#262626]"
+    >
+      <TableCell>
+        <Image
+          src={
+            data.tokenIcon
+              ? `/api/token/image?q=${data.tokenIcon.split('/').pop()}`
+              : `/icons/token-default.svg`
+          }
+          alt={data.tokenName}
+          width={28}
+          height={28}
+          className="rounded-full"
+        />
+      </TableCell>
+
+      <TableCell className="text-[12px] font-[400] text-zinc-100">
+        {data?.tokenName}
+      </TableCell>
+      <TableCell className="flex items-center gap-1">
+        <p className="text-[12px] text-blue-400 uppercase">
+          {formatAddress(data?.tokenAddress)}
+        </p>
+        <button type="button" onClick={() => handleCopy(data?.tokenAddress)}>
+          <Image src="/icons/copy.svg" alt="copy" width={12} height={12} />
+        </button>
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <p className="text-zinc-200 text-[12px] font-[400]">
+            {data?.auditDate}
+          </p>
+          <p className="text-zinc-200 text-[12px] font-[400] uppercase">
+            {data?.auditTime}
+          </p>
+        </div>
+      </TableCell>
+      <TableCell>
+        {!data.percentageData ? (
+          <Skeleton className="w-full" />
+        ) : (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="w-full">
+                <div className="w-full min-w-[300px] h-[20px] flex items-center">
+                  <div
+                    className={`h-[20px] bg-[#353535]`}
+                    style={{
+                      width: `${dataToPercent(data.percentageData)[0]}%`,
+                    }}
+                  />
+                  <div
+                    className={`h-[20px] bg-[#0096B7]`}
+                    style={{
+                      width: `${dataToPercent(data.percentageData)[1]}%`,
+                    }}
+                  />
+                  <div
+                    className={`h-[20px] bg-[#D49900]`}
+                    style={{
+                      width: `${dataToPercent(data.percentageData)[2]}%`,
+                    }}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                sideOffset={8}
+                className="translate-x-4 p-2"
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="rounded-full w-[12px] h-[12px] bg-[#353535]" />
+                    <p className="text-zinc-200 text-sm">
+                      High: {data.percentageData[0]}
+                    </p>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center gap-2">
+                    <div className="rounded-full w-[12px] h-[12px] bg-[#0096B7]" />
+                    <p className="text-zinc-200 text-sm">
+                      Medium: {data.percentageData[1]}
+                    </p>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center gap-2">
+                    <div className="rounded-full w-[12px] h-[12px] bg-[#D49900]" />
+                    <p className="text-zinc-200 text-sm">
+                      Low: {data.percentageData[2]}
+                    </p>
+                  </div>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </TableCell>
+    </TableRow>
+  );
+};
+
+export const ReportsTable = ({
+  tablehead,
+  setShowModal,
+  setTokenState,
+  tokenState,
+  user_id,
+}: Props) => {
+  const [tableData, setTableData] = React.useState<ReportState[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [reportLoading, setReportLoading] = React.useState(false);
 
   useEffect(() => {
     async function fetchReports() {
@@ -91,6 +228,10 @@ export const ReportsTable = ({
       const response = await fetch('/api/reports');
       const data = await response.json();
       const table_report = data.reports.map((report: Report) => {
+        console.log('user_id', user_id);
+        console.log('report.user_id', report.user_id);
+        console.log('user_id === report.user_id', user_id === report.user_id);
+
         return {
           tokenIcon: report.image_url,
           tokenName: report.name,
@@ -101,7 +242,6 @@ export const ReportsTable = ({
         };
       });
       setTableData(table_report);
-      console.log(data);
       setReportLoading(false);
 
       const table_data: ReportState[] = await Promise.all(
@@ -185,132 +325,27 @@ export const ReportsTable = ({
               </TableCell>
             </TableRow>
           )}
-          {tableData?.map((data, i) => (
-            <TableRow
-              onClick={() => {
-                setShowModal(true);
-                setTokenState({
-                  tokenIcon: data?.tokenIcon,
-                  tokenName: data?.tokenName,
-                  tokenInfo: data?.tokenInfo,
-                  tokenAddress: data?.tokenAddress,
-                  loading: loading,
-                });
-              }}
-              key={i}
-              className="border-b border-[#262626]"
-            >
-              <TableCell>
-                <Image
-                  src={
-                    data.tokenIcon
-                      ? `/api/token/image?q=${data.tokenIcon.split('/').pop()}`
-                      : `/icons/token-default.svg`
-                  }
-                  alt={data.tokenName}
-                  width={28}
-                  height={28}
-                  className="rounded-full"
+          {tableData?.map((data, i) =>
+            user_id ? (
+              user_id === data.user_id ? (
+                <ReportsRow
+                  data={data}
+                  i={i}
+                  loading={loading}
+                  setTokenState={setTokenState}
+                  setShowModal={setShowModal}
                 />
-              </TableCell>
-
-              <TableCell className="text-[12px] font-[400] text-zinc-100">
-                {data?.tokenName}
-              </TableCell>
-              <TableCell className="flex items-center gap-1">
-                <p className="text-[12px] text-blue-400 uppercase">
-                  {formatAddress(data?.tokenAddress)}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => handleCopy(data?.tokenAddress)}
-                >
-                  <Image
-                    src="/icons/copy.svg"
-                    alt="copy"
-                    width={12}
-                    height={12}
-                  />
-                </button>
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <p className="text-zinc-200 text-[12px] font-[400]">
-                    {data?.auditDate}
-                  </p>
-                  <p className="text-zinc-200 text-[12px] font-[400] uppercase">
-                    {data?.auditTime}
-                  </p>
-                </div>
-              </TableCell>
-              <TableCell>
-                {!data.percentageData ? (
-                  <Skeleton className="w-full" />
-                ) : (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger className="w-full">
-                        <div className="w-full min-w-[300px] h-[20px] flex items-center">
-                          <div
-                            className={`h-[20px] bg-[#353535]`}
-                            style={{
-                              width: `${
-                                dataToPercent(data.percentageData)[0]
-                              }%`,
-                            }}
-                          />
-                          <div
-                            className={`h-[20px] bg-[#0096B7]`}
-                            style={{
-                              width: `${
-                                dataToPercent(data.percentageData)[1]
-                              }%`,
-                            }}
-                          />
-                          <div
-                            className={`h-[20px] bg-[#D49900]`}
-                            style={{
-                              width: `${
-                                dataToPercent(data.percentageData)[2]
-                              }%`,
-                            }}
-                          />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="bottom"
-                        sideOffset={8}
-                        className="translate-x-4 p-2"
-                      >
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-2">
-                            <div className="rounded-full w-[12px] h-[12px] bg-[#353535]" />
-                            <p className="text-zinc-200 text-sm">
-                              High: {data.percentageData[0]}
-                            </p>
-                          </div>
-                          <Separator />
-                          <div className="flex items-center gap-2">
-                            <div className="rounded-full w-[12px] h-[12px] bg-[#0096B7]" />
-                            <p className="text-zinc-200 text-sm">
-                              Medium: {data.percentageData[1]}
-                            </p>
-                          </div>
-                          <Separator />
-                          <div className="flex items-center gap-2">
-                            <div className="rounded-full w-[12px] h-[12px] bg-[#D49900]" />
-                            <p className="text-zinc-200 text-sm">
-                              Low: {data.percentageData[2]}
-                            </p>
-                          </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+              ) : null
+            ) : (
+              <ReportsRow
+                data={data}
+                i={i}
+                loading={loading}
+                setTokenState={setTokenState}
+                setShowModal={setShowModal}
+              />
+            )
+          )}
         </TableBody>
       </Table>
     </>

@@ -26,7 +26,6 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(response);
     if (response.status === 404) {
       toast({
         variant: 'destructive',
@@ -39,7 +38,6 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       if (data.status === 'failed') {
         toast({
           variant: 'destructive',
