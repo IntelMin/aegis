@@ -33,7 +33,6 @@ const Analytics = ({ params }: Props) => {
   );
 
   const liveData = useLiveData(contractAddress);
-  const [isChartReady, setIsChartReady] = useState(false);
   const [showSection, setShowSection] = useState('info');
 
   const sectionsArr = [
@@ -70,11 +69,9 @@ const Analytics = ({ params }: Props) => {
           {/* Trading View chart */}
           {liveData?.pairAddress && (
             <TVChart
+              symbol={`${liveData.baseToken.symbol} / ${liveData.quoteToken.symbol}`}
               pairAddress={liveData.pairAddress}
               initialPrice="500"
-              onChartReady={() => {
-                setIsChartReady(true);
-              }}
             />
           )}
           <div className="grid grid-cols-3 gap-4">

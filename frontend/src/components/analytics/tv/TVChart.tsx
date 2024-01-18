@@ -8,12 +8,13 @@ import {
 } from './charting_library/charting_library';
 import { DEFAULT_RESOLUTION } from './constants';
 import DataFeedFactory from './DataFeed';
-import { loadChartState, saveChartState } from './utils';
+import { loadChartState, resolutionToSeconds, saveChartState } from './utils';
 
 export type ChartProps = {
   initialPrice: string;
   onChartReady?: () => void;
   pairAddress: string;
+  symbol: string;
 };
 
 export type Props = ChartProps & {
@@ -35,6 +36,7 @@ export function TVChart({
   studiesOverrides = {},
   initialPrice,
   pairAddress,
+  symbol,
   onChartReady = () => {
     return;
   },
@@ -42,12 +44,10 @@ export function TVChart({
   const _widget = useRef<IChartingLibraryWidget | null>(null);
 
   const DEFAULT_OVERRIDES = {
-    'paneProperties.background': '#232243',
+    'paneProperties.background': '#0c0c0c',
     'chartProperties.background': '#242424',
     'paneProperties.backgroundType': 'solid',
   };
-
-  const marketAsset = 'ETH';
 
   const decimals =
     Number(initialPrice) > 100 && Number(initialPrice) < 1000
@@ -59,8 +59,12 @@ export function TVChart({
     const chartData = loadChartState();
 
     const widgetOptions: ChartingLibraryWidgetOptions = {
-      symbol: marketAsset + ':sUSD',
-      datafeed: DataFeedFactory(1, chartScale, pairAddress),
+      symbol,
+      datafeed: DataFeedFactory(
+        chartScale,
+        pairAddress,
+        resolutionToSeconds(interval as ResolutionString)
+      ),
       interval: interval as ResolutionString,
       container: containerId,
       library_path: libraryPath,
@@ -122,12 +126,12 @@ export function TVChart({
     _widget.current?.onChartReady(() => {
       const symbolInterval = _widget.current?.symbolInterval();
       _widget.current?.setSymbol(
-        marketAsset + ':sUSD',
+        symbol,
         symbolInterval?.interval ?? DEFAULT_RESOLUTION,
         () => {}
       );
     });
-  }, [marketAsset]);
+  }, [symbol]);
 
   useEffect(() => {
     const handleAutoSave = () => {
