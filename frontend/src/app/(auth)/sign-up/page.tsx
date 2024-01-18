@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import {
   PersonalDataTypes,
@@ -19,7 +19,6 @@ import ProjectDetailsForm from '@/components/sign-up/form-project';
 import CompleteForm from '@/components/sign-up/form-complete';
 
 const SignUpForm = () => {
-  const { toast } = useToast();
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [personalData, setPersonalData] = useState<PersonalDataTypes>({
@@ -76,28 +75,16 @@ const SignUpForm = () => {
       });
       if (res.status === 201) {
         console.log('success');
-        toast({
-          title: 'Success',
-          description: 'Your account has been created!',
-          duration: 5000,
-        });
+        toast('Your account has been created!');
         router.replace('/login');
       } else {
         router.replace('/sign-up');
-        toast({
-          title: 'Error',
-          description: 'Your account has not been created!',
-          duration: 3000,
-        });
+        toast('Your account has not been created!');
       }
     } catch (err) {
       if (err) {
         router.replace('/sign-up');
-        toast({
-          title: 'Error',
-          description: 'Your account has not been created!',
-          duration: 3000,
-        });
+        toast('Your account has not been created!');
       }
     }
   };

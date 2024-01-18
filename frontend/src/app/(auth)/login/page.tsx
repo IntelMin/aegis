@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,7 +40,6 @@ const FormSchema = z.object({
 
 const SignIn: FC<SignInProps> = ({}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast } = useToast();
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -59,11 +58,7 @@ const SignIn: FC<SignInProps> = ({}) => {
     });
 
     if (signInData?.error) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong.',
-        description: 'Please check your email and password.',
-      });
+      toast('Please check your email and password.');
       setIsLoading(false);
     } else {
       router.replace('/dashboard');

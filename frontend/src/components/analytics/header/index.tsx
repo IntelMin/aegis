@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import copy from 'copy-to-clipboard';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { formatNumber } from '@/utils/format-number';
 import { formatAge } from '@/utils/format-age';
 import { formatAddress } from '@/utils/format-address';
@@ -16,7 +16,6 @@ type Props = {
 };
 
 const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
-  const toast = useToast();
   const [loading, setLoading] = React.useState(false);
 
   const requestReport = async () => {
@@ -78,9 +77,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
 
   const handleCopy = (text: string) => () => {
     copy(text);
-    toast.toast({
-      title: 'Copied to clipboard',
-    });
+    toast('Copied to clipboard');
   };
 
   return (
