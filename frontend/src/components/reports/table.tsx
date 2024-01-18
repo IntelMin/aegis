@@ -332,6 +332,7 @@ export const ReportsTable = ({
               ) : null
             ) : (
               <ReportsRow
+                key={i}
                 data={data}
                 i={i}
                 loading={loading}
