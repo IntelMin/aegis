@@ -136,6 +136,13 @@ const ReportsPage = () => {
       }
     }
   };
+  const handleOutsideClick = (event: MouseEvent) => {
+    const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
+
+    if (modal && !modal.contains(event.target as Node)) {
+      setShowModal(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchReports() {
@@ -145,6 +152,11 @@ const ReportsPage = () => {
       setReports(data.reports);
     }
     fetchReports();
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
   }, []);
 
   return (
@@ -301,11 +313,11 @@ const ReportsPage = () => {
         </Table>
       </div>
       {showModal && (
-        <div className="absolute w-[340px] h-full right-4 top-12 z-[20] rounded-[4px]">
+        <div className="modal absolute w-[340px] h-full right-4 top-12 z-[20] rounded-[4px]">
           <div
             className="w-[340px] relative h-[200px] flex items-center justify-center border border-b-0 border-neutral-800"
             style={{
-              background: 'url(/backgrounds/report-iconbg.png)',
+              background: 'url(/backgrounds/report.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'top center',
             }}
