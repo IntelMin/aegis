@@ -144,7 +144,7 @@ export const ReportsTable = ({
             tokenName: tokenState.tokenName,
             tokenInfo: tokenState.tokenInfo,
             tokenAddress: tokenState.tokenAddress,
-            loading: true,
+            loading: false,
           });
         }
       }
