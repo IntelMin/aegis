@@ -3,6 +3,7 @@ import copy from 'copy-to-clipboard';
 import Image from 'next/image';
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type Props = {
   tokenState: {
@@ -48,8 +49,8 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
           <IoMdClose className="text-2xl text-zinc-400" />
         </button>
       </div>
-      <div className="p-4 bg-[#0D0D0D] flex flex-col gap-4 border border-t-0 border-zinc-800">
-        <div className="flex gap-2 items-center">
+      <div className="p-4 bg-[#0D0D0D] flex flex-col gap-4 border border-t-0 max-height[240px] border-zinc-800">
+        <div className="flex flex-col gap-2 items-center">
           <p className="text-zinc-200 text-[16px] text-bold">
             {tokenState?.tokenName}
           </p>
@@ -70,17 +71,19 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
         </div>
         <div className="flex flex-col gap-6">
           <div className="h-[200px] overflow-y-scroll">
-            {'Aave is a decentralized money market protocol where users can lend and borrow cryptocurrency across 20 different assets as collateral. The protocol has a native token called AAVE, which is also a governance token that lets the community decide the direction of the protocol in a collective manner. Lenders can earn interest by providing liquidity to the market, while borrowers can borrow by collateralizing their cryptoassets to take out loans from the liquidity pools.'
-              ?.split('.')
-              ?.slice(0, -1)
-              ?.map((item, i) => (
-                <p
-                  className="text-sm text-zinc-300 font-[300] flex items-center"
-                  key={i}
-                >
-                  {item}.
-                </p>
-              ))}
+            <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+              {tokenState?.tokenInfo
+                ?.split('.')
+                ?.slice(0, -1)
+                ?.map((item, i) => (
+                  <p
+                    className="text-sm text-zinc-300 font-[300] flex items-center"
+                    key={i}
+                  >
+                    {item}.
+                  </p>
+                ))}
+            </ScrollArea>
           </div>
           <button className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full">
             <Image

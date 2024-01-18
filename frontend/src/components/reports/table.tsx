@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -17,18 +17,12 @@ import Image from 'next/image';
 import { formatAddress } from '@/utils/format-address';
 import copy from 'copy-to-clipboard';
 import { Separator } from '../ui/separator';
+import { Skeleton } from '../ui/skeleton';
 
 type Props = {
   tablehead: string[];
-  tableData: {
-    tokenIcon: string;
-    tokenName: string;
-    tokenInfo: string;
-    tokenAddress: string;
-    auditDate: string;
-    auditTime: string;
-    percentageData: number[];
-  }[];
+  loading?: boolean;
+
   setShowModal: React.Dispatch<SetStateAction<boolean>>;
   setTokenState: React.Dispatch<
     SetStateAction<{
@@ -39,20 +33,78 @@ type Props = {
     }>
   >;
 };
-
+type Report = {
+  id: number;
+  name: string;
+  address: string;
+  user_id: number;
+  status: string;
+  image_url: string;
+  created_at: Date;
+};
+interface ReportState {
+  tokenIcon: string;
+  tokenName: string;
+  tokenInfo: string;
+  tokenAddress: string;
+  auditDate: string;
+  auditTime: string;
+  percentageData: number[];
+}
 export const ReportsTable = ({
   tablehead,
-  tableData,
   setShowModal,
   setTokenState,
 }: Props) => {
   const handleCopy = (data: string) => {
     copy(data);
   };
+  const [tableData, setTableData] = React.useState<ReportState[]>([]);
+  const [loading, setLoading] = React.useState(false);
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
     return data.map(item => (item / total) * 100);
   };
+  console.log('tableData', tableData);
+  console.log('loading', loading);
+  useEffect(() => {
+    async function fetchReports() {
+      setLoading(true);
+      const response = await fetch('/api/getallReports');
+      const data = await response.json();
+      console.log(data);
+
+      let table_data: ReportState[] = [];
+
+      data.reports.forEach(async (report: Report) => {
+        const data = await fetchFindings(report.address);
+        table_data.push({
+          tokenIcon: report.image_url,
+          tokenName: report.name,
+          tokenInfo: data.text,
+          tokenAddress: report.address,
+          auditDate: new Date(report.created_at).toLocaleDateString(),
+          auditTime: new Date(report.created_at).toLocaleTimeString(),
+          percentageData: [
+            data.table?.number_of_high_severity_issues,
+            data.table?.number_of_medium_severity_issues,
+            data.table?.number_of_low_severity_issues,
+          ],
+        });
+      });
+      setTableData(table_data);
+      setLoading(false);
+    }
+    fetchReports();
+    async function fetchFindings(address: string) {
+      const response = await fetch(
+        `/api/token/info?address=${address}&type=summary`
+      );
+      const data = await response.json();
+      return data;
+    }
+  }, []);
+  if (loading) return <Skeleton className="w-full h-full" />;
   return (
     <>
       <Table>
@@ -86,9 +138,9 @@ export const ReportsTable = ({
                   height={20}
                 />
               </TableCell>
-              <TableCell className="text-[12px] font-[400] text-zinc-100">
-                {data?.tokenInfo}
-              </TableCell>
+              {/* <TableCell className="text-[12px] font-[400] text-zinc-100">
+                  {data?.tokenInfo}
+                </TableCell> */}
               <TableCell className="text-[12px] font-[400] text-zinc-100">
                 {data?.tokenName}
               </TableCell>
@@ -178,19 +230,6 @@ export const ReportsTable = ({
           ))}
         </TableBody>
       </Table>
-      {tableData?.length === 0 && (
-        <div className="w-[full] flex justify-center items-center flex-col my-4">
-          <Image
-            src="/icons/no-data.svg"
-            alt="no-data"
-            width={155}
-            height={150}
-          />
-          <p className="text-zinc-400 text-[12px] text-[400]">
-            Request Audit Report
-          </p>
-        </div>
-      )}
     </>
   );
 };

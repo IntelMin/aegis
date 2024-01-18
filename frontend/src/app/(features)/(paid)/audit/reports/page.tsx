@@ -6,16 +6,10 @@ import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { tableData, tablehead } from '@/components/reports/constant';
-
-type Report = {
-  id: number;
-  name: string;
-  address: string;
-  user_id: number;
-  status: string;
-  image_url: string;
-};
+import {
+  // tableData,
+  tablehead,
+} from '@/components/reports/constant';
 
 const ReportsPage = () => {
   const [tokenState, setTokenState] = useState({
@@ -26,9 +20,7 @@ const ReportsPage = () => {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [reports, setReports] = useState([]);
-  const [reqAddress, setReqAddress] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const requestNewReport = async (address: string) => {
     const contractAddress = address;
     try {
@@ -122,20 +114,12 @@ const ReportsPage = () => {
   };
 
   useEffect(() => {
-    async function fetchReports() {
-      const response = await fetch('/api/getallReports');
-      const data = await response.json();
-      console.log(data);
-      setReports(data.reports);
-    }
-    fetchReports();
     document.addEventListener('mousedown', handleOutsideClick);
 
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
-
   return (
     <div className="w-full flex justify-center pt-16 relative">
       <div className="w-[80%] flex flex-col gap-8">
@@ -166,7 +150,6 @@ const ReportsPage = () => {
         </div>
         <ReportsTable
           tablehead={tablehead}
-          tableData={tableData}
           setShowModal={setShowModal}
           setTokenState={setTokenState}
         />
