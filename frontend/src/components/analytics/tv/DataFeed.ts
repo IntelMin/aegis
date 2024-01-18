@@ -96,15 +96,18 @@ const DataFeedFactory = (
       res: ResolutionString,
       onTick: SubscribeBarsCallback
     ) => {
-      fetch(`/api/tv?pair=${pairAddress}&res=${res}&from=${Math.floor(Date.now() / 1000 - interval)}&to=${Math.floor(Date.now() / 1000)}}`).then(res => res.json())
-        .then(res => {
+      const to = Math.floor(Date.now() / 1000)
+      const from = to - interval
+      fetch(`/api/tv?pair=${pairAddress}&res=${res}&from=${from}&to=${to}`)
+        .then(res => res.json())
+        .then(([item]) => {
           onTick(
             {
-              high: res.h,
-              low: res.l,
-              open: res.o,
-              close: res.c,
-              time: new Date(res.dt).getTime()
+              high: item.h,
+              low: item.l,
+              open: item.o,
+              close: item.c,
+              time: new Date(item.dt).getTime()
             }
           )
         })
