@@ -220,7 +220,7 @@ export const ReportsTable = ({
   const [tableData, setTableData] = React.useState<ReportState[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [reportLoading, setReportLoading] = React.useState(false);
-
+  console.log('tableData', user_id);
   useEffect(() => {
     async function fetchReports() {
       setLoading(true);
@@ -255,6 +255,7 @@ export const ReportsTable = ({
               data.table.number_of_medium_severity_issues,
               data.table.number_of_low_severity_issues,
             ],
+            user_id: report.user_id,
           };
         })
       );
@@ -321,7 +322,7 @@ export const ReportsTable = ({
           )}
           {tableData?.map((data, i) =>
             user_id ? (
-              user_id === data.user_id ? (
+              user_id == data.user_id ? (
                 <ReportsRow
                   data={data}
                   i={i}
