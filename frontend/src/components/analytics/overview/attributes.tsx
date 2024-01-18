@@ -132,7 +132,7 @@ const TokenAttributes = ({ tokenAddress }: any) => {
   //   }
 
   return (
-    <div className="w-full pt-3">
+    <div className="w-full">
       <TooltipProvider>
         {attributes.map((attribute: any) => (
           <div

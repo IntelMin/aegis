@@ -2,8 +2,8 @@ import React from 'react';
 
 const ClusterHold = () => {
   return (
-    <table className="w-full mt-3">
-      <tr className="w-full bg-[#0B0B0B] border-zinc-600 grid grid-cols-8"></tr>
+    <table className="w-full mt-3 bg-zinc-700">
+      <tr className="w-full  border-zinc-600 grid grid-cols-8"></tr>
       <div className="overflow-y-scroll h-[310px]">
         {[1, 2, 3, 4, 5, 6, 7, 8]?.map(item => (
           <tr

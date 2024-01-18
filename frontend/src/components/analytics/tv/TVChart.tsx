@@ -79,7 +79,7 @@ export function TVChart({
   // const { network } = Connector.useContainer()
 
   const DEFAULT_OVERRIDES = {
-    'paneProperties.background': '#545454',
+    'paneProperties.background': '#232243',
     'chartProperties.background': '#242424',
     'paneProperties.backgroundType': 'solid',
   };
@@ -231,18 +231,18 @@ export function TVChart({
     });
 
     _widget.current?.headerReady().then(() => {
-      if (!_widget.current || !onToggleShowOrderLines) return;
-      _toggleLinesButton.current = _widget.current.createButton();
-      _toggleLinesButton.current.classList.add('custom-button');
-      _toggleLinesButton.current.setAttribute('title', 'Hide / Show Orders');
-      _toggleLinesButton.current.textContent = showOrderLines
-        ? 'Hide Orders'
-        : 'Show Orders';
-      _toggleLinesButton.current.addEventListener(
-        'click',
-        onToggleShowOrderLines
-      );
-      _toggleListener.current = onToggleShowOrderLines;
+      //   if (!_widget.current || !onToggleShowOrderLines) return;
+      //   _toggleLinesButton.current = _widget.current.createButton();
+      //   _toggleLinesButton.current.classList.add('custom-button');
+      //   _toggleLinesButton.current.setAttribute('title', 'Hide / Show Orders');
+      //   _toggleLinesButton.current.textContent = showOrderLines
+      //     ? 'Hide Orders'
+      //     : 'Show Orders';
+      //   _toggleLinesButton.current.addEventListener(
+      //     'click',
+      //     onToggleShowOrderLines
+      //   );
+      //   _toggleListener.current = onToggleShowOrderLines;
     });
 
     return () => {
@@ -341,5 +341,11 @@ export function TVChart({
     _priceListener.current = priceListener;
   }, []);
 
-  return <div id={containerId} className="min-h-[400px]" />;
+  return (
+    <div
+      id={containerId}
+      className="min-h-[400px]"
+      style={{ height: '100%' }}
+    />
+  );
 }

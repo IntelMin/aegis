@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { GraphTypeHeader } from './graph-type-header';
+import { GraphTypeHeader } from '../token-analytics/wallets-overview/graph-type-header';
 import Image from 'next/image';
-import { HoldingWalletChart } from './holding-wallet-chart';
+import { HoldingWalletChart } from './wallets/bubble';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {

@@ -44,7 +44,7 @@ const TokenStatistics = ({ liveData }: any) => {
   const getStatValue = (key: string) => liveData?.[key]?.[switchRes[active]];
 
   return (
-    <div className="border border-zinc-900 p-2 flex flex-col gap-2 mt-3">
+    <div className="border border-zinc-900 p-3 flex flex-col gap-3 bg-[#0C0C0C]">
       {/* Button Group */}
       <div className="flex justify-between bg-zinc-900 rounded-[6px]">
         {btnArr.map(item => (
@@ -62,7 +62,7 @@ const TokenStatistics = ({ liveData }: any) => {
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-3">
         {loading ? (
           <>
             <Skeleton className="w-12 h-10 m-2" />

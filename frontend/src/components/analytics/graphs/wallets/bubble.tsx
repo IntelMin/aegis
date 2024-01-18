@@ -72,7 +72,7 @@ export const data = {
   ],
 };
 
-export const HoldingWalletChart = (props: Props) => {
+const WalletBubble = (props: Props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -93,3 +93,5 @@ export const HoldingWalletChart = (props: Props) => {
     </div>
   );
 };
+
+export default WalletBubble;

@@ -4,16 +4,16 @@ import HighchartsReact from 'highcharts-react-official';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export const OrderBookGraph = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      // Made this timeout to show the skeleton loading will remove when api is ready
-      setTimeout(() => setIsLoading(false), 1000);
-    };
+  //   useEffect(() => {
+  //     const loadData = async () => {
+  //       // Made this timeout to show the skeleton loading will remove when api is ready
+  //       setTimeout(() => setIsLoading(false), 1000);
+  //     };
 
-    loadData();
-  }, []);
+  //     loadData();
+  //   }, []);
 
   const options = {
     chart: {
@@ -180,8 +180,10 @@ export const OrderBookGraph = () => {
   }
 
   return (
-    <div className="w-full translate-y-4">
+    <div className="w-full">
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );
 };
+
+export default OrderBookGraph;
