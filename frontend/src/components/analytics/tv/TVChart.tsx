@@ -1,38 +1,19 @@
-// import { NetworkId, ConditionalOrder, PricesListener } from '@kwenta/sdk/types'
-// import { formatOrderDisplayType, formatNumber, suggestedDecimals } from '@kwenta/sdk/utils'
+import { useRef, useEffect } from 'react';
 import {
   ChartingLibraryWidgetOptions,
   IChartingLibraryWidget,
-  IPositionLineAdapter,
   ResolutionString,
   TimeFrameItem,
   widget,
 } from './charting_library/charting_library';
-// import { useRouter } from 'next/router';
-import { useRef, useContext, useEffect, useCallback, useMemo } from 'react';
-// import { ThemeContext } from 'styled-components'
-
-// import Connector from 'containers/Connector'
-// import { chain } from 'containers/Connector/config'
-// import { ChartBody } from 'sections/exchange/TradeCard/Charts/common/styles'
-// import { useAppSelector } from 'state/hooks'
-// import { selectCurrentTheme } from 'state/preferences/selectors'
-// import sdk from 'state/sdk'
-// import darkTheme from 'styles/theme/colors/dark'
-
 import { DEFAULT_RESOLUTION } from './constants';
 import DataFeedFactory from './DataFeed';
-import { ChartPosition } from './types';
 import { loadChartState, saveChartState } from './utils';
 
 export type ChartProps = {
-  activePosition?: ChartPosition | null;
-  potentialTrade?: ChartPosition | null;
-  openOrders: ConditionalOrder[];
-  showOrderLines: boolean;
   initialPrice: string;
   onChartReady?: () => void;
-  onToggleShowOrderLines?: () => void;
+  pairAddress: string;
 };
 
 export type Props = ChartProps & {
@@ -52,31 +33,13 @@ export function TVChart({
   fullscreen = false,
   autosize = true,
   studiesOverrides = {},
-  activePosition,
-  potentialTrade,
-  openOrders,
-  showOrderLines,
   initialPrice,
-  onToggleShowOrderLines,
+  pairAddress,
   onChartReady = () => {
     return;
   },
 }: Props) {
-  // const currentTheme = useAppSelector(selectCurrentTheme)
   const _widget = useRef<IChartingLibraryWidget | null>(null);
-  const _entryLine = useRef<IPositionLineAdapter | null | undefined>(null);
-  const _liquidationLine = useRef<IPositionLineAdapter | null | undefined>(
-    null
-  );
-  const _oderLineRefs = useRef<IPositionLineAdapter[]>([]);
-  const _toggleLinesButton = useRef<HTMLElement | null>(null);
-  const _toggleListener = useRef<(() => void) | null>(null);
-  const _priceListener = useRef<PricesListener | undefined>();
-
-  //   const router = useRouter();
-
-  // const { colors } = useContext(ThemeContext)
-  // const { network } = Connector.useContainer()
 
   const DEFAULT_OVERRIDES = {
     'paneProperties.background': '#232243',
@@ -84,16 +47,7 @@ export function TVChart({
     'paneProperties.backgroundType': 'solid',
   };
 
-  //   const [marketAsset, marketAssetLoaded] = useMemo(() => {
-  //     return router.query.asset ? [router.query.asset, true] : ['sETH', false];
-  //   }, [router.query.asset]);
-
-  const clearOrderLines = () => {
-    _oderLineRefs.current?.forEach(ref => {
-      ref?.remove();
-    });
-    _oderLineRefs.current = [];
-  };
+  const marketAsset = 'ETH';
 
   const decimals =
     Number(initialPrice) > 100 && Number(initialPrice) < 1000
@@ -101,80 +55,12 @@ export function TVChart({
       : Number(initialPrice);
   const chartScale = 10 ** decimals;
 
-  // useEffect(() => {
-  // 	return () => {
-  // 		if (_priceListener.current) {
-  // 			sdk.prices.removePricesListener(_priceListener.current)
-  // 		}
-  // 	}
-  // }, [])
-
-  // const renderOrderLines = () => {
-  // 	_widget.current?.onChartReady(() => {
-  // 		_widget.current?.chart().dataReady(() => {
-  // 			clearOrderLines()
-  // 			_oderLineRefs.current = openOrders.reduce((acc, order) => {
-  // 				if (order.targetPrice) {
-  // 					const color =
-  // 						colors.selectedTheme.chartLine[order.isSlTp ? 'default' : order.side ?? 'short']
-
-  // 					const orderLine = _widget.current
-  // 						?.chart()
-  // 						.createPositionLine()
-  // 						.setText(formatOrderDisplayType(order.orderType, order.reduceOnly))
-  // 						.setTooltip('Average entry price')
-  // 						.setQuantity(order.isSlTp ? '100%' : formatNumber(order.size.abs()))
-  // 						.setPrice(order.targetPrice?.toNumber())
-  // 						.setExtendLeft(false)
-  // 						.setQuantityTextColor(colors.white)
-  // 						.setBodyTextColor(darkTheme.black)
-  // 						.setLineStyle(2)
-  // 						.setLineColor(color)
-  // 						.setBodyBorderColor(color)
-  // 						.setQuantityBackgroundColor(color)
-  // 						.setQuantityBorderColor(color)
-  // 						.setLineLength(25)
-  // 					if (orderLine) {
-  // 						acc.push(orderLine)
-  // 					}
-  // 				}
-  // 				return acc
-  // 			}, [] as IPositionLineAdapter[])
-  // 		})
-  // 	})
-  // }
-
-  // const onToggleOrderLines = () => {
-  // 	if (_oderLineRefs.current.length) {
-  // 		clearOrderLines()
-  // 	} else {
-  // 		renderOrderLines()
-  // 	}
-  // }
-
-  // useEffect(() => {
-  // 	if (showOrderLines) {
-  // 		renderOrderLines()
-  // 	}
-  // 	// eslint-disable-next-line
-  // }, [openOrders])
-
-  // useEffect(() => {
-  // 	if (_toggleLinesButton.current) {
-  // 		_toggleLinesButton.current.textContent = showOrderLines ? 'Hide Orders' : 'Show Orders'
-  // 	}
-  // 	if (_widget.current) {
-  // 		onToggleOrderLines()
-  // 	}
-  // 	// eslint-disable-next-line
-  // }, [showOrderLines])
-
   useEffect(() => {
     const chartData = loadChartState();
 
     const widgetOptions: ChartingLibraryWidgetOptions = {
-      symbol: 'test:USD',
-      datafeed: DataFeedFactory(1, chartScale, onSubscribe),
+      symbol: marketAsset + ':sUSD',
+      datafeed: DataFeedFactory(1, chartScale, pairAddress),
       interval: interval as ResolutionString,
       container: containerId,
       library_path: libraryPath,
@@ -210,12 +96,8 @@ export function TVChart({
 
     const clearExistingWidget = () => {
       if (_widget.current !== null) {
-        clearOrderLines();
         _widget.current.remove();
         _widget.current = null;
-      }
-      if (_priceListener.current) {
-        sdk.prices.removePricesListener(_priceListener.current);
       }
     };
 
@@ -230,100 +112,22 @@ export function TVChart({
       onChartReady();
     });
 
-    _widget.current?.headerReady().then(() => {
-      //   if (!_widget.current || !onToggleShowOrderLines) return;
-      //   _toggleLinesButton.current = _widget.current.createButton();
-      //   _toggleLinesButton.current.classList.add('custom-button');
-      //   _toggleLinesButton.current.setAttribute('title', 'Hide / Show Orders');
-      //   _toggleLinesButton.current.textContent = showOrderLines
-      //     ? 'Hide Orders'
-      //     : 'Show Orders';
-      //   _toggleLinesButton.current.addEventListener(
-      //     'click',
-      //     onToggleShowOrderLines
-      //   );
-      //   _toggleListener.current = onToggleShowOrderLines;
-    });
-
     return () => {
       clearExistingWidget();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [1, chartScale]);
-
-  useEffect(() => {
-    if (onToggleShowOrderLines) {
-      _toggleListener.current &&
-        _toggleLinesButton.current?.removeEventListener(
-          'click',
-          _toggleListener.current
-        );
-      _toggleLinesButton.current?.addEventListener(
-        'click',
-        onToggleShowOrderLines
-      );
-      _toggleListener.current = onToggleShowOrderLines;
-    }
-  }, [onToggleShowOrderLines]);
+  }, [chartScale]);
 
   useEffect(() => {
     _widget.current?.onChartReady(() => {
-      _widget.current?.chart().dataReady(() => {
-        _entryLine.current?.remove?.();
-        // _liquidationLine.current?.remove?.();
-        // _entryLine.current = null;
-        // _liquidationLine.current = null;
-        // const setPositionLines = (position: ChartPosition, active: boolean) => {
-        //   _entryLine.current = _widget.current
-        //     ?.chart()
-        //     .createPositionLine()
-        //     .setText('Entry')
-        //     .setTooltip('Average entry price')
-        //     .setQuantity(formatNumber(position.size.abs()))
-        //     .setPrice(position.price.toNumber())
-        //     .setExtendLeft(false)
-        //     .setBodyTextColor(darkTheme.black)
-        //     .setLineStyle(active ? 0 : 2)
-        //     .setLineLength(25);
-        //   if (position.liqPrice) {
-        //     _liquidationLine.current = _widget.current
-        //       ?.chart()
-        //       .createPositionLine()
-        //       .setText('Liquidation')
-        //       .setTooltip('Liquidation price')
-        //       .setQuantity(formatNumber(position.size.abs()))
-        //       .setPrice(position.liqPrice.toNumber())
-        //       .setExtendLeft(false)
-        //       .setBodyTextColor(darkTheme.black)
-        //       .setLineStyle(active ? 0 : 2)
-        //       .setLineColor(colors.selectedTheme.orange)
-        //       .setBodyBorderColor(colors.selectedTheme.orange)
-        //       .setQuantityBackgroundColor(colors.selectedTheme.orange)
-        //       .setQuantityBorderColor(colors.selectedTheme.orange)
-        //       .setLineLength(25);
-        //   }
-        // };
-        // // Always show potential over existing
-        // if (potentialTrade) {
-        //   setPositionLines(potentialTrade, false);
-        // } else if (activePosition) {
-        //   setPositionLines(activePosition, true);
-        // }
-      });
+      const symbolInterval = _widget.current?.symbolInterval();
+      _widget.current?.setSymbol(
+        marketAsset + ':sUSD',
+        symbolInterval?.interval ?? DEFAULT_RESOLUTION,
+        () => {}
+      );
     });
-    // eslint-disable-next-line
-  }, [activePosition, potentialTrade]);
-
-  //   useEffect(() => {
-  //     _widget.current?.onChartReady(() => {
-  //       const symbolInterval = _widget.current?.symbolInterval();
-  //       _widget.current?.setSymbol(
-  //         marketAsset + ':sUSD',
-  //         symbolInterval?.interval ?? DEFAULT_RESOLUTION,
-  //         () => {}
-  //       );
-  //     });
-  //   }, [marketAsset]);
+  }, [marketAsset]);
 
   useEffect(() => {
     const handleAutoSave = () => {
@@ -335,10 +139,6 @@ export function TVChart({
     return () => {
       _widget.current?.unsubscribe('onAutoSaveNeeded', handleAutoSave);
     };
-  }, []);
-
-  const onSubscribe = useCallback((priceListener: PricesListener) => {
-    _priceListener.current = priceListener;
   }, []);
 
   return (

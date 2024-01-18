@@ -1,4 +1,8 @@
-router.get('/search', async (req, res) => {
+const express = require('express');
+const fs = require('fs');
+const router = express.Router();
+
+router.get('/pair', async (req, res) => {
   const { q } = req.query;
   console.log('query', q);
 
@@ -186,10 +190,12 @@ router.get('/search', async (req, res) => {
 
       console.log('a_processed', processed.join('\n'));
 
-      res.status(200).send(a_processed);
+      res.status(200).send(processed);
     })
     .catch(error => {
       console.error('Error:', error);
       res.status(500).send('Internal Server Error');
     });
 });
+
+module.exports = router;
