@@ -59,6 +59,7 @@ interface ReportState {
   auditTime: string;
   percentageData?: number[];
   imageSmallUrl?: string;
+  user_id?: number;
 }
 export const ReportsTable = ({
   tablehead,
@@ -87,7 +88,6 @@ export const ReportsTable = ({
       setReportLoading(true);
       const response = await fetch('/api/getallReports');
       const data = await response.json();
-      console.log(data);
       const table_report = data.reports.map((report: Report) => {
         return {
           tokenIcon: report.image_url,
@@ -95,6 +95,7 @@ export const ReportsTable = ({
           tokenAddress: report.address,
           auditDate: new Date(report.created_at).toLocaleDateString(),
           auditTime: new Date(report.created_at).toLocaleTimeString(),
+          user_id: report.user_id,
         };
       });
       setTableData(table_report);

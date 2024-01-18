@@ -4,7 +4,6 @@ import { tableData, tablehead } from '@/components/reports/constant';
 import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import { toast } from '@/components/ui/use-toast';
-import usePayment from '@/hooks/usePayment';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,38 +28,6 @@ const RequestReportPage = (props: Props) => {
   });
   const [requestAddress, setRequestAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!requestAddress) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Please enter a valid contract address',
-      });
-      return;
-    }
-    // if (isFetching) {
-    //   await tokenRequestInfo;
-    // }
-
-    // if (!tokenRequestInfo) {
-    //   toast({
-    //     variant: 'destructive',
-    //     title: 'Error',
-    //     description: 'Please enter a valid contract address',
-    //   });
-    //   return;
-    // }
-    await requestNewReport(requestAddress);
-  };
-  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
-    submitting ? requestAddress : '',
-    'meta',
-    false
-  );
-
-  console.log(isFetching, tokenRequestInfo, error);
 
   const requestNewReport = async (address: string) => {
     const contractAddress = address;
@@ -97,7 +64,16 @@ const RequestReportPage = (props: Props) => {
             }
           );
           console.log(response);
-
+          if (response.status === 404) {
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description: 'Please enter a valid contract address',
+            });
+            setSubmitting(false);
+            clearInterval(intervalId);
+            return;
+          }
           if (response.ok) {
             const data = await response.json();
             console.log({ '1': data });
@@ -131,8 +107,50 @@ const RequestReportPage = (props: Props) => {
       console.error('Error requesting report:', error);
     }
   };
+  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
+    submitting ? requestAddress : '',
+    'meta',
+    false
+  );
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!requestAddress) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please enter a valid contract address',
+      });
+      return;
+    }
+    if (requestAddress.slice(0, 2) !== '0x') {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please enter a valid contract address',
+      });
+      return;
+    }
+    setSubmitting(true);
+  };
 
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!submitting) return;
+    console.log({ isFetching, tokenRequestInfo, error });
+    if (!isFetching && tokenRequestInfo && !error) {
+      requestNewReport(requestAddress);
+    }
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error fetching token information',
+      });
+      setSubmitting(false);
+    }
+  }, [submitting, isFetching, tokenRequestInfo, error, requestAddress, toast]);
+
   const handleOutsideClick = (event: MouseEvent) => {
     const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
 

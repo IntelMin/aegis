@@ -1,8 +1,11 @@
 import { formatAddress } from '@/utils/format-address';
 import copy from 'copy-to-clipboard';
+import { set } from 'date-fns';
 import Image from 'next/image';
 import React, { use, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { toast } from '../ui/use-toast';
+import ScaleLoader from 'react-spinners/ScaleLoader';
 
 type Props = {
   tokenState: {
@@ -16,16 +19,36 @@ type Props = {
 };
 
 export const Modal = ({ tokenState, setShowModal }: Props) => {
+  const [submitting, setSubmitting] = React.useState(false);
   const requestReport = async (address: string) => {
+    setSubmitting(true);
     const response = await fetch(`/api/audit/report?address=${address}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
     console.log(response);
+    if (response.status === 404) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Report not found.',
+      });
+      setSubmitting(false);
+      return;
+    }
 
     if (response.ok) {
       const data = await response.json();
       console.log(data);
+      if (data.status === 'failed') {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: data.message,
+        });
+        setSubmitting(false);
+        return;
+      }
       if (data.status === 'success') {
         const pdfData = data.report; // base64-encoded PDF data
         const pdfBlob = new Blob([atob(pdfData)], {
@@ -44,14 +67,19 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
         link.click();
 
         // Remove the link when done
+        setSubmitting(false);
         document.body.removeChild(link);
+        toast({
+          variant: 'default',
+          title: 'Success',
+          description: 'Report downloaded successfully.',
+        });
       }
     }
   };
   const handleCopy = (data: string) => {
     copy(data);
   };
-  useEffect(() => {}, [tokenState.loading]);
 
   return (
     <div className="modal fixed w-[340px] h-full right-4 top-36 z-[20] rounded-[4px]">
@@ -129,23 +157,29 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
                 ))}
             </div>
           )}
-          <button
-            className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
-            onClick={() => requestReport(tokenState?.tokenAddress)}
-          >
-            <Image
-              src="/icons/nav/reports.svg"
-              alt="report-icon"
-              width={16}
-              height={16}
-              style={{
-                filter: 'invert(100%) brightness(1000%) contrast(100%)',
-              }}
-            />
-            <p className="text-[16px] font-[500] text-zinc-50">
-              Download Report
-            </p>
-          </button>
+          {submitting ? (
+            <div className="flex items-center justify-center bg-[#0E76FD] w-full p-2">
+              <ScaleLoader width={4} height={10} color="white" />
+            </div>
+          ) : (
+            <button
+              className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
+              onClick={() => requestReport(tokenState?.tokenAddress)}
+            >
+              <Image
+                src="/icons/nav/reports.svg"
+                alt="report-icon"
+                width={16}
+                height={16}
+                style={{
+                  filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                }}
+              />
+              <p className="text-[16px] font-[500] text-zinc-50">
+                Download Report
+              </p>
+            </button>
+          )}
         </div>
       </div>
     </div>
