@@ -2,7 +2,7 @@ import { formatAddress } from '@/utils/format-address';
 
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import SelectTopToken from '../select-top-token';
+// import SelectTopToken from '../select-top-token';
 import TotalTransactionTable from './total-transaction-table';
 import { tableHead, totalTransactionTableData } from '../token-constant';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ const TradersTable = ({ selected }: any) => {
               {formatAddress('0xelj45d3e454u4i4u484y64dt3')}
             </p>
           </div>
-          <SelectTopToken />
+          {/* <SelectTopToken /> */}
         </div>
       </div>
       {isLoading ? (

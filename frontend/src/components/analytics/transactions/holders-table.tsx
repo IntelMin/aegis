@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatAddress } from '@/utils/format-address';
 import Image from 'next/image';
-import SelectTopToken from '../select-top-token';
 import { HoldersDemoData } from './demo-table-data';
 import TableHead from '../table-head';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -34,7 +33,6 @@ const HoldersTable = ({ selected }: any) => {
               {formatAddress('0xelj45d3e454u4i4u484y64dt3')}
             </p>
           </div>
-          <SelectTopToken />
         </div>
       </div>
       {isLoading ? (
