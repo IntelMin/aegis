@@ -228,10 +228,6 @@ export const ReportsTable = ({
       const response = await fetch('/api/reports');
       const data = await response.json();
       const table_report = data.reports.map((report: Report) => {
-        console.log('user_id', user_id);
-        console.log('report.user_id', report.user_id);
-        console.log('user_id === report.user_id', user_id === report.user_id);
-
         return {
           tokenIcon: report.image_url,
           tokenName: report.name,
@@ -247,7 +243,6 @@ export const ReportsTable = ({
       const table_data: ReportState[] = await Promise.all(
         data.reports.map(async (report: Report) => {
           const data = await fetchFindings(report.address);
-          console.log(data);
           return {
             tokenIcon: report.image_url,
             tokenName: report.name,
@@ -277,7 +272,6 @@ export const ReportsTable = ({
     }
   }, []);
   useEffect(() => {
-    console.log('tableData', tableData);
     if (tokenState?.tokenAddress) {
       if (!tokenState?.tokenInfo) {
         if (!loading) {

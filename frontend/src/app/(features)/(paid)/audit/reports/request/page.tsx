@@ -43,7 +43,6 @@ const RequestReportPage = (props: Props) => {
     const contractAddress = address;
     try {
       setSubmitting(true);
-      console.log({ contractAddress });
 
       const response = await fetch('/api/audit/report', {
         method: 'POST',
@@ -53,7 +52,6 @@ const RequestReportPage = (props: Props) => {
         }),
       });
       const data = await response.json();
-      console.log({ '1': data });
       if (data.status === 'failed') {
         toast({
           variant: 'destructive',
@@ -73,7 +71,6 @@ const RequestReportPage = (props: Props) => {
               headers: { 'Content-Type': 'application/json' },
             }
           );
-          console.log(response);
           if (response.status === 404) {
             toast({
               variant: 'destructive',
@@ -86,7 +83,6 @@ const RequestReportPage = (props: Props) => {
           }
           if (response.ok) {
             const data = await response.json();
-            console.log({ '1': data });
 
             if (data.status === 'success') {
               const pdfData = data.report; // base64-encoded PDF data
@@ -149,14 +145,12 @@ const RequestReportPage = (props: Props) => {
       const response = await fetch('/api/profile');
       const data = await response.json();
       if (data.user) {
-        console.log(data.user);
         setUser(data.user);
         return data.user;
       }
     }
     getuser();
   }, []);
-  console.log(user);
   useEffect(() => {
     if (!submitting) return;
     console.log({ isFetching, tokenRequestInfo, error });
