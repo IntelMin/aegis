@@ -84,6 +84,7 @@ export const ReportsTable = ({
       setReportLoading(true);
       const response = await fetch('/api/getallReports');
       const data = await response.json();
+      console.log(data);
       const table_report = data.reports.map((report: Report) => {
         return {
           tokenIcon: report.image_url,

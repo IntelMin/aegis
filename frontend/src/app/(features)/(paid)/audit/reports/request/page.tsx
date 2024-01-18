@@ -3,9 +3,13 @@
 import { tableData, tablehead } from '@/components/reports/constant';
 import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
+import { toast } from '@/components/ui/use-toast';
+import usePayment from '@/hooks/usePayment';
+import useTokenInfo from '@/hooks/useTokenInfo';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import ScaleLoader from 'react-spinners/ScaleLoader';
 
 type Props = {};
 type tokenState = {
@@ -23,10 +27,47 @@ const RequestReportPage = (props: Props) => {
     tokenAddress: '',
     loading: false,
   });
+  const [requestAddress, setRequestAddress] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!requestAddress) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please enter a valid contract address',
+      });
+      return;
+    }
+    // if (isFetching) {
+    //   await tokenRequestInfo;
+    // }
+
+    // if (!tokenRequestInfo) {
+    //   toast({
+    //     variant: 'destructive',
+    //     title: 'Error',
+    //     description: 'Please enter a valid contract address',
+    //   });
+    //   return;
+    // }
+    await requestNewReport(requestAddress);
+  };
+  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
+    submitting ? requestAddress : '',
+    'meta',
+    false
+  );
+
+  console.log(isFetching, tokenRequestInfo, error);
 
   const requestNewReport = async (address: string) => {
     const contractAddress = address;
     try {
+      setSubmitting(true);
+      console.log({ contractAddress });
+
       const response = await fetch('/api/audit/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -35,6 +76,17 @@ const RequestReportPage = (props: Props) => {
         }),
       });
       const data = await response.json();
+      console.log({ '1': data });
+      if (data.status === 'failed') {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: data.message,
+        });
+        setSubmitting(false);
+        return;
+      }
+
       if (data.status === 'success') {
         const intervalId = setInterval(async () => {
           const response = await fetch(
@@ -48,6 +100,8 @@ const RequestReportPage = (props: Props) => {
 
           if (response.ok) {
             const data = await response.json();
+            console.log({ '1': data });
+
             if (data.status === 'success') {
               const pdfData = data.report; // base64-encoded PDF data
               const pdfBlob = new Blob([atob(pdfData)], {
@@ -67,6 +121,7 @@ const RequestReportPage = (props: Props) => {
 
               // Remove the link when done
               document.body.removeChild(link);
+              setSubmitting(false);
               clearInterval(intervalId);
             }
           }
@@ -110,27 +165,43 @@ const RequestReportPage = (props: Props) => {
       </div>
       {/* Input Section */}
       <div className="flex items-center justify-center -translate-y-1/2">
-        <div className="w-[590px] flex items-center bg-zinc-900 p-3 border border-zinc-700 gap-3">
-          <input
-            type="text"
-            placeholder="Token address"
-            className="border-0 bg-transparent px-2 border-r border-r-zinc-700 flex-1 outline-none"
-          />
-          <button className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1">
-            <Image
-              src="/icons/nav/reports.svg"
-              alt="report-icon"
-              width={16}
-              height={16}
-              style={{
-                filter: 'invert(100%) brightness(1000%) contrast(100%)',
+        <form onSubmit={e => handleSubmit(e)}>
+          <div className="w-[590px] flex items-center bg-zinc-900 p-3 border border-zinc-700 gap-3">
+            <input
+              type="text"
+              placeholder="Token address"
+              className="border-0 bg-transparent px-2 border-r border-r-zinc-700 flex-1 outline-none"
+              value={requestAddress}
+              onChange={e => {
+                setRequestAddress(e.target.value);
               }}
             />
-            <p className="text-[16px] font-[500] text-zinc-50">
-              Generate Report
-            </p>
-          </button>
-        </div>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1"
+            >
+              {submitting ? (
+                <ScaleLoader width={6} height={12} color="white" />
+              ) : (
+                <>
+                  <Image
+                    src="/icons/nav/reports.svg"
+                    alt="report-icon"
+                    width={16}
+                    height={16}
+                    style={{
+                      filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                    }}
+                  />
+                  <p className="text-[16px] font-[500] text-zinc-50">
+                    Generate Report
+                  </p>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
       {/* Request Section */}
       <div className="flex flex-col items-center justify-center gap-6">
@@ -143,9 +214,9 @@ const RequestReportPage = (props: Props) => {
         <div className="w-[80%]">
           <ReportsTable
             tablehead={tablehead}
-            tableData={[]}
             setShowModal={setShowModal}
             setTokenState={setTokenState}
+            tokenState={tokenState}
           />
         </div>
       </div>
