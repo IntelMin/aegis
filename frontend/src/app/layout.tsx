@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${satoshi.className} bg-black`}>
+      <body className={`${satoshi.className} bg-[#09090B]`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

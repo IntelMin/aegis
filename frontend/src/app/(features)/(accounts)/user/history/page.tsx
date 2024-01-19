@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -7,6 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { formatDate } from '@/utils/format-date';
+import { formatTime } from '@/utils/format-time';
+import Image from 'next/image';
 
 import React, { useEffect } from 'react';
 import { BiPencil } from 'react-icons/bi';
@@ -60,38 +64,57 @@ const UserAccountTable = () => {
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex flex-col pb-8">
-        <h1 className="text-lg font-semibold">Your history</h1>
+        <h1 className="text-lg font-semibold">Your Audits</h1>
         <p className="text-md text-zinc-500">Items you have unlocked</p>
       </div>
       <Table className="p-3 border border-zinc-800 w-full">
-        <TableHeader className="grid grid-cols-3 bg-zinc-800">
-          <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
-            Cost (Credits)
-          </TableHead>
-          <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
-            Type
+        <TableHeader className="">
+          <TableHead className="py-4 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
+            TOKEN
           </TableHead>
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
             Date
+          </TableHead>
+          <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
+            FILE
           </TableHead>
         </TableHeader>
         <TableBody>
           {history.map((item: Historytype, index: number) => (
             <TableRow
-              className="grid grid-cols-3 items-center border-b-1 "
+              className="items-center bg-zinc-900 border-b border-zinc-800 "
               key={index}
             >
               {' '}
-              <TableCell className="py-2 px-4 text-red-400 text-center">
-                {item.cost}
-              </TableCell>
-              <TableCell className="py-2 px-4 text-neutral-200 text-center">
-                {Typeconfig[item.type]}
+              <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
+                <Image
+                  src="/icons/token-default.svg"
+                  alt="token-svg"
+                  width={24}
+                  height={24}
+                />
+                <p className="text-zinc-100 text-[12px] font-[400]">$AAVE</p>
               </TableCell>
               <TableCell className="py-2 px-4 text-neutral-100 text-center">
-                {new Date(item.created_at).toLocaleDateString() +
+                {formatDate(item.created_at) +
                   ' ' +
-                  new Date(item.created_at).toLocaleTimeString()}
+                  formatTime(item.created_at)}
+              </TableCell>
+              <TableCell className="py-3 px-4 text-center">
+                <Button
+                  className="py-1 h-[30px] px-2 text-[12px] text-blue-400"
+                  style={{
+                    background: `rgba(96, 165, 250, 0.10)`,
+                  }}
+                >
+                  <Image
+                    src="/icons/download-report.svg"
+                    alt="download-icon"
+                    width={16}
+                    height={16}
+                  />
+                  <p className="text-blue-400 text-[12px] ml-1">Download</p>
+                </Button>
               </TableCell>
             </TableRow>
           ))}

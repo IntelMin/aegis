@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PersonIcon, ArchiveIcon, ReaderIcon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function UserProfileLayout({
   children,
@@ -55,36 +56,56 @@ export default function UserProfileLayout({
       <div className="flex max-md:flex-col gap-2">
         <nav className="flex md:flex-col py-5 px-5 border-r border-zinc-900 text-sm font-medium gap-3">
           <Link
-            className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg  ${
+            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all  ${
               pathname == '/user/profile'
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-500 hover:text-zinc-400'
+                ? 'bg-blue-600 text-zinc-50'
+                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
             }`}
             href="/user/profile"
           >
-            <PersonIcon className="text-2xl" />
+            <PersonIcon className="text-[30px]" />
             Profile
           </Link>
           <Link
-            className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg  ${
+            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all  ${
               pathname == '/user/history'
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-500 hover:text-zinc-400'
+                ? 'bg-blue-600 text-zinc-50'
+                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
             }`}
             href="/user/history"
           >
-            <ArchiveIcon className="text-2xl" />
-            History
+            <Image
+              src="/icons/nav/token-audit.svg"
+              alt="token-audit"
+              width={20}
+              height={20}
+              style={
+                pathname == '/user/history'
+                  ? { filter: 'invert(100%) brightness(1000%) contrast(100%)' }
+                  : {}
+              }
+            />
+            Audits
           </Link>
           <Link
-            className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg  ${
+            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all ${
               pathname == '/user/payments'
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-500 hover:text-zinc-400'
+                ? 'bg-blue-600 text-zinc-50'
+                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
             }`}
             href="/user/payments"
           >
-            <ReaderIcon className="text-2xl" />
+            <Image
+              src="/icons/purchase.svg"
+              alt="token-audit"
+              width={20}
+              height={20}
+              style={
+                pathname == '/user/payments'
+                  ? { filter: 'invert(100%) brightness(1000%) contrast(100%)' }
+                  : {}
+              }
+            />
             Payments
           </Link>
         </nav>
