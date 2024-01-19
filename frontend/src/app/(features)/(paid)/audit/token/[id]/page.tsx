@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +11,7 @@ import useBalance from '@/hooks/useBalance';
 import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
 import { showToastError } from '@/components/toast-error';
+import toast from 'sonner';
 
 type props = {
   params: {
@@ -43,8 +43,6 @@ const SkeletonLoader = () => (
 const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
-
-  const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
 
   const { balance, setBalance } = useBalance(

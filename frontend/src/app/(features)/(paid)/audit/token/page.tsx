@@ -6,11 +6,10 @@ import { useRouter } from 'next/navigation';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import { showToastError } from '@/components/toast-error';
-import { toast, useToast } from '@/components/ui/use-toast';
+import toast from 'sonner';
 type Props = {};
 
 const TokenAuditorForm = (props: Props) => {
-  const { toast } = useToast();
   const router = useRouter();
   const [tokenAddress, setTokenAddress] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);

@@ -1,7 +1,6 @@
 'use client';
 import React, { use, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import CodeEditor from '@/components/audit/code-editor';
 import { useSession } from 'next-auth/react';
@@ -9,9 +8,9 @@ import useBalance from '@/hooks/useBalance';
 import usePayment from '@/hooks/usePayment';
 import PaymentDialog from '@/components/payment-dialog';
 import { showToastError } from '@/components/toast-error';
+import { toast } from 'sonner';
 
 const CodeAudit = () => {
-  const { toast } = useToast();
   const session = useSession();
   const [activeComponent, setActiveComponent] =
     React.useState<string>('contractCode');
