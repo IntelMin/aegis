@@ -34,27 +34,10 @@ export default function UserProfileLayout({
   }, [session?.data?.user?.email]);
 
   return (
-    <div className="p-8 w-full max-w-[80%] m-auto">
-      {/* Header */}
-      {/* <div className="flex justify-between items-center">
-        <div className="">
-          <h1 className="font-semibold text-zinc-500 text-md">Hello,</h1>
-          <h1 className="font-semibold text-zinc-200 text-lg">
-            {session?.data?.user?.username}
-          </h1>
-        </div>
-        <div>
-          <h1 className="font-bold text-md text-green-600 text-right">
-            {balance}
-          </h1>
-          <span className="text-zinc-600 text-xs">Credits</span>
-        </div>
-      </div>
-      <hr className="border-b-1 border-zinc-900 mt-4" /> */}
-
+    <div className="p-8 w-full md:max-w-[75%] m-auto">
       {/* Sidebar */}
       <div className="flex max-md:flex-col gap-2">
-        <div className="w-[250px] flex flex-col gap-4">
+        <div className="w-[250px] max-md:justify-center max-md:w-full flex flex-col gap-4">
           <h1 className="text-zinc-500 text-2xl font-[500] w-[70%]">
             Hello,{' '}
             <span className="text-neutral-200 text-ellipsis">

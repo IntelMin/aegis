@@ -53,7 +53,7 @@ const UserAccountTable = () => {
   }
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex flex-row pb-8 justify-between">
+      <div className="flex flex-col max-md:gap-5 md:flex-row pb-8 justify-between">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold">Your payments</h1>
           <p className="text-md text-zinc-400">Previous credit purchases</p>
@@ -103,12 +103,12 @@ const UserAccountTable = () => {
               <TableCell className="py-4 px-4 text-zinc-100 text-center font-[500] capitalize">
                 {item.package}
               </TableCell>
-              <TableCell className="py-2 px-4 text-zinc-100 font-[500] text-center">
+              <TableCell className="py-2 px-4 text-zinc-100 font-[500] min-w-[100px] text-center">
                 <a href={'https://etherscan.io/tx/' + item.hash}>
                   {item.amount_eth} ETH
                 </a>
               </TableCell>
-              <TableCell className="py-2 px-4 text-zinc-100 font-[500] text-center">
+              <TableCell className="py-2 px-4 text-zinc-100 font-[500] min-w-[100px] text-center">
                 {formatDate(item.created_at)}
               </TableCell>
               <TableCell className="py-2 px-4 text-blue-500 font-[500] text-center">

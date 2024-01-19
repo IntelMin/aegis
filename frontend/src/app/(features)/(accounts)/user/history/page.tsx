@@ -95,7 +95,7 @@ const UserAccountTable = () => {
                 />
                 <p className="text-zinc-100 text-[12px] font-[400]">$AAVE</p>
               </TableCell>
-              <TableCell className="py-2 px-4 text-neutral-100 text-center">
+              <TableCell className="py-2 px-4 text-neutral-100 text-center min-w-[180px]">
                 {formatDate(item.created_at) +
                   ' ' +
                   formatTime(item.created_at)}
