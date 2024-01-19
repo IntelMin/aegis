@@ -5,11 +5,12 @@ type Props = {
   description?: string;
 };
 
-export const showToastSuccess = ({ message }: Props) => {
+export const showToastSuccess = ({ message, description }: Props) => {
   toast.success(message, {
     style: {
       background: 'green',
       color: 'white',
     },
+    description,
   });
 };

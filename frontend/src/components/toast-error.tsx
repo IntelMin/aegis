@@ -5,8 +5,9 @@ type Props = {
   description?: string;
 };
 
-export const showToastError = ({ message }: Props) => {
+export const showToastError = ({ message, description }: Props) => {
   toast.error(message, {
+    description,
     style: {
       background: 'red',
       color: 'white',
