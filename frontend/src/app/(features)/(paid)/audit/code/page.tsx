@@ -16,12 +16,12 @@ const CodeAudit = () => {
     React.useState<string>('contractCode');
   const [ContractCode, setContractCode] = React.useState<string>('');
   const [findings, setFindings] = React.useState<any>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  // const [loading, setLoading] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
-  const handlePayment = usePayment({
+  const { handlePayment, loading } = usePayment({
     session,
     balance,
     toast,
@@ -43,7 +43,6 @@ const CodeAudit = () => {
     }
   };
   const afterPayment = async () => {
-    setLoading(true);
     try {
       const data = {
         type: 'code',
@@ -73,8 +72,6 @@ const CodeAudit = () => {
         title: 'Error',
         description: 'An error occurred during code audit',
       });
-    } finally {
-      setLoading(false);
     }
   };
 

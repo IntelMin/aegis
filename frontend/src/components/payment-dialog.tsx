@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CreditType, creditConfig } from '@/lib/credit-config';
+import { set } from 'date-fns';
 interface PaymentDialogProps {
   balance: number | null;
   service: CreditType;
@@ -24,11 +25,12 @@ const PaymentDialog = ({
   TriggerElement,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
-  if (!balance) return null;
+
   return (
     <Dialog>
       <DialogTrigger>{TriggerElement}</DialogTrigger>
-      {balance >= required_credits && (
+
+      {balance && balance >= required_credits && (
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Pay for audit</DialogTitle>
@@ -50,28 +52,30 @@ const PaymentDialog = ({
           </DialogClose>
         </DialogContent>
       )}
-      {balance < required_credits && (
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Credit balance low</DialogTitle>
-            <DialogDescription>
-              You have {balance} credits available. You need {required_credits}
-              credits{' '}
-              {service == 'code'
-                ? 'to audit your code'
-                : service == 'detailed'
-                ? 'to perform detailed audit'
-                : 'to get a PDF report'}
-              . Please add credits to your account.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogClose>
-            <Link href="/payment">
-              <Button>Add credits</Button>
-            </Link>
-          </DialogClose>
-        </DialogContent>
-      )}
+      {balance == undefined ||
+        (balance < required_credits && (
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Credit balance low</DialogTitle>
+              <DialogDescription>
+                You have {balance} credits available. You need{' '}
+                {required_credits}
+                credits{' '}
+                {service == 'code'
+                  ? 'to audit your code'
+                  : service == 'detailed'
+                  ? 'to perform detailed audit'
+                  : 'to get a PDF report'}
+                . Please add credits to your account.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogClose>
+              <Link href="/payment">
+                <Button>Add credits</Button>
+              </Link>
+            </DialogClose>
+          </DialogContent>
+        ))}
     </Dialog>
   );
 };

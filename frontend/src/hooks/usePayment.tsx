@@ -24,7 +24,7 @@ const usePayment = ({
   toast,
 }: usePaymentProps) => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const handlePayment = async (type: CreditType) => {
     if (session.status === 'unauthenticated') {
       router.push('/login');
@@ -44,6 +44,7 @@ const usePayment = ({
       });
       return new Error('Not enough credits');
     }
+    setLoading(true);
     const res = await fetch('/api/credit/pay', {
       method: 'POST',
       body: JSON.stringify({
@@ -71,7 +72,9 @@ const usePayment = ({
       if (onSuccess) {
         onSuccess(); // Call onSuccess callback if provided
       }
+      setLoading(false);
     } else {
+      setLoading(false);
       toast({
         id: 'payment-error',
         variant: 'destructive',
@@ -83,7 +86,7 @@ const usePayment = ({
     }
   };
 
-  return handlePayment;
+  return { handlePayment, loading };
 };
 
 export default usePayment;
