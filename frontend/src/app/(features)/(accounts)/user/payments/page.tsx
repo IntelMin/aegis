@@ -53,16 +53,16 @@ const UserAccountTable = () => {
   }
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex flex-col max-md:gap-5 md:flex-row pb-8 justify-between">
+      <div className="flex flex-col max-md:gap-5 md:flex-row pb-8 justify-between w-full">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold">Your payments</h1>
           <p className="text-md text-zinc-400">Previous credit purchases</p>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col max-md:w-full">
           <Link href="/payment">
             <Button
               variant="blue"
-              className="text-[16px] flex items-center gap-2"
+              className="text-[16px] flex items-center gap-2 w-full"
             >
               <Image
                 src="/icons/purchase.svg"

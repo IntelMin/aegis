@@ -9,6 +9,7 @@ import { BiPencil } from 'react-icons/bi';
 import { IoLogoDiscord } from 'react-icons/io5';
 import { FaXTwitter } from 'react-icons/fa6';
 import { FaTelegram, FaInstagram } from 'react-icons/fa';
+import Image from 'next/image';
 
 const UserAccountTable = () => {
   const [isEditing, setIsEditing] = React.useState(false);
@@ -24,7 +25,7 @@ const UserAccountTable = () => {
         <h2 className="text-md pb-3 mb-4 border-b border-zinc-800">
           Personal Information
         </h2>
-        <div className="grid grid-cols-2 gap-6 md:flex-row md:gap-8 text-zinc-50">
+        <div className="grid max-md:grid-cols-1 grid-cols-2 gap-6 md:flex-row md:gap-8 text-zinc-50">
           <div className="col-span-1 space-y-2">
             <Label className="flex gap-2 items-center" htmlFor="name">
               First name
@@ -34,8 +35,7 @@ const UserAccountTable = () => {
               placeholder="First name"
               style={{
                 border: '1px solid var(--zinc-800, #27272A)',
-                background:
-                  'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                background: '#27272A',
               }}
             />
           </div>
@@ -48,8 +48,7 @@ const UserAccountTable = () => {
               placeholder="Last name"
               style={{
                 border: '1px solid var(--zinc-800, #27272A)',
-                background:
-                  'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                background: '#27272A',
               }}
               id="phone"
             />
@@ -63,8 +62,7 @@ const UserAccountTable = () => {
               placeholder="Enter your email address"
               style={{
                 border: '1px solid var(--zinc-800, #27272A)',
-                background:
-                  'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                background: '#27272A',
               }}
               id="email"
             />
@@ -74,7 +72,7 @@ const UserAccountTable = () => {
       <div className="border shadow-sm rounded-lg border-zinc-800 p-4 mb-4">
         <h2 className="text-md pb-3 mb-4 border-b border-zinc-800">Socials</h2>
         <div className="grid grid-cols-1 gap-6 md:flex-row md:gap-8 text-zinc-50">
-          <div className="col-span-1 grid grid-cols-2 gap-6">
+          <div className="col-span-1 grid max-md:grid-cols-1 grid-cols-2 gap-6">
             <div className="col-span-1 space-y-2">
               <Label className="flex gap-2 items-center" htmlFor="name">
                 <FaXTwitter />X
@@ -84,8 +82,7 @@ const UserAccountTable = () => {
                 placeholder="@username"
                 style={{
                   border: '1px solid var(--zinc-800, #27272A)',
-                  background:
-                    'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                  background: '#27272A',
                 }}
               />
             </div>
@@ -98,13 +95,12 @@ const UserAccountTable = () => {
                 placeholder="@username"
                 style={{
                   border: '1px solid var(--zinc-800, #27272A)',
-                  background:
-                    'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                  background: '#27272A',
                 }}
               />
             </div>
           </div>
-          <div className="col-span-1 grid grid-cols-2 gap-6">
+          <div className="col-span-1 grid max-md:grid-cols-1 grid-cols-2 gap-6">
             <div className="space-y-2 col-span-1">
               <Label className="flex gap-2 items-center" htmlFor="name">
                 <FaTelegram />
@@ -115,8 +111,7 @@ const UserAccountTable = () => {
                 placeholder="@username"
                 style={{
                   border: '1px solid var(--zinc-800, #27272A)',
-                  background:
-                    'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                  background: '#27272A',
                 }}
               />
             </div>
@@ -129,8 +124,7 @@ const UserAccountTable = () => {
                 placeholder="@username"
                 style={{
                   border: '1px solid var(--zinc-800, #27272A)',
-                  background:
-                    'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+                  background: '#27272A',
                 }}
               />
             </div>
@@ -138,9 +132,16 @@ const UserAccountTable = () => {
         </div>
       </div>
       <div className=" shadow-sm">
-        <Button disabled>
-          <BiPencil className="w-4 h-4 mr-2" />
-          Edit
+        <Button
+          style={{
+            background:
+              'linear-gradient(160deg, #18181B 13.54%, #18181B 64.41%)',
+          }}
+        >
+          <Image src="/icons/save.svg" alt="save-icon" width={24} height={24} />
+          <p className="text-zinc-600 text-[16px] ml-1 font-semibold">
+            Save changes
+          </p>
         </Button>
       </div>
     </div>
