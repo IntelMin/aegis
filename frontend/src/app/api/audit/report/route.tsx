@@ -34,12 +34,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
       type: 'report',
     },
   });
-  if (!paid_user) {
-    return NextResponse.json({
-      status: 'failed',
-      message: "You have't paid for this report yet.",
-    });
-  }
+  // if (!paid_user) {
+  //   return NextResponse.json({
+  //     status: 'failed',
+  //     message: "You have't paid for this report yet.",
+  //   });
+  // }
   const report_request = await db.report_requests.findFirst({
     where: {
       address: address,

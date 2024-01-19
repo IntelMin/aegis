@@ -6,19 +6,20 @@ import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { tableData, tablehead } from '@/components/reports/constant';
-
-type Report = {
-  id: number;
-  name: string;
-  address: string;
-  user_id: number;
-  status: string;
-  image_url: string;
+import {
+  // tableData,
+  tablehead,
+} from '@/components/reports/constant';
+type tokenState = {
+  tokenIcon: string;
+  tokenName: string;
+  tokenInfo?: string | undefined;
+  tokenAddress: string;
+  loading?: boolean;
 };
 
 const ReportsPage = () => {
-  const [tokenState, setTokenState] = useState({
+  const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',
     tokenName: '',
     tokenInfo: '',
@@ -26,93 +27,8 @@ const ReportsPage = () => {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [reports, setReports] = useState([]);
-  const [reqAddress, setReqAddress] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const requestNewReport = async (address: string) => {
-    const contractAddress = address;
-    try {
-      const response = await fetch('/api/audit/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: contractAddress,
-        }),
-      });
-      const data = await response.json();
-      if (data.status === 'success') {
-        const intervalId = setInterval(async () => {
-          const response = await fetch(
-            `/api/audit/report?address=${contractAddress}`,
-            {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-            }
-          );
-          console.log(response);
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.status === 'success') {
-              const pdfData = data.report; // base64-encoded PDF data
-              const pdfBlob = new Blob([atob(pdfData)], {
-                type: 'application/pdf',
-              });
-              const pdfUrl = URL.createObjectURL(pdfBlob);
-              const link = document.createElement('a');
-              link.href = pdfUrl;
-              link.download =
-                data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-              // Append the link to the body
-              document.body.appendChild(link);
-
-              // Programmatically click the link to start the download
-              link.click();
-
-              // Remove the link when done
-              document.body.removeChild(link);
-              clearInterval(intervalId);
-            }
-          }
-        }, 5000);
-      }
-    } catch (error) {
-      console.error('Error requesting report:', error);
-    }
-  };
-  const requestReport = async (address: string) => {
-    const response = await fetch(`/api/audit/report?address=${address}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log(response);
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      if (data.status === 'success') {
-        const pdfData = data.report; // base64-encoded PDF data
-        const pdfBlob = new Blob([atob(pdfData)], {
-          type: 'application/pdf',
-        });
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        link.download =
-          data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-        // Append the link to the body
-        document.body.appendChild(link);
-
-        // Programmatically click the link to start the download
-        link.click();
-
-        // Remove the link when done
-        document.body.removeChild(link);
-      }
-    }
-  };
   const handleOutsideClick = (event: MouseEvent) => {
     const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
 
@@ -122,20 +38,12 @@ const ReportsPage = () => {
   };
 
   useEffect(() => {
-    async function fetchReports() {
-      const response = await fetch('/api/getallReports');
-      const data = await response.json();
-      console.log(data);
-      setReports(data.reports);
-    }
-    fetchReports();
     document.addEventListener('mousedown', handleOutsideClick);
 
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
-
   return (
     <div className="w-full flex justify-center pt-16 relative">
       <div className="w-[80%] flex flex-col gap-8">
@@ -166,9 +74,9 @@ const ReportsPage = () => {
         </div>
         <ReportsTable
           tablehead={tablehead}
-          tableData={tableData}
           setShowModal={setShowModal}
           setTokenState={setTokenState}
+          tokenState={tokenState}
         />
       </div>
       {showModal && (
