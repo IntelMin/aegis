@@ -34,9 +34,9 @@ export default function UserProfileLayout({
   }, [session?.data?.user?.email]);
 
   return (
-    <div className="p-8 w-full max-w-[1200px] m-auto">
+    <div className="p-8 w-full max-w-[80%] m-auto">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <div className="">
           <h1 className="font-semibold text-zinc-500 text-md">Hello,</h1>
           <h1 className="font-semibold text-zinc-200 text-lg">
@@ -50,65 +50,89 @@ export default function UserProfileLayout({
           <span className="text-zinc-600 text-xs">Credits</span>
         </div>
       </div>
-      <hr className="border-b-1 border-zinc-900 mt-4" />
+      <hr className="border-b-1 border-zinc-900 mt-4" /> */}
 
       {/* Sidebar */}
       <div className="flex max-md:flex-col gap-2">
-        <nav className="flex md:flex-col py-5 px-5 border-r border-zinc-900 text-sm font-medium gap-3">
-          <Link
-            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all  ${
-              pathname == '/user/profile'
-                ? 'bg-blue-600 text-zinc-50'
-                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
-            }`}
-            href="/user/profile"
+        <div className="w-[250px] flex flex-col gap-4">
+          <h1 className="text-zinc-500 text-2xl font-[500] w-[70%]">
+            Hello,{' '}
+            <span className="text-neutral-200 text-ellipsis">
+              {session?.data?.user?.username}
+            </span>
+          </h1>
+          <div
+            style={{
+              background: 'url(/backgrounds/balance.png)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'top center',
+            }}
+            className="border border-zinc-900 p-4 pb-6 flex flex-col gap-3 items-center justify-center"
           >
-            <PersonIcon className="text-[30px]" />
-            Profile
-          </Link>
-          <Link
-            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all  ${
-              pathname == '/user/history'
-                ? 'bg-blue-600 text-zinc-50'
-                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
-            }`}
-            href="/user/history"
-          >
-            <Image
-              src="/icons/nav/token-audit.svg"
-              alt="token-audit"
-              width={20}
-              height={20}
-              style={
+            <Image src="/icons/credits.svg" alt="" width={131} height={100} />
+            <p className="text-zinc-50 font-[600] text-3xl">{balance}</p>
+            <p className="text-zinc-400 font-[400] text-sm">Credit Balance</p>
+          </div>
+          <nav className="flex md:flex-col py-5 border-r border-zinc-900 text-sm font-medium gap-3">
+            <Link
+              className={`flex items-center font-[500] justify-center gap-3 px-3 py-2 text-[16px] transition-all  ${
+                pathname == '/user/profile'
+                  ? 'bg-blue-600 text-zinc-50'
+                  : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
+              }`}
+              href="/user/profile"
+            >
+              <PersonIcon className="text-[36px]" />
+              Profile
+            </Link>
+            <Link
+              className={`flex items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all  ${
                 pathname == '/user/history'
-                  ? { filter: 'invert(100%) brightness(1000%) contrast(100%)' }
-                  : {}
-              }
-            />
-            Audits
-          </Link>
-          <Link
-            className={`flex items-center gap-3 px-3 py-2 text-[16px] transition-all ${
-              pathname == '/user/payments'
-                ? 'bg-blue-600 text-zinc-50'
-                : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
-            }`}
-            href="/user/payments"
-          >
-            <Image
-              src="/icons/purchase.svg"
-              alt="token-audit"
-              width={20}
-              height={20}
-              style={
+                  ? 'bg-blue-600 text-zinc-50'
+                  : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
+              }`}
+              href="/user/history"
+            >
+              <Image
+                src="/icons/nav/token-audit.svg"
+                alt="token-audit"
+                width={20}
+                height={20}
+                style={
+                  pathname == '/user/history'
+                    ? {
+                        filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                      }
+                    : { filter: 'brightness(50%) contrast(50%)' }
+                }
+              />
+              Audits
+            </Link>
+            <Link
+              className={`flex items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all ${
                 pathname == '/user/payments'
-                  ? { filter: 'invert(100%) brightness(1000%) contrast(100%)' }
-                  : {}
-              }
-            />
-            Payments
-          </Link>
-        </nav>
+                  ? 'bg-blue-600 text-zinc-50'
+                  : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
+              }`}
+              href="/user/payments"
+            >
+              <Image
+                src="/icons/purchase.svg"
+                alt="token-audit"
+                width={20}
+                height={20}
+                style={
+                  pathname == '/user/payments'
+                    ? {
+                        filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                      }
+                    : {}
+                }
+              />
+              Payments
+            </Link>
+          </nav>
+        </div>
 
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           {children}
