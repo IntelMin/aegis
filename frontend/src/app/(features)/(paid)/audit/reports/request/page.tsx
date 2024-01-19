@@ -187,7 +187,7 @@ const RequestReportPage = (props: Props) => {
       <div
         className="flex items-center justify-center w-full h-[300px]"
         style={{
-          background: 'url(/backgrounds/request-report.png)',
+          background: 'url(/backgrounds/report-request.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
@@ -255,7 +255,19 @@ const RequestReportPage = (props: Props) => {
               user_id={user.id}
             />
           ) : (
-            <> </>
+            <>
+              <div className="w-[full] flex justify-center items-center flex-col my-4">
+                <Image
+                  src="/icons/no-data.svg"
+                  alt="no-data"
+                  width={155}
+                  height={150}
+                />
+                <p className="text-zinc-400 text-[12px] text-[400]">
+                  Log in to see your reports
+                </p>
+              </div>
+            </>
           )}
         </div>
       </div>
