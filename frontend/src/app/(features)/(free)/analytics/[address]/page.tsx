@@ -1,6 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import useLiveData from '@/hooks/useLiveData';
@@ -34,7 +33,6 @@ const Analytics = ({ params }: Props) => {
   );
 
   const liveData = useLiveData(contractAddress);
-  const [isChartReady, setIsChartReady] = useState(false);
   const [showSection, setShowSection] = useState('info');
 
   const sectionsArr = [
@@ -69,15 +67,13 @@ const Analytics = ({ params }: Props) => {
         </div>
         <div className="col-span-3 flex flex-col gap-4">
           {/* Trading View chart */}
-          <TVChart
-            openOrders={[]}
-            initialPrice={'500'}
-            onChartReady={() => {
-              setIsChartReady(true);
-            }}
-            showOrderLines={false}
-            onToggleShowOrderLines={() => {}} // TODO
-          />
+          {liveData?.pairAddress && (
+            <TVChart
+              symbol={`${liveData.baseToken.symbol} / ${liveData.quoteToken.symbol}`}
+              pairAddress={liveData.pairAddress}
+              initialPrice="500"
+            />
+          )}
           <div className="grid grid-cols-3 gap-4">
             {/* Trades or Holders */}
             <div className="col-span-1 aspect-square">

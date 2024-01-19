@@ -36,7 +36,7 @@ const DashboardDataTable = ({
     { label: 'LIQUIDITY', colSpan: 1 },
     { label: '30MIN', colSpan: 1 },
     { label: '1Hr', colSpan: 1 },
-    { label: 'Audit', colSpan: 1 },
+    // { label: 'Audit', colSpan: 1 },
   ];
 
   const handleCopy = (data: string) => {
@@ -191,11 +191,11 @@ const DashboardDataTable = ({
             </TableCell>
 
             {/* Audit */}
-            <TableCell className={`text-green-400`}>
+            {/* <TableCell className={`text-green-400`}>
               <button className="bg-green-700 text-white pl-2 pr-2 pt-1 pb-1 rounded-[4px]">
                 Audit
               </button>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         ))}
       </TableBody>

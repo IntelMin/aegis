@@ -25,7 +25,8 @@ async function fetchAttacks(url) {
 
       description = description
         .replace('Slowmist ', '')
-        .replace('slowmist ', '');
+        .replace('slowmist ', '')
+        .replace('SlowMist ', '');
 
       // amount = amount.replace('$ ', '').replace(/,/g, '').replace('-', '0');
 

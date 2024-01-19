@@ -31,6 +31,9 @@ export async function GET(req: NextRequest) {
         where: whereClause,
         take: limit,
         skip: offset,
+        orderBy: {
+          date: 'desc',
+        },
       }),
       db.attacks.count({ where: whereClause }),
     ]);

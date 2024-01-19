@@ -17,6 +17,7 @@ type tokenState = {
   tokenAddress: string;
   loading?: boolean;
 };
+
 const ReportsPage = () => {
   const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',

@@ -40,6 +40,9 @@ export async function GET(req: NextRequest) {
         where: whereClause,
         take: limit,
         skip: offset,
+        orderBy: {
+          id: 'asc',
+        },
       }),
       db.bounties.count({ where: whereClause }),
     ]);
