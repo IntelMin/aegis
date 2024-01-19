@@ -237,7 +237,7 @@ export const ReportsTable = ({
           user_id: report.user_id,
         };
       });
-      // setTableData(table_report);
+      setTableData(table_report);
       setReportLoading(false);
 
       const table_data: ReportState[] = await Promise.all(
