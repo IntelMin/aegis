@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import {
   PersonalDataTypes,
@@ -17,9 +16,10 @@ import RoleDetailsForm from '@/components/sign-up/form-role';
 import SocialDetailsForm from '@/components/sign-up/form-socials';
 import ProjectDetailsForm from '@/components/sign-up/form-project';
 import CompleteForm from '@/components/sign-up/form-complete';
+import { showToastSuccess } from '@/components/toast-success';
+import { showToastError } from '@/components/toast-error';
 
 const SignUpForm = () => {
-  const { toast } = useToast();
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [personalData, setPersonalData] = useState<PersonalDataTypes>({
@@ -76,27 +76,24 @@ const SignUpForm = () => {
       });
       if (res.status === 201) {
         console.log('success');
-        toast({
-          title: 'Success',
+        showToastSuccess({
+          message: 'Success',
           description: 'Your account has been created!',
-          duration: 5000,
         });
         router.replace('/login');
       } else {
         router.replace('/sign-up');
-        toast({
-          title: 'Error',
+        showToastError({
+          message: 'Error',
           description: 'Your account has not been created!',
-          duration: 3000,
         });
       }
     } catch (err) {
       if (err) {
         router.replace('/sign-up');
-        toast({
-          title: 'Error',
+        showToastError({
+          message: 'Error',
           description: 'Your account has not been created!',
-          duration: 3000,
         });
       }
     }

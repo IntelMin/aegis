@@ -9,7 +9,7 @@ import AuditHistory from '@/components/audit/detail/audit-history';
 import Link from 'next/link';
 import axios from 'axios';
 import useTokenInfo from '@/hooks/useTokenInfo';
-import { useToast } from '@/components/ui/use-toast';
+import { showToastError } from '@/components/toast-error';
 
 type Props = {
   params: {
@@ -18,7 +18,6 @@ type Props = {
 };
 
 const QuickAuditPage = ({ params }: Props) => {
-  const { toast } = useToast();
   const contractAddress = params.id;
   const [liveData, setLiveData] = useState<any>(null);
   const { isFetching, tokenInfo, error } = useTokenInfo(
@@ -40,9 +39,8 @@ const QuickAuditPage = ({ params }: Props) => {
 
   useEffect(() => {
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToastError({
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
     }

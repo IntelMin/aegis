@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import useBalance from '@/hooks/useBalance';
 import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
+import { showToastError } from '@/components/toast-error';
 
 type props = {
   params: {
@@ -78,9 +79,8 @@ const TokenAuditOption = ({ params }: props) => {
     }
 
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToastError({
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
       setSubmitting(false);

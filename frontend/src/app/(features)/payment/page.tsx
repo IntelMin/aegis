@@ -27,9 +27,9 @@ import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { set } from 'zod';
-import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
+import { showToastError } from '@/components/toast-error';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),
@@ -77,7 +77,6 @@ const PricingCard = ({
   handlePackageSelect,
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
-  const toast = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <Card
@@ -141,9 +140,8 @@ const PricingCard = ({
           onOpenChange={() => {
             if (!isConnected) {
               console.log('not connected');
-              toast.toast({
-                variant: 'destructive',
-                title: 'Not connected',
+              showToastError({
+                message: 'Not connected',
                 description: 'Please connect your wallet to continue',
               });
             } else {

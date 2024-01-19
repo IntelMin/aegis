@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-
+import { showToastError } from '@/components/toast-error';
+import { toast, useToast } from '@/components/ui/use-toast';
 type Props = {};
 
 const TokenAuditorForm = (props: Props) => {
@@ -32,9 +32,8 @@ const TokenAuditorForm = (props: Props) => {
     }
 
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToastError({
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
       setSubmitting(false);
@@ -52,9 +51,8 @@ const TokenAuditorForm = (props: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!tokenAddress) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToastError({
+        message: 'Error',
         description: 'Please enter a valid contract address',
       });
       return;
