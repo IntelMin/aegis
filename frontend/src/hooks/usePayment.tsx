@@ -54,6 +54,17 @@ const usePayment = ({
     });
     const data = await res.json();
     console.log(data);
+    if (!res.ok) {
+      toast({
+        id: 'payment-error',
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Credit payment error',
+      });
+      setLoading(false);
+
+      return new Error('Credit payment error');
+    }
     if (data?.status === 'success') {
       toast({
         id: 'payment-success',

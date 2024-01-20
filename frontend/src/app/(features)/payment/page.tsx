@@ -25,11 +25,10 @@ import { cn } from '@/lib/utils';
 import { useAccount, useSendTransaction, useWaitForTransaction } from 'wagmi';
 import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { set } from 'zod';
-import { useToast } from '@/components/ui/use-toast';
+import { toast, useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
+import { set } from 'date-fns';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),
@@ -49,6 +48,8 @@ type PricingCardProps = {
   exclusive?: boolean;
   handleConfirm: () => void;
   handlePackageSelect: (packageName: string, amount: number) => void;
+  submitting: boolean;
+  closeDialog: boolean;
 };
 
 const PricingHeader = ({
@@ -75,10 +76,19 @@ const PricingCard = ({
   exclusive,
   handleConfirm,
   handlePackageSelect,
+  submitting,
+  closeDialog,
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
   const toast = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (closeDialog) {
+      setDialogOpen(false);
+    }
+  }, [closeDialog]);
+
   return (
     <Card
       className={cn(
@@ -153,7 +163,9 @@ const PricingCard = ({
           }}
         >
           <DialogTrigger asChild className="w-full">
-            <Button>Purchase</Button>
+            <Button disabled={submitting}>
+              {submitting ? 'Please wait' : 'Purchase'}
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -189,13 +201,23 @@ const PricingCard = ({
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" disabled={submitting}>
                   Close
                 </Button>
               </DialogClose>
-              <Button onClick={handleConfirm} type="submit">
-                Confirm
-              </Button>
+              {submitting ? (
+                <Button type="button" variant="secondary">
+                  <ScaleLoader width={4} height={10} color="white" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleConfirm}
+                  type="submit"
+                  disabled={submitting}
+                >
+                  Confirm
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -218,9 +240,27 @@ export default function PricingPage() {
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
   const ETH_TO_WEI = BigInt(10 ** 18);
+  const [txhash, setTxhash] = useState('0x' as `0x${string}`);
+  const [submitting, setSubmitting] = useState(false);
+  const { data: txn_receipt, status } = useWaitForTransaction({
+    hash: txhash,
+  });
+
+  const [closeDialog, setCloseDialog] = useState(false);
+
   const { data: txn, sendTransaction: buy } = useSendTransaction({
     onSuccess: async txn => {
-      console.log('success');
+      const newTxhash = txn?.hash;
+      setTxhash(newTxhash);
+      setSubmitting(true);
+      console.log(status);
+    },
+  });
+  useEffect(() => {
+    if (status === 'loading' || status === 'idle') {
+      return;
+    }
+    async function addCredits() {
       const res = await fetch('/api/credit/add', {
         method: 'POST',
         body: JSON.stringify({
@@ -233,11 +273,47 @@ export default function PricingPage() {
 
       console.log(res);
       const data = await res.json();
+      if (!res.ok) {
+        setCloseDialog(true);
+        setSubmitting(false);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'An error occurred during credit purchase',
+        });
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      toast({
+        variant: 'default',
+        title: 'Success',
+        description: 'Credits added successfully',
+      });
+      setCloseDialog(true);
       setBalance(data?.balance);
       session.update({ ...session.data, credits: data?.balance });
-    },
-  });
+      setSubmitting(false);
+    }
+    console.log(txhash);
+    if (submitting && status === 'success') {
+      console.log(txn_receipt);
+      console.log('success');
 
+      addCredits();
+      setLoading(false);
+    }
+    if (status === 'error') {
+      setCloseDialog(true);
+
+      console.log('error');
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'An error occurred during credit purchase',
+      });
+      setLoading(false);
+      setSubmitting(false);
+    }
+  }, [status, submitting, txhash]);
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);
@@ -328,6 +404,8 @@ export default function PricingPage() {
               {...plan}
               handleConfirm={handleConfirm}
               handlePackageSelect={handlePackageSelect}
+              submitting={submitting}
+              closeDialog={closeDialog}
             />
           );
         })}
