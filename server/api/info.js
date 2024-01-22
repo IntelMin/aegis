@@ -65,6 +65,9 @@ router.get('/:type/:address', async (req, res) => {
         token_info = filedata.data.result;
         token_info = token_info[Object.keys(token_info)[0]];
         break;
+      case 'scan':
+        token_info = filedata.auditLayout;
+        break;
       default:
         token_info = filedata;
         break;

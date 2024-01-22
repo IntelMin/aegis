@@ -19,7 +19,7 @@ const HorizontalSwitcher = ({
   const [activeGraphName, setActiveGraphName] = useState(graphs[0].name);
   const [resolution, setResolution] = useState(defaultResolution);
 
-  const resolutionFilter = ['6M', '1M', '1W', '1D'];
+  const resolutionFilter = ['1m', '5m', '15m', '1h', '2h', '4h'];
 
   const ActiveGraphComponent = useMemo(() => {
     const activeGraph = graphs.find(
@@ -28,10 +28,10 @@ const HorizontalSwitcher = ({
     if (!activeGraph || !activeGraph.component) return null;
 
     const Component = activeGraph.component;
-    const props = activeGraph.props || {};
+    const props = { ...activeGraph.props, resolution };
 
     return <Component {...props} />;
-  }, [activeGraphName, graphs]);
+  }, [activeGraphName, graphs, resolution]);
 
   const handleResolutionChange = (value: string) => {
     setResolution(value);

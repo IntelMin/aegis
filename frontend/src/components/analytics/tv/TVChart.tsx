@@ -56,6 +56,10 @@ export function TVChart({
   const chartScale = 10 ** decimals;
 
   useEffect(() => {
+    if (!pairAddress) {
+      return;
+    }
+
     const chartData = loadChartState();
 
     const widgetOptions: ChartingLibraryWidgetOptions = {
@@ -120,7 +124,7 @@ export function TVChart({
       clearExistingWidget();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartScale]);
+  }, [pairAddress]);
 
   useEffect(() => {
     _widget.current?.onChartReady(() => {

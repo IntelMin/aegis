@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   try {
     let url = `${process.env.AEGIS_SRV}/info/${type}/${address}`;
     const response = await axios.get(url);
-    console.log(response.data);
+    // console.log(response.data);
     return NextResponse.json(response.data);
   } catch (error) {
     if (error) {

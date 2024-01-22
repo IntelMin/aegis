@@ -5,11 +5,12 @@ const cors = require('cors');
 
 const monitorRoute = require('./api/monitor');
 const auditRoute = require('./api/audit');
-const monitoringRoute = require('./api/monitoring');
+// const monitoringRoute = require('./api/monitoring');
 const tokenRoute = require('./api/token');
 const searchRoute = require('./api/search');
 const reportRoute = require('./api/report');
 const infoRoute = require('./api/info');
+const analyticsRoute = require('./api/analytics');
 const {
   router: dashboardRoute,
   initLive: initDashboardLive,
@@ -46,13 +47,14 @@ router.get('/ping', (req, res) => {
 app.use('/dashboard', dashboardRoute);
 app.use('/monitor', monitorRoute);
 app.use('/audit', auditRoute);
-app.use('/monitoring', monitoringRoute);
+// app.use('/monitoring', monitoringRoute);
 app.use('/token', tokenRoute);
 app.use('/search', searchRoute);
 app.use('/info', infoRoute);
 app.use('/report', reportRoute);
 app.use('/bounty', bountyRoute);
 app.use('/attacks', attacksRoute);
+app.use('/analytics', analyticsRoute);
 // app.use('/deployer', deployerRoute);
 // app.use('/code', codeRoute);
 // app.use('/trending', trendingTokens);
@@ -65,10 +67,10 @@ async function init() {
     console.log('Initializing...');
 
     await Promise.all([
-      initDashboardLive(),
-      initDashboardTrending(),
-      initBounty(),
-      initAttacks(),
+      //   initDashboardLive(),
+      //   initDashboardTrending(),
+      //   initBounty(),
+      //   initAttacks(),
     ]);
 
     console.log('Initialization complete.');

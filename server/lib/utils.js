@@ -69,7 +69,7 @@ const writeCache = async (filename, data) => {
 async function apiRequest(url, params) {
   try {
     const response = await axios.get(url, { params });
-    console.log('Response data: ', response.data);
+    // console.log('Response data: ', response.data);
     return response.data;
   } catch (error) {
     console.error('Error making the request', error);

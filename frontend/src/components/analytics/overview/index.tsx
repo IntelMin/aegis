@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import Attributes from './attributes';
 import Statistics from './statistics';
-import TokenSecurityScoreChart from '../token-security-score-chart';
+import SecurityOverview from './security';
 
 const ICON_SIZE = 18;
 
@@ -87,7 +87,7 @@ const TokenDetailOverView = ({
       <Statistics liveData={liveData} />
 
       {/* Token Gauge Chart */}
-      <TokenSecurityScoreChart />
+      <SecurityOverview address={tokenMetaData?.address} />
     </div>
   );
 };

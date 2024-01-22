@@ -17,7 +17,7 @@ import { SelectTrigger } from '@radix-ui/react-select';
 
 import LiquidityReport from './liquidity-report';
 import HoldersTable from './holders-table';
-import TradersTable from './traders-table';
+// import TradersTable from './trades';
 import OwnerTable from './owner-table';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { BiChevronDown } from 'react-icons/bi';
@@ -147,7 +147,7 @@ const TokenDetailTable = (props: Props) => {
 
         {selected === 'Holders' && <HoldersTable selected={selected} />}
 
-        {selected === 'Trades' && <TradersTable selected={selected} />}
+        {/* {selected === 'Trades' && <TradersTable selected={selected} />} */}
 
         {selected === 'Owner' && <OwnerTable selected={selected} />}
       </div>
