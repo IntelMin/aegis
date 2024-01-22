@@ -344,6 +344,19 @@ export const ReportsTable = ({
           )}
         </TableBody>
       </Table>
+      {tableData.length === 0 && !reportLoading && (
+        <div className="w-full flex justify-center items-center flex-col my-4">
+          <Image
+            src="/icons/no-data.svg"
+            alt="no-data"
+            width={155}
+            height={150}
+          />
+          <p className="text-zinc-400 text-[12px] text-[400]">
+            Request Audit Report
+          </p>
+        </div>
+      )}
     </>
   );
 };
