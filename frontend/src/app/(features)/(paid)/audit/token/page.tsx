@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-import toast from 'sonner';
 import { showToast } from '@/components/toast';
 type Props = {};
 
@@ -45,7 +44,6 @@ const TokenAuditorForm = (props: Props) => {
     error,
     submittedAddress,
     router,
-    toast,
   ]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
