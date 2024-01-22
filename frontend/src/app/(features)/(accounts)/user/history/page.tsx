@@ -101,8 +101,8 @@ const UserAccountTable = () => {
           <p className="text-md text-zinc-500">Items you have unlocked</p>
         </div>
         <Select onValueChange={handleTableTypeChange}>
-          <SelectTrigger className="w-full md:w-[180px] outline-none">
-            <div className="flex items-center justify-between text-sm pl-3">
+          <SelectTrigger className="max-md:w-full outline-none">
+            <div className="flex items-center gap-6 justify-between text-sm pl-3">
               {type}
               <BiChevronDown className="text-neutral-400 text-[28px]" />
             </div>
