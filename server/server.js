@@ -71,6 +71,7 @@ async function init() {
       initDashboardTrending(),
       initBounty(),
       initAttacks(),
+
     ]);
 
     console.log('Initialization complete.');

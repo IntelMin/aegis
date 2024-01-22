@@ -86,7 +86,6 @@ const WalletBubble = (props: Props) => {
       const percentile5 = sortedData[Math.floor(total * 0.05)].balance;
       const percentile10 = sortedData[Math.floor(total * 0.1)].balance;
 
-      // Explicitly setting the type of the hierarchy data to any
       const root = d3
         .hierarchy({ children: sortedData } as any)
         .sum((d: any) => d.balance);

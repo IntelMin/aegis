@@ -20,6 +20,7 @@ const TradesTable = ({ pair, symbol, base }: any) => {
 
   const transformTradeData = (tradeData: any) => {
     return tradeData.map((trade: any) => {
+
       const isBuy = trade.attributes.kind === 'buy';
 
       const dateString = trade.attributes.block_timestamp;
@@ -27,6 +28,7 @@ const TradesTable = ({ pair, symbol, base }: any) => {
       const unixTimestamp = Math.floor(date.getTime() / 1000);
 
       let color = 'text-green-600';
+
       if (!isBuy) {
         color = 'text-red-600';
       }
