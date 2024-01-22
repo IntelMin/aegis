@@ -7,7 +7,6 @@ import { useSession } from 'next-auth/react';
 import useBalance from '@/hooks/useBalance';
 import usePayment from '@/hooks/usePayment';
 import PaymentDialog from '@/components/payment-dialog';
-import { toast } from 'sonner';
 import { showToast } from '@/components/toast';
 
 const CodeAudit = () => {
@@ -26,7 +25,6 @@ const CodeAudit = () => {
   );
   const { handlePayment, loading: paymentloading } = usePayment({
     balance,
-    toast,
     onSuccess: () => {
       afterPayment();
     },
@@ -68,7 +66,7 @@ const CodeAudit = () => {
       setLoading(false);
       const result = await response.json();
       console.log(result);
-      if(result.message === 'No vulnerabilities found.'){
+      if (result.message === 'No vulnerabilities found.') {
         setNoFindings(true);
       }
       setFindings(result.findings);

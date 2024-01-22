@@ -276,16 +276,16 @@ export default function PricingPage() {
       if (!res.ok) {
         setCloseDialog(true);
         setSubmitting(false);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
+        showToast({
+          type: 'error',
+          message: 'Error',
           description: 'An error occurred during credit purchase',
         });
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
-      toast({
-        variant: 'default',
-        title: 'Success',
+      showToast({
+        type: 'success',
+        message: 'Success',
         description: 'Credits added successfully',
       });
       setCloseDialog(true);
@@ -305,9 +305,9 @@ export default function PricingPage() {
       setCloseDialog(true);
 
       console.log('error');
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'An error occurred during credit purchase',
       });
       setLoading(false);

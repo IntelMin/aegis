@@ -1,5 +1,7 @@
 'use client';
 
+import { use, useEffect, useState } from 'react';
+
 import { tableData, tablehead } from '@/components/reports/constant';
 import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
@@ -9,11 +11,11 @@ import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { use, useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import useBalance from '@/hooks/useBalance';
 import PaymentDialog from '@/components/payment-dialog';
 import { add, set } from 'date-fns';
+
 type Props = {};
 type tokenState = {
   tokenIcon: string;
@@ -49,8 +51,6 @@ const RequestReportPage = (props: Props) => {
   const [open, setOpen] = useState(false);
   const { handlePayment, loading } = usePayment({
     balance,
-    toast,
-
     onSuccess: () => {
       requestNewReport(requestAddress);
       setOpen(false);

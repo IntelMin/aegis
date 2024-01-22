@@ -1,24 +1,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
-
 import { creditConfig, CreditType } from '@/lib/credit-config';
-// import { ToasterToast } from '@/components/ui/use-toast';
-import { ExternalToast } from 'sonner';
 import { useSession } from 'next-auth/react';
+import { showToast } from '@/components/toast';
 
 interface usePaymentProps {
   address?: string;
   balance: number | null;
   onSuccess?: () => void;
-  toast: any;
 }
-const usePayment = ({
-  address,
-  balance,
-  onSuccess,
-  toast,
-}: usePaymentProps) => {
+const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
   const router = useRouter();
   const session = useSession();
   const [loading, setLoading] = useState(false);
@@ -33,19 +25,12 @@ const usePayment = ({
 
     const cost = creditConfig[type];
     if (!balance || balance === 0 || balance < cost) {
-      toast('Error', {
-        style: {
-          background: 'red',
-          color: 'white',
-        },
-        description: 'Not enough credits',
+      showToast({
+        type: 'error',
+        message: 'Error',
+        description: 'You do not have enough credits to perform this action',
       });
-      // toast({
-      //   id: 'not-enough-credits',
-      //   variant: 'destructive',
-      //   title: 'Error',
-      //   description: 'Not enough credits',
-      // });
+
       return new Error('Not enough credits');
     }
     setLoading(true);
@@ -59,29 +44,21 @@ const usePayment = ({
     const data = await res.json();
     console.log(data);
     if (!res.ok) {
-      toast({
-        id: 'payment-error',
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Credit payment error',
+      showToast({
+        type: 'error',
+        message: 'Error',
+        description: 'There was an error with your payment',
       });
+
       setLoading(false);
 
       return new Error('Credit payment error');
     }
     if (data?.status === 'success') {
-      // toast({
-      //   id: 'payment-success',
-      //   variant: 'default',
-      //   title: 'Success',
-      //   description: 'Payment success',
-      // });
-      toast('Error', {
-        style: {
-          background: 'green',
-          color: 'white',
-        },
-        description: 'Payment success',
+      showToast({
+        type: 'success',
+        message: 'Success',
+        description: 'Payment successful',
       });
       session.update({
         ...session.data,
@@ -96,19 +73,11 @@ const usePayment = ({
       }
       setLoading(false);
     } else {
-      toast('Error', {
-        style: {
-          background: 'red',
-          color: 'white',
-        },
-        description: 'Credit payment error',
+      showToast({
+        type: 'error',
+        message: 'Error',
+        description: 'There was an error with your payment',
       });
-      // toast({
-      //   id: 'payment-error',
-      //   variant: 'destructive',
-      //   title: 'Error',
-      //   description: 'Credit payment error',
-      // });
 
       return new Error('Credit payment error');
     }

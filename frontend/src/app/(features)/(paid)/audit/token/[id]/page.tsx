@@ -1,17 +1,16 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import useTokenInfo from '@/hooks/useTokenInfo';
 import useBalance from '@/hooks/useBalance';
-import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
-import toast from 'sonner';
 import { showToast } from '@/components/toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import PaymentDialog from '@/components/payment-dialog';
 
 type props = {
   params: {
@@ -52,7 +51,6 @@ const TokenAuditOption = ({ params }: props) => {
   const { handlePayment, loading } = usePayment({
     address: params?.id,
     balance,
-    toast,
     onSuccess: () => {
       if (auditType === 'quick')
         router.push(`/audit/token/${params?.id}/quick`);
@@ -92,7 +90,6 @@ const TokenAuditOption = ({ params }: props) => {
     error,
     submittedAddress,
     router,
-    toast,
   ]);
 
   if (!balance) return <SkeletonLoader />;

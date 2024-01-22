@@ -29,7 +29,6 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
   );
   const { handlePayment, loading } = usePayment({
     balance,
-    toast,
     onSuccess: () => {
       requestReport(tokenState?.tokenAddress);
     },
