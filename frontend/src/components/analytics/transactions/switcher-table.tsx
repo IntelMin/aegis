@@ -25,14 +25,14 @@ const TableSwitcher = ({ tables }: { tables: any[] }) => {
   }, [activeGraphName, tables]);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 max-md:w-screen max-md:overflow-x-scroll">
       <div className="flex items-center gap-4">
         {tables.map(graph => (
           <button
             key={graph.name}
             className={`text-[16px] ${
               activeGraphName === graph.name ? 'bg-blue-600' : 'bg-zinc-900'
-            } px-3 py-2 text-neutral-100 text-[16px] leading-[20px] font-[400] hover:bg-blue-600 transition-all ease-in duration-150`}
+            } px-3 py-2 text-neutral-100 text-[16px] leading-[20px] font-[400] max-md:w-full hover:bg-blue-600 transition-all ease-in duration-150`}
             onClick={() => setActiveGraphName(graph.name)}
           >
             {graph.name}
