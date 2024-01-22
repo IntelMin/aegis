@@ -39,7 +39,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
     let localSocket: Socket | null = null;
 
     if (settings.active) {
-      localSocket = io(websocket_url);
+      localSocket = io(websocket_url || '');
       setSocket(localSocket);
 
       if (localSocket) {
