@@ -46,6 +46,7 @@ const OrderBookGraph: React.FC<{
       .flatMap((book: { bids: any }) => book.bids)
       .sort((a: { p0: number }, b: { p0: number }) => b.p0 - a.p0)
       .reduce((acc: any[][], bid: { p0: any; qty: any }) => {
+
         const lastQty = acc.length > 0 ? acc[acc.length - 1][1] : 0;
         acc.push([bid.p0, bid.qty + lastQty]);
         return acc;

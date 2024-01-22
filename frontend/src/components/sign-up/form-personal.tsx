@@ -106,7 +106,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Confrim Password"
+                    placeholder="Confirm Password"
                     type="password"
                   />
                 </FormControl>
