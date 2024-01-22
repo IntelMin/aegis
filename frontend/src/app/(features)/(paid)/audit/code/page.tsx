@@ -68,6 +68,10 @@ const CodeAudit = () => {
       }
       setLoading(false);
       const result = await response.json();
+      console.log(result);
+      if(result.message === 'No vulnerabilities found.'){
+        setNoFindings(true);
+      }
       setFindings(result.findings);
     } catch (error) {
       console.error('Error during code audit:', error);
@@ -117,6 +121,7 @@ const CodeAudit = () => {
           findings={findings}
           tree={null}
           readonly={false}
+          nofindings={nofindings}
         />
       </div>
     </form>

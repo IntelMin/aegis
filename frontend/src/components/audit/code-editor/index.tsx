@@ -11,6 +11,7 @@ type Props = {
   findings: any | null;
   tree: any | null;
   readonly?: boolean;
+  nofindings?: boolean;
 };
 
 const CodeAuditEditor = (props: Props) => {
@@ -203,7 +204,17 @@ const CodeAuditEditor = (props: Props) => {
                   <p className="text-xs">{finding.reason}</p>
                 </div>
               ))
-            ) : (
+            ) : (props.nofindings? ((
+              <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-800">
+                <Image
+                  src="/icons/findings-empty.svg"
+                  width={120}
+                  height={120}
+                  alt="No findings"
+                />
+                <h1 className="text-sm text-white">No vulnerabilities found</h1>
+              </div>
+              )):(
               <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-800">
                 <Image
                   src="/icons/findings-empty.svg"
@@ -213,7 +224,8 @@ const CodeAuditEditor = (props: Props) => {
                 />
                 <h1 className="text-sm text-white">No findings available</h1>
               </div>
-            )}
+            ))}
+
           </div>
         </div>
       </div>

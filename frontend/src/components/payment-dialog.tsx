@@ -50,6 +50,8 @@ const PaymentDialog = ({
                 ? 'to audit your code'
                 : service == 'detailed'
                 ? 'to perform detailed audit'
+                : service == 'quick'
+                ? 'to get a quick audit'
                 : 'to get a PDF report'}
               . Please add credits to your account.
             </DialogDescription>
