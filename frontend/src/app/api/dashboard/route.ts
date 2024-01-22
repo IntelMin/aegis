@@ -4,23 +4,11 @@ import axios from 'axios';
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const limit = searchParams.get('limit');
-  const resolution = searchParams.get('resolution');
-
-  let interval = 1;
-
-  if (resolution === '1h') {
-    interval = 1;
-  } else if (resolution === '4h') {
-    interval = 4;
-  } else if (resolution === '12hr') {
-    interval = 12;
-  } else if (resolution === '1d') {
-    interval = 24;
-  }
+  const resolution = Number(searchParams.get('resolution')) ?? 60;
 
   try {
     const response = await axios.get(
-      `${process.env.AEGIS_SRV}/dashboard/trending?interval=${interval}`
+      `${process.env.AEGIS_SRV}/dashboard/trending?interval=${resolution / 60}`
     );
 
     return NextResponse.json(response.data);
