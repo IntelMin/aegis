@@ -11,81 +11,83 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatYAxisLabel } from '@/utils/formatYaxisLabel';
 import axios from 'axios';
+import qs from 'qs';
+import { formatNumber } from '@/utils/format-number';
 
-const data = [
-  {
-    name: 'Jan',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Feb',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Mar',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Apr',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'May',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Jun',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: 'Jan',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Feb',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Mar',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Apr',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'May',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Jun',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+// const data = [
+//   {
+//     name: 'Jan',
+//     uv: 4000,
+//     pv: 2400,
+//     amt: 2400,
+//   },
+//   {
+//     name: 'Feb',
+//     uv: 3000,
+//     pv: 1398,
+//     amt: 2210,
+//   },
+//   {
+//     name: 'Mar',
+//     uv: 2000,
+//     pv: 9800,
+//     amt: 2290,
+//   },
+//   {
+//     name: 'Apr',
+//     uv: 2780,
+//     pv: 3908,
+//     amt: 2000,
+//   },
+//   {
+//     name: 'May',
+//     uv: 2390,
+//     pv: 3800,
+//     amt: 2500,
+//   },
+//   {
+//     name: 'Jun',
+//     uv: 3490,
+//     pv: 4300,
+//     amt: 2100,
+//   },
+//   {
+//     name: 'Jan',
+//     uv: 4000,
+//     pv: 2400,
+//     amt: 2400,
+//   },
+//   {
+//     name: 'Feb',
+//     uv: 3000,
+//     pv: 1398,
+//     amt: 2210,
+//   },
+//   {
+//     name: 'Mar',
+//     uv: 2000,
+//     pv: 9800,
+//     amt: 2290,
+//   },
+//   {
+//     name: 'Apr',
+//     uv: 2780,
+//     pv: 3908,
+//     amt: 2000,
+//   },
+//   {
+//     name: 'May',
+//     uv: 2390,
+//     pv: 3800,
+//     amt: 2500,
+//   },
+//   {
+//     name: 'Jun',
+//     uv: 3490,
+//     pv: 4300,
+//     amt: 2100,
+//   },
+// ];
 
 interface RoundedBarProps {
   x?: number;
@@ -115,7 +117,10 @@ const RoundedBar: React.FC<RoundedBarProps> = ({
   return <path d={path} fill={fill} />;
 };
 
-const TransferVolumeGraph: React.FC<RoundedBarProps> = () => {
+const TransferVolumeGraph: React.FC<{
+  address: string;
+  resolution: string;
+}> = ({ address, resolution }) => {
   const labelStyle = {
     color: '#A3A3A3',
     textAlign: 'center',
@@ -127,47 +132,51 @@ const TransferVolumeGraph: React.FC<RoundedBarProps> = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const config = {
-      exchangeAddress: '0xcA143Ce32Fe78f17019d7d551a6402fC5350c73',
-      baseCurrency: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-      quoteCurrency: '0xB09FE1613fe03E7361319d2a3eDeC17a22f36809',
-    };
+    setLoading(true);
+
     const loadData = async () => {
-      const response = await axios.post(`/monitoring/volume`, config);
-      console.log('response', response);
+      const queryString = qs.stringify({
+        type: 'volume',
+        address,
+        resolution,
+      });
+      const response = await axios.get(`/api/analytics?${queryString}`);
+      //   console.log('response', response);
+      const truncatedData = response.data.slice(0, 20);
+      setData(truncatedData);
       setLoading(false);
     };
 
     loadData();
-  }, []);
+  }, [address, resolution]);
 
   if (isLoading) {
-    return <Skeleton className="w-full h-full" />;
+    return <Skeleton className="w-[100%] h-[320px] aspect-square" />;
   }
 
   return (
-    <div className="w-full h-[320px]">
+    <div className="w-full h-[300px]">
       <ResponsiveContainer width="110%" height="100%">
         <BarChart width={150} height={40} data={data}>
-          <XAxis
+          {/* <XAxis
             axisLine={{ stroke: '#333', strokeWidth: 1 }}
             tickLine={{ display: 'none' }}
             dataKey="name"
             tick={{ ...labelStyle }}
-          />
+          /> */}
 
           <YAxis
             axisLine={{ display: 'none' }}
             tickLine={{ display: 'none' }}
             // Replace 'formatYAxisLabel' with your actual function
-            tickFormatter={value => formatYAxisLabel(value)}
+            tickFormatter={value => formatNumber(parseInt(value) / 1e9)}
             tick={{ ...labelStyle }}
             orientation="right"
           />
           <CartesianGrid stroke="#171717" vertical={false} />
           <CartesianGrid stroke="#171717" vertical={false} />
           <Bar
-            dataKey="uv"
+            dataKey="value"
             fill="#0284C7"
             barSize={10}
             shape={<RoundedBar />}

@@ -14,7 +14,9 @@ import GraphOrderBook from '@/components/analytics/graphs/order-book';
 import GraphWallets from '@/components/analytics/graphs/wallets';
 import HorizontalSwitcher from '@/components/analytics/graphs/switcher-horizontal';
 import DropdownSwitcher from '@/components/analytics/graphs/switcher-dropdown';
-import TokenDetailTable from '@/components/analytics/transactions/token-table';
+import TableSwitcher from '@/components/analytics/transactions/switcher-table';
+import TableTrades from '@/components/analytics/transactions/trades';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
   params: {
@@ -34,6 +36,7 @@ const Analytics = ({ params }: Props) => {
 
   const liveData = useLiveData(contractAddress);
   const [showSection, setShowSection] = useState('info');
+  const [isTVChartReady, setIsTVChartReady] = useState(false);
 
   const sectionsArr = [
     {
@@ -67,13 +70,23 @@ const Analytics = ({ params }: Props) => {
         </div>
         <div className="col-span-3 flex flex-col gap-4">
           {/* Trading View chart */}
-          {liveData?.pairAddress && (
+          {!isTVChartReady && <Skeleton className="w-full h-[400px]" />}
+          <div
+            style={{
+              display: isTVChartReady ? 'block' : 'none',
+              visibility: isTVChartReady ? 'visible' : 'hidden',
+            }}
+          >
             <TVChart
-              symbol={`${liveData.baseToken.symbol} / ${liveData.quoteToken.symbol}`}
-              pairAddress={liveData.pairAddress}
+              symbol={`${liveData?.baseToken.symbol} / ${liveData?.quoteToken.symbol}`}
+              pairAddress={liveData?.pairAddress}
               initialPrice="500"
+              onChartReady={() => {
+                setIsTVChartReady(true);
+              }}
             />
-          )}
+          </div>
+
           <div className="grid grid-cols-3 gap-4">
             {/* Trades or Holders */}
             <div className="col-span-1 aspect-square">
@@ -82,7 +95,7 @@ const Analytics = ({ params }: Props) => {
                   {
                     name: 'Volume',
                     component: GraphVolume,
-                    props: { data: 0 },
+                    props: { address: contractAddress },
                   },
                   {
                     name: 'Holders',
@@ -90,7 +103,7 @@ const Analytics = ({ params }: Props) => {
                     props: { data: 0 },
                   },
                 ]}
-                defaultResolution={'1W'}
+                defaultResolution={'1h'}
               />
             </div>
             <div className="col-span-2">
@@ -98,14 +111,23 @@ const Analytics = ({ params }: Props) => {
               <DropdownSwitcher
                 graphs={[
                   {
-                    name: 'Volume',
+                    name: 'Top Holders',
                     component: GraphWallets,
-                    props: { data: 0 },
+                    props: {
+                      address: contractAddress,
+                      symbol: (tokenInfo as any)?.symbol,
+                      limit: 100,
+                    },
                   },
                   {
                     name: 'Order Book',
                     component: GraphOrderBook,
-                    props: { data: 0 },
+                    props: {
+                      pair: liveData?.pairAddress,
+                      exchange: liveData?.dexId,
+                      labels: liveData?.labels,
+                      priceUsd: liveData?.priceUsd,
+                    },
                   },
                 ]}
                 defaultResolution={'1W'}
@@ -113,8 +135,20 @@ const Analytics = ({ params }: Props) => {
             </div>
           </div>
           {/* Transactions */}
-          <div className="flex-grow">
-            <TokenDetailTable />
+          <div className="flex-grow mb-10">
+            <TableSwitcher
+              tables={[
+                {
+                  name: 'Trades',
+                  component: TableTrades,
+                  props: {
+                    pair: liveData?.pairAddress,
+                    symbol: liveData?.baseToken.symbol,
+                    base: liveData?.quoteToken.symbol,
+                  },
+                },
+              ]}
+            />
           </div>
         </div>
       </div>

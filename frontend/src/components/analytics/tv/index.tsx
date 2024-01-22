@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import { ChartProps } from './TVChart';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // @ts-ignore
 const TVChartContainer = dynamic<TVChart>(

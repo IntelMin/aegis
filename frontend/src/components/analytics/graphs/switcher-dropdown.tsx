@@ -39,9 +39,9 @@ const DropdownSwitcher = ({
   };
 
   return (
-    <div className="flex flex-col gap-6 p-3 border border-zinc-900 bg-[#0C0C0C]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="flex flex-col p-3 border border-zinc-900 bg-[#0C0C0C] h-[386px]">
+      <div className="flex items-center justify-between relative">
+        <div className="flex items-center gap-4 absolute translate-y-5">
           <Select onValueChange={value => setActiveGraphName(value)}>
             <SelectTrigger className="bg-zinc-900 rounded-[4px] outline-none p-2 py-1 text-white">
               {activeGraphName}
@@ -61,7 +61,7 @@ const DropdownSwitcher = ({
             </SelectContent>
           </Select>
         </div>
-        <div className="relative z-20">
+        {/* <div className="relative z-20">
           <Select onValueChange={handleResolutionChange}>
             <SelectTrigger className="w-[60px] bg-zinc-900 rounded-[4px] outline-none p-2 py-1 text-white">
               <div className="flex items-center justify-between text-sm">
@@ -83,7 +83,7 @@ const DropdownSwitcher = ({
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
       </div>
       {ActiveGraphComponent}
     </div>
