@@ -1,4 +1,9 @@
-const { fetchAndCacheData, writeCache, readCache } = require('../lib/utils');
+const {
+  fetchAndCacheData,
+  writeCache,
+  readCache,
+  fetchAndCacheDataPersist,
+} = require('../lib/utils');
 const path = require('path');
 const axios = require('axios');
 
@@ -74,6 +79,42 @@ async function getMetadata(address) {
   }
 }
 
+async function getScan(address) {
+  const filename = path.join(
+    __dirname,
+    `../cache/contracts/${address}/scan.json`
+  );
+
+  let filedata = await readCache(filename);
+
+  if (filedata) {
+    return filedata;
+  } else {
+    try {
+      const response = await axios.post(
+        'https://www.coinscope.co/api/search/cyberscan',
+        {
+          address: address,
+          network: 'ETH',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = response.data;
+
+      await writeCache(filename, data);
+      return data;
+    } catch (error) {
+      console.error('Error making the request', error);
+      return null;
+    }
+  }
+}
+
 async function getInfo(address) {
   try {
     await Promise.all([
@@ -92,12 +133,14 @@ async function getInfo(address) {
         `https://api.gopluslabs.io/api/v1/rugpull_detecting/1?contract_addresses=${address}`,
         address
       ),
-      fetchAndCacheData(
+
+      fetchAndCacheDataPersist(
         'source',
-        `https://eth.blockscout.com/api/v2/smart-contracts/${address}`,
+        `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${process.env.ETHERSCAN_API_KEY}}`,
         address
       ),
       getMetadata(address),
+      getScan(address),
     ]);
   } catch (error) {
     console.error('Error in getInfo:', error);

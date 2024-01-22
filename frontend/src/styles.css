@@ -1,0 +1,7 @@
+.margin-view-overlays {
+  background: #1d2939 !important;
+}
+
+.monitor ::-webkit-scrollbar {
+  display: none;
+}

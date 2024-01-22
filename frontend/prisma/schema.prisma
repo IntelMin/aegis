@@ -107,6 +107,7 @@ model report_requests {
     address    String
     name       String?
     status     String
+    image_url  String?
     created_at DateTime @default(now())
     updated_on DateTime @default(now())
 

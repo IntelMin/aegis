@@ -29,14 +29,36 @@ interface BountyTableProps {
     pages: number;
     total: number;
   };
+  setLimit: any;
+  setOffset: any;
+  limit: any;
+  offset: any;
 }
 
-const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
+const BountyTable: FC<BountyTableProps> = ({
+  loading,
+  options,
+  results,
+  setLimit,
+  setOffset,
+  limit,
+  offset,
+}) => {
   const current_page = results?.offset + 1;
   const last_page = results?.pages;
 
-  const handlePageClick = (page: number) => {
-    console.log('Page:', page);
+  const handleNextClick = (page: number) => {
+    const newOffset = offset + 1;
+    setOffset(newOffset);
+  };
+  const handlePreviousClick = (page: number) => {
+    const newOffset = offset - 1;
+    setOffset(newOffset);
+  };
+
+  const handleClick = (page: number) => {
+    const newOffset = offset;
+    setOffset(newOffset);
   };
 
   if (loading) {
@@ -47,7 +69,7 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
     );
   }
   return (
-    <div className="pt-6 pl-2">
+    <div className="pt-6 md:pl-2 max-md:w-full overflow-x-auto">
       {/* {options.length && options?.searchTerm.length > 0 && (
         <div className="flex items-center justify-between pb-3 border-b border-zinc-900">
           <h3 className="text-neutral-200 text-[20px] font-[600]">
@@ -59,8 +81,8 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
           </div>
         </div>
       )} */}
-      <Table className="border border-zinc-800 w-full">
-        <TableHeader className="grid grid-cols-6 bg-zinc-800">
+      <Table className="border border-zinc-800 w-full overflow-auto max-md:mb-4">
+        <TableHeader className=" bg-zinc-800">
           <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
             Project
           </TableHead>
@@ -82,11 +104,8 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
         </TableHeader>
         <TableBody>
           {results.bounties.map((bounty: any) => (
-            <TableRow
-              key={bounty.id}
-              className="grid grid-cols-6 items-center border-b-1"
-            >
-              <TableCell className="text-neutral-100 text-center flex items-center justify-right">
+            <TableRow key={bounty.id} className="items-center border-b-1">
+              <TableCell className="text-neutral-100 text-center flex items-center justify-right max-md:min-w-[200px]">
                 <img
                   src={bounty.logo}
                   alt={bounty.name}
@@ -124,26 +143,31 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
           ))}
         </TableBody>
       </Table>
-      <Pagination>
+      <Pagination className="mt-4">
         <PaginationContent>
           {current_page > 1 && (
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                className="cursor-pointer"
+                onClick={() => handlePreviousClick(current_page - 1)}
+              />
             </PaginationItem>
           )}
 
           {Array.from({ length: last_page }).map((_, index) => {
             const page = index + 1;
+            const isActive = page === current_page;
             if (
               page === current_page ||
               page === current_page - 1 ||
               page === current_page + 1
             ) {
               return (
-                <PaginationItem key={page}>
+                <PaginationItem key={index}>
                   <PaginationLink
-                    href="#"
-                    onClick={() => handlePageClick(page)}
+                    className={`cursor-pointer ${
+                      isActive ? 'bg-zinc-800' : ''
+                    }`}
                   >
                     {page}
                   </PaginationLink>
@@ -153,17 +177,16 @@ const BountyTable: FC<BountyTableProps> = ({ loading, options, results }) => {
             return null;
           })}
 
-          {/* <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem> */}
-
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
 
           {current_page < last_page && (
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                className="cursor-pointer"
+                onClick={() => handleNextClick(current_page + 1)}
+              />
             </PaginationItem>
           )}
         </PaginationContent>

@@ -11,6 +11,9 @@ import GridLoader from 'react-spinners/GridLoader';
 // import AttacksTable from '@/components/attacks/table';
 import Banner from '@/components/attacks/banner';
 import CountUp from 'react-countup';
+import { Button } from '@/components/ui/button';
+import { FaFilter } from 'react-icons/fa6';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const AttacksTable = dynamic(() => import('@/components/attacks/table'), {
   loading: () => <GridLoader color="white" />,
@@ -24,8 +27,9 @@ interface AttacksProps {}
 
 const Attacks: FC<AttacksProps> = ({}) => {
   const toast = useToast();
-  const [fromDate, setFromDate] = useState<Date>();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
   const [filterResults, setFilterResults] = useState<{
     attacks: any[];
     total: number;
@@ -50,15 +54,11 @@ const Attacks: FC<AttacksProps> = ({}) => {
   const fetchData = async (filterOptions: any[]) => {
     setIsLoading(true);
 
-    console.log('--------');
-    console.log(filterOptions);
+    const queryString = qs.stringify(
+      { ...filterOptions, limit, offset },
+      { arrayFormat: 'comma', skipNulls: true }
+    );
 
-    const queryString = qs.stringify(filterOptions, {
-      arrayFormat: 'comma',
-      skipNulls: true,
-    });
-
-    console.log(queryString);
     try {
       const response = await axios.get(`api/attacks/filter?${queryString}`);
       setFilterResults(response.data);
@@ -81,12 +81,11 @@ const Attacks: FC<AttacksProps> = ({}) => {
 
   useEffect(() => {
     fetchData(filterOptions);
-  }, [filterOptions]);
+  }, [filterOptions, offset, limit]);
 
   return (
     <div>
       <Banner />
-
       <div className="flex justify-center items-center w-full">
         <div className="mt-10 justify-center items-center w-full">
           <div className="p-4 text-center mix-blend-difference">
@@ -120,23 +119,47 @@ const Attacks: FC<AttacksProps> = ({}) => {
       </div>
 
       <div className="p-8 w-full max-w-[900px] m-auto">
-        <div className="flex gap-2">
+        <div className="flex max-md:flex-col gap-2">
           {isInitialLoad ? (
             <div className="flex justify-center items-center w-full">
               <PulseLoader color="white" />
             </div>
           ) : (
             <>
-              <AttacksFilter
-                onApplyFilters={handleApplyFilters}
-                stats={attackStats}
-              />
+              <div>
+                <div className="w-full md:hidden flex justify-end">
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button className="text-sm bg-white flex items-center gap-2">
+                        <FaFilter />
+                        Filters
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[90%]">
+                      <AttacksFilter
+                        onApplyFilters={handleApplyFilters}
+                        stats={attackStats}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <div className="max-md:hidden">
+                  <AttacksFilter
+                    onApplyFilters={handleApplyFilters}
+                    stats={attackStats}
+                  />
+                </div>
+              </div>
 
-              <main className="flex flex-1 flex-col gap-4 pt-4 pl-4 md:gap-8 md:pt-6">
+              <main className="flex flex-1 flex-col gap-4 pt-4 md:pl-4 md:gap-8 md:pt-6">
                 <AttacksTable
                   loading={isLoading}
                   options={filterOptions}
                   results={filterResults}
+                  setLimit={setLimit}
+                  setOffset={setOffset}
+                  limit={limit}
+                  offset={offset}
                 />
               </main>
             </>

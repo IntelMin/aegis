@@ -1,5 +1,5 @@
 import React from 'react';
-import PieGraph from '@/components/analytics/security-pie-chart';
+import PieGraph from '@/components/analytics/overview/security-pie-chart';
 
 type Props = {
   demoSecurityScore: {
@@ -18,12 +18,12 @@ const SecurityScore = ({ demoSecurityScore }: Props) => {
         </h3>
         <div className="flex items-center gap-1">
           <p className="text-neutral-200 text-[16px]">Last Audit:</p>
-          <span className="text-green-400 text-[16px]">8th Oct, 2023</span>
+          <span className="text-green-400 text-[16px]">8th Jan, 2024</span>
         </div>
       </div>
       {/* Chart & Other Detail */}
       <div className="flex max-md:flex-col items-center justify-between w-full pb-3 border-b border-zinc-900">
-        {/* <PieGraph value={30} height={280} /> */}
+        <PieGraph value={97} height={280} />
         <div className="flex flex-col w-full md:w-1/2 gap-4">
           {demoSecurityScore?.map(item => (
             <div className="flex items-center justify-between" key={item?.key}>

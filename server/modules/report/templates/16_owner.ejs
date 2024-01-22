@@ -4,47 +4,53 @@
     <h5 class="title-button" style="font-size: 24px">Ownership</h5>
   </ptitle>
 
-  <% if (security.owner_address=="0x0000000000000000000000000000000000000000" ) { security.owner_address="" ; } %>
+  <%
+    if (security.owner_address == "0x0000000000000000000000000000000000000000") {
+      security.owner_address = "";
+    }
+%>
 
-    <div>
-      <table class="security-table <%= security.owner_address=='' ? 'success' : 'error' %>">
-        <tr>
-          <td>Is ownership renounced?</td>
-          <td>
-            <%= security.owner_address=="" ? "✅ Contract does not have an owner" : "❌ Contract has an owner" %>
-          </td>
-        </tr>
-        <tr>
-          <td>Description</td>
-          <td>
-            <% if(security.owner_address=="" ) { %>
-              The owner has renounced the ownership that means that the owner has
-              no control over the contract’s operations, including the ability to
-              execute functions that may impact the contract’s users or stakeholders.
-              <% } else { %>
-                The owner has not renounced the ownership that means that the owner
-                retains control over the contract’s operations, including the ability
-                to execute functions that may impact the contract’s users or stakeholders.
-                This can lead to potential issues.
-                <% } %>
-          </td>
-        </tr>
-        <% if(security.owner_address !="" ) { %>
-          <tr>
-            <td>Comments</td>
-            <td>
-              <strong>Centralization</strong><br />
-              The owner has significant control over contract’s operations.
-            </td>
-          </tr>
-          <% } %>
-      </table>
+  <div>
+    <table
+      class="security-table <%=( security.owner_address==='' || security.owner_address==="0x0000000000000000000000000000000000000000" ) ? 'success' : 'error' %>"
+    >
+      <tr>
+        <td>Is ownership renounced?</td>
+        <td>
+          <%= (security.owner_address==="" || security.owner_address==="0x0000000000000000000000000000000000000000" ) ? "✅ Contract does not have an owner": "❌ Contract has an owner" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>
+        <% if(security.owner_address==="" || security.owner_address==="0x0000000000000000000000000000000000000000") { %> 
+            The owner has renounced the ownership that means that the owner has 
+            no control over the contract’s operations, including the ability to 
+            execute functions that may impact the contract’s users or stakeholders. 
+        <% } else { %> 
+            The owner has not renounced the ownership that means that the owner 
+            retains control over the contract’s operations, including the ability 
+            to execute functions that may impact the contract’s users or stakeholders. 
+            This can lead to potential issues. 
+        <% } %>
+        </td>
+      </tr>
+      <% if(security.owner_address != "" ) { %>
+      <tr>
+        <td>Comments</td>
+        <td>
+          <strong>Centralization</strong><br />
+          The owner has significant control over contract’s operations.
+        </td>
+      </tr>
+      <% } %>
+    </table>
 
-      <h3>Note</h3>
-      <p>
-        If the contract is not deployed then we would consider the ownership to be
-        not renounced. Moreover, if there are no ownership functionalities,
-        ownership is automatically considered renounced.
-      </p>
-    </div>
+    <h3>Note</h3>
+    <p>
+      If the contract is not deployed then we would consider the ownership to be
+      not renounced. Moreover, if there are no ownership functionalities,
+      ownership is automatically considered renounced.
+    </p>
+  </div>
 </div>

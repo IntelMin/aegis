@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"node-curl-impersonate": "^1.4.2"
+	}
+}

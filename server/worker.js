@@ -35,8 +35,9 @@ async function worker() {
           .join(__dirname, `./cache/contracts/${address}/source.json`)
           .toString();
         source_code = await readCache(source_file);
-        source_code = source_code['data']['source_code'];
+        console.log('-- source.json', source_code);
 
+        source_code = source_code['data']['source_code'];
         // generate tree.json
         const tree = await getTree(address, source_code);
         if (!tree) {

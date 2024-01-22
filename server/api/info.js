@@ -56,11 +56,21 @@ router.get('/:type/:address', async (req, res) => {
     let filedata = await readCache(filename);
 
     let token_info;
-    if (info_type === 'meta') {
-      token_info = filedata.data.tokens;
-      token_info = token_info[Object.keys(token_info)[0]];
-    } else {
-      token_info = filedata;
+    switch (info_type) {
+      case 'meta':
+        token_info = filedata.data.tokens;
+        token_info = token_info[Object.keys(token_info)[0]];
+        break;
+      case 'security':
+        token_info = filedata.data.result;
+        token_info = token_info[Object.keys(token_info)[0]];
+        break;
+      case 'scan':
+        token_info = filedata.auditLayout;
+        break;
+      default:
+        token_info = filedata;
+        break;
     }
 
     res.status(200).send(token_info);

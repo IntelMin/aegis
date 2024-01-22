@@ -12,10 +12,10 @@ const AuditHistory = (props: Props) => {
           Audit History
         </h3>
         <div className="flex items-center gap-2 max-md:py-4 max-md:pb-4 max-md:border-b max-md:border-zinc-900">
-          <p className="text-neutral-200 font-[16px]">500+</p>
+          {/* <p className="text-neutral-200 font-[16px]">500+</p>
           <p className="text-neutral-200 font-[16px]">
             +3.5% from the last week
-          </p>
+          </p> */}
         </div>
       </div>
       {/* Audit history Chart and detail */}

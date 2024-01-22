@@ -15,11 +15,13 @@ const SidebarOpenbtn = ({ open, setOpen }: Props) => {
           else setOpen(1);
         }}
       >
-        {open === 2 ? (
-          <Image alt="logo" src="/icons/close.svg" width={32} height={32} />
-        ) : (
-          <Image alt="logo" src="/icons/open.svg" width={32} height={32} />
-        )}
+        <Image
+          alt="logo"
+          src={open === 2 ? '/icons/close.svg' : '/icons/open.svg'}
+          width={32}
+          height={32}
+          className="brightness-50 hover:brightness-[20]"
+        />
       </button>
     </div>
   );

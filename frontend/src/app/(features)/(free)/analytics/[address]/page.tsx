@@ -1,12 +1,22 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import useLiveData from '@/hooks/useLiveData';
 
 import TokenHeader from '@/components/analytics/header';
-import TokenOverview from '@/components/analytics/token-overview';
+import TokenOverview from '@/components/analytics/overview';
+
+import TVChart from '@/components/analytics/tv';
+import GraphVolume from '@/components/analytics/graphs/volume';
+import GraphHolders from '@/components/analytics/graphs/holders';
+import GraphOrderBook from '@/components/analytics/graphs/order-book';
+import GraphWallets from '@/components/analytics/graphs/wallets';
+import HorizontalSwitcher from '@/components/analytics/graphs/switcher-horizontal';
+import DropdownSwitcher from '@/components/analytics/graphs/switcher-dropdown';
+import TableSwitcher from '@/components/analytics/transactions/switcher-table';
+import TableTrades from '@/components/analytics/transactions/trades';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
   params: {
@@ -23,22 +33,124 @@ const Analytics = ({ params }: Props) => {
     'meta',
     true
   );
+
   const liveData = useLiveData(contractAddress);
+  const [showSection, setShowSection] = useState('info');
+  const [isTVChartReady, setIsTVChartReady] = useState(false);
+
+  const sectionsArr = [
+    {
+      name: 'Token info',
+      val: 'info',
+    },
+    {
+      name: 'Chart+Txns',
+      val: 'chart',
+    },
+    {
+      name: 'Volume+Wallets',
+      val: 'volume',
+    },
+  ];
 
   return (
-    <div className="flex flex-col px-4 md:px-10 mt-4 gap-6">
+    <div className="flex flex-col px-4 md:px-10 mt-8 gap-6">
       <TokenHeader showTitle={true} liveData={liveData} metadata={tokenInfo} />
 
-      <div className="grid grid-cols-4 gap-6 pb-3">
-        <div>
-          {/* Token Detailed Info */}
-          <TokenOverview
-            tokenMetaData={tokenInfo}
-            tokenDetails={tokenDetails}
-            liveData={liveData}
-          />
+      <div className="grid grid-cols-4 gap-4">
+        <div className="col-span-1 flex flex-col gap-4">
+          {/* Token details */}
+          <div className="row-span-3">
+            <TokenOverview
+              tokenMetaData={tokenInfo}
+              tokenDetails={tokenDetails}
+              liveData={liveData}
+            />
+          </div>
         </div>
-        <div className="col-span-4 md:col-span-3"></div>
+        <div className="col-span-3 flex flex-col gap-4">
+          {/* Trading View chart */}
+          {!isTVChartReady && <Skeleton className="w-full h-[400px]" />}
+          <div
+            style={{
+              display: isTVChartReady ? 'block' : 'none',
+              visibility: isTVChartReady ? 'visible' : 'hidden',
+            }}
+          >
+            <TVChart
+              symbol={`${liveData?.baseToken.symbol} / ${liveData?.quoteToken.symbol}`}
+              pairAddress={liveData?.pairAddress}
+              initialPrice="500"
+              onChartReady={() => {
+                setIsTVChartReady(true);
+              }}
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            {/* Trades or Holders */}
+            <div className="col-span-1 aspect-square">
+              <HorizontalSwitcher
+                graphs={[
+                  {
+                    name: 'Volume',
+                    component: GraphVolume,
+                    props: { address: contractAddress },
+                  },
+                  {
+                    name: 'Holders',
+                    component: GraphHolders,
+                    props: { data: 0 },
+                  },
+                ]}
+                defaultResolution={'1h'}
+              />
+            </div>
+            <div className="col-span-2">
+              {/* Holder Bubble Chart */}
+              <DropdownSwitcher
+                graphs={[
+                  {
+                    name: 'Top Holders',
+                    component: GraphWallets,
+                    props: {
+                      address: contractAddress,
+                      symbol: (tokenInfo as any)?.symbol,
+                      limit: 100,
+                    },
+                  },
+                  {
+                    name: 'Order Book',
+                    component: GraphOrderBook,
+                    props: {
+                      pair: liveData?.pairAddress,
+                      exchange: liveData?.dexId,
+                      labels: liveData?.labels,
+                      priceUsd: liveData?.priceUsd,
+                    },
+                  },
+                ]}
+                defaultResolution={'1W'}
+              />
+            </div>
+          </div>
+          {/* Transactions */}
+          <div className="flex-grow mb-10">
+            <TableSwitcher
+              tables={[
+                {
+                  name: 'Trades',
+                  component: TableTrades,
+                  props: {
+                    pair: liveData?.pairAddress,
+                    symbol: liveData?.baseToken.symbol,
+                    base: liveData?.quoteToken.symbol,
+                  },
+                },
+              ]}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

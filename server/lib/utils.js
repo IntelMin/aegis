@@ -69,7 +69,7 @@ const writeCache = async (filename, data) => {
 async function apiRequest(url, params) {
   try {
     const response = await axios.get(url, { params });
-    // console.log("Response data: ", response.data);
+    // console.log('Response data: ', response.data);
     return response.data;
   } catch (error) {
     console.error('Error making the request', error);
@@ -77,10 +77,7 @@ async function apiRequest(url, params) {
   }
 }
 async function fetchAndCacheData(type, endpoint, address) {
-  const filename = path.join(
-    __dirname,
-    `/cache/contracts/${address}/${type}.json`
-  );
+  const filename = `./cache/contracts/${address}/${type}.json`;
   const currentTime = new Date().getTime();
   let filedata = await readCache(filename);
   const expiry = 3600000;
@@ -94,7 +91,62 @@ async function fetchAndCacheData(type, endpoint, address) {
     }; // Customize this based on the endpoint
     const response_data = await apiRequest(endpoint, request_data);
 
-    console.log(`Fetched ${type} from API: `, response_data);
+    console.log(`Fetched ${type} from API:`);
+
+    // don't cache if there is no data
+    if (!response_data) {
+      return null;
+    }
+
+    const data = {
+      time: currentTime,
+      data: response_data,
+    };
+
+    await writeCache(filename, data);
+    return response_data;
+  }
+}
+async function fetchAndCacheDataPersist(type, endpoint, address) {
+  const filename = `./cache/contracts/${address}/${type}.json`;
+  const currentTime = new Date().getTime();
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  let filedata = await readCache(filename);
+  const expiry = 3600000;
+  if (filedata && currentTime - filedata.time <= expiry) {
+    console.log(`Fetching ${type} from cache.`);
+    return filedata.data;
+  } else {
+    console.log(`Making request to ${type}.`);
+    const request_data = {
+      /* ... */
+    }; // Customize this based on the endpoint
+    for (let i = 0; i < 3; i++) {
+      const response_data = await apiRequest(endpoint, request_data);
+      if (response_data) {
+        if (response_data.status == '1') {
+          console.log(`Fetched ${type} from API:`);
+          const cleanedData = {
+            source_code: response_data.result[0]['SourceCode'],
+            abi: JSON.parse(response_data.result[0]['ABI']),
+          };
+          const data = {
+            time: currentTime,
+            data: cleanedData,
+          };
+
+          await writeCache(filename, data);
+          return data; // return the data if status is '1'
+        } else if (response_data.status == '0') {
+          console.log('Status is 0, retrying in 3 seconds...');
+          await delay(3000); // wait for 3 seconds before the next iteration
+        }
+      }
+    }
+    const response_data = await apiRequest(endpoint, request_data);
+
+    console.log(`Fetched ${type} from API:`);
 
     // don't cache if there is no data
     if (!response_data) {
@@ -322,4 +374,5 @@ module.exports = {
   definedRequest,
   chainbaseRequest,
   bitqueryRequest,
+  fetchAndCacheDataPersist,
 };

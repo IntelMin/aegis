@@ -32,7 +32,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
   useEffect(() => {
     // prettier-ignore
     const initialData = (
-      <TerminalOutput key={1}>
+      <TerminalOutput key={'intro'}>
       <pre>
       {`
           _    _____ ____ ___ ____      / \__
@@ -86,12 +86,16 @@ const Monitor = React.forwardRef(function MonitorComponent(
   };
 
   const updateLog = (data: any) => {
+    console.log(data);
     // console.log('Updating data: ', data);
-    data.forEach((d: any) => {
+    // generate random string for key
+    // const key = Math.random().toString(36).substring(7);
+    data.forEach((d: any, index: number) => {
       console.log('Updating data: ', d);
+      const key = Math.random().toString(36).substring(7);
       if (d.type === 'tx') {
         setLineData([
-          <TerminalOutput key={1}>
+          <TerminalOutput key={key}>
             <pre>
               {d.data.hash}
               {'\n'}
@@ -108,7 +112,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
         ]);
       } else {
         setLineData([
-          <TerminalOutput key={1}>
+          <TerminalOutput key={key}>
             <pre>{d}</pre>
           </TerminalOutput>,
         ]);
@@ -131,7 +135,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
     // let ld = [...lineData];
 
     const commandInput = [
-      <TerminalOutput key={1}>
+      <TerminalOutput key={command}>
         <pre className="text-zinc-300">~/aegis-wg $ {command}</pre>
       </TerminalOutput>,
     ];
@@ -148,14 +152,14 @@ const Monitor = React.forwardRef(function MonitorComponent(
 
           setLineData([
             ...commandInput,
-            <TerminalOutput key={1}>
+            <TerminalOutput key={12}>
               <pre>Starting watchdog...</pre>
             </TerminalOutput>,
           ]);
         } else {
           setLineData([
             ...commandInput,
-            <TerminalOutput key={1}>
+            <TerminalOutput key={13}>
               <pre className="text-[#ff5151]">
                 Error: Watchdog already running.
               </pre>
@@ -217,9 +221,9 @@ const Monitor = React.forwardRef(function MonitorComponent(
           honeypot: !settings.honeypot,
         }));
         setLineData([
-          <TerminalInput key={1}>
+          <TerminalOutput key={1}>
             {'Honeypot monitoring turned ' + (settings.honeypot ? 'off' : 'on')}
-          </TerminalInput>,
+          </TerminalOutput>,
         ]);
         break;
       case 'clear':

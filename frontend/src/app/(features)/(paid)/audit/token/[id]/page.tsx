@@ -6,6 +6,11 @@ import React, { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import useBalance from '@/hooks/useBalance';
+import PaymentDialog from '@/components/payment-dialog';
+import usePayment from '@/hooks/usePayment';
 
 type props = {
   params: {
@@ -35,17 +40,41 @@ const SkeletonLoader = () => (
 );
 
 const TokenAuditOption = ({ params }: props) => {
+  const session = useSession();
+  // const [balance, setBalance] = React.useState<number>(0);
+
   const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
-  const { isFetching, tokenInfo, error } = useTokenInfo(
-    params.id,
+
+  const { balance, setBalance } = useBalance(
+    session.data?.user?.email as string
+  );
+  const router = useRouter();
+  const handlePayment = usePayment({
+    session,
+    address: params?.id,
+    balance,
+    toast,
+    onSuccess: () => {
+      router.push(`/audit/token/${params?.id}/detailed`);
+    },
+  });
+  const [submitting, setSubmitting] = React.useState<boolean>(false);
+  const [submittedAddress, setSubmittedAddress] = React.useState<string>('');
+
+  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
+    submitting ? submittedAddress : '',
     'meta',
-    true
+    false
   );
 
   useEffect(() => {
-    if (!isFetching && tokenInfo && !error) {
-      setMetadata(tokenInfo);
+    if (!submitting) return;
+
+    if (!isFetching && tokenRequestInfo && !error) {
+      setSubmitting(false);
+
+      router.push(`/audit/token/${submittedAddress}`);
     }
 
     if (error) {
@@ -54,13 +83,22 @@ const TokenAuditOption = ({ params }: props) => {
         title: 'Error',
         description: 'There was an error fetching token information',
       });
+      setSubmitting(false);
     }
-  }, [isFetching, tokenInfo, error]);
+  }, [
+    submitting,
+    isFetching,
+    tokenRequestInfo,
+    error,
+    submittedAddress,
+    router,
+    toast,
+  ]);
 
+  if (!balance) return <SkeletonLoader />;
   if (error) {
     return <div>Error loading token information</div>;
   }
-
   return (
     <div
       className={`bg-[url(/backgrounds/audit-token-option.png)]  max-md:min-h-screen md:h-[calc(100vh-80px)] bg-cover max-md:pt-[80px] max-md:px-4 pt-[30px] w-full flex flex-col gap-8 md:gap-[72px] items-center justify-center`}
@@ -117,15 +155,21 @@ const TokenAuditOption = ({ params }: props) => {
             <div className="flex items-center max-md:flex-col gap-10">
               {/* Detailed */}
               <div
-                className={`from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
+                className={`from-[#001735] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
-                  <Link
-                    href={`/audit/token/${params?.id}/detailed`}
-                    className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                  >
-                    Detailed Audit
-                  </Link>
+                  <PaymentDialog
+                    balance={balance}
+                    service="detailed"
+                    TriggerElement={
+                      <div
+                        className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                      >
+                        Detailed Audit
+                      </div>
+                    }
+                    handlePayment={handlePayment}
+                  />
                 </div>
                 <Image
                   alt="detailed-audit"
@@ -138,15 +182,21 @@ const TokenAuditOption = ({ params }: props) => {
 
               {/* Quick */}
               <div
-                className={`from-[#001735] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
+                className={` from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
-                  <Link
-                    href={`/audit/token/${params?.id}/quick`}
-                    className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                  >
-                    Quick Audit
-                  </Link>
+                  <PaymentDialog
+                    balance={balance}
+                    service="quick"
+                    TriggerElement={
+                      <div
+                        className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                      >
+                        Quick Audit
+                      </div>
+                    }
+                    handlePayment={handlePayment}
+                  />
                 </div>
                 <Image
                   alt="detailed-audit"

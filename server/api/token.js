@@ -4,7 +4,7 @@ const axios = require('axios');
 
 router.get('/live/:address', async (req, res) => {
   const address = req.params.address;
-  console.log('token live request: ', address);
+  //   console.log('token live request: ', address);
 
   const url = `https://api.dexscreener.com/latest/dex/tokens/${address}`;
 

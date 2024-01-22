@@ -1,10 +1,13 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import CodeEditor from '@/components/audit/code-editor';
 import { useSession } from 'next-auth/react';
+import useBalance from '@/hooks/useBalance';
+import usePayment from '@/hooks/usePayment';
+import PaymentDialog from '@/components/payment-dialog';
 
 const CodeAudit = () => {
   const { toast } = useToast();
@@ -14,34 +17,22 @@ const CodeAudit = () => {
   const [ContractCode, setContractCode] = React.useState<string>('');
   const [findings, setFindings] = React.useState<any>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [balance, setBalance] = React.useState<number>(0);
-  useEffect(() => {
-    const getBalance = async () => {
-      console.log(session?.data?.user?.email);
-      const r = await fetch('/api/credit/pay', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: session?.data?.user?.email,
-          amount: 1,
-        }),
-      });
-      const res = await fetch('/api/credit/balance', {
-        method: 'POST',
-        body: JSON.stringify({
-          type: 'code',
-        }),
-      });
-      const data = await res.json();
-      setBalance(data?.balance);
-    };
-    if (session?.data?.user?.email) {
-      getBalance();
-    }
-  }, [session?.data?.user?.email]);
+  const [open, setOpen] = React.useState(false);
+  const { balance, setBalance } = useBalance(
+    session.data?.user?.email as string
+  );
+  const handlePayment = usePayment({
+    session,
+    balance,
+    toast,
+    onSuccess: () => {
+      afterPayment();
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setOpen(false);
     if (ContractCode === '') {
       toast({
         variant: 'destructive',
@@ -50,9 +41,9 @@ const CodeAudit = () => {
       });
       return;
     }
-
+  };
+  const afterPayment = async () => {
     setLoading(true);
-
     try {
       const data = {
         type: 'code',
@@ -101,17 +92,24 @@ const CodeAudit = () => {
               Paste token contract code below to audit code.
             </h1>
           </div>
-
-          <Button
-            type="submit"
-            disabled={loading}
-            className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 ${
-              loading ? 'active' : ''
-            }`}
-          >
-            {loading ? 'Auditing' : 'Audit your code'}{' '}
-            {loading && <ScaleLoader width={4} height={10} color="white" />}
-          </Button>
+          <PaymentDialog
+            service="code"
+            balance={balance}
+            handlePayment={handlePayment}
+            TriggerElement={
+              <Button
+                type="button"
+                disabled={loading}
+                className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 ${
+                  loading ? 'active' : ''
+                }`}
+                onClick={() => setOpen(true)}
+              >
+                {loading ? 'Auditing' : 'Audit your code'}{' '}
+                {loading && <ScaleLoader width={4} height={10} color="white" />}
+              </Button>
+            }
+          />
         </div>
         {/* <div className="flex space-x-2 space-y-0 md:hidden ">
           <Button

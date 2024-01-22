@@ -184,6 +184,7 @@ const Terminal = forwardRef(function TerminalComponent(
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleWrapperClick = () => {
+    console.log('wrapper clicked');
     if (hiddenInputRef.current) {
       hiddenInputRef.current.focus();
     }
@@ -192,6 +193,7 @@ const Terminal = forwardRef(function TerminalComponent(
   return (
     <div
       ref={wrapperRef}
+      onClick={handleWrapperClick}
       className={`react-terminal-wrapper bg-[#101010] ${GeistMono.className} w-full`}
       data-terminal-name={name}
     >

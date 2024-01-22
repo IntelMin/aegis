@@ -71,7 +71,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
   }));
 
   return (
-    <div className="flex flex-col bg-[#131313] w-full p-4 items-center">
+    <div className="flex flex-col bg-[#131313] w-full p-4 items-center h-full">
       <div ref={divRef} className="min-h-[140px] w-full pl-8">
         {isLoaded && blockCount !== 0 ? (
           <>

@@ -4,6 +4,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Monitor from '@/components/watchdog/monitor';
 import BlockStatus from '@/components/watchdog/status';
 import { io, Socket } from 'socket.io-client';
+import { Sections } from '@/components/sections';
 
 interface WatchdogProps {}
 
@@ -18,24 +19,41 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
     contracts: true,
   });
   const [socket, setSocket] = useState<Socket>();
+  const [showSection, setShowSection] = useState('monitor');
+  const sectionsArr = [
+    {
+      name: 'Status',
+      val: 'status',
+    },
+    {
+      name: 'Monitor',
+      val: 'monitor',
+    },
+    {
+      name: 'Anomalies',
+      val: 'anomalies',
+    },
+  ];
 
   useEffect(() => {
-    if (settings.active) {
-      // Establish connection with socket.io server
-      setSocket(io(websocket_url));
+    let localSocket: Socket | null = null;
 
-      if (socket) {
-        socket.on('connect', () => {
+    if (settings.active) {
+      localSocket = io(websocket_url);
+      setSocket(localSocket);
+
+      if (localSocket) {
+        localSocket.on('connect', () => {
           console.log('Connected to the server!');
         });
 
         // Handle disconnection
-        socket.on('disconnect', () => {
+        localSocket.on('disconnect', () => {
           console.log('Disconnected from the server');
         });
 
         // Handle block status updates
-        socket.on('block_status', data => {
+        localSocket.on('block_status', data => {
           if (statusRef.current?.updateBlock) {
             statusRef.current.updateBlock(data);
           }
@@ -43,8 +61,10 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         });
 
         // Handle log updates
-        socket.on('log', data => {
+        localSocket.on('log', data => {
+          console.log('log received');
           if (monitorRef.current?.updateLog) {
+            console.log('trying...');
             monitorRef.current.updateLog(data);
           }
           console.log('Received log from socket');
@@ -67,14 +87,19 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
 
   return (
     <div className="h-full w-full ">
+      <Sections
+        sectionsArr={sectionsArr}
+        setShowSection={setShowSection}
+        showSection={showSection}
+      />
       <div className="justify-center items-center w-full">
-        <div className="p-4 text-center">
-          <h1 className="text-lg text-zinc-500 mix-blend-difference">
+        <div className="p-4 text-center text-2xl">
+          <h1 className="text-4xl text-zinc-500 mix-blend-difference">
             Live{' '}
             <span
               style={{
                 outline: 'none',
-                background: 'url(/backgrounds/scanner.webp)',
+                background: 'url(/backgrounds/watchdog.webp)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'top center',
                 WebkitBackgroundClip: 'text',
@@ -88,20 +113,33 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         </div>
       </div>
       <div className={`flex justify-center items-stretch p-4`}>
-        <div className="flex flex-none w-1/6 border border-zinc-800">
+        <div
+          className={`${
+            showSection === 'status' ? 'flex' : 'max-md:hidden'
+          } flex-none w-full md:w-1/6 border border-zinc-800`}
+        >
           <BlockStatus ref={statusRef} settings={settings} />
         </div>
-
-        <div className="flex-grow w-1/2">
-          <Monitor
-            ref={monitorRef}
-            settings={settings}
-            setSettings={setSettings}
-          />
+        <div className="max-md:flex md:flex-grow max-md:overflow-x-scroll w-full md:w-1/2 monitor">
+          <div
+            className={`${
+              showSection === 'monitor' ? 'flex-grow' : 'max-md:hidden'
+            }`}
+          >
+            <Monitor
+              ref={monitorRef}
+              settings={settings}
+              setSettings={setSettings}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-none w-1/4 border border-zinc-800">
-          Anomalies...
+        <div
+          className={`${
+            showSection === 'anomalies' ? '' : 'max-md:hidden'
+          } flex-none w-full md:w-1/4 border border-zinc-800 max-md:min-h-[500px] p-2 bg-zinc-900`}
+        >
+          <pre className="text-zinc-600">Anomalies...</pre>
         </div>
       </div>
     </div>

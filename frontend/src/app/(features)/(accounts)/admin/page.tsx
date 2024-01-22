@@ -55,12 +55,17 @@ const Admin: FC<AdminProps> = ({}) => {
           'Content-Type': 'application/json',
         },
       });
-      const data = await users.json();
+
+      console.log(users);
+      const data = await users?.json();
+      console.log(data);
       setUserstable(data);
     }
     getUsers();
   }, []);
-
+  console.log(userstable);
+  if (userstable?.length === 0)
+    return <div className="text-2xl font-bold">No users found!!!</div>;
   if (session?.user) {
     return (
       <>
@@ -75,7 +80,7 @@ const Admin: FC<AdminProps> = ({}) => {
 
           <div className="w-full overflow-x-auto mt-6">
             <Table className="p-3 mt-6 border border-zinc-800 w-full">
-              <TableHeader className="grid grid-cols-3 bg-gray-800">
+              <TableHeader className="grid grid-cols-3 bg-zinc-900">
                 {' '}
                 {/* 3 columns grid */}
                 <TableHead className="py-3 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center">
