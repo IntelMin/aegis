@@ -1,16 +1,16 @@
 'use client';
 import React, { use, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import CodeEditor from '@/components/audit/code-editor';
 import { useSession } from 'next-auth/react';
 import useBalance from '@/hooks/useBalance';
 import usePayment from '@/hooks/usePayment';
 import PaymentDialog from '@/components/payment-dialog';
+import { toast } from 'sonner';
+import { showToast } from '@/components/toast';
 
 const CodeAudit = () => {
-  const { toast } = useToast();
   const session = useSession();
 
   const [ContractCode, setContractCode] = React.useState<string>('');
@@ -36,9 +36,9 @@ const CodeAudit = () => {
     e.preventDefault();
     setOpen(false);
     if (ContractCode === '') {
-      toast({
-        variant: 'destructive',
-        title: 'Missing value',
+      showToast({
+        type: 'error',
+        message: 'Missing value',
         description: 'Please add valid contract code',
       });
       return;
@@ -58,10 +58,9 @@ const CodeAudit = () => {
       });
 
       if (!response.ok) {
-        setLoading(false);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
+        showToast({
+          type: 'error',
+          message: 'Error',
           description: 'An error occurred during code audit',
         });
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -75,9 +74,9 @@ const CodeAudit = () => {
       setFindings(result.findings);
     } catch (error) {
       console.error('Error during code audit:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'An error occurred during code audit',
       });
     }

@@ -4,13 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import useBalance from '@/hooks/useBalance';
 import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
+import toast from 'sonner';
+import { showToast } from '@/components/toast';
 
 type props = {
   params: {
@@ -42,8 +43,6 @@ const SkeletonLoader = () => (
 const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
-
-  const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
   const [auditType, setAuditType] = React.useState<string>('detailed'); // ['detailed', 'quick'
   const { balance, setBalance } = useBalance(
@@ -79,9 +78,9 @@ const TokenAuditOption = ({ params }: props) => {
     }
 
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
       setSubmitting(false);

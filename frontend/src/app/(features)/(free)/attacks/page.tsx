@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import dynamic from 'next/dynamic';
-import { useToast } from '@/components/ui/use-toast';
 import PulseLoader from 'react-spinners/PulseLoader';
 import GridLoader from 'react-spinners/GridLoader';
 // import AttacksFilter from '@/components/attacks/filter';
@@ -14,6 +13,7 @@ import CountUp from 'react-countup';
 import { Button } from '@/components/ui/button';
 import { FaFilter } from 'react-icons/fa6';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { showToast } from '@/components/toast';
 
 const AttacksTable = dynamic(() => import('@/components/attacks/table'), {
   loading: () => <GridLoader color="white" />,
@@ -26,7 +26,6 @@ const AttacksFilter = dynamic(() => import('@/components/attacks/filter'), {
 interface AttacksProps {}
 
 const Attacks: FC<AttacksProps> = ({}) => {
-  const toast = useToast();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
@@ -64,9 +63,9 @@ const Attacks: FC<AttacksProps> = ({}) => {
       setFilterResults(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
-      toast.toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching the data. Please try again.',
       });
     } finally {

@@ -3,14 +3,15 @@ import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
 
 import { creditConfig, CreditType } from '@/lib/credit-config';
-import { ToasterToast } from '@/components/ui/use-toast';
+// import { ToasterToast } from '@/components/ui/use-toast';
+import { ExternalToast } from 'sonner';
 import { useSession } from 'next-auth/react';
 
 interface usePaymentProps {
   address?: string;
   balance: number | null;
   onSuccess?: () => void;
-  toast: (props: ToasterToast) => void;
+  toast: any;
 }
 const usePayment = ({
   address,
@@ -32,12 +33,19 @@ const usePayment = ({
 
     const cost = creditConfig[type];
     if (!balance || balance === 0 || balance < cost) {
-      toast({
-        id: 'not-enough-credits',
-        variant: 'destructive',
-        title: 'Error',
+      toast('Error', {
+        style: {
+          background: 'red',
+          color: 'white',
+        },
         description: 'Not enough credits',
       });
+      // toast({
+      //   id: 'not-enough-credits',
+      //   variant: 'destructive',
+      //   title: 'Error',
+      //   description: 'Not enough credits',
+      // });
       return new Error('Not enough credits');
     }
     setLoading(true);
@@ -62,10 +70,17 @@ const usePayment = ({
       return new Error('Credit payment error');
     }
     if (data?.status === 'success') {
-      toast({
-        id: 'payment-success',
-        variant: 'default',
-        title: 'Success',
+      // toast({
+      //   id: 'payment-success',
+      //   variant: 'default',
+      //   title: 'Success',
+      //   description: 'Payment success',
+      // });
+      toast('Error', {
+        style: {
+          background: 'green',
+          color: 'white',
+        },
         description: 'Payment success',
       });
       session.update({
@@ -81,13 +96,19 @@ const usePayment = ({
       }
       setLoading(false);
     } else {
-      setLoading(false);
-      toast({
-        id: 'payment-error',
-        variant: 'destructive',
-        title: 'Error',
+      toast('Error', {
+        style: {
+          background: 'red',
+          color: 'white',
+        },
         description: 'Credit payment error',
       });
+      // toast({
+      //   id: 'payment-error',
+      //   variant: 'destructive',
+      //   title: 'Error',
+      //   description: 'Credit payment error',
+      // });
 
       return new Error('Credit payment error');
     }

@@ -25,9 +25,11 @@ import { cn } from '@/lib/utils';
 import { useAccount, useSendTransaction, useWaitForTransaction } from 'wagmi';
 import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
-import { toast, useToast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { set } from 'zod';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
+import { showToast } from '@/components/toast';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),
@@ -79,7 +81,6 @@ const PricingCard = ({
   closeDialog,
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
-  const toast = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -150,9 +151,9 @@ const PricingCard = ({
           onOpenChange={() => {
             if (!isConnected) {
               console.log('not connected');
-              toast.toast({
-                variant: 'destructive',
-                title: 'Not connected',
+              showToast({
+                type: 'error',
+                message: 'Not connected',
                 description: 'Please connect your wallet to continue',
               });
             } else {

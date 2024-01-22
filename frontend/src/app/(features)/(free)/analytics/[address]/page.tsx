@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import useLiveData from '@/hooks/useLiveData';
 
@@ -25,7 +24,6 @@ type Props = {
 };
 
 const Analytics = ({ params }: Props) => {
-  const { toast } = useToast();
   const contractAddress = params.address;
   const [tokenDetails, setTokenDetails] = useState<any>(null);
 
