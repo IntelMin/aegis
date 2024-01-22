@@ -22,6 +22,16 @@ function formatSubscript(value: number) {
   return value.toFixed(2);
 }
 
+interface Book {
+  bids: { p0: number; qty: number }[];
+  asks: { p0: number; qty: number }[];
+  price: number;
+}
+
+interface SeriesData {
+  books: Book[];
+}
+
 const OrderBookGraph: React.FC<{
   pair: string;
   exchange: string;
@@ -31,35 +41,31 @@ const OrderBookGraph: React.FC<{
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState({});
 
-  const processSeriesData = data => {
-    // Accumulate bids
+  const processSeriesData = (data: SeriesData) => {
     const bids = data.books
-      .flatMap(book => book.bids)
-      .sort((a, b) => b.p0 - a.p0) // Sort bids by price in descending order for accumulation
-      .reduce((acc, bid) => {
+      .flatMap((book: { bids: any }) => book.bids)
+      .sort((a: { p0: number }, b: { p0: number }) => b.p0 - a.p0)
+      .reduce((acc: any[][], bid: { p0: any; qty: any }) => {
+
         const lastQty = acc.length > 0 ? acc[acc.length - 1][1] : 0;
         acc.push([bid.p0, bid.qty + lastQty]);
         return acc;
       }, []);
 
-    // Accumulate asks
     const asks = data.books
-      .flatMap(book => book.asks)
-      .sort((a, b) => a.p0 - b.p0) // Sort asks by price in ascending order for accumulation
-      .reduce((acc, ask) => {
+      .flatMap((book: { asks: any }) => book.asks)
+      .sort((a: { p0: number }, b: { p0: number }) => a.p0 - b.p0)
+      .reduce((acc: any[][], ask: { p0: any; qty: any }) => {
         const lastQty = acc.length > 0 ? acc[acc.length - 1][1] : 0;
         acc.push([ask.p0, ask.qty + lastQty]);
         return acc;
       }, []);
 
-    // Reverse the bids to have the highest price at the end (for charting purposes)
     bids.reverse();
 
     const price = data.books[0].price;
 
     return { bids, asks, price };
-
-    return { bids, asks };
   };
 
   useEffect(() => {
@@ -122,7 +128,7 @@ const OrderBookGraph: React.FC<{
             style: {
               fontSize: '14px',
               fontWeight: 400,
-              color: '#D4D4D4', // Set the font color
+              color: '#D4D4D4',
             },
           },
 
@@ -160,7 +166,7 @@ const OrderBookGraph: React.FC<{
               style: {
                 fontSize: '12px',
                 fontWeight: 400,
-                color: '#000', // Set the font color
+                color: '#000',
               },
             },
           },
@@ -180,7 +186,7 @@ const OrderBookGraph: React.FC<{
               style: {
                 fontSize: '12px',
                 fontWeight: 400,
-                color: '#D4D4D4', // Set the font color
+                color: '#D4D4D4',
               },
             },
           },

@@ -87,8 +87,8 @@ const WalletBubble = (props: Props) => {
       const percentile10 = sortedData[Math.floor(total * 0.1)].balance;
 
       const root = d3
-        .hierarchy({ children: sortedData })
-        .sum((d: { balance: any }) => d.balance);
+        .hierarchy({ children: sortedData } as any)
+        .sum((d: any) => d.balance);
 
       const diameter = 300;
       const packLayout = d3.pack().size([diameter, diameter]).padding(50);

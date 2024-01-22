@@ -34,7 +34,7 @@ const ClusterHold: React.FC<Props> = ({ data }) => {
     const percentile5 = sortedData[Math.floor(total * 0.05)].balance;
     const percentile10 = sortedData[Math.floor(total * 0.1)].balance;
 
-    const parsedData = sortedData.map(node => {
+    const parsedData = sortedData.map((node: any) => {
       let color = 'bg-[#2563EB]'; // Default color
 
       if (node.balance >= percentile1) {
@@ -90,7 +90,7 @@ const ClusterHold: React.FC<Props> = ({ data }) => {
       <table className="w-full text-white">
         <ScrollArea className="w-full h-[400px]">
           <tbody>
-            {holders?.map((holder, index) => (
+            {holders?.map((holder: any, index: any) => (
               <tr
                 key={holder.address}
                 className={`items-center text-xs ${
