@@ -9,7 +9,8 @@ import { Sections } from '@/components/sections';
 interface WatchdogProps {}
 
 const Watchdog: FC<WatchdogProps> = ({}) => {
-  const websocket_url = process.env.AEGIS_WSS;
+  const websocket_url = process.env.NEXT_PUBLIC_AEGIS_WSS;
+  console.log('websocket_url', websocket_url);
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
   const [settings, setSettings] = useState({
