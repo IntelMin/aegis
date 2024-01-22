@@ -6,6 +6,10 @@ import React, { use, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { toast } from '../ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
+import usePayment from '@/hooks/usePayment';
+import useBalance from '@/hooks/useBalance';
+import { useSession } from 'next-auth/react';
+import PaymentDialog from '../payment-dialog';
 
 type Props = {
   tokenState: {
@@ -19,6 +23,17 @@ type Props = {
 };
 
 export const Modal = ({ tokenState, setShowModal }: Props) => {
+  const session = useSession();
+  const { balance, setBalance } = useBalance(
+    session.data?.user?.email as string
+  );
+  const { handlePayment, loading } = usePayment({
+    balance,
+    toast,
+    onSuccess: () => {
+      requestReport(tokenState?.tokenAddress);
+    },
+  });
   const [submitting, setSubmitting] = React.useState(false);
   const requestReport = async (address: string) => {
     setSubmitting(true);
@@ -155,28 +170,35 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
                 ))}
             </div>
           )}
-          {submitting ? (
+          {submitting || loading ? (
             <div className="flex items-center justify-center bg-[#0E76FD] w-full p-2">
               <ScaleLoader width={4} height={10} color="white" />
             </div>
           ) : (
-            <button
-              className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
-              onClick={() => requestReport(tokenState?.tokenAddress)}
-            >
-              <Image
-                src="/icons/nav/reports.svg"
-                alt="report-icon"
-                width={16}
-                height={16}
-                style={{
-                  filter: 'invert(100%) brightness(1000%) contrast(100%)',
-                }}
-              />
-              <p className="text-[16px] font-[500] text-zinc-50">
-                Download Report
-              </p>
-            </button>
+            <PaymentDialog
+              service="report"
+              balance={balance}
+              handlePayment={handlePayment}
+              TriggerElement={
+                <button
+                  className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
+                  // onClick={() => requestReport(tokenState?.tokenAddress)}
+                >
+                  <Image
+                    src="/icons/nav/reports.svg"
+                    alt="report-icon"
+                    width={16}
+                    height={16}
+                    style={{
+                      filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                    }}
+                  />
+                  <p className="text-[16px] font-[500] text-zinc-50">
+                    Download Report
+                  </p>
+                </button>
+              }
+            />
           )}
         </div>
       </div>

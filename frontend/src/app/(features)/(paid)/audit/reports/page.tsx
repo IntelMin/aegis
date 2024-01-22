@@ -37,13 +37,18 @@ const ReportsPage = () => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
 
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
+  // useEffect(() => {
+
+
+  //   document.addEventListener('mousedown', handleOutsideClick);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleOutsideClick);
+  //   };
+  // }, []);
+
+
   return (
     <div className="w-full flex justify-center pt-16 relative">
       <div className="w-[80%] flex flex-col gap-8">

@@ -4,26 +4,22 @@ import { Session } from 'next-auth';
 
 import { creditConfig, CreditType } from '@/lib/credit-config';
 import { ToasterToast } from '@/components/ui/use-toast';
+import { useSession } from 'next-auth/react';
 
 interface usePaymentProps {
-  session: {
-    data: Session | null;
-    update: (data?: any) => Promise<Session | null>;
-    status: 'authenticated' | 'loading' | 'unauthenticated';
-  };
   address?: string;
   balance: number | null;
   onSuccess?: () => void;
   toast: (props: ToasterToast) => void;
 }
 const usePayment = ({
-  session,
   address,
   balance,
   onSuccess,
   toast,
 }: usePaymentProps) => {
   const router = useRouter();
+  const session = useSession();
   const [loading, setLoading] = useState(false);
   const handlePayment = async (type: CreditType) => {
     if (session.status === 'unauthenticated') {

@@ -50,8 +50,7 @@ const TokenAuditOption = ({ params }: props) => {
     session.data?.user?.email as string
   );
   const router = useRouter();
-  const handlePayment = usePayment({
-    session,
+  const { handlePayment, loading } = usePayment({
     address: params?.id,
     balance,
     toast,

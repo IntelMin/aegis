@@ -28,7 +28,6 @@ import { Label } from '@/components/ui/label';
 import { toast, useToast } from '@/components/ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
-import { set } from 'date-fns';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),

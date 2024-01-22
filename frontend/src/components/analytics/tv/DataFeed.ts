@@ -82,7 +82,7 @@ const DataFeedFactory = (
       fetch(`/api/tv?pair=${pairAddress}&res=${res}&from=${from}&to=${to}}`)
         .then(res => res.json())
         .then(res => {
-          onHistoryCallback(res.map(item => ({
+          onHistoryCallback(res.map((item: any) => ({
             high: item.h,
             low: item.l,
             open: item.o,

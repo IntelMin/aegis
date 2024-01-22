@@ -12,17 +12,19 @@ import PaymentDialog from '@/components/payment-dialog';
 const CodeAudit = () => {
   const { toast } = useToast();
   const session = useSession();
-  const [activeComponent, setActiveComponent] =
-    React.useState<string>('contractCode');
+
   const [ContractCode, setContractCode] = React.useState<string>('');
   const [findings, setFindings] = React.useState<any>([]);
-  // const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+
+  //To do handle this
+  const [nofindings, setNoFindings] = React.useState<boolean>(false);
+
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
-  const { handlePayment, loading } = usePayment({
-    session,
+  const { handlePayment, loading: paymentloading } = usePayment({
     balance,
     toast,
     onSuccess: () => {
@@ -44,6 +46,7 @@ const CodeAudit = () => {
   };
   const afterPayment = async () => {
     try {
+      setLoading(true);
       const data = {
         type: 'code',
         source: ContractCode,
@@ -55,6 +58,7 @@ const CodeAudit = () => {
       });
 
       if (!response.ok) {
+        setLoading(false);
         toast({
           variant: 'destructive',
           title: 'Error',
@@ -62,7 +66,7 @@ const CodeAudit = () => {
         });
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
+      setLoading(false);
       const result = await response.json();
       setFindings(result.findings);
     } catch (error) {
@@ -73,10 +77,6 @@ const CodeAudit = () => {
         description: 'An error occurred during code audit',
       });
     }
-  };
-
-  const handleButtonClick = (component: string) => {
-    setActiveComponent(component);
   };
 
   return (
@@ -96,41 +96,21 @@ const CodeAudit = () => {
             TriggerElement={
               <Button
                 type="button"
-                disabled={loading}
-                className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 ${
+                disabled={loading || paymentloading}
+                className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 gap-2 ${
                   loading ? 'active' : ''
                 }`}
                 onClick={() => setOpen(true)}
               >
                 {loading ? 'Auditing' : 'Audit your code'}{' '}
-                {loading && <ScaleLoader width={4} height={10} color="white" />}
+                {(loading || paymentloading) && (
+                  <ScaleLoader width={4} height={10} color="black" />
+                )}
               </Button>
             }
           />
         </div>
-        {/* <div className="flex space-x-2 space-y-0 md:hidden ">
-          <Button
-            onClick={() => handleButtonClick('contractCode')}
-            className={`text-neutral-200 text-md font-semibold md:px-28 w-full p-2 bg-zinc-900 space-y-4 ${
-              activeComponent === 'contractCode'
-                ? 'active'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
-          >
-            Contract Code
-          </Button>
-          <Button
-            onClick={() => handleButtonClick('findings')}
-            className={`text-neutral-200 text-md space-x-2 font-semibold md:px-28 w-full p-2 bg-zinc-900 space-y-4 ${
-              activeComponent === 'findings'
-                ? 'active'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
-          >
-            Findings
-            <p className="animate-pulse">🟢</p>
-          </Button>
-        </div> */}
+
         <CodeEditor
           source={ContractCode}
           setContractCode={setContractCode}

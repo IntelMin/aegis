@@ -21,15 +21,13 @@ const CodeAuditEditor = (props: Props) => {
   const isReadOnly = props.readonly !== undefined ? props.readonly : true;
 
   const editorRef = useRef<any>(null);
-
+  console.log(findings);
   useEffect(() => {
     if (props?.tree) {
       setTreeViewData(props?.tree);
     }
 
     if (props?.source) {
-      console.log('--- source');
-      console.log(props?.source);
       setSourceCode(props?.source);
     }
 

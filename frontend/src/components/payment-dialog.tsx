@@ -11,25 +11,34 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CreditType, creditConfig } from '@/lib/credit-config';
+import { set } from 'date-fns';
 interface PaymentDialogProps {
   balance: number | null;
   service: CreditType;
   handlePayment: (type: CreditType) => void;
-  TriggerElement: React.ReactNode;
+  TriggerElement?: React.ReactNode;
+  DummyElement?: React.ReactNode;
+  open?: boolean;
 }
 const PaymentDialog = ({
   balance,
   service,
   handlePayment,
   TriggerElement,
+  DummyElement,
+  open,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
-  console.log(balance);
-  console.log(balance == null || balance < required_credits);
+  const [openDialog, setOpenDialog] = React.useState(false);
   if (balance == null || balance < required_credits) {
     return (
-      <Dialog>
-        <DialogTrigger>{TriggerElement}</DialogTrigger>
+      <Dialog open={open ? open : undefined}>
+        {TriggerElement ? (
+          <DialogTrigger>{TriggerElement}</DialogTrigger>
+        ) : (
+          <></>
+        )}
+        {DummyElement ? <>{DummyElement}</> : <></>}
 
         <DialogContent>
           <DialogHeader>
@@ -55,8 +64,23 @@ const PaymentDialog = ({
     );
   } else {
     return (
-      <Dialog>
-        <DialogTrigger>{TriggerElement}</DialogTrigger>
+      <Dialog
+        open={open ? open : openDialog}
+        onOpenChange={() => {
+          if (open) {
+            setOpenDialog(!open);
+          } else {
+            setOpenDialog(!openDialog);
+          }
+        }}
+      >
+        {TriggerElement ? (
+          <DialogTrigger>{TriggerElement}</DialogTrigger>
+        ) : (
+          <></>
+        )}
+        {DummyElement ? <>{DummyElement}</> : <></>}
+
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Pay for audit</DialogTitle>
