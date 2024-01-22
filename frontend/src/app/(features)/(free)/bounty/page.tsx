@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import qs from 'qs';
-import { useToast } from '@/components/ui/use-toast';
 import PulseLoader from 'react-spinners/PulseLoader';
 import Image from 'next/image';
 import GridLoader from 'react-spinners/GridLoader';
@@ -11,6 +10,7 @@ import dynamic from 'next/dynamic';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { FaFilter } from 'react-icons/fa6';
+import { showToast } from '@/components/toast';
 
 const BountyFilter = dynamic(() => import('@/components/bounty/filter'), {
   loading: () => <GridLoader color="white" />,
@@ -23,7 +23,6 @@ const BountyTable = dynamic(() => import('@/components/bounty/table'), {
 interface BountyProps {}
 
 const Bounty: FC<BountyProps> = ({}) => {
-  const toast = useToast();
   const [fromDate, setFromDate] = useState<Date>();
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
   const [limit, setLimit] = useState(10);
@@ -62,9 +61,9 @@ const Bounty: FC<BountyProps> = ({}) => {
       setFilterResults(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
-      toast.toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching the data. Please try again.',
       });
     } finally {

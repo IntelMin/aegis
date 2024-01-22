@@ -57,7 +57,7 @@ model credit_payment {
     package    String
     amount_eth Float
     credits    Int
-    hash       String
+    hash       String   @unique
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
     user       user     @relation(fields: [user_id], references: [id])

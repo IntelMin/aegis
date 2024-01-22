@@ -1,16 +1,16 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/components/ui/use-toast';
-import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import useTokenInfo from '@/hooks/useTokenInfo';
 import useBalance from '@/hooks/useBalance';
-import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
+import { showToast } from '@/components/toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import PaymentDialog from '@/components/payment-dialog';
 
 type props = {
   params: {
@@ -42,21 +42,19 @@ const SkeletonLoader = () => (
 const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
-
-  const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
-
+  const [auditType, setAuditType] = React.useState<string>('detailed'); // ['detailed', 'quick'
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
   const router = useRouter();
-  const handlePayment = usePayment({
-    session,
+  const { handlePayment, loading } = usePayment({
     address: params?.id,
     balance,
-    toast,
     onSuccess: () => {
-      router.push(`/audit/token/${params?.id}/detailed`);
+      if (auditType === 'quick')
+        router.push(`/audit/token/${params?.id}/quick`);
+      else router.push(`/audit/token/${params?.id}/detailed`);
     },
   });
   const [submitting, setSubmitting] = React.useState<boolean>(false);
@@ -78,9 +76,9 @@ const TokenAuditOption = ({ params }: props) => {
     }
 
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
       setSubmitting(false);
@@ -92,7 +90,6 @@ const TokenAuditOption = ({ params }: props) => {
     error,
     submittedAddress,
     router,
-    toast,
   ]);
 
   if (!balance) return <SkeletonLoader />;
@@ -164,6 +161,7 @@ const TokenAuditOption = ({ params }: props) => {
                     TriggerElement={
                       <div
                         className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                        onClick={() => setAuditType('detailed')}
                       >
                         Detailed Audit
                       </div>
@@ -191,6 +189,7 @@ const TokenAuditOption = ({ params }: props) => {
                     TriggerElement={
                       <div
                         className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                        onClick={() => setAuditType('quick')}
                       >
                         Quick Audit
                       </div>

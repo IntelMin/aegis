@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import copy from 'copy-to-clipboard';
-import { useToast } from '@/components/ui/use-toast';
 import { formatNumber } from '@/utils/format-number';
 import { formatAge } from '@/utils/format-age';
 import { formatAddress } from '@/utils/format-address';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BiBadgeCheck, BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import TokenValueContainer from './token-value-container';
+import { toast } from 'sonner';
 
 type Props = {
   showTitle: boolean;
@@ -16,7 +16,6 @@ type Props = {
 };
 
 const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
-  const toast = useToast();
   const [loading, setLoading] = React.useState(false);
 
   const requestReport = async () => {
@@ -78,9 +77,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
 
   const handleCopy = (text: string) => () => {
     copy(text);
-    toast.toast({
-      title: 'Copied to clipboard',
-    });
+    toast('Copied to clipboard');
   };
 
   return (

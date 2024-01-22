@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 const usePaidUser = (contractAddress: string) => {
-  const [paidUser, setPaidUser] = useState(null);
-  const router = useRouter();
+  const [paidUser, setPaidUser] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchPaidUser = async () => {
@@ -16,7 +14,11 @@ const usePaidUser = (contractAddress: string) => {
         }),
       });
       const paidUserResponse = await response.json();
-      console.log(paidUserResponse);
+      console.log({ paidUserResponse });
+      if (paidUserResponse.status === 'error') {
+        setPaidUser(false);
+        return;
+      }
       setPaidUser(paidUserResponse.paiduser);
     };
     fetchPaidUser();

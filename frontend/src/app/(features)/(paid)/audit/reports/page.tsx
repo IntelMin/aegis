@@ -29,21 +29,6 @@ const ReportsPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleOutsideClick = (event: MouseEvent) => {
-    const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
-
-    if (modal && !modal.contains(event.target as Node)) {
-      setShowModal(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
   return (
     <div className="w-full flex justify-center pt-16 relative">
       <div className="w-[80%] flex flex-col gap-8">
