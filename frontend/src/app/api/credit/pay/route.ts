@@ -1,7 +1,9 @@
 import { authOptions } from '@/lib/auth';
+import { creditConfig } from '@/lib/credit-config';
 import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
+type creditconfigType = keyof typeof creditConfig
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(authOptions)
@@ -13,28 +15,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const id = user?.id
   const request = await req.json()
   const { type } = request
-  const credit_menu = [{
-    name: "detailed",
-    cost: 14
-  },
-  {
-    name: 'quick',
-    cost: 12,
-  },
-  {
-    name: 'code',
-    cost: 12,
-  },
-  {
-    name: "report",
-    cost: 100
-  }]
-
-
   if (!id) {
     return NextResponse.json({ status: "error" }, { status: 401 })
   }
-  const requested_credit = credit_menu.find((credit: any) => credit.name === type)
+  const selected_type = ["detailed", "report", "quick", "code"].find((t) => t === type)
+  if (!selected_type) {
+    return NextResponse.json({ status: "error" }, { status: 401 })
+  }
+  const requested_credit = creditConfig[type as creditconfigType]
 
   const user_credit = await db.credit_balance.findFirst({
     where: { user_id: Number(id) },
@@ -43,18 +31,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
   if (!user_credit) {
     return NextResponse.json({ status: "error" }, { status: 401 })
   }
-  if (!requested_credit) {
+  if (requested_credit === null || requested_credit === undefined) {
     return NextResponse.json({ status: "error" }, { status: 401 })
   }
-  if (user_credit?.credits < requested_credit?.cost) {
+  if (user_credit?.credits < requested_credit) {
     const url = new URL("/payment", req.nextUrl)
     return NextResponse.redirect("/payment")
   }
   try {
     const insert_tx = await db.credit_transactions.create({
       data: {
-        type: requested_credit?.name,
-        cost: requested_credit?.cost,
+        type: selected_type,
+        cost: requested_credit,
         created_at: new Date(),
         user: {
           connect: {
@@ -66,7 +54,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const updated_credit = await db.credit_balance.update({
       where: { user_id: Number(id) },
       data: {
-        credits: user_credit?.credits - requested_credit?.cost,
+        credits: user_credit?.credits - requested_credit,
       }
     })
     console.log(updated_credit)
@@ -79,7 +67,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       data: {
         address: address ? address : " ",
         credit_transaction_id: id,
-        type: requested_credit.name,
+        type: selected_type,
 
         user: {
           connect: {
@@ -90,7 +78,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     })
 
 
-    return NextResponse.json({ status: "success", allow: requested_credit.name, credits: updated_credit.credits })
+    return NextResponse.json({ status: "success", allow: selected_type, credits: updated_credit.credits })
   } catch (e) {
     console.log(e)
     return NextResponse.json({ status: "error" }, { status: 401 })

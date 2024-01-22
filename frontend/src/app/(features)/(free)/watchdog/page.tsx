@@ -9,7 +9,7 @@ import { Sections } from '@/components/sections';
 interface WatchdogProps {}
 
 const Watchdog: FC<WatchdogProps> = ({}) => {
-  const websocket_url = 'ws://localhost:4444';
+  const websocket_url = process.env.AEGIS_WSS;
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
   const [settings, setSettings] = useState({
@@ -39,7 +39,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
     let localSocket: Socket | null = null;
 
     if (settings.active) {
-      localSocket = io(websocket_url);
+      localSocket = io(websocket_url || '');
       setSocket(localSocket);
 
       if (localSocket) {

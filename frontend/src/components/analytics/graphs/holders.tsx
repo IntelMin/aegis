@@ -113,7 +113,7 @@ const HoldersGraph = (props: Props) => {
     return <Skeleton className="w-full h-full" />;
   }
   return (
-    <div className="w-full h-[320px] translate-x-2">
+    <div className="w-full h-[100%]">
       <ResponsiveContainer width="120%" height="100%">
         <AreaChart
           width={500}

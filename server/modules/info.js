@@ -79,6 +79,42 @@ async function getMetadata(address) {
   }
 }
 
+async function getScan(address) {
+  const filename = path.join(
+    __dirname,
+    `../cache/contracts/${address}/scan.json`
+  );
+
+  let filedata = await readCache(filename);
+
+  if (filedata) {
+    return filedata;
+  } else {
+    try {
+      const response = await axios.post(
+        'https://www.coinscope.co/api/search/cyberscan',
+        {
+          address: address,
+          network: 'ETH',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = response.data;
+
+      await writeCache(filename, data);
+      return data;
+    } catch (error) {
+      console.error('Error making the request', error);
+      return null;
+    }
+  }
+}
+
 async function getInfo(address) {
   try {
     await Promise.all([
@@ -104,6 +140,7 @@ async function getInfo(address) {
         address
       ),
       getMetadata(address),
+      getScan(address),
     ]);
   } catch (error) {
     console.error('Error in getInfo:', error);

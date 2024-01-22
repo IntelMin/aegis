@@ -1,4 +1,4 @@
-export const tablehead = ['', '', 'TOKEN', 'CA', 'AUDITED DATE', 'FINDINGS'];
+export const tablehead = ['', 'TOKEN', 'CA', 'AUDITED DATE', 'FINDINGS'];
 
 //! Delete this file after adding data from backend
 

@@ -71,7 +71,7 @@ const PieGraph = (props: props) => {
             show: props.labels,
             color: '#4ADE80',
             fontWeight: 400,
-            fontSize: '20px',
+            fontSize: '14px',
           },
         },
       },
@@ -93,7 +93,17 @@ const PieGraph = (props: props) => {
     stroke: {
       lineCap: 'round',
     },
-    labels: ['Audit Score'],
+    labels: ['Safety Overview'],
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: 380,
+          },
+        },
+      },
+    ],
   };
 
   return (

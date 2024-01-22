@@ -61,6 +61,16 @@ export async function POST(req: Request) {
         whitelisted: true,
       },
     });
+    const new_user_credit = await db.credit_balance.create({
+      data: {
+        credits: 0,
+        user: {
+          connect: {
+            id: newUser.id,
+          },
+        },
+      },
+    });
 
     console.log({ newUser });
     return NextResponse.json(

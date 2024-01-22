@@ -1,5 +1,5 @@
 // Add report worker logic hereconst { report } = require("process");
-const supabase = require('./supabase');
+const supabase = require('./lib/supabase');
 const generatePDF = require('./modules/report/generate');
 const fs = require('fs');
 // const { Octokit } = require('@octokit/rest');
@@ -11,11 +11,11 @@ const fs = require('fs');
 // const owner = 'AslamSDM';
 // const repo = 'test-repo';
 
-async function modifyreportRequestdb(address, status, name) {
+async function modifyreportRequestdb(address, status, name, image_url) {
   try {
     const { data, error } = await supabase
       .from('report_requests')
-      .update({ status: status, name: name })
+      .update({ status: status, name: name, image_url: image_url })
       .eq('address', address);
     if (error) {
       throw new Error(error.message);
@@ -77,14 +77,18 @@ async function pushToGithub(address) {
 }
 
 const getName = address => {
-  const filePath = `./cache/contracts/${address}/info.json`;
+  const filePath = `./cache/contracts/${address}/meta.json`;
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    const info = JSON.parse(fileContent);
-    const name = info?.data?.symbol;
+    const meta = JSON.parse(fileContent);
+    const info = meta?.data.tokens[0];
+    const name = info?.symbol;
+    console.log('info', info);
+    const image_url = info?.imageSmallUrl;
     // Use the name variable here
     console.log('Name:', name);
-    return name;
+    console.log('Image URL:', image_url);
+    return { name, image_url };
   } catch (error) {
     console.error('Error reading info.json:', error);
     return address;
@@ -99,7 +103,7 @@ async function reportWorker() {
   for (const row of requests) {
     const address = row.address;
     console.log('Processing: ', address, row.status);
-    const name = getName(address);
+    const { name, image_url } = getName(address);
     try {
       if (row.status === 'requested') {
         await generatePDF(address, name).then(() =>
@@ -107,7 +111,7 @@ async function reportWorker() {
         );
         console.log('-- generated pdf ', name, '.pdf');
 
-        await modifyreportRequestdb(address, 'completed', name);
+        await modifyreportRequestdb(address, 'completed', name, image_url);
 
         console.log('-- pushed to supabase');
       }
