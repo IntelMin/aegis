@@ -29,16 +29,17 @@ const TokenMarquee = dynamic(
 
 const Dashboard = () => {
   const session = useSession();
-  //   const [collections, setCollections] = useState<CollectionProps[]>([]);
-  const [time, setTime] = useState('1D');
+  const [time, setTime] = useState<number>();
   const [tableData, setTableData] = useState([]);
   const [marqueeData, setMarqueeData] = useState([]);
   const [tableLimit, setTableLimit] = useState(20);
 
   useEffect(() => {
-    axios.get(`api/dashboard/?resolution="${time}"`).then(response => {
-      setTableData(response.data);
-    });
+    if (time !== undefined) {
+      axios.get(`api/dashboard?resolution=${time}`).then(response => {
+        setTableData(response.data);
+      });
+    }
   }, [time, tableLimit]);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 gap-6 relative z-[-1]">
         <TokenMarquee marqueeData={marqueeData} />
       </div>
-      <DropdownFilter time={time} setTime={setTime} />
+      <DropdownFilter onTimeChange={setTime} />
       <DashboardDataTable
         tableLimit={tableLimit}
         setTableLimit={setTableLimit}
