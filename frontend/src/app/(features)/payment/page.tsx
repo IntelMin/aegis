@@ -29,7 +29,7 @@ import { Input } from '@/components/ui/input';
 import { set } from 'zod';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),
@@ -140,7 +140,8 @@ const PricingCard = ({
           onOpenChange={() => {
             if (!isConnected) {
               console.log('not connected');
-              showToastError({
+              showToast({
+                type: 'error',
                 message: 'Not connected',
                 description: 'Please connect your wallet to continue',
               });

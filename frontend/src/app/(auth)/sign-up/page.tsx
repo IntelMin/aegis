@@ -16,8 +16,7 @@ import RoleDetailsForm from '@/components/sign-up/form-role';
 import SocialDetailsForm from '@/components/sign-up/form-socials';
 import ProjectDetailsForm from '@/components/sign-up/form-project';
 import CompleteForm from '@/components/sign-up/form-complete';
-import { showToastSuccess } from '@/components/toast-success';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -76,14 +75,16 @@ const SignUpForm = () => {
       });
       if (res.status === 201) {
         console.log('success');
-        showToastSuccess({
+        showToast({
+          type: 'success',
           message: 'Success',
           description: 'Your account has been created!',
         });
         router.replace('/login');
       } else {
         router.replace('/sign-up');
-        showToastError({
+        showToast({
+          type: 'error',
           message: 'Error',
           description: 'Your account has not been created!',
         });
@@ -91,7 +92,8 @@ const SignUpForm = () => {
     } catch (err) {
       if (err) {
         router.replace('/sign-up');
-        showToastError({
+        showToast({
+          type: 'error',
           message: 'Error',
           description: 'Your account has not been created!',
         });

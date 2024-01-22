@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { FaFilter } from 'react-icons/fa6';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 const BountyFilter = dynamic(() => import('@/components/bounty/filter'), {
   loading: () => <GridLoader color="white" />,
@@ -61,7 +61,8 @@ const Bounty: FC<BountyProps> = ({}) => {
       setFilterResults(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Error',
         description: 'There was an error fetching the data. Please try again.',
       });

@@ -13,7 +13,7 @@ import CountUp from 'react-countup';
 import { Button } from '@/components/ui/button';
 import { FaFilter } from 'react-icons/fa6';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 const AttacksTable = dynamic(() => import('@/components/attacks/table'), {
   loading: () => <GridLoader color="white" />,
@@ -63,7 +63,8 @@ const Attacks: FC<AttacksProps> = ({}) => {
       setFilterResults(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Error',
         description: 'There was an error fetching the data. Please try again.',
       });

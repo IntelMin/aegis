@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 interface SignInProps {}
 
@@ -58,7 +58,8 @@ const SignIn: FC<SignInProps> = ({}) => {
     });
 
     if (signInData?.error) {
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Something went wrong.',
         description: 'Please check your email and password.',
       });

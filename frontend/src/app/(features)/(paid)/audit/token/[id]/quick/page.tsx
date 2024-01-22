@@ -9,7 +9,7 @@ import AuditHistory from '@/components/audit/detail/audit-history';
 import Link from 'next/link';
 import axios from 'axios';
 import useTokenInfo from '@/hooks/useTokenInfo';
-import { showToastError } from '@/components/toast-error';
+import { showToast } from '@/components/toast';
 
 type Props = {
   params: {
@@ -39,7 +39,8 @@ const QuickAuditPage = ({ params }: Props) => {
 
   useEffect(() => {
     if (error) {
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Error',
         description: 'There was an error fetching token information',
       });

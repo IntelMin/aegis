@@ -7,8 +7,8 @@ import { useSession } from 'next-auth/react';
 import useBalance from '@/hooks/useBalance';
 import usePayment from '@/hooks/usePayment';
 import PaymentDialog from '@/components/payment-dialog';
-import { showToastError } from '@/components/toast-error';
 import { toast } from 'sonner';
+import { showToast } from '@/components/toast';
 
 const CodeAudit = () => {
   const session = useSession();
@@ -34,7 +34,8 @@ const CodeAudit = () => {
     e.preventDefault();
     setOpen(false);
     if (ContractCode === '') {
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Missing value',
         description: 'Please add valid contract code',
       });
@@ -55,7 +56,8 @@ const CodeAudit = () => {
       });
 
       if (!response.ok) {
-        showToastError({
+        showToast({
+          type: 'error',
           message: 'Error',
           description: 'An error occurred during code audit',
         });
@@ -66,7 +68,8 @@ const CodeAudit = () => {
       setFindings(result.findings);
     } catch (error) {
       console.error('Error during code audit:', error);
-      showToastError({
+      showToast({
+        type: 'error',
         message: 'Error',
         description: 'An error occurred during code audit',
       });
