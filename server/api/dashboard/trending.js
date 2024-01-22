@@ -175,7 +175,6 @@ function scheduleTrendingFetch(frequency, duration) {
 scheduleTrendingFetch('*/5 * * * *', 1); // Every hour, check every 3 minutes
 scheduleTrendingFetch('*/15 * * * *', 4); // Every 4 hours, check every 10 mins
 scheduleTrendingFetch('0 * * * *', 12); // Every 12 hours, check every 60 mins
-scheduleTrendingFetch('0 */6 * * *', 24); // Every 24 hours (daily), check every 6 hours
 
 async function init() {
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -186,9 +185,6 @@ async function init() {
 
   await new Promise(resolve => setTimeout(resolve, 2000));
   await getTrending(12);
-
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  await getTrending(24);
 }
 
 module.exports = { router, init };
