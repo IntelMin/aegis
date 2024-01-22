@@ -87,7 +87,7 @@ const DataFeedFactory = (
         .then(res => {
           onHistoryCallback(
             res.map(
-              item => ({
+              (item: any) => ({
                 high: item.h,
                 low: item.l,
                 open: item.o,
