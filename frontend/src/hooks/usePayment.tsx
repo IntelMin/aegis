@@ -4,27 +4,23 @@ import { Session } from 'next-auth';
 
 import { creditConfig, CreditType } from '@/lib/credit-config';
 import { ToasterToast } from '@/components/ui/use-toast';
+import { useSession } from 'next-auth/react';
 
 interface usePaymentProps {
-  session: {
-    data: Session | null;
-    update: (data?: any) => Promise<Session | null>;
-    status: 'authenticated' | 'loading' | 'unauthenticated';
-  };
   address?: string;
   balance: number | null;
   onSuccess?: () => void;
   toast: (props: ToasterToast) => void;
 }
 const usePayment = ({
-  session,
   address,
   balance,
   onSuccess,
   toast,
 }: usePaymentProps) => {
   const router = useRouter();
-
+  const session = useSession();
+  const [loading, setLoading] = useState(false);
   const handlePayment = async (type: CreditType) => {
     if (session.status === 'unauthenticated') {
       router.push('/login');
@@ -44,6 +40,7 @@ const usePayment = ({
       });
       return new Error('Not enough credits');
     }
+    setLoading(true);
     const res = await fetch('/api/credit/pay', {
       method: 'POST',
       body: JSON.stringify({
@@ -53,6 +50,17 @@ const usePayment = ({
     });
     const data = await res.json();
     console.log(data);
+    if (!res.ok) {
+      toast({
+        id: 'payment-error',
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Credit payment error',
+      });
+      setLoading(false);
+
+      return new Error('Credit payment error');
+    }
     if (data?.status === 'success') {
       toast({
         id: 'payment-success',
@@ -71,7 +79,9 @@ const usePayment = ({
       if (onSuccess) {
         onSuccess(); // Call onSuccess callback if provided
       }
+      setLoading(false);
     } else {
+      setLoading(false);
       toast({
         id: 'payment-error',
         variant: 'destructive',
@@ -83,7 +93,7 @@ const usePayment = ({
     }
   };
 
-  return handlePayment;
+  return { handlePayment, loading };
 };
 
 export default usePayment;

@@ -1,8 +1,8 @@
+import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 
 const useBalance = (email: string) => {
   const [balance, setBalance] = useState(null);
-
   useEffect(() => {
     const getBalance = async () => {
       const res = await fetch('/api/credit/balance', {

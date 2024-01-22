@@ -4,12 +4,16 @@ import { tableData, tablehead } from '@/components/reports/constant';
 import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import { toast } from '@/components/ui/use-toast';
+import usePayment from '@/hooks/usePayment';
 import useTokenInfo from '@/hooks/useTokenInfo';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-
+import useBalance from '@/hooks/useBalance';
+import PaymentDialog from '@/components/payment-dialog';
+import { add, set } from 'date-fns';
 type Props = {};
 type tokenState = {
   tokenIcon: string;
@@ -28,6 +32,10 @@ type usertype = {
   updated_at?: Date;
 };
 const RequestReportPage = (props: Props) => {
+  const session = useSession();
+  const { balance, setBalance } = useBalance(
+    session.data?.user?.email as string
+  );
   const [user, setUser] = useState<usertype>({}); // user state
   const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',
@@ -38,6 +46,16 @@ const RequestReportPage = (props: Props) => {
   });
   const [requestAddress, setRequestAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { handlePayment, loading } = usePayment({
+    balance,
+    toast,
+
+    onSuccess: () => {
+      requestNewReport(requestAddress);
+      setOpen(false);
+    },
+  });
 
   const requestNewReport = async (address: string) => {
     const contractAddress = address;
@@ -113,13 +131,16 @@ const RequestReportPage = (props: Props) => {
       console.error('Error requesting report:', error);
     }
   };
-  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
-    submitting ? requestAddress : '',
-    'meta',
-    false
-  );
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+
+  const verifyAddress = async (address: string) => {
+    const response = await fetch(`/api/token/check?token=${address}`);
+    const res = await response.json();
+    console.log(res);
+    return res.data;
+  };
+
+  const handleSubmit = async () => {
+    // e.preventDefault();
     if (!requestAddress) {
       toast({
         variant: 'destructive',
@@ -136,8 +157,19 @@ const RequestReportPage = (props: Props) => {
       });
       return;
     }
-    setSubmitting(true);
+    const verify = await verifyAddress(requestAddress);
+    console.log(verify);
+    if (!verify) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please enter a valid contract address',
+      });
+      return;
+    }
+    setOpen(true);
   };
+  const [addressState, setAddressState] = useState('');
 
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
@@ -151,25 +183,10 @@ const RequestReportPage = (props: Props) => {
     }
     getuser();
   }, []);
-  useEffect(() => {
-    if (!submitting) return;
-    console.log({ isFetching, tokenRequestInfo, error });
-    if (!isFetching && tokenRequestInfo && !error) {
-      requestNewReport(requestAddress);
-    }
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'There was an error fetching token information',
-      });
-      setSubmitting(false);
-    }
-  }, [submitting, isFetching, tokenRequestInfo, error, requestAddress, toast]);
 
   const handleOutsideClick = (event: MouseEvent) => {
     const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
-
+    setOpen(false);
     if (modal && !modal.contains(event.target as Node)) {
       setShowModal(false);
     }
@@ -199,43 +216,60 @@ const RequestReportPage = (props: Props) => {
       </div>
       {/* Input Section */}
       <div className="flex items-center justify-center -translate-y-1/2">
-        <form onSubmit={e => handleSubmit(e)}>
-          <div className="w-[590px] flex items-center bg-zinc-900 p-3 border border-zinc-700 gap-3">
-            <input
-              type="text"
-              placeholder="Token address"
-              className="border-0 bg-transparent px-2 border-r border-r-zinc-700 flex-1 outline-none"
-              value={requestAddress}
-              onChange={e => {
-                setRequestAddress(e.target.value);
-              }}
-            />
-            <button
-              type="submit"
-              disabled={submitting}
-              className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1"
-            >
-              {submitting ? (
-                <ScaleLoader width={6} height={12} color="white" />
-              ) : (
-                <>
-                  <Image
-                    src="/icons/nav/reports.svg"
-                    alt="report-icon"
-                    width={16}
-                    height={16}
-                    style={{
-                      filter: 'invert(100%) brightness(1000%) contrast(100%)',
-                    }}
-                  />
-                  <p className="text-[16px] font-[500] text-zinc-50">
-                    Generate Report
-                  </p>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+        <div className="w-[590px] flex items-center bg-zinc-900 p-3 border border-zinc-700 gap-3">
+          <input
+            type="text"
+            placeholder="Token address"
+            className="border-0 bg-transparent px-2 border-r border-r-zinc-700 flex-1 outline-none"
+            value={requestAddress}
+            onChange={e => {
+              setRequestAddress(e.target.value);
+            }}
+          />
+          <PaymentDialog
+            service="report"
+            balance={balance}
+            handlePayment={handlePayment}
+            open={open}
+            DummyElement={
+              <button
+                type="submit"
+                disabled={submitting || balance == null || addressState !== ''}
+                className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1"
+                onClick={() => {
+                  if (addressState !== '') {
+                    toast({
+                      variant: 'destructive',
+                      title: 'Error',
+                      description: 'Please enter a valid contract address',
+                    });
+                  } else {
+                    handleSubmit();
+                  }
+                }}
+              >
+                {submitting ? (
+                  <ScaleLoader width={6} height={12} color="white" />
+                ) : (
+                  <>
+                    <Image
+                      src="/icons/nav/reports.svg"
+                      alt="report-icon"
+                      width={16}
+                      height={16}
+                      style={{
+                        filter: 'invert(100%) brightness(1000%) contrast(100%)',
+                      }}
+                    />
+                    <p className="text-[16px] font-[500] text-zinc-50">
+                      Generate Report
+                    </p>
+                  </>
+                )}
+              </button>
+            }
+          />
+        </div>
       </div>
       {/* Request Section */}
       <div className="flex flex-col items-center justify-center gap-6">

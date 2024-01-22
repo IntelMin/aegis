@@ -118,7 +118,7 @@ const DataFeedFactory = (
           });
         });
     },
-    unsubscribeBars: () => {},
+    unsubscribeBars: () => { },
     searchSymbols: (
       userInput: string,
       exchange: string,
