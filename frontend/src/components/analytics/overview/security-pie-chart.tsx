@@ -94,6 +94,16 @@ const PieGraph = (props: props) => {
       lineCap: 'round',
     },
     labels: ['Safety Overview'],
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: 380,
+          },
+        },
+      },
+    ],
   };
 
   return (
