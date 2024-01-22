@@ -8,7 +8,7 @@ const NodeCache = require('node-cache');
 const server = http.createServer();
 const io = socketIO(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
