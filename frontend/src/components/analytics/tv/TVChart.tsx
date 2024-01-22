@@ -7,7 +7,7 @@ import {
   widget,
 } from './charting_library/charting_library';
 import { DEFAULT_RESOLUTION } from './constants';
-import DataFeedFactory from './DataFeed';
+import DataFeedFactory from './datafeed';
 import { loadChartState, resolutionToSeconds, saveChartState } from './utils';
 
 export type ChartProps = {
