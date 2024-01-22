@@ -18,16 +18,15 @@ const TradesTable = ({ pair, symbol, base }: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [trades, setTrades] = useState<any[]>([]);
 
-  const transformTradeData = tradeData => {
-    // Add your transformation logic here
-    return tradeData.map(trade => {
+  const transformTradeData = (tradeData: any) => {
+    return tradeData.map((trade: any) => {
       const isBuy = trade.attributes.kind === 'buy';
 
       const dateString = trade.attributes.block_timestamp;
       const date = new Date(dateString);
       const unixTimestamp = Math.floor(date.getTime() / 1000);
 
-      let color = 'text-green-600'; // Default color
+      let color = 'text-green-600';
       if (!isBuy) {
         color = 'text-red-600';
       }

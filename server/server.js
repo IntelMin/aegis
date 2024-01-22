@@ -67,10 +67,10 @@ async function init() {
     console.log('Initializing...');
 
     await Promise.all([
-      //   initDashboardLive(),
-      //   initDashboardTrending(),
-      //   initBounty(),
-      //   initAttacks(),
+      initDashboardLive(),
+      initDashboardTrending(),
+      initBounty(),
+      initAttacks(),
     ]);
 
     console.log('Initialization complete.');
