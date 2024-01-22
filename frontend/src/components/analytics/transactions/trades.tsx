@@ -20,7 +20,6 @@ const TradesTable = ({ pair, symbol, base }: any) => {
 
   const transformTradeData = (tradeData: any) => {
     return tradeData.map((trade: any) => {
-
       const isBuy = trade.attributes.kind === 'buy';
 
       const dateString = trade.attributes.block_timestamp;
@@ -76,50 +75,6 @@ const TradesTable = ({ pair, symbol, base }: any) => {
         <Table className="w-full">
           {/* <div className="sticky top-0"> */}
           <TableHead tableHead={['', 'Address', 'Amount', 'Price', 'Time']} />
-          {/* </div> 
-          {
-        {
-            "id": "eth_19050534_0xf82279e3afcd550925678c080dfe726111a2b05076a7cf865a3637c0e9ffaed7_323_1705783391",
-            "type": "trade",
-            "attributes": {
-                "block_number": 19050534,
-                "tx_hash": "0xf82279e3afcd550925678c080dfe726111a2b05076a7cf865a3637c0e9ffaed7",
-                "tx_from_address": "0x498586424c3ba11c9a5da2fe84e2497b5c35ebe2",
-                "from_token_amount": "0.22552479760947",
-                "to_token_amount": "5658.442279089",
-                "price_from_in_currency_token": "1.0",
-                "price_to_in_currency_token": "0.000039856339693153",
-                "price_from_in_usd": "2464.84210673481",
-                "price_to_in_usd": "0.0982395842960095",
-                "block_timestamp": "2024-01-20T20:42:47Z",
-                "kind": "buy",
-                "volume_in_usd": "555.883017260668",
-                "from_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                "to_token_address": "0x55a8f6c6b3aa58ad6d1f26f6afeded78f32e19f4"
-            }
-        },
-        {
-            "id": "eth_19050462_0x86b06b2cf8e0d8f932f3d3628ba0a3eddf28dc4392a72a161e84b9d1bf58a58e_242_1705782515",
-            "type": "trade",
-            "attributes": {
-                "block_number": 19050462,
-                "tx_hash": "0x86b06b2cf8e0d8f932f3d3628ba0a3eddf28dc4392a72a161e84b9d1bf58a58e",
-                "tx_from_address": "0x8bed692c0dad2aab8b0fdb52b41e95e9b876b674",
-                "from_token_amount": "0.075",
-                "to_token_amount": "1885.140677436",
-                "price_from_in_currency_token": "1.0",
-                "price_to_in_currency_token": "0.0000397848292690858",
-                "price_from_in_usd": "2466.48415998123",
-                "price_to_in_usd": "0.0981286511997577",
-                "block_timestamp": "2024-01-20T20:28:23Z",
-                "kind": "buy",
-                "volume_in_usd": "184.986311998592",
-                "from_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                "to_token_address": "0x55a8f6c6b3aa58ad6d1f26f6afeded78f32e19f4"
-            }
-        },
-          
-          */}
           <TableBody>
             {trades?.map(item => (
               <TableRow
