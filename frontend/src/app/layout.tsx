@@ -9,6 +9,21 @@ import { satoshi } from '@/fonts/satoshi';
 export const metadata: Metadata = {
   title: 'Aegis - AI Powered Defi Aisstant',
   description: 'Superpowered AI assistant for DeFi',
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'de-DE': '/de-DE',
+    },
+  },
+  openGraph: {
+    images: '/opengraph-image.jpg',
+  },
 };
 
 export default function RootLayout({
