@@ -58,7 +58,7 @@ const Analytics = ({ params }: Props) => {
       <TokenHeader showTitle={true} liveData={liveData} metadata={tokenInfo} />
 
       <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-1 flex flex-col gap-4">
+        <div className="col-span-4 sm:col-span-2 xl:col-span-1 flex flex-col gap-4">
           {/* Token details */}
           <div className="row-span-3">
             <TokenOverview
@@ -68,7 +68,7 @@ const Analytics = ({ params }: Props) => {
             />
           </div>
         </div>
-        <div className="col-span-3 flex flex-col gap-4">
+        <div className="col-span-4 sm:col-span-2 xl:col-span-3 flex flex-col gap-4">
           {/* Trading View chart */}
           {!isTVChartReady && <Skeleton className="w-full h-[400px]" />}
           <div
@@ -89,7 +89,7 @@ const Analytics = ({ params }: Props) => {
 
           <div className="grid grid-cols-3 gap-4">
             {/* Trades or Holders */}
-            <div className="col-span-1 aspect-square">
+            <div className="col-span-3 xl:col-span-1 aspect-square">
               <HorizontalSwitcher
                 graphs={[
                   {
@@ -106,7 +106,7 @@ const Analytics = ({ params }: Props) => {
                 defaultResolution={'1h'}
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-3 xl:col-span-2">
               {/* Holder Bubble Chart */}
               <DropdownSwitcher
                 graphs={[
