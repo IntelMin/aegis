@@ -44,8 +44,8 @@ const PaymentDialog = ({
           <DialogHeader>
             <DialogTitle>Credit balance low</DialogTitle>
             <DialogDescription>
-              You have {balance} credits available. You need {required_credits}{' '}
-              credits{' '}
+              You have {balance ? balance : 0} credits available. You need{' '}
+              {required_credits} credits{' '}
               {service == 'code'
                 ? 'to audit your code'
                 : service == 'detailed'
