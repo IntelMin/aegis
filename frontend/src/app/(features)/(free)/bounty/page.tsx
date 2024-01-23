@@ -41,10 +41,10 @@ const Bounty = (props: Props) => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full monitor">
       {/* Banner Section */}
       <div
-        className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full"
+        className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full monitor"
         style={{
           background: 'url(/backgrounds/bounty.png)',
           backgroundSize: 'cover',
@@ -85,7 +85,7 @@ const Bounty = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="px-2 md:px-10 flex flex-col gap-6">
+      <div className="px-2 overflow-hidden h-full md:px-10 flex flex-col gap-6 monitor">
         {/* Filter Section */}
         <div className="w-full flex max-md:flex-col max-md:gap-6 items-center justify-between">
           {/* Left Filter Section */}
@@ -254,7 +254,7 @@ const Bounty = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-6 mt-6 max-md:my-3">
+        <div className="grid grid-cols-4 gap-6 my-6 max-md:my-3 bounty">
           {arr?.slice(0, 8).map(item => (
             <BountyCard key={item} />
           ))}
