@@ -9,6 +9,16 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+
 import { SelectTrigger } from '@radix-ui/react-select';
 import { BiChevronDown } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
@@ -31,7 +41,7 @@ const Bounty = (props: Props) => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full h-full">
       {/* Banner Section */}
       <div
         className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full"
@@ -245,9 +255,29 @@ const Bounty = (props: Props) => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-6 mt-6 max-md:my-3">
-          {arr?.map(item => (
+          {arr?.slice(0, 8).map(item => (
             <BountyCard key={item} />
           ))}
+        </div>
+        <div className="w-full flex justify-center items-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious className="bg-[#121F31]" href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink className="bg-[#0E76FD] py-1" href="#">
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext className="bg-[#0E76FD] py-1" href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>
