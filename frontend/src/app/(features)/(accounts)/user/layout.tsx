@@ -56,9 +56,9 @@ export default function UserProfileLayout({
             <p className="text-zinc-50 font-[600] text-3xl">{balance}</p>
             <p className="text-zinc-400 font-[400] text-sm">Credit Balance</p>
           </div>
-          <nav className="flex md:flex-col py-5 border-r border-zinc-900 text-sm font-medium gap-3">
+          <nav className="flex md:flex-col max-md:w-full py-5 border-b md:border-r border-zinc-900 text-sm font-medium gap-3">
             <Link
-              className={`flex items-center font-[500] justify-center gap-3 px-3 py-2 text-[16px] transition-all  ${
+              className={`flex max-md:w-1/3 items-center font-[500] justify-center gap-3 px-3 py-2 text-[16px] transition-all  ${
                 pathname == '/user/profile'
                   ? 'bg-blue-600 text-zinc-50'
                   : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
@@ -69,7 +69,7 @@ export default function UserProfileLayout({
               Profile
             </Link>
             <Link
-              className={`flex items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all  ${
+              className={`flex max-md:w-1/3 items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all  ${
                 pathname == '/user/history'
                   ? 'bg-blue-600 text-zinc-50'
                   : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
@@ -92,7 +92,7 @@ export default function UserProfileLayout({
               Audits
             </Link>
             <Link
-              className={`flex items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all ${
+              className={`flex max-md:w-1/3 items-center justify-center font-[500] gap-3 px-3 py-2 text-[16px] transition-all ${
                 pathname == '/user/payments'
                   ? 'bg-blue-600 text-zinc-50'
                   : 'bg-zinc-900 text-zinc-600 hover:text-zinc-400'
