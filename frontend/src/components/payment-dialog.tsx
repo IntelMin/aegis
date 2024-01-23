@@ -17,7 +17,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 interface PaymentDialogProps {
   balance: number | null;
   service: CreditType;
-  handlePayment: (type: CreditType) => Promise<void>;
+  handlePayment: (type: CreditType) => Promise<any>;
   TriggerElement?: React.ReactNode;
   DummyElement?: React.ReactNode;
   open?: boolean;
