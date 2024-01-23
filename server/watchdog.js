@@ -23,6 +23,9 @@ let current_block;
 const Network = () => {
   let node;
   let network;
+  const blockQueue = [];
+  const transactionQueue = [];
+  const RATE_LIMIT = 10; // transactions per second, adjustable
 
   const fetchParsec = async txHash => {
     const query = `
@@ -126,7 +129,9 @@ const Network = () => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      //   throw new Error(`HTTP error! Status: ${response.status}`);
+      console.log(`HTTP error! Status: ${response.status}`);
+      return null;
     }
 
     return await response.json();
@@ -357,29 +362,31 @@ const Network = () => {
       // console.log(risk);
     }
 
-    return results;
+    return { results, type };
   }
 
   async function processTransaction(tx) {
     try {
-      io.emit('log', 'Processing tx: ' + tx);
-      if (tx) {
-        let parsecData = await fetchParsec(tx);
+      //   io.emit('log', 'Processing tx: ' + tx);
+      if (tx.tx) {
+        // console.log(tx.tx);
+        let parsecData = await fetchParsec(tx.tx);
         // check if parsecData has data
         if (parsecData) {
-          parsecData = await parseTransaction(parsecData.data.tx);
-          io.emit('log', parsecData);
+          const { results, type } = await parseTransaction(parsecData.data.tx);
+          io.emit('log', results);
+
+          const blockInfo = {
+            number: tx.number,
+            timestamp: tx.blockTimestamp,
+            transactions: 1,
+            addresses: 1 ? type === 'wallet' : 0,
+            contracts: 1 ? type === 'contract' : 0,
+          };
+
+          io.emit('block_status', blockInfo);
         }
       }
-
-      // const txDetails = await node.getTransaction(tx);
-      // console.log(txDetails);
-      // console.log(`Processed transaction with ID: ${txDetails.hash}`);
-      // io.emit('log', 'Processing tx: ' + txDetails.hash);
-      // let parsecData = await fetchParsec(txDetails.hash);
-      // // console.log(parsecData);
-      // parsecData = parsecData.data.tx;
-      // parsecData = JSON.stringify(parsecData);
 
       // return txDetails;
     } catch (error) {
@@ -388,25 +395,63 @@ const Network = () => {
     }
   }
 
+  async function processTransactionsFromQueue() {
+    while (true) {
+      if (transactionQueue.length > 0) {
+        const transactionsToProcess = transactionQueue.splice(0, RATE_LIMIT);
+        await Promise.all(
+          transactionsToProcess.map(tx => processTransaction(tx))
+        );
+
+        // Calculate delay for rate limiting
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } else {
+        // No transactions to process, short delay to reduce CPU usage
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+  }
+
+  async function processBlockFromQueue() {
+    while (true) {
+      if (blockQueue.length > 0) {
+        const blockNumber = blockQueue.shift();
+        await processBlock(blockNumber);
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
   async function processBlock(blockNumber) {
     try {
       const block = await node.getBlock(blockNumber);
-      const blockInfo = {
-        number: block.number,
-        timestamp: block.timestamp,
-        transactions: block.transactions.length,
-      };
-      current_block = blockInfo;
-      io.emit('block_status', blockInfo);
 
-      const transactionsProcessed = await Promise.all(
-        block.transactions.map(tx => processTransaction(tx))
-      );
+      if (!block) {
+        console.error(
+          `Block with number ${blockNumber} could not be fetched or does not exist.`
+        );
+        return;
+      }
 
-      return;
+      //   const blockInfo = {
+      //     number: block.number,
+      //     timestamp: block.timestamp,
+      //     // transactions: block.transactions.length,
+      //   };
+      //   current_block = blockInfo;
+      //   io.emit('block_status', blockInfo);
 
-      io.emit('log', 'Processed block: ' + block.number);
-      console.log(`Processed block number: ${block.number}`);
+      block.transactions.forEach(tx => {
+        let augmentedTransaction = {
+          tx,
+          blockTimestamp: block.timestamp,
+          number: block.number,
+        };
+        transactionQueue.push(augmentedTransaction);
+      });
+
+      //   io.emit('log', 'Added transactions from block: ' + block.number);
+      console.log(`Added transactions from block number: ${block.number}`);
     } catch (error) {
       console.error('Error processing block:', error);
     }
@@ -414,22 +459,15 @@ const Network = () => {
 
   const load = async () => {
     try {
-      // node = new ethers.JsonRpcProvider(
-      //   'https://eth-mainnet.g.alchemy.com/v2/7B2QtnMLzcqodSxHVKoUAyoddGmaFvSF'
-      // );
-
       node = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
 
-      let lastProcessedBlock = 0;
-
       node.on('block', async blockNumber => {
-        if (blockNumber > lastProcessedBlock) {
-          await processBlock(blockNumber, node);
-          lastProcessedBlock = blockNumber;
-        }
+        blockQueue.push(blockNumber);
       });
 
-      console.log('Network loaded.');
+      console.log('Network loaded. Starting block processing...');
+      processBlockFromQueue();
+      processTransactionsFromQueue();
     } catch (err) {
       console.error('Error initializing network:', err);
     }
@@ -454,9 +492,17 @@ Network();
 io.on('connection', socket => {
   console.log('A user connected');
 
-  if (current_block) {
-    socket.emit('block_status', current_block);
-  }
+  //   if (current_block) {
+  //     socket.emit('block_status', current_block);
+  //   }
+
+  socket.emit('block_status', {
+    number: 0,
+    timestamp: 0,
+    transactions: 0,
+    addresses: 0,
+    contracts: 0,
+  });
 
   socket.on('disconnect', () => {
     console.log('User disconnected');

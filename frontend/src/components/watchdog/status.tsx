@@ -30,6 +30,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
   const [blockCount, setBlockCount] = useState(0);
   const [blockTxns, setBlockTxns] = useState(0);
   const [blockAddresses, setBlockAddresses] = useState(0);
+  const [blockContracts, setBlockContracts] = useState(0);
   const [lastBlock, setLastBlock] = useState(0);
   const [updatedOn, setUpdatedOn] = useState('');
 
@@ -55,10 +56,15 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
 
   const updateBlock = (data: any) => {
     console.log('Updating block');
-    setBlockCount(prevCount => prevCount + 1);
-    setBlockTxns(prevTxns => prevTxns + data.transactions);
-    setLastBlock(data.number);
+
+    if (data.number !== lastBlock) {
+      setBlockCount(prevCount => prevCount + 1);
+      setLastBlock(data.number);
+    }
     setUpdatedOn(formatAge(parseInt(data.timestamp) * 1000, true));
+    setBlockTxns(prevTxns => prevTxns + data.transactions);
+    setBlockAddresses(prevAddresses => prevAddresses + data.addresses);
+    setBlockContracts(prevContracts => prevContracts + data.contracts);
   };
 
   const updateAddress = () => {
@@ -108,7 +114,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
             {'\n'}
             {'CONTRACTS:      '}
             <span className="text-zinc-500">
-              {padWithSpaces(blockAddresses.toString(), 7)}
+              {padWithSpaces(blockContracts.toString(), 7)}
             </span>
             {'\n\n'}
             {'BLOCK #:       '}
