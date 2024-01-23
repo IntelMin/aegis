@@ -92,7 +92,7 @@ const ClusterHold: React.FC<Props> = ({ data }) => {
           <tbody>
             {holders?.map((holder: any, index: any) => (
               <tr
-                key={holder.address}
+                key={holder.link}
                 className={`items-center text-xs ${
                   index % 2 !== 0 ? 'bg-[#0B0B0B]' : 'bg-transparent'
                 }`}
@@ -103,7 +103,7 @@ const ClusterHold: React.FC<Props> = ({ data }) => {
                 <td className="text-blue-300 font-bold">
                   <Link
                     target="_blank"
-                    href={`https://etherscan.io/address/${holder.address}`}
+                    href={`https://etherscan.io/address/${holder.link}`}
                   >
                     {holder.label}
                   </Link>
