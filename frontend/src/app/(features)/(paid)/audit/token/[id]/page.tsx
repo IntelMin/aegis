@@ -61,11 +61,18 @@ const TokenAuditOption = ({ params }: props) => {
   const [submitting, setSubmitting] = React.useState<boolean>(false);
   const [submittedAddress, setSubmittedAddress] = React.useState<string>('');
 
-  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
-    submitting ? submittedAddress : '',
+  const { isFetching, tokenRequestInfo, tokenInfo, error } = useTokenInfo(
+    params.id,
     'meta',
-    false
+    true
   );
+  useEffect(() => {
+    console.log({ tokenInfo });
+    if (!isFetching && tokenRequestInfo && !error) {
+      console.log({ tokenInfo });
+      setMetadata(tokenInfo);
+    }
+  }, [submittedAddress, isFetching, tokenRequestInfo, error]);
 
   useEffect(() => {
     if (!submitting) return;
