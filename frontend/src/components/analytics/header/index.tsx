@@ -87,7 +87,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
         <div
           className={`${
             showTitle ? '' : 'hidden'
-          } flex-1 max-md:flex max-md:flex-row max-md:items-center max-md:gap-6`}
+          } flex-1 max-md:flex max-md:flex-row max-md:justify-between max-md:items-center max-md:gap-6`}
         >
           <div className="col-span-1 flex items-center justify-between">
             <div className="flex gap-2 items-start md:items-center">

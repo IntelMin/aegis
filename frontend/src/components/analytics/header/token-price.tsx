@@ -8,7 +8,7 @@ type Props = {
 
 export const TokenPrice = ({ liveData }: Props) => {
   return (
-    <div className="flex max-md:flex-col max-md:gap-1 md:items-center gap-4">
+    <div className="flex max-md:flex-col max-md:gap-1 items-end md:items-center gap-4">
       {liveData?.priceUsd ? (
         <h1 className="text-neutral-50 text-[28px] leading-[35px] md:leading-[40px] font-[700]">
           ${liveData.priceUsd}
