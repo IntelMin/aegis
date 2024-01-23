@@ -7,21 +7,18 @@ import {
   DialogTitle,
   DialogDescription,
   DialogClose,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CreditType, creditConfig } from '@/lib/credit-config';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-
+import { set } from 'date-fns';
 interface PaymentDialogProps {
   balance: number | null;
   service: CreditType;
-  handlePayment: (type: CreditType) => Promise<any>;
+  handlePayment: (type: CreditType) => void;
   TriggerElement?: React.ReactNode;
   DummyElement?: React.ReactNode;
   open?: boolean;
-  payInProgress?: boolean;
 }
 const PaymentDialog = ({
   balance,
@@ -29,16 +26,10 @@ const PaymentDialog = ({
   handlePayment,
   TriggerElement,
   DummyElement,
-  payInProgress,
   open,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
   const [openDialog, setOpenDialog] = React.useState(false);
-
-  if (required_credits === 0) {
-    return <div onClick={() => handlePayment(service)}>{TriggerElement}</div>;
-  }
-
   if (balance == null || balance < required_credits) {
     return (
       <Dialog open={open ? open : undefined}>
@@ -106,20 +97,11 @@ const PaymentDialog = ({
               .
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button
-              disabled={payInProgress}
-              className="m-auto"
-              onClick={() =>
-                handlePayment(service).then(() => setOpenDialog(false))
-              }
-            >
-              {payInProgress && (
-                <AiOutlineLoading3Quarters className="animate-spin mr-1" />
-              )}
+          <DialogClose>
+            <Button type="submit" onClick={() => handlePayment(service)}>
               Confirm to pay {required_credits} credits
             </Button>
-          </DialogFooter>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     );
