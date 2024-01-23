@@ -39,7 +39,7 @@ const DropdownSwitcher = ({
   };
 
   return (
-    <div className="flex flex-col p-3 border border-zinc-900 bg-[#0C0C0C] h-[386px]">
+    <div className="flex flex-col p-3 border border-zinc-900 max-md:mb-3 max-md:min-h-[400px] bg-[#0C0C0C] md:h-[386px]">
       <div className="flex items-center justify-between relative">
         <div className="flex items-center gap-4 absolute translate-y-5">
           <Select onValueChange={value => setActiveGraphName(value)}>

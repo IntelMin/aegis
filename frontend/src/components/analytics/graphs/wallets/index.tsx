@@ -41,11 +41,11 @@ const WalletsGraph: React.FC<{
   }
 
   return (
-    <div className="flex flex-col max-md:gap-6 md:flex-row md:overflow-hidden">
-      <div className="flex flex-col w-full max-md:mb-6 md:w-[50%]">
+    <div className="flex flex-col gap-4 max-md:pb-4 max-md:gap-6 md:flex-row md:overflow-hidden">
+      <div className="flex flex-col w-full mb-6 md:w-[50%]">
         <WalletBubble data={data} />
       </div>
-      <div className="flex flex-col w-full md:w-[50%]">
+      <div className="flex flex-col max-md:mb-3 w-full md:w-[50%]">
         <WalletTable data={data} />
       </div>
     </div>

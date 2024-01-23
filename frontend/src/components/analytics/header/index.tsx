@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BiBadgeCheck, BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import TokenValueContainer from './token-value-container';
 import { toast } from 'sonner';
+import { TokenPrice } from './token-price';
 
 type Props = {
   showTitle: boolean;
@@ -83,7 +84,11 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
   return (
     <div className="container p-0 mx-auto">
       <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
-        <div className={`${showTitle ? '' : 'hidden'} flex-1`}>
+        <div
+          className={`${
+            showTitle ? '' : 'hidden'
+          } flex-1 max-md:flex max-md:flex-row max-md:justify-between max-md:items-center max-md:gap-6`}
+        >
           <div className="col-span-1 flex items-center justify-between">
             <div className="flex gap-2 items-start md:items-center">
               <Image
@@ -107,55 +112,27 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                   <Skeleton className="w-20 h-6" />
                 )}
                 {metadata?.symbol ? (
-                  <>
+                  <div className="flex gap-1 items-center">
                     <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
                       {metadata.symbol}
                     </h3>
                     {metadata?.explorerData?.blueCheckmark && (
                       <BiBadgeCheck className="text-blue-300" />
                     )}
-                  </>
+                  </div>
                 ) : (
                   <Skeleton className="w-10 h-5" />
                 )}
               </div>
             </div>
           </div>
+          <div className="md:hidden">
+            <TokenPrice liveData={liveData} />
+          </div>
         </div>
 
-        <div className="flex-1">
-          <div className="flex items-center gap-4">
-            {liveData?.priceUsd ? (
-              <h1 className="text-neutral-50 text-[28px] leading-[40px] font-[700]">
-                ${liveData.priceUsd}
-              </h1>
-            ) : (
-              <Skeleton className="w-32 h-8" />
-            )}
-            <div className="flex items-center">
-              {liveData?.priceChange?.h24 !== undefined ? (
-                <>
-                  {liveData.priceChange.h24 >= 0 ? (
-                    <>
-                      <BiChevronUp className="text-green-700" />
-                      <h5 className="text-green-700">
-                        {liveData.priceChange.h24}%
-                      </h5>
-                    </>
-                  ) : (
-                    <>
-                      <BiChevronDown className="text-red-700" />
-                      <h5 className="text-red-700">
-                        {Math.abs(liveData.priceChange.h24)}%
-                      </h5>
-                    </>
-                  )}
-                </>
-              ) : (
-                <Skeleton className="w-10 h-4" />
-              )}
-            </div>
-          </div>
+        <div className="flex-1 max-md:hidden">
+          <TokenPrice liveData={liveData} />
         </div>
 
         <div className="flex max-md:hidden flex-end">

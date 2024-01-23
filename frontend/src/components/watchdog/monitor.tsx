@@ -33,7 +33,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
     // prettier-ignore
     const initialData = (
       <TerminalOutput key={'intro'}>
-      <pre>
+      <pre className='max-md:scale-75 max-md:translate-x-[-50px]'>
       {`
           _    _____ ____ ___ ____      / \__
          / \\  | ____/ ___|_ _/ ___|    (    @\___
@@ -48,7 +48,8 @@ const Monitor = React.forwardRef(function MonitorComponent(
   token     [on|off]      toggle token detection
   honeypot  [on|off]      toggle honeypot detection
   address   [on|off]      toggle address detection
-  contract  [address]     monitor only the specified contract
+  contract  [address]     monitor only the specified 
+                          contract
   clear                   clear the terminal
   start                   start scanning
   stop                    stop scanning
@@ -245,7 +246,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
   }
 
   return (
-    <div className="pl-4 pr-4 max-w-[800px]">
+    <div className="md:pl-4 md:pr-4 max-md:w-screen md:max-w-[800px]">
       <Terminal
         ref={terminalRef}
         name="Watchdog Terminal"

@@ -31,7 +31,7 @@ const ReportsPage = () => {
 
   return (
     <div className="w-full flex justify-center pt-16 relative">
-      <div className="w-[80%] flex flex-col gap-8">
+      <div className="w-[90%] md:w-[80%] flex flex-col gap-8">
         <div className="w-full flex items-center justify-between">
           <div>
             <h1 className="text-2xl text-zinc-200 font-bold">Reports</h1>
@@ -52,7 +52,7 @@ const ReportsPage = () => {
                 filter: 'invert(100%) brightness(1000%) contrast(100%)',
               }}
             />
-            <p className="text-[16px] font-[500] text-zinc-50">
+            <p className="text-[14px] md:text-[16px] font-[500] text-zinc-50">
               Request Report
             </p>
           </Link>
