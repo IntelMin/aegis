@@ -254,11 +254,17 @@ const Bounty = (props: Props) => {
             </div>
           </div>
         </div>
+
+        {/* Bounty Card */}
+
         <div className="grid grid-cols-4 gap-6 my-6 max-md:my-3 bounty">
           {arr?.slice(0, 8).map(item => (
-            <BountyCard key={item} />
+            <BountyCard i={item} key={item} />
           ))}
         </div>
+
+        {/* Pagnation */}
+
         <div className="w-full flex justify-center items-center">
           <Pagination>
             <PaginationContent>

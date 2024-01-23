@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import React from 'react';
 
-type Props = {};
+type Props = {
+  i: number;
+};
 
-export const BountyCard = (props: Props) => {
+export const BountyCard = ({ i }: Props) => {
   return (
-    <div className="col-span-4 md:col-span-1 bg-zinc-900 p-2">
+    <div className="col-span-4 md:col-span-1 bg-zinc-900 p-2 rounded-md">
       <div
         style={{
           clipPath:
@@ -16,7 +18,7 @@ export const BountyCard = (props: Props) => {
         <div className="flex flex-col gap-2 text-center items-center z-[5]">
           <Image
             alt="bounty"
-            src="/icons/bounty/bounty-default.png"
+            src={`/icons/bounty/bounty-default.png`}
             width={32}
             height={32}
           />
@@ -34,18 +36,22 @@ export const BountyCard = (props: Props) => {
           </p>
         </div>
         <Image
-          src="/icons/bounty/blue-ellipse.svg"
+          src={`/icons/bounty/${i % 3 === 0 ? 'green' : 'blue'}-ellipse.svg`}
           alt="ellipse"
-          width={220}
-          height={220}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-[3]"
+          width={280}
+          height={280}
+          className={`absolute bottom-0 left-1/2 -translate-x-1/2 ${
+            i % 3 === 0 ? '' : 'translate-y-1/2'
+          } z-[3]`}
         />
         <Image
-          src="/icons/bounty/vector-1.png"
+          src={`/icons/bounty/vector-${(i % 3) + 1}.png`}
           alt="ellipse"
           width={320}
           height={320}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[2]"
+          className={`absolute bottom-0 left-1/2 ${
+            i % 3 !== 0 ? 'translate-y-[30%]' : ''
+          } -translate-x-1/2 z-[2]`}
         />
       </div>
     </div>
