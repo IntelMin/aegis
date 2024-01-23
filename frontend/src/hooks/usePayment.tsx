@@ -8,12 +8,13 @@ import { showToast } from '@/components/toast';
 interface usePaymentProps {
   address?: string;
   balance: number | null;
-  onSuccess?: () => void;
+  onSuccess?: (type: CreditType) => void;
 }
 const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
   const router = useRouter();
   const session = useSession();
   const [loading, setLoading] = useState(false);
+
   const handlePayment = async (type: CreditType) => {
     if (session.status === 'unauthenticated') {
       router.push('/login');
@@ -24,6 +25,12 @@ const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
     }
 
     const cost = creditConfig[type];
+
+    if (cost === 0) {
+      onSuccess?.(type);
+      return;
+    }
+
     if (!balance || balance === 0 || balance < cost) {
       showToast({
         type: 'error',
@@ -69,7 +76,7 @@ const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
         },
       });
       if (onSuccess) {
-        onSuccess(); // Call onSuccess callback if provided
+        onSuccess(type); // Call onSuccess callback if provided
       }
       setLoading(false);
     } else {
