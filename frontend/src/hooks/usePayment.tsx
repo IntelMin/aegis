@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Session } from 'next-auth';
 import { creditConfig, CreditType } from '@/lib/credit-config';
 import { useSession } from 'next-auth/react';
 import { showToast } from '@/components/toast';
@@ -24,7 +23,7 @@ const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
     }
 
     const cost = creditConfig[type];
-    if (!balance || balance === 0 || balance < cost) {
+    if (balance == null || balance == undefined || balance < cost) {
       showToast({
         type: 'error',
         message: 'Error',

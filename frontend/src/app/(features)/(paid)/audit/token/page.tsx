@@ -28,8 +28,8 @@ const TokenAuditorForm = (props: Props) => {
 
       router.push(`/audit/token/${submittedAddress}`);
     }
-
     if (error) {
+      console.log(isFetching, tokenRequestInfo, error);
       showToast({
         type: 'error',
         message: 'Error',
