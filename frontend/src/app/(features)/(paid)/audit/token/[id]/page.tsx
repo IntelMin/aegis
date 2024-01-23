@@ -43,7 +43,6 @@ const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
   const [metadata, setMetadata] = React.useState<any>();
-  const [auditType, setAuditType] = React.useState<string>('detailed'); // ['detailed', 'quick'
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
@@ -51,10 +50,8 @@ const TokenAuditOption = ({ params }: props) => {
   const { handlePayment, loading } = usePayment({
     address: params?.id,
     balance,
-    onSuccess: () => {
-      if (auditType === 'quick')
-        router.push(`/audit/token/${params?.id}/quick`);
-      else router.push(`/audit/token/${params?.id}/detailed`);
+    onSuccess: auditType => {
+      router.push(`/audit/token/${params?.id}/${auditType}`);
     },
   });
   const [submitting, setSubmitting] = React.useState<boolean>(false);
@@ -161,11 +158,11 @@ const TokenAuditOption = ({ params }: props) => {
                     TriggerElement={
                       <div
                         className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                        onClick={() => setAuditType('detailed')}
                       >
                         Detailed Audit
                       </div>
                     }
+                    payInProgress={loading}
                     handlePayment={handlePayment}
                   />
                 </div>
@@ -189,11 +186,11 @@ const TokenAuditOption = ({ params }: props) => {
                     TriggerElement={
                       <div
                         className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                        onClick={() => setAuditType('quick')}
                       >
                         Quick Audit
                       </div>
                     }
+                    payInProgress={loading}
                     handlePayment={handlePayment}
                   />
                 </div>
