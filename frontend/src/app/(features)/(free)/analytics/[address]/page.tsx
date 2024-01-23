@@ -122,7 +122,7 @@ const Analytics = ({ params }: Props) => {
               }`}
             >
               {/* Trades or Holders */}
-              <div className="col-span-4 md:col-span-1 aspect-square">
+              <div className="col-span-4 md:col-span-1 md:aspect-square">
                 <HorizontalSwitcher
                   graphs={[
                     {

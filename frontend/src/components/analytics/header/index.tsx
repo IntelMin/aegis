@@ -107,14 +107,14 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                   <Skeleton className="w-20 h-6" />
                 )}
                 {metadata?.symbol ? (
-                  <>
+                  <div className="flex gap-1">
                     <h3 className="text-neutral-500 text-[20px] leading-[24px] font-500">
                       {metadata.symbol}
                     </h3>
                     {metadata?.explorerData?.blueCheckmark && (
                       <BiBadgeCheck className="text-blue-300" />
                     )}
-                  </>
+                  </div>
                 ) : (
                   <Skeleton className="w-10 h-5" />
                 )}

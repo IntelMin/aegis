@@ -245,7 +245,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
   }
 
   return (
-    <div className="pl-4 pr-4 max-w-[800px]">
+    <div className="md:pl-4 md:pr-4 md:max-w-[800px]">
       <Terminal
         ref={terminalRef}
         name="Watchdog Terminal"
