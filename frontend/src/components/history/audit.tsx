@@ -56,7 +56,9 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
     }
     fetchData();
   }, [data]);
-  console.log({ audit_data });
+  console.log(audit_data);
+  console.log(loading);
+  console.log({ code });
   return (
     <TableBody>
       {audit_data.map((item, index: number) => (
@@ -74,7 +76,7 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
               <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
                 <Image
                   src={
-                    item.address?.length > 0
+                    item.imageSmallUrl
                       ? `/api/token/image?q=${item.imageSmallUrl
                           .split('/')
                           .pop()}`
