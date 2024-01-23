@@ -34,7 +34,7 @@ const middleware = withAuth(
       return NextResponse.next();
     }
 
-    return NextResponse.next();
+    // return NextResponse.next();
 
     if (token) {
       if (!token?.whitelisted && pathname.startsWith('/logout') === false) {
