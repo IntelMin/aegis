@@ -12,6 +12,7 @@ import { showToast } from '@/components/toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import PaymentDialog from '@/components/payment-dialog';
 import ScaleLoader from 'react-spinners/ScaleLoader';
+import usePaidUser from '@/hooks/usePaiduser';
 
 type props = {
   params: {
@@ -44,6 +45,7 @@ const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
   const [metadata, setMetadata] = React.useState<any>();
+  const paiduser = usePaidUser(params?.id);
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
@@ -175,6 +177,10 @@ const TokenAuditOption = ({ params }: props) => {
                     }
                     payInProgress={loading}
                     handlePayment={handlePayment}
+                    paidUser={paiduser ?? undefined}
+                    onSuccess={() => {
+                      router.push(`/audit/token/${params?.id}/detailed`);
+                    }}
                   />
                 </div>
                 <Image

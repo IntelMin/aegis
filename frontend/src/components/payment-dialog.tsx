@@ -22,6 +22,8 @@ interface PaymentDialogProps {
   DummyElement?: React.ReactNode;
   open?: boolean;
   payInProgress?: boolean;
+  paidUser?: boolean;
+  onSuccess?: () => void;
 }
 const PaymentDialog = ({
   balance,
@@ -31,6 +33,8 @@ const PaymentDialog = ({
   DummyElement,
   payInProgress,
   open,
+  paidUser,
+  onSuccess,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -38,6 +42,12 @@ const PaymentDialog = ({
   if (required_credits === 0) {
     return <div onClick={() => handlePayment(service)}>{TriggerElement}</div>;
   }
+  if (paidUser && onSuccess)
+    return (
+      <>
+        <div onClick={() => onSuccess()}>{TriggerElement}</div>
+      </>
+    );
 
   if (balance == null || balance < required_credits) {
     return (

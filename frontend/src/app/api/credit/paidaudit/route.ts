@@ -25,7 +25,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (!paid_audits) {
         return NextResponse.json({ status: "error", message: "user not paid" }, { status: 401 })
     }
-    const paid_audit = paid_audits.find((audit: any) => audit.address === address)
+    const paid_audit = paid_audits.find((audit: any) => audit.address == address)
+
     if (!paid_audit) {
         return NextResponse.json({ status: "error", message: "user not paid" }, { status: 401 })
     }

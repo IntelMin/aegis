@@ -18,63 +18,6 @@ type Props = {
 const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
   const [loading, setLoading] = React.useState(false);
 
-  const requestReport = async () => {
-    const contractAddress = metadata?.address;
-    try {
-      setLoading(true);
-      const response = await fetch('/api/audit/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: contractAddress,
-        }),
-      });
-      const data = await response.json();
-      if (data.status === 'success') {
-        const intervalId = setInterval(async () => {
-          const response = await fetch(
-            `/api/audit/report?address=${contractAddress}`,
-            {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-            }
-          );
-          console.log(response);
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.status === 'success') {
-              const pdfData = data.report; // base64-encoded PDF data
-              const pdfBlob = new Blob([atob(pdfData)], {
-                type: 'application/pdf',
-              });
-              const pdfUrl = URL.createObjectURL(pdfBlob);
-              const link = document.createElement('a');
-              link.href = pdfUrl;
-              link.download =
-                data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-              // Append the link to the body
-              document.body.appendChild(link);
-
-              // Programmatically click the link to start the download
-              link.click();
-
-              // Remove the link when done
-              document.body.removeChild(link);
-              // setPdfUrl(pdfUrl);
-              clearInterval(intervalId);
-              setLoading(false);
-            }
-          }
-        }, 5000);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error('Error requesting report:', error);
-    }
-  };
-
   const handleCopy = (text: string) => () => {
     copy(text);
     toast('Copied to clipboard');

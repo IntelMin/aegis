@@ -128,7 +128,7 @@ const DetailedPage = ({ params }: Props) => {
   const paiduser = usePaidUser(contractAddress);
   useEffect(() => {
     console.log({ paiduser });
-    if (!paiduser) {
+    if (paiduser == false) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -252,7 +252,7 @@ const DetailedPage = ({ params }: Props) => {
     return () => {
       if (timer.current) clearInterval(timer.current);
     };
-  }, [contractAddress]);
+  }, [contractAddress, paiduser]);
 
   if (!paiduser) {
     return (
