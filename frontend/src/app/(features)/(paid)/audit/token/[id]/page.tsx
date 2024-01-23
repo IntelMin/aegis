@@ -11,6 +11,7 @@ import usePayment from '@/hooks/usePayment';
 import { showToast } from '@/components/toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import PaymentDialog from '@/components/payment-dialog';
+import ScaleLoader from 'react-spinners/ScaleLoader';
 
 type props = {
   params: {
@@ -89,7 +90,6 @@ const TokenAuditOption = ({ params }: props) => {
     router,
   ]);
 
-  if (!balance) return <SkeletonLoader />;
   if (error) {
     return <div>Error loading token information</div>;
   }
@@ -159,7 +159,11 @@ const TokenAuditOption = ({ params }: props) => {
                       <div
                         className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
-                        Detailed Audit
+                        {submitting ? (
+                          <ScaleLoader width={4} height={10} color="white" />
+                        ) : (
+                          'Detailed Audit'
+                        )}
                       </div>
                     }
                     payInProgress={loading}
@@ -187,7 +191,11 @@ const TokenAuditOption = ({ params }: props) => {
                       <div
                         className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
-                        Quick Audit
+                        {submitting ? (
+                          <ScaleLoader width={4} height={10} color="white" />
+                        ) : (
+                          'Quick Audit'
+                        )}
                       </div>
                     }
                     payInProgress={loading}

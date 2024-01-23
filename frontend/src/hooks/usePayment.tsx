@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Session } from 'next-auth';
 import { creditConfig, CreditType } from '@/lib/credit-config';
 import { useSession } from 'next-auth/react';
 import { showToast } from '@/components/toast';
