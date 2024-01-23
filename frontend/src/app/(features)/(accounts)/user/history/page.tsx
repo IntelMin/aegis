@@ -1,29 +1,14 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from '@/components/ui/select';
-
-import { formatDate } from '@/utils/format-date';
-import { formatTime } from '@/utils/format-time';
-import Image from 'next/image';
+import { Table, TableHead, TableHeader } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 
 import React, { useEffect } from 'react';
-import { BiChevronDown, BiPencil } from 'react-icons/bi';
+import { BiChevronDown } from 'react-icons/bi';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { ReportTableBody } from '@/components/history/report';
 import { AuditTableBody } from '@/components/history/audit';
+import { Loader } from 'lucide-react';
 
 type typeconfig = {
   [key: string]: string;
@@ -34,6 +19,11 @@ type typeconfig = {
 };
 const UserAccountTable = () => {
   const [history, setHistory] = React.useState([]);
+  const [detailed_history, setDetailedHistory] = React.useState([]);
+  const [quick_history, setQuickHistory] = React.useState([]);
+  const [code_history, setCodeHistory] = React.useState([]);
+  const [report_history, setReportHistory] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState('Reports');
 
   const reportsTableHead = ['TOKEN', 'DATE', 'FILE'];
@@ -45,13 +35,13 @@ const UserAccountTable = () => {
   const renderTableBody = () => {
     switch (type) {
       case 'Reports':
-        return <ReportTableBody data={history} />;
+        return <ReportTableBody data={report_history} />;
       case 'Detailed Audit':
-        return <AuditTableBody data={[1, 2, 3]} type="detailed" />;
+        return <AuditTableBody data={detailed_history} type="detailed" />;
       case 'Quick Audit':
-        return <AuditTableBody data={[1, 2, 3]} type="quick" />;
+        return <AuditTableBody data={quick_history} type="quick" />;
       case 'Code Audit':
-        return <AuditTableBody data={[1, 2, 3]} code />;
+        return <AuditTableBody data={code_history} code />;
       default:
         break;
     }
@@ -66,24 +56,43 @@ const UserAccountTable = () => {
   };
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch('/api/credit/history/txn');
-      const json = await res.json();
-      console.log(json);
+      setLoading(true);
 
-      setHistory(json.txn);
+      const paid_audits = await fetch('/api/credit/paidaudit');
+      const paid_audits_json = await paid_audits.json();
+
+      if (paid_audits_json.paid_audits.length > 0) {
+        setDetailedHistory(
+          paid_audits_json.paid_audits.filter(
+            (item: any) => item.type == 'detailed'
+          )
+        );
+        setQuickHistory(
+          paid_audits_json.paid_audits.filter(
+            (item: any) => item.type == 'quick'
+          )
+        );
+        setCodeHistory(
+          paid_audits_json.paid_audits.filter(
+            (item: any) => item.type == 'code'
+          )
+        );
+        setReportHistory(
+          paid_audits_json.paid_audits.filter(
+            (item: any) => item.type == 'report'
+          )
+        );
+      }
+
+      setLoading(false);
     }
     fetchData();
   }, []);
 
-  if (history.length === 0) {
+  if (loading) {
     return (
-      <div className="w-full overflow-x-auto">
-        <div className="flex flex-col pb-8">
-          <h1 className="text-lg font-semibold">Your history</h1>
-        </div>
-        <div className="flex flex-col">
-          <p className="text-md text-zinc-500">No history yet</p>
-        </div>
+      <div className="flex items-center justify-center w-full h-full">
+        <Loader className="w-6 h-6 text-blue-400" />
       </div>
     );
   }

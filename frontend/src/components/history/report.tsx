@@ -19,6 +19,20 @@ type Props = {
 };
 
 export const ReportTableBody = ({ data }: Props) => {
+  if (data.length === 0)
+    return (
+      <div className="flex w-full flex-col items-center justify-center">
+        <Image
+          src="/icons/no-data.svg"
+          alt="no-report-icon"
+          width={100}
+          height={100}
+        />
+        <p className="text-zinc-100 text-[12px] font-[400] mt-3">
+          No reports generated yet
+        </p>
+      </div>
+    );
   return (
     <TableBody>
       {data.map((item, index: number) => (
