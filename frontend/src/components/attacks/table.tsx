@@ -65,8 +65,8 @@ const AttacksTable: FC<AttacksTableProps> = ({
     );
   }
   return (
-    <div className="pt-6 pl-2">
-      <div className="flex flex-col pl-4 pt-1">
+    <div className="pt-6 md:pl-2">
+      <div className="flex flex-col md:pl-4 pt-1">
         {results.attacks.map((attack: any, index: number) => (
           <div
             key={index}
