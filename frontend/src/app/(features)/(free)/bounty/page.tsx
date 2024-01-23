@@ -27,20 +27,21 @@ type Props = {};
 const Bounty = (props: Props) => {
   const [bounties, setBounties] = React.useState('open');
   const [search, setSearch] = React.useState('');
-  const [platform, setPlatform] = React.useState('');
+
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
 
   return (
-    <div
-      className="flex flex-col w-full min-h-screen"
-      style={{
-        background: 'url(/backgrounds/bounty.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'top center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="flex flex-col w-full min-h-screen">
       {/* Banner Section */}
-      <div className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full">
+      <div
+        className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full"
+        style={{
+          background: 'url(/backgrounds/bounty.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="flex flex-col gap-4">
           <h1 className="text-zinc-50 text-[40px] font-bold">Bug Bounty</h1>
           <p className="text-zinc-300 text-[20px] font-medium">
@@ -244,7 +245,9 @@ const Bounty = (props: Props) => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-6 mt-6 max-md:my-3">
-          <BountyCard />
+          {arr?.map(item => (
+            <BountyCard key={item} />
+          ))}
         </div>
       </div>
     </div>

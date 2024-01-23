@@ -11,7 +11,7 @@ export const BountyCard = (props: Props) => {
           clipPath:
             'polygon(20% 0, 100% 0, 100% 50%, 100% 100%, 0 100%, 0 20%)',
         }}
-        className="flex flex-col justify-center p-4 gap-14 relative overflow-hidden bg-[#0D0D0D] border border-[#5E5E5E] rounded-md"
+        className="flex flex-col justify-center p-4 gap-14 relative overflow- bg-[#0D0D0D] rounded-md"
       >
         <div className="flex flex-col gap-2 text-center items-center z-[5]">
           <Image
