@@ -1,122 +1,13 @@
 const ethers = require('ethers');
 const { HoneypotIsV1 } = require('@normalizex/honeypot-is');
 const NodeCache = require('node-cache');
+const parsec = require('../../lib/third-party/parsec');
 
 const type_cache = new NodeCache();
 const token_cache = new NodeCache();
 const honeypot_cache = new NodeCache();
 
-const query = `
-query Tx($hash: String!, $chain: String!) {
-  tx(hash: $hash, chain: $chain) {
-    hash
-    to
-    from
-    chain
-    gasUsed
-    gasPrice
-    gasLimit
-    input
-    call
-    nonce
-    index
-    status
-    value
-    state
-    error
-    contract_creation
-    timestamp
-    block
-    toAddressLabel {
-      src
-      label
-      address
-      tags
-    }
-    fromAddressLabel {
-      src
-      label
-      address
-      tags
-    }
-    marketData {
-      type
-      data
-    }
-    inputDecoded {
-      function
-      args
-    }
-    logs {
-      address
-      addressLabel {
-        src
-        label
-        tags
-        address
-      }
-      data
-      name
-      index
-      topic
-      rawData
-      dataLabels
-    }
-    transfers {
-      timestamp
-      to
-      from
-      value
-      address
-      symbol
-      decimals
-      usdPrice
-      imgSrc
-      isNft
-      toLabel {
-        src
-        label
-        address
-        tags
-      }
-      fromLabel {
-        src
-        label
-        address
-        tags
-      }
-    }
-  }
-}
-`;
-
 async function processTransactionsFromQueue(transactionQueue, node, io) {
-  const fetchParsec = async txHash => {
-    const response = await fetch('https://api.parsec.finance/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'GUEST',
-      },
-      body: JSON.stringify({
-        operationName: 'Tx',
-        variables: {
-          hash: txHash,
-          chain: 'eth',
-        },
-        query,
-      }),
-    });
-
-    if (!response.ok) {
-      //   throw new Error(`HTTP error! Status: ${response.status}`);
-      console.log(`HTTP error! Status: ${response.status}`);
-      return null;
-    }
-
-    return await response.json();
-  };
-
   const fetchAddress = async address => {
     const baseUrl =
       'https://dashboard.misttrack.io/api/v1/address_risk_analysis';
@@ -350,7 +241,11 @@ async function processTransactionsFromQueue(transactionQueue, node, io) {
       //   io.emit('log', 'Processing tx: ' + tx);
       if (tx.tx) {
         // console.log(tx.tx);
-        let parsecData = await fetchParsec(tx.tx);
+        const parsecData = await parsec.fetchTx({
+          hash: tx.tx,
+          chain: 'eth',
+        });
+
         // check if parsecData has data
         if (parsecData) {
           const { results, type } = await parseTransaction(
