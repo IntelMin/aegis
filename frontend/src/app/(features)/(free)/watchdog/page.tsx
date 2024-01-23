@@ -121,7 +121,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         >
           <BlockStatus ref={statusRef} settings={settings} />
         </div>
-        <div className="max-md:flex md:flex-grow max-md:overflow-x-scroll w-full md:w-1/2 monitor">
+        <div className="max-md:flex md:flex-grow max-md:overflow-x-hidden w-screen md:w-1/2 monitor">
           <div
             className={`${
               showSection === 'monitor' ? 'flex-grow' : 'max-md:hidden'
