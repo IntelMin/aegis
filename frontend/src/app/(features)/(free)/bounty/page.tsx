@@ -292,10 +292,10 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={value => setCategory(value)}>
+              <Select onValueChange={value => setLanguage(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
-                    <SelectValue placeholder="Category" />
+                    <SelectValue placeholder="Language" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
                 </SelectTrigger>
@@ -322,10 +322,10 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={value => setLanguage(value)}>
+              <Select onValueChange={value => setCategory(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
-                    <SelectValue placeholder="Language" />
+                    <SelectValue placeholder="Category" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
                 </SelectTrigger>
