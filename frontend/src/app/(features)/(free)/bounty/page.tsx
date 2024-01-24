@@ -146,14 +146,15 @@ const Bounty = (props: Props) => {
     <div className="flex flex-col w-full monitor">
       {/* Banner Section */}
       <div
-        className="flex flex-col py-24 text-center items-center justify-center gap-14 w-full monitor"
-        style={{
-          background: 'url(/backgrounds/bounty.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'top center',
-          backgroundRepeat: 'no-repeat',
-        }}
+        className="flex flex-col relative py-16 text-center items-center justify-center gap-14 w-full monitor"
+        // style={{
+        //   background: 'url(/backgrounds/bounty.png)',
+        //   backgroundSize: 'cover',
+        //   backgroundPosition: 'top center',
+        //   backgroundRepeat: 'no-repeat',
+        // }}
       >
+        <div className="absolute w-[311px] top-0 left-1/2 -translate-y-[50%] -translate-x-1/2 h-[311px] rounded-full bg-[#0E76FD] blur-[200px]" />
         <div className="flex flex-col gap-4">
           <h1 className="text-zinc-50 text-[40px] font-bold">Bug Bounty</h1>
           <p className="text-zinc-300 text-[20px] font-medium">
@@ -193,7 +194,7 @@ const Bounty = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="px-2 overflow-hidden h-full md:px-10 flex flex-col gap-6 monitor">
+      <div className="px-6 pt-4 overflow-hidden h-full md:px-10 flex flex-col gap-6 monitor">
         {/* Filter Section */}
         <div className="w-full flex max-md:flex-col max-md:gap-6 items-center justify-between">
           {/* Left Filter Section */}
@@ -240,11 +241,11 @@ const Bounty = (props: Props) => {
                 className="flex-grow text-[15px] text-white placeholder:text-zinc-200 border-none outline-none bg-transparent"
               />
             </div>
-            <div className="grid grid-cols-4 max-md:w-full items-center gap-3">
+            <div className="grid grid-cols-4 md:max-w-[60%] max-md:w-full items-center gap-3">
               {/* Dropdown Filter */}
               <Select onValueChange={value => setPlatform(value)}>
-                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
-                  <div className="flex gap-2 item-center justify-center font-semibold text-sm translate-y-1">
+                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 py-2 pl-[3px] rounded-md">
+                  <div className="flex gap-4 item-center justify-center font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Platform" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
@@ -385,7 +386,7 @@ const Bounty = (props: Props) => {
 
             {/* Pagnation */}
 
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full flex justify-center items-center pb-12">
               <Pagination className="mt-4">
                 <PaginationContent>
                   {current_page > 1 && (

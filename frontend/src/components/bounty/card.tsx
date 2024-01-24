@@ -1,4 +1,5 @@
 import { formatAge } from '@/utils/format-age';
+import { formatCurrency } from '@/utils/format-currency';
 import { formatNumber } from '@/utils/format-number';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,7 +33,7 @@ export const BountyCard = ({ i, bounty }: Props) => {
         </div>
         <div className="flex flex-col gap-2 text-center items-center z-[5]">
           <h1 className="text-[40px] font-bold text-zinc-50">
-            {formatNumber(bounty.max_reward)}
+            {formatCurrency(bounty.max_reward)}
           </h1>
           <p className="text-sm font-[500] text-zinc-50 uppercase">
             bounty reward
