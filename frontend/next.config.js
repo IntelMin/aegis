@@ -11,7 +11,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['assets.coingecko.com'],
+    domains: ['assets.coingecko.com', 'images.ctfassets.net'],
   },
 };
 
