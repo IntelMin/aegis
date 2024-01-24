@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const usePaidUser = (contractAddress: string) => {
   const [paidUser, setPaidUser] = useState<boolean | null>(null);

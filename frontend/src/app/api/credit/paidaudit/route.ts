@@ -37,3 +37,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ status: "success", paid_user: true })
 }
 
+export async function GET(req: NextRequest, res: NextResponse) {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+
+    if (!email) {
+        return NextResponse.json({ status: "error" }, { status: 401 })
+    }
+    const user = await db.user.findUnique({ where: { email: email } })
+    if (!user) {
+        return NextResponse.json({ status: "error" }, { status: 401 })
+    }
+    console.log({ user })
+    const id = user?.id
+    const paid_audits = await db.paid_audits.findMany({
+        where: { user_id: Number(id) },
+    })
+    return NextResponse.json({ status: "success", paid_audits: paid_audits })
+}
