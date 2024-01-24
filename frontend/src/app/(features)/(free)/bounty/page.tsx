@@ -42,7 +42,7 @@ type Props = {};
 
 const Bounty = (props: Props) => {
   const [isPaid, setIsPaid] = useState(false);
-  const [name, setName] = useState<string | undefined>();
+  const [name, setName] = useState('');
   const [platform, setPlatform] = useState<string | undefined>();
   const [language, setLanguage] = useState<string | undefined>();
   const [category, setCategory] = useState<string | undefined>();
@@ -120,7 +120,7 @@ const Bounty = (props: Props) => {
     handleFilters(filters);
   };
   const resetFilters = () => {
-    setName(undefined);
+    setName('');
     setPlatform(undefined);
     setLanguage(undefined);
     setCategory(undefined);

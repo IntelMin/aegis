@@ -20,7 +20,9 @@ export const BountyCard = ({ i, bounty }: Props) => {
         className="flex flex-col justify-center p-4 gap-14 relative overflow- bg-[#0D0D0D] rounded-md"
       >
         <div className="flex flex-col gap-2 text-center items-center z-[5]">
-          <img alt={bounty.name} src={bounty.logo} width={40} height={40} />
+          <div className="min-h-[40px]">
+            <img alt={bounty.name} src={bounty.logo} width={40} height={40} />
+          </div>
           <Link
             href={bounty.link}
             className="text-sm font-semibold text-zinc-200"
