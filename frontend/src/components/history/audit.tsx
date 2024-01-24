@@ -57,11 +57,6 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
     }
     fetchData();
   }, [data]);
-  console.log({ audit_data });
-  console.log({ data });
-  useEffect(() => {
-    console.log('audit_data', audit_data);
-  }, [loading]);
   return (
     <TableBody>
       {audit_data.length == 0 ? (
