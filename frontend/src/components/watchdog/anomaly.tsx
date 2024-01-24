@@ -3,6 +3,7 @@
 import React, { useImperativeHandle, useEffect, useState, useRef } from 'react';
 import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
 import { TerminalOutput } from './terminal';
+import { Card } from '../ui/card';
 
 interface AnomalyProps {
   settings: WatchdogSettings;
@@ -24,22 +25,27 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
             data
               .filter((d: any) => d.type === 'honeypot')
               .map((d: any) => (
-                <TerminalOutput key={nonce.current++}>
-                  <pre className="whitespace-pre-wrap break-all">
-                    Honeypot:
-                    {'\n'}
-                    {d.data.hash}
-                    {'\n'}
-                    {'├── FROM    '}
-                    {d.data.from}
-                    {'\n'}
-                    {'│    └─ TO  '}
-                    {d.data.to}
-                    {'\n'}
-                    {'└── ACTION  '}
+                <Card
+                  key={nonce.current++}
+                  className="p-2 whitespace-pre-wrap break-all bg-zinc-800 border-zinc-700 text-gray-500"
+                >
+                  <p className="text-gray-300">
+                    <strong>Honeypot</strong>
+                  </p>
+                  <p>
+                    <span className="text-gray-400">Hash</span> {d.data.hash}
+                  </p>
+                  <p>
+                    <span className="text-gray-400">From</span> {d.data.from}
+                  </p>
+                  <p>
+                    <span className="text-gray-400">To</span> {d.data.to}
+                  </p>
+                  <p>
+                    <span className="text-gray-400">Action</span>{' '}
                     {d.data.action}
-                  </pre>
-                </TerminalOutput>
+                  </p>
+                </Card>
               ))
           )
           .slice(-50)
@@ -58,11 +64,11 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
 
   return (
     <div
-      className="flex flex-col bg-[#131313] w-full p-4 items-center text-sm text-[#aaaaaa] h-[600px] overflow-y-auto"
+      className="flex flex-col bg-[#131313] w-full p-4 items-center text-sm h-[600px] overflow-y-auto"
       ref={viewRef}
     >
       <pre className="w-full">Anomalies</pre>
-      {lineData}
+      <div className="space-y-3">{lineData}</div>
     </div>
   );
 });
