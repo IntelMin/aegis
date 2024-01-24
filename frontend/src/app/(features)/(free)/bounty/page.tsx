@@ -40,7 +40,7 @@ const categoryList = [
 type Props = {};
 
 const Bounty = (props: Props) => {
-  const [bounties, setBounties] = React.useState('open');
+  const [isPaid, setIsPaid] = useState<boolean | undefined>();
   const [search, setSearch] = React.useState('');
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
   const [limit, setLimit] = useState(10);
@@ -58,7 +58,17 @@ const Bounty = (props: Props) => {
   }>({ total: 0, total_amount: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+  const current_page = filterResults?.offset + 1;
+  const last_page = filterResults?.pages;
 
+  const handleNextClick = (page: number) => {
+    const newOffset = offset + 1;
+    setOffset(newOffset);
+  };
+  const handlePreviousClick = (page: number) => {
+    const newOffset = offset - 1;
+    setOffset(newOffset);
+  };
   useEffect(() => {
     axios.get(`api/bounty/stats`).then(response => {
       setBountyStats(response.data);
@@ -115,7 +125,13 @@ const Bounty = (props: Props) => {
         <div className="flex flex-col gap-4">
           <h1 className="text-zinc-50 text-[40px] font-bold">Bug Bounty</h1>
           <p className="text-zinc-300 text-[20px] font-medium">
-            Over 400 Bounties aggregated from
+            Over{' '}
+            <span>
+              {!isInitialLoad
+                ? Math.floor(bountyStats?.total / 100) * 100
+                : '...'}
+            </span>{' '}
+            Bounties aggregated from
           </p>
         </div>
         <div className="flex gap-12 items-center">
@@ -152,10 +168,10 @@ const Bounty = (props: Props) => {
           <div className="max-md:w-full flex gap-3 max-md:justify-center items-center">
             <div
               className="flex gap-3 items-center cursor-pointer"
-              onClick={() => setBounties('open')}
+              onClick={() => setIsPaid(false)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
-                {bounties === 'open' && (
+                {!isPaid && (
                   <div className={`w-2 h-2 bg-zinc-50 rounded-full z-2`}></div>
                 )}
               </div>
@@ -163,10 +179,10 @@ const Bounty = (props: Props) => {
             </div>
             <div
               className="flex gap-3 items-center cursor-pointer"
-              onClick={() => setBounties('paid')}
+              onClick={() => setIsPaid(true)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
-                {bounties === 'paid' && (
+                {isPaid && (
                   <div className={`w-2 h-2 bg-zinc-50 rounded-full z-2`}></div>
                 )}
               </div>
@@ -337,22 +353,52 @@ const Bounty = (props: Props) => {
             {/* Pagnation */}
 
             <div className="w-full flex justify-center items-center">
-              <Pagination>
+              <Pagination className="mt-4">
                 <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious className="bg-[#121F31]" href="#" />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink className="bg-[#0E76FD] py-1" href="#">
-                      1
-                    </PaginationLink>
-                  </PaginationItem>
+                  {current_page > 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        className="cursor-pointer bg-[#121F31]"
+                        onClick={() => handlePreviousClick(current_page - 1)}
+                      />
+                    </PaginationItem>
+                  )}
+
+                  {Array.from({ length: last_page }).map((_, index) => {
+                    const page = index + 1;
+                    const isActive = page === current_page;
+                    if (
+                      page === current_page ||
+                      page === current_page - 1 ||
+                      page === current_page + 1
+                    ) {
+                      return (
+                        <PaginationItem key={index}>
+                          <PaginationLink
+                            className={`cursor-pointer ${
+                              isActive ? 'bg-[#0E76FD]' : ''
+                            }`}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  })}
+
                   <PaginationItem>
                     <PaginationEllipsis />
                   </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext className="bg-[#0E76FD] py-1" href="#" />
-                  </PaginationItem>
+
+                  {current_page < last_page && (
+                    <PaginationItem>
+                      <PaginationNext
+                        className="cursor-pointer bg-[#0E76FD]"
+                        onClick={() => handleNextClick(current_page + 1)}
+                      />
+                    </PaginationItem>
+                  )}
                 </PaginationContent>
               </Pagination>
             </div>
