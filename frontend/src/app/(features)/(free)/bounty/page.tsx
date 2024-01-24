@@ -41,7 +41,7 @@ const categoryList = [
 type Props = {};
 
 const Bounty = (props: Props) => {
-  const [isPaid, setIsPaid] = useState<boolean | undefined>();
+  const [isPaid, setIsPaid] = useState(false);
   const [name, setName] = useState<string | undefined>();
   const [platform, setPlatform] = useState<string | undefined>();
   const [language, setLanguage] = useState<string | undefined>();
@@ -85,7 +85,7 @@ const Bounty = (props: Props) => {
     setIsLoading(true);
 
     const queryString = qs.stringify(
-      { ...filterOptions, limit, offset },
+      { ...filterOptions, isPaid, limit, offset },
       { arrayFormat: 'comma', skipNulls: true }
     );
 
@@ -124,7 +124,7 @@ const Bounty = (props: Props) => {
     setPlatform(undefined);
     setLanguage(undefined);
     setCategory(undefined);
-    setIsPaid(undefined);
+    setIsPaid(false);
   };
 
   const handleResetFilters = () => {
@@ -192,7 +192,7 @@ const Bounty = (props: Props) => {
         {/* Filter Section */}
         <div className="w-full flex max-md:flex-col max-md:gap-6 items-center justify-between">
           {/* Left Filter Section */}
-          <div className="max-md:w-full flex gap-3 max-md:justify-center items-center">
+          <div className="max-md:w-full md:w-[25%] flex gap-3 max-md:justify-center items-center">
             <div
               className="flex gap-3 items-center cursor-pointer"
               onClick={() => setIsPaid(false)}
@@ -217,9 +217,9 @@ const Bounty = (props: Props) => {
             </div>
           </div>
           {/* Right Filter Section */}
-          <div className="max-md:w-full flex max-md:flex-col items-center gap-3">
+          <div className="max-md:w-full md:w-[75%] md:justify-end flex max-md:flex-col items-center gap-3">
             {/* Search */}
-            <div className="max-md:w-full flex bg-zinc-900 border border-zinc-800 py-2 max-md:px-2 md:pl-2 md:pr-4 gap-4 md:min-w-[400px] w-fit rounded-md">
+            <div className="max-md:w-full flex md:flex-grow bg-zinc-900 border border-zinc-800 py-2 max-md:px-2 md:pl-2 md:pr-4 gap-4 md:min-w-[300px] w-fit rounded-md">
               <Image
                 src="/icons/search.svg"
                 alt="token"
@@ -239,7 +239,7 @@ const Bounty = (props: Props) => {
               {/* Dropdown Filter */}
               <Select onValueChange={setPlatform}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
-                  <div className="flex gap-2 item-center max-md:justify-center font-semibold text-sm translate-y-1">
+                  <div className="flex gap-2 item-center justify-center font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Platform" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
@@ -289,7 +289,7 @@ const Bounty = (props: Props) => {
 
               <Select onValueChange={setCategory}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
-                  <div className="flex gap-2 item-center max-md:justify-center  font-semibold text-sm translate-y-1">
+                  <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Category" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
@@ -319,7 +319,7 @@ const Bounty = (props: Props) => {
 
               <Select onValueChange={setLanguage}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
-                  <div className="flex gap-2 item-center max-md:justify-center  font-semibold text-sm translate-y-1">
+                  <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Language" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
                   </div>
