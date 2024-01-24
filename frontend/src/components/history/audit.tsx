@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { Button } from '../ui/button';
 import Image from 'next/image';
 import { TableBody, TableCell, TableRow } from '../ui/table';
@@ -7,6 +7,7 @@ import { formatTime } from '@/utils/format-time';
 import { FaEye } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
+import { Loader } from 'lucide-react';
 type Historytype = {
   type: string;
   created_at: Date;
@@ -56,63 +57,85 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
     }
     fetchData();
   }, [data]);
-  console.log(audit_data);
-  console.log(loading);
-  console.log({ code });
+  console.log({ audit_data });
+  console.log({ data });
+  useEffect(() => {
+    console.log('audit_data', audit_data);
+  }, [loading]);
   return (
     <TableBody>
-      {audit_data.map((item, index: number) => (
+      {audit_data.length == 0 ? (
         <TableRow
-          className="items-center bg-zinc-900 border-b border-zinc-800 "
-          key={index}
+          className=" flex flex-row w-full items-center bg-zinc-900 border-b border-zinc-800 "
+          key={1}
         >
-          {' '}
-          {!code &&
-            (loading ? (
-              <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
-                <Skeleton className="w-full h-full" />
-              </TableCell>
-            ) : (
-              <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
-                <Image
-                  src={
-                    item.imageSmallUrl
-                      ? `/api/token/image?q=${item.imageSmallUrl
-                          .split('/')
-                          .pop()}`
-                      : '/icons/token-default.svg'
-                  }
-                  alt="token-svg"
-                  width={24}
-                  height={24}
-                />
-                <p className="text-zinc-100 text-[12px] font-[400]">
-                  ${item.symbol ? item.symbol : 'N/A'}
-                </p>
-              </TableCell>
-            ))}
-          <TableCell className="py-2 px-4 text-neutral-100 text-center min-w-[180px]">
-            <span> {formatDate(item.created_at)}</span>{' '}
-            <span>{formatTime(item.created_at)}</span>
+          <TableCell className="flex items-center justify-center gap-2 text-center">
+            <Skeleton className="w-[30px] h-[20px]" />
           </TableCell>
-          {!code && (
-            <TableCell className="py-3 px-4 text-center">
-              <Button
-                onClick={() => {
-                  router.push(`/audit/token/${item.address}/${type}`); // 1212 => address
-                }}
-                className="py-1 h-[30px] px-2 text-[12px] text-blue-400"
-                style={{
-                  background: `rgba(96, 165, 250, 0.10)`,
-                }}
-              >
-                <FaEye className="text-blue-400 text-[12px] mr-1" />
-                <p className="text-blue-400 text-[12px] ml-1">View</p>
-              </Button>
-            </TableCell>
-          )}
+          <TableCell className="flex items-center justify-center gap-2 text-center">
+            <Skeleton className="w-[30px] h-[20px]" />
+          </TableCell>
+          <TableCell className="flex items-center justify-center gap-2 text-center">
+            <Skeleton className="w-[30px] h-[20px]" />
+          </TableCell>
+          <TableCell className="flex items-center justify-center gap-2 text-center">
+            <Skeleton className="w-[30px] h-[20px]" />
+          </TableCell>
         </TableRow>
-      ))}
+      ) : (
+        audit_data.map((item, index: number) => (
+          <TableRow
+            className="items-center bg-zinc-900 border-b border-zinc-800 "
+            key={index}
+          >
+            {' '}
+            {!code &&
+              (loading ? (
+                <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
+                  <Skeleton className="w-[30px] h-[20px]" />
+                </TableCell>
+              ) : (
+                <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
+                  <Image
+                    src={
+                      item.imageSmallUrl
+                        ? `/api/token/image?q=${item.imageSmallUrl
+                            .split('/')
+                            .pop()}`
+                        : '/icons/token-default.svg'
+                    }
+                    alt="token-svg"
+                    width={24}
+                    height={24}
+                  />
+                  <p className="text-zinc-100 text-[12px] font-[400]">
+                    ${item.symbol ? item.symbol : 'N/A'}
+                  </p>
+                </TableCell>
+              ))}
+            <TableCell className="py-2 px-4 text-neutral-100 text-center min-w-[180px]">
+              <span> {formatDate(item.created_at)}</span>{' '}
+              <span>{formatTime(item.created_at)}</span>
+            </TableCell>
+            {!code && (
+              <TableCell className="py-3 px-4 text-center">
+                <Button
+                  onClick={() => {
+                    router.push(`/audit/token/${item.address}/${type}`); // 1212 => address
+                  }}
+                  className="py-1 h-[30px] px-2 text-[12px] text-blue-400"
+                  style={{
+                    background: `rgba(96, 165, 250, 0.10)`,
+                  }}
+                >
+                  <FaEye className="text-blue-400 text-[12px] mr-1" />
+                  <p className="text-blue-400 text-[12px] ml-1">View</p>
+                </Button>
+              </TableCell>
+            )}
+          </TableRow>
+        ))
+      )}
     </TableBody>
   );
 };
