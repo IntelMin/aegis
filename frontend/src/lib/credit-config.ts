@@ -12,3 +12,8 @@ export const creditConfig = {
     quick: 0,
     code: 12,
 };
+export const credits_chart = [
+    { credits: 100, amount: 0.5, package: "Starter" },
+    { credits: 230, amount: 1, package: "Seasoned" },
+    { credits: 600, amount: 2, package: "Veteran" },
+];

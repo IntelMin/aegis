@@ -9,7 +9,7 @@ import AuditHistory from '@/components/audit/detail/audit-history';
 import Link from 'next/link';
 import axios from 'axios';
 import useTokenInfo from '@/hooks/useTokenInfo';
-import { useToast } from '@/components/ui/use-toast';
+import { showToast } from '@/components/toast';
 
 type Props = {
   params: {
@@ -18,7 +18,6 @@ type Props = {
 };
 
 const QuickAuditPage = ({ params }: Props) => {
-  const { toast } = useToast();
   const contractAddress = params.id;
   const [liveData, setLiveData] = useState<any>(null);
   const { isFetching, tokenInfo, error } = useTokenInfo(
@@ -40,9 +39,9 @@ const QuickAuditPage = ({ params }: Props) => {
 
   useEffect(() => {
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
     }
@@ -87,8 +86,8 @@ const QuickAuditPage = ({ params }: Props) => {
                 Detailed Audit
               </Link>
               <p className="text-neutral-200 text-[14px] font-[300]">
-                Premium information on $AAVE token, to guide you on making the
-                best trading decisions
+                Premium information on ${tokenInfo ? tokenInfo.symbol : ''}{' '}
+                token, to guide you on making the best trading decisions
               </p>
             </div>
             <div className="w-1/2 h-full">

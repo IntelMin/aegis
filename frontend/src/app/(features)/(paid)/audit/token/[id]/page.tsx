@@ -1,16 +1,18 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/components/ui/use-toast';
-import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import useTokenInfo from '@/hooks/useTokenInfo';
 import useBalance from '@/hooks/useBalance';
-import PaymentDialog from '@/components/payment-dialog';
 import usePayment from '@/hooks/usePayment';
+import { showToast } from '@/components/toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import PaymentDialog from '@/components/payment-dialog';
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import usePaidUser from '@/hooks/usePaiduser';
 
 type props = {
   params: {
@@ -42,31 +44,34 @@ const SkeletonLoader = () => (
 const TokenAuditOption = ({ params }: props) => {
   const session = useSession();
   // const [balance, setBalance] = React.useState<number>(0);
-
-  const { toast } = useToast();
   const [metadata, setMetadata] = React.useState<any>();
-
+  const paiduser = usePaidUser(params?.id);
   const { balance, setBalance } = useBalance(
     session.data?.user?.email as string
   );
   const router = useRouter();
-  const handlePayment = usePayment({
-    session,
+  const { handlePayment, loading } = usePayment({
     address: params?.id,
     balance,
-    toast,
-    onSuccess: () => {
-      router.push(`/audit/token/${params?.id}/detailed`);
+    onSuccess: auditType => {
+      router.push(`/audit/token/${params?.id}/${auditType}`);
     },
   });
   const [submitting, setSubmitting] = React.useState<boolean>(false);
   const [submittedAddress, setSubmittedAddress] = React.useState<string>('');
 
-  const { isFetching, tokenRequestInfo, error } = useTokenInfo(
-    submitting ? submittedAddress : '',
+  const { isFetching, tokenRequestInfo, tokenInfo, error } = useTokenInfo(
+    params.id,
     'meta',
-    false
+    true
   );
+  useEffect(() => {
+    console.log({ tokenInfo });
+    if (!isFetching && tokenRequestInfo && !error) {
+      console.log({ tokenInfo });
+      setMetadata(tokenInfo);
+    }
+  }, [submittedAddress, isFetching, tokenRequestInfo, error]);
 
   useEffect(() => {
     if (!submitting) return;
@@ -78,9 +83,9 @@ const TokenAuditOption = ({ params }: props) => {
     }
 
     if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        type: 'error',
+        message: 'Error',
         description: 'There was an error fetching token information',
       });
       setSubmitting(false);
@@ -92,10 +97,8 @@ const TokenAuditOption = ({ params }: props) => {
     error,
     submittedAddress,
     router,
-    toast,
   ]);
 
-  if (!balance) return <SkeletonLoader />;
   if (error) {
     return <div>Error loading token information</div>;
   }
@@ -165,10 +168,19 @@ const TokenAuditOption = ({ params }: props) => {
                       <div
                         className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
-                        Detailed Audit
+                        {submitting ? (
+                          <ScaleLoader width={4} height={10} color="white" />
+                        ) : (
+                          'Detailed Audit'
+                        )}
                       </div>
                     }
+                    payInProgress={loading}
                     handlePayment={handlePayment}
+                    paidUser={paiduser ?? undefined}
+                    onSuccess={() => {
+                      router.push(`/audit/token/${params?.id}/detailed`);
+                    }}
                   />
                 </div>
                 <Image
@@ -192,9 +204,14 @@ const TokenAuditOption = ({ params }: props) => {
                       <div
                         className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
-                        Quick Audit
+                        {submitting ? (
+                          <ScaleLoader width={4} height={10} color="white" />
+                        ) : (
+                          'Quick Audit'
+                        )}
                       </div>
                     }
+                    payInProgress={loading}
                     handlePayment={handlePayment}
                   />
                 </div>

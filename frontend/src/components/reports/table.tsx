@@ -353,7 +353,7 @@ export const ReportsTable = ({
             height={150}
           />
           <p className="text-zinc-400 text-[12px] text-[400]">
-            Request Audit Report
+            No reports generated yet
           </p>
         </div>
       )}

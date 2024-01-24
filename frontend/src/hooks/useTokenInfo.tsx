@@ -4,7 +4,7 @@ import axios from 'axios';
 function useTokenInfo(tokenAddress: string, type: string, fetch = false) {
   const [isFetching, setIsFetching] = useState(false);
   const [tokenRequestInfo, setTokenRequestInfo] = useState(null);
-  const [tokenInfo, settokenInfo] = useState(null);
+  const [tokenInfo, settokenInfo] = useState<any>(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const usePaidUser = (contractAddress: string) => {
-  const [paidUser, setPaidUser] = useState(null);
-  const router = useRouter();
+  const [paidUser, setPaidUser] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchPaidUser = async () => {
@@ -11,13 +10,16 @@ const usePaidUser = (contractAddress: string) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          token: contractAddress,
+          address: contractAddress,
           type: 'detailed',
         }),
       });
       const paidUserResponse = await response.json();
-      console.log(paidUserResponse);
-      setPaidUser(paidUserResponse.paiduser);
+      if (paidUserResponse.status === 'error') {
+        setPaidUser(false);
+        return;
+      }
+      setPaidUser(paidUserResponse.paid_user);
     };
     fetchPaidUser();
   }, [contractAddress]);

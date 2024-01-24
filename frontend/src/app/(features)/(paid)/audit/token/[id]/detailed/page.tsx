@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 import { AUDIT_STATUS_RETURN_CODE } from '@/utils/audit-statuses';
 import usePaidUser from '@/hooks/usePaiduser';
 import dynamic from 'next/dynamic';
 import GridLoader from 'react-spinners/GridLoader';
+import { useRouter } from 'next/navigation';
+import { toast } from '@/components/ui/use-toast';
+import { Loader } from 'lucide-react';
 
 const FunctionReport = dynamic(
   () => import('@/components/audit/detail/function-report'),
@@ -23,7 +24,6 @@ const OverViewReport = dynamic(
     loading: () => <GridLoader color="white" />,
   }
 );
-
 const CodeEditor = dynamic(() => import('@/components/audit/code-editor'), {
   loading: () => <GridLoader color="white" />,
 });
@@ -108,6 +108,7 @@ const getProgressMessage = (progress: number) => {
 };
 
 const DetailedPage = ({ params }: Props) => {
+  const router = useRouter();
   const tabArr = ['Overview', 'Code', 'Functions', 'Dependency'];
   const contractAddress = params.id;
   const [tab, setTab] = useState('Overview');
@@ -124,11 +125,20 @@ const DetailedPage = ({ params }: Props) => {
   const [statusProgress, setStatusProgress] = useState(0);
   const [statusEta, setStatusEta] = useState<number | null>(null);
   const timer = useRef<NodeJS.Timeout | null>(null);
-  const router = useRouter();
   const paiduser = usePaidUser(contractAddress);
-  if (paiduser === false) {
-    router.push(`/audit/token/${params.id}`);
-  }
+  useEffect(() => {
+    console.log({ paiduser });
+    if (paiduser == false) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please pay to audit this token',
+      });
+      router.push(`/audit/token/${params.id}`);
+      return;
+    }
+  }, [paiduser, contractAddress]);
+
   const getAuditResults = async () => {
     try {
       const fetchData = async () => {
@@ -232,6 +242,9 @@ const DetailedPage = ({ params }: Props) => {
   };
 
   useEffect(() => {
+    if (!paiduser) {
+      return;
+    }
     if (contractAddress) {
       pollStatus();
     }
@@ -239,17 +252,17 @@ const DetailedPage = ({ params }: Props) => {
     return () => {
       if (timer.current) clearInterval(timer.current);
     };
-  }, [contractAddress]);
+  }, [contractAddress, paiduser]);
 
-  //   if (!paiduser) {
-  //     return (
-  //       <div className="flex items-center justify-center w-full h-screen text-white">
-  //         <div className="text-lg font-bold text-center">
-  //           <p>Loading...</p>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
+  if (!paiduser) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen text-white">
+        <div className="text-lg font-bold text-center">
+          <Loader />
+        </div>
+      </div>
+    );
+  }
   if (loading) {
     const progressMessage = getProgressMessage(statusProgress);
     return (

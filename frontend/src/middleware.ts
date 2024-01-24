@@ -9,6 +9,7 @@ const allowedPaths: (string | RegExp)[] = [
   /\.svg$/,
   /\.css$/,
   /\.ico$/,
+  /^\/socket\.io\/?/,
 ];
 
 function isPathAllowed(
@@ -27,7 +28,7 @@ const middleware = withAuth(
   function middleware(request) {
     const token = request.nextauth?.token;
     const pathname = request.nextUrl?.pathname;
-    console.log({ token, pathname });
+    // console.log({ token, pathname });
 
     if (pathname.startsWith('/logout') || pathname.startsWith('/pending')) {
       return NextResponse.next();
