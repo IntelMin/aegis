@@ -92,7 +92,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
       <div className="font-thin text-sm text-zinc-600 w-full justify-center mt-5">
         <pre className="mb-6 whitespace-pre-wrap break-all">
           {`token      ${settings.token ? 'on' : 'off'}\n`}
-          {`honeypot   ${settings.token ? 'on' : 'off'}\n`}
+          {`honeypot   ${settings.honeypot ? 'on' : 'off'}\n`}
           {settings.address
             .map((addr, key) => `address    on\n${addr.toLowerCase()}`)
             .join('\n')}

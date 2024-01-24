@@ -30,7 +30,7 @@ const sectionsArr = [
 
 export interface WatchdogSettings {
   active: boolean;
-  address: [];
+  address: string[];
   honeypot: boolean;
   token: boolean;
 }

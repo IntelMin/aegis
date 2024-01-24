@@ -9,21 +9,22 @@ interface AnomalyProps {
 }
 
 const Anomaly = React.forwardRef(function AnomalyComponent(
-  props: BlockStatusProps,
+  props: AnomalyProps,
   ref
 ) {
   const [lineData, setLineData] = useState<React.ReactNode[]>([]);
   const viewRef = useRef<HTMLDivElement>(null);
+  const nonce = useRef<number>(0);
 
   const update = (data: any) => {
-    if (props.settings.honeypot || true) {
+    if (props.settings.honeypot) {
       setLineData(prev =>
         prev
           .concat(
             data
-              .filter((d, key) => d.type === 'tx')
-              .map((d, key) => (
-                <TerminalOutput key={key}>
+              .filter((d: any) => d.type === 'honeypot')
+              .map((d: any) => (
+                <TerminalOutput key={nonce.current++}>
                   <pre className="whitespace-pre-wrap break-all">
                     Honeypot:
                     {'\n'}
@@ -47,10 +48,7 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
   };
 
   useEffect(() => {
-    viewRef.current?.scrollIntoView({
-      behavior: 'instant',
-      block: 'end',
-    });
+    viewRef.current?.scrollTo(0, viewRef.current.scrollHeight);
   }, [lineData]);
 
   useImperativeHandle(ref, () => ({
