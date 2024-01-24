@@ -3,6 +3,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Monitor from '@/components/watchdog/monitor';
 import BlockStatus from '@/components/watchdog/status';
+import Anomaly from '@/components/watchdog/anomaly';
 import { io, Socket } from 'socket.io-client';
 import { Sections } from '@/components/sections';
 
@@ -27,14 +28,23 @@ const sectionsArr = [
   },
 ];
 
+export interface WatchdogSettings {
+  active: boolean;
+  address: [];
+  honeypot: boolean;
+  token: boolean;
+}
+
 const Watchdog: FC<WatchdogProps> = ({}) => {
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
+  const anomalyRef = useRef<{ update?: (data: any) => void }>({});
+
   const socket = useRef<Socket>();
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<WatchdogSettings>({
     active: false,
     address: [],
-    honeypot: true,
+    honeypot: false,
     token: false,
   });
   const [showSection, setShowSection] = useState('monitor');
@@ -65,10 +75,8 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         // Handle log updates
         localSocket.on('log', data => {
           console.log('log received');
-          if (monitorRef.current?.updateLog) {
-            console.log('trying...');
-            monitorRef.current.updateLog(data);
-          }
+          monitorRef.current?.updateLog(data);
+          anomalyRef.current?.update(data);
           console.log('Received log from socket');
         });
       }
@@ -126,6 +134,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
               ref={monitorRef}
               settings={settings}
               setSettings={setSettings}
+              onClear={() => anomalyRef.current?.clear()}
             />
           </div>
         </div>
@@ -135,7 +144,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
             showSection === 'anomalies' ? '' : 'max-md:hidden'
           } flex-none w-full md:w-1/4 border border-zinc-800 max-md:min-h-[500px] p-2 bg-zinc-900`}
         >
-          <pre className="text-zinc-600">Anomalies...</pre>
+          <Anomaly ref={anomalyRef} settings={settings} />
         </div>
       </div>
     </div>

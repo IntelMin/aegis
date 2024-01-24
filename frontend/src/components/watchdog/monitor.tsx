@@ -9,22 +9,19 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import Terminal, { TerminalInput, TerminalOutput } from './terminal';
+import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
 
 interface MonitorProps {
-  settings: {
-    active: boolean;
-    address: boolean;
-    honeypot: boolean;
-    contracts: boolean;
-  };
+  settings: WatchdogSettings;
   setSettings: (settings: any) => void;
+  onClear: () => void;
 }
 
 const Monitor = React.forwardRef(function MonitorComponent(
   props: MonitorProps,
   ref
 ) {
-  const { settings, setSettings } = props;
+  const { settings, setSettings, onClear } = props;
   const terminalRef = useRef<{ clearOutput?: () => void }>({});
 
   const [lineData, setLineData] = useState<JSX.Element[]>([]);
@@ -95,22 +92,29 @@ const Monitor = React.forwardRef(function MonitorComponent(
       console.log('Updating data: ', d);
       const key = Math.random().toString(36).substring(7);
       if (d.type === 'tx') {
-        setLineData([
-          <TerminalOutput key={key}>
-            <pre>
-              {d.data.hash}
-              {'\n'}
-              {'├── FROM    '}
-              {d.data.from}
-              {'\n'}
-              {'│    └─ TO  '}
-              {d.data.to}
-              {'\n'}
-              {'└── ACTION  '}
-              {d.data.action}
-            </pre>
-          </TerminalOutput>,
-        ]);
+        if (
+          settings.address.includes(d.data.fromAddr) ||
+          settings.address.includes(d.data.toAddr) ||
+          (settings.token && d.token) ||
+          (settings.address.length === 0 && !settings.token)
+        ) {
+          setLineData([
+            <TerminalOutput key={key}>
+              <pre>
+                {d.data.hash}
+                {'\n'}
+                {'├── FROM    '}
+                {d.data.from}
+                {'\n'}
+                {'│    └─ TO  '}
+                {d.data.to}
+                {'\n'}
+                {'└── ACTION  '}
+                {d.data.action}
+              </pre>
+            </TerminalOutput>,
+          ]);
+        }
       } else {
         setLineData([
           <TerminalOutput key={key}>
@@ -316,12 +320,13 @@ const Monitor = React.forwardRef(function MonitorComponent(
   }
 
   return (
-    <div className="md:pl-4 md:pr-4 max-md:w-screen md:max-w-[800px]">
+    <div className="md:pl-4 md:pr-4 max-md:w-screen">
       <Terminal
         ref={terminalRef}
         name="Watchdog Terminal"
         onInput={onInput}
         prompt="~/aegis-wg $"
+        onClear={onClear}
       >
         {lineData}
       </Terminal>
