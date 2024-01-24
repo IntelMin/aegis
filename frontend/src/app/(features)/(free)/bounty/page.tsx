@@ -134,6 +134,11 @@ const Bounty = (props: Props) => {
   };
 
   useEffect(() => {
+    handleApplyFilters();
+    console.log(filterOptions);
+  }, [isPaid, platform, language, category, name]);
+
+  useEffect(() => {
     fetchData(filterOptions);
   }, [filterOptions, offset, limit]);
 
@@ -237,7 +242,7 @@ const Bounty = (props: Props) => {
             </div>
             <div className="grid grid-cols-4 max-md:w-full items-center gap-3">
               {/* Dropdown Filter */}
-              <Select onValueChange={setPlatform}>
+              <Select onValueChange={value => setPlatform(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center justify-center font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Platform" />
@@ -287,7 +292,7 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={setCategory}>
+              <Select onValueChange={value => setCategory(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Category" />
@@ -317,7 +322,7 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={setLanguage}>
+              <Select onValueChange={value => setLanguage(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Language" />
