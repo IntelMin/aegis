@@ -8,40 +8,42 @@ import { Sections } from '@/components/sections';
 
 interface WatchdogProps {}
 
+const websocket_url = process.env.NEXT_PUBLIC_AEGIS_WSS;
+
+console.log('websocket_url', websocket_url);
+
+const sectionsArr = [
+  {
+    name: 'Status',
+    val: 'status',
+  },
+  {
+    name: 'Monitor',
+    val: 'monitor',
+  },
+  {
+    name: 'Anomalies',
+    val: 'anomalies',
+  },
+];
+
 const Watchdog: FC<WatchdogProps> = ({}) => {
-  const websocket_url = process.env.NEXT_PUBLIC_AEGIS_WSS;
-  console.log('websocket_url', websocket_url);
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
+  const socket = useRef<Socket>();
   const [settings, setSettings] = useState({
     active: false,
     address: true,
     honeypot: true,
     contracts: true,
+    token: false,
   });
-  const [socket, setSocket] = useState<Socket>();
   const [showSection, setShowSection] = useState('monitor');
-  const sectionsArr = [
-    {
-      name: 'Status',
-      val: 'status',
-    },
-    {
-      name: 'Monitor',
-      val: 'monitor',
-    },
-    {
-      name: 'Anomalies',
-      val: 'anomalies',
-    },
-  ];
 
   useEffect(() => {
-    let localSocket: Socket | null = null;
-
     if (settings.active) {
-      localSocket = io(websocket_url || '');
-      setSocket(localSocket);
+      const localSocket = io(websocket_url || '');
+      socket.current = localSocket;
 
       if (localSocket) {
         localSocket.on('connect', () => {
@@ -73,18 +75,12 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
       }
     } else {
       // Disconnect if the socket is established
-      if (socket) {
-        socket.disconnect();
-      }
+      socket.current?.disconnect();
     }
 
     // Clean up the connection when component unmounts or active status changes
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [settings.active]);
+    return () => socket.current?.disconnect();
+  }, [settings.active, socket]);
 
   return (
     <div className=" w-full ">
