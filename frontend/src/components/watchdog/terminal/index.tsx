@@ -153,7 +153,8 @@ const Terminal = forwardRef(function TerminalComponent(
   }, [displayedOutputs]); // Depend on lineData, assuming it's updated in displayChildren
 
   const clearOutput = () => {
-    setDisplayedOutputs([]);
+    // keep welcome terminal
+    setDisplayedOutputs(displayedOutputs.slice(0, 1));
   };
 
   useImperativeHandle(ref, () => ({

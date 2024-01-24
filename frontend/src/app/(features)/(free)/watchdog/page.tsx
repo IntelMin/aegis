@@ -33,9 +33,8 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
   const socket = useRef<Socket>();
   const [settings, setSettings] = useState({
     active: false,
-    address: true,
+    address: [],
     honeypot: true,
-    contracts: true,
     token: false,
   });
   const [showSection, setShowSection] = useState('monitor');

@@ -45,11 +45,11 @@ const Monitor = React.forwardRef(function MonitorComponent(
       {'\n\n'}
       {`The following commands are supported:
   
-  token     [on|off]      toggle token detection
-  honeypot  [on|off]      toggle honeypot detection
-  address   [on|off]      toggle address detection
-  contract  [address]     monitor only the specified 
-                          contract
+  token     [on|off]               toggle token detection
+  address                          list address detection
+  address   [on|off] [address]     toggle address detection
+  honeypot  [on|off]               toggle honeypot detection
+
   clear                   clear the terminal
   start                   start scanning
   stop                    stop scanning
@@ -141,7 +141,9 @@ const Monitor = React.forwardRef(function MonitorComponent(
       </TerminalOutput>,
     ];
 
-    switch (command) {
+    const [cmd, ...args] = command.split(' ');
+
+    switch (cmd) {
       case 'start':
         console.log('start command');
 
@@ -192,29 +194,96 @@ const Monitor = React.forwardRef(function MonitorComponent(
           ]);
         }
         break;
-      case 'contracts':
-        setSettings((settings: any) => ({
-          ...settings,
-          contracts: !settings.contracts,
-        }));
-        setLineData([
-          ...commandInput,
-          <TerminalOutput key={1}>
-            {'Contracts monitoring turned ' +
-              (settings.contracts ? 'off' : 'on')}
-          </TerminalOutput>,
-        ]);
+      case 'token':
+        if (args[0] === 'on') {
+          setSettings((settings: any) => ({
+            ...settings,
+            token: true,
+          }));
+          setLineData([
+            ...commandInput,
+            <TerminalOutput key={1}>Token monitoring turned on</TerminalOutput>,
+          ]);
+        } else if (args[0] === 'off') {
+          setSettings((settings: any) => ({
+            ...settings,
+            token: false,
+          }));
+          setLineData([
+            ...commandInput,
+            <TerminalOutput key={1}>
+              Token monitoring turned off
+            </TerminalOutput>,
+          ]);
+        }
         break;
       case 'address':
-        setSettings((settings: any) => ({
-          ...settings,
-          address: !settings.address,
-        }));
-        setLineData([
-          <TerminalOutput key={1}>
-            {'Address monitoring turned ' + (settings.address ? 'off' : 'on')}
-          </TerminalOutput>,
-        ]);
+        if (args[0] === undefined) {
+          if (settings.address.length === 0) {
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>
+                No address is being monitored
+              </TerminalOutput>,
+            ]);
+          } else {
+            setLineData(
+              [
+                ...commandInput,
+                <TerminalOutput key={1}>
+                  Address monitoring is turned on for
+                </TerminalOutput>,
+              ].concat(
+                settings.address.map((addr, key) => (
+                  <TerminalOutput key={2 + key}>{addr}</TerminalOutput>
+                ))
+              )
+            );
+          }
+        } else if (args[0] === 'on') {
+          if (args[1] === undefined) {
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>No address is specified</TerminalOutput>,
+            ]);
+          } else if (!/^(0x)?[0-9a-fA-F]{40}$/.test(args[1])) {
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>Invalid address</TerminalOutput>,
+            ]);
+          } else {
+            if (!settings.address.includes(args[1].toLowerCase())) {
+              setSettings((settings: any) => ({
+                ...settings,
+                address: settings.address.concat(args[1].toLowerCase()),
+              }));
+            }
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>
+                Address monitoring for {args[1]} has been turned on
+              </TerminalOutput>,
+            ]);
+          }
+        } else if (args[0] === 'off') {
+          if (args[1] === undefined) {
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>No address is specified</TerminalOutput>,
+            ]);
+          } else {
+            setSettings((settings: any) => ({
+              ...settings,
+              address: settings.address.filter(addr => addr !== args[1]),
+            }));
+            setLineData([
+              ...commandInput,
+              <TerminalOutput key={1}>
+                Address monitoring for {args[1]} has been turned off
+              </TerminalOutput>,
+            ]);
+          }
+        }
         break;
       case 'honeypot':
         setSettings((settings: any) => ({
@@ -222,6 +291,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
           honeypot: !settings.honeypot,
         }));
         setLineData([
+          ...commandInput,
           <TerminalOutput key={1}>
             {'Honeypot monitoring turned ' + (settings.honeypot ? 'off' : 'on')}
           </TerminalOutput>,
