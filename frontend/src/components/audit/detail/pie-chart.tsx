@@ -1,17 +1,19 @@
-import React from 'react';
 import dynamic from 'next/dynamic';
 import { Props } from 'react-apexcharts';
 import { isViewportValid } from '@/utils/media-query';
-import PieChart from './pie-chart';
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 }) as React.FC<Props>;
 
-const FindingsGraph = (props: {}) => {
+type Series = {
+  detail?: boolean;
+};
+
+const PieChart = (props: Series) => {
   const isMobile = isViewportValid(768);
   const series = [0, 1, 0, 0];
-  const customSegmentNames = ['HIGH', 'MEDIUM', 'LOW', 'INFO'];
+  const customSegmentNames = ['HIGH', 'MEDIUM', 'LOW', 'INORMATIONAL'];
   const colors = ['#F97316', '#FCD34D', '#A855F7', '#60A5FA'];
 
   const options: Props['options'] = {
@@ -26,7 +28,7 @@ const FindingsGraph = (props: {}) => {
     },
     legend: {
       show: true,
-      position: 'bottom',
+      position: 'left',
       fontSize: '12px',
     },
     stroke: {
@@ -67,24 +69,18 @@ const FindingsGraph = (props: {}) => {
       },
     ],
   };
+
   return (
-    <div className="w-full p-3 border border-zinc-900 h-full">
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
-        <h3 className="text-zinc-200 text-md font-semibold">Findings</h3>
-      </div>
-      <div className="flex items-center justify-center h-full">
-        <div id="chart" className="">
-          <Chart
-            options={options}
-            series={series}
-            type="donut"
-            width={300}
-            height={200}
-          />
-        </div>
-      </div>
+    <div id="chart" className="md:-translate-x-4">
+      <Chart
+        options={options}
+        series={series}
+        type="donut"
+        width={300}
+        height={400}
+      />
     </div>
   );
 };
 
-export default FindingsGraph;
+export default PieChart;
