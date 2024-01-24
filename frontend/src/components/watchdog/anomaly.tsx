@@ -4,6 +4,8 @@ import React, { useImperativeHandle, useEffect, useState, useRef } from 'react';
 import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
 import { TerminalOutput } from './terminal';
 import { Card } from '../ui/card';
+import Link from 'next/link';
+import { formatAddress } from '@/utils/format-address';
 
 interface AnomalyProps {
   settings: WatchdogSettings;
@@ -23,7 +25,8 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
         prev
           .concat(
             data
-              .filter((d: any) => d.type === 'honeypot')
+              .filter((d: any) => d.type === 'tx')
+              // .filter((d: any) => d.type === 'honeypot')
               .map((d: any) => (
                 <Card
                   key={nonce.current++}
@@ -33,17 +36,36 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
                     <strong>Honeypot</strong>
                   </p>
                   <p>
-                    <span className="text-gray-400">Hash</span> {d.data.hash}
+                    <Link
+                      className="text-gray-400 hover:underline"
+                      target="_blank"
+                      href={`https://etherscan.io/tx/${d.data.hash}`}
+                    >
+                      View TX
+                    </Link>
                   </p>
                   <p>
-                    <span className="text-gray-400">From</span> {d.data.from}
-                  </p>
-                  <p>
-                    <span className="text-gray-400">To</span> {d.data.to}
-                  </p>
-                  <p>
-                    <span className="text-gray-400">Action</span>{' '}
+                    <Link
+                      className="text-gray-400 hover:underline"
+                      target="_blank"
+                      href={`https://etherscan.io/address/${d.data.fromAddr}`}
+                    >
+                      {d.data.from === d.data.fromAddr
+                        ? formatAddress(d.data.from)
+                        : d.data.from}
+                    </Link>
+                    &nbsp;
                     {d.data.action}
+                    &nbsp;to&nbsp;
+                    <Link
+                      className="text-gray-400 hover:underline"
+                      target="_blank"
+                      href={`https://etherscan.io/address/${d.data.toAddr}`}
+                    >
+                      {d.data.to === d.data.toAddr
+                        ? formatAddress(d.data.to)
+                        : d.data.to}
+                    </Link>
                   </p>
                 </Card>
               ))
@@ -54,7 +76,9 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
   };
 
   useEffect(() => {
-    viewRef.current?.scrollTo(0, viewRef.current.scrollHeight);
+    if (viewRef.current) {
+      viewRef.current.scrollTo(0, viewRef.current.scrollHeight);
+    }
   }, [lineData]);
 
   useImperativeHandle(ref, () => ({
