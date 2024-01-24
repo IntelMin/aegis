@@ -73,11 +73,11 @@ const AttacksFilter: FC<AttacksFilterProps> = ({ onApplyFilters, stats }) => {
   };
 
   return (
-    <nav className="flex flex-col py-5 px-5 border-r border-zinc-900 text-sm font-medium gap-3">
+    <nav className="flex flex-col py-5 px-5 max-md:border-r-0 border-r border-zinc-900 text-sm font-medium gap-3">
       <h1>Filter</h1>
 
       <div
-        className="flex border rounded-md border-zinc-800 py-2 max-md:px-2 md:pl-2 md:pr-4 gap-2  w-full"
+        className="flex border rounded-md border-zinc-800 py-2 max-md:px-2 max-md:pr-2 md:pl-2 md:pr-4 gap-2  w-full"
         onClick={() => {}}
       >
         <Image src="/icons/search.svg" alt="token" width={16} height={16} />

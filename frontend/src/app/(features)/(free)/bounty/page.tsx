@@ -147,12 +147,7 @@ const Bounty = (props: Props) => {
       {/* Banner Section */}
       <div
         className="flex flex-col relative py-16 text-center items-center justify-center gap-14 w-full monitor"
-        // style={{
-        //   background: 'url(/backgrounds/bounty.png)',
-        //   backgroundSize: 'cover',
-        //   backgroundPosition: 'top center',
-        //   backgroundRepeat: 'no-repeat',
-        // }}
+      
       >
         <div className="absolute w-[311px] top-0 left-1/2 -translate-y-[50%] -translate-x-1/2 h-[311px] rounded-full bg-[#0E76FD] blur-[200px]" />
         <div className="flex flex-col gap-4">
@@ -385,7 +380,6 @@ const Bounty = (props: Props) => {
             )}
 
             {/* Pagnation */}
-
             <div className="w-full flex justify-center items-center pb-12">
               <Pagination className="mt-4">
                 <PaginationContent>

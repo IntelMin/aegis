@@ -1,6 +1,5 @@
 import { formatAge } from '@/utils/format-age';
 import { formatCurrency } from '@/utils/format-currency';
-import { formatNumber } from '@/utils/format-number';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';

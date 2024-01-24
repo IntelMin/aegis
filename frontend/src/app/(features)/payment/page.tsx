@@ -82,12 +82,13 @@ const PricingCard = ({
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  console.log({ closeDialog });
   useEffect(() => {
     if (closeDialog) {
+      console.log('close dialog');
       setDialogOpen(false);
     }
-  }, [closeDialog]);
+  }, [closeDialog, submitting]);
 
   return (
     <Card
@@ -271,7 +272,6 @@ export default function PricingPage() {
         }),
       });
 
-      console.log(res);
       const data = await res.json();
       if (!res.ok) {
         setCloseDialog(true);
@@ -283,12 +283,12 @@ export default function PricingPage() {
         });
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
+      setCloseDialog(true);
       showToast({
         type: 'success',
         message: 'Success',
         description: 'Credits added successfully',
       });
-      setCloseDialog(true);
       setBalance(data?.balance);
       session.update({ ...session.data, credits: data?.balance });
       setSubmitting(false);
@@ -299,6 +299,7 @@ export default function PricingPage() {
       console.log('success');
 
       addCredits();
+
       setLoading(false);
     }
     if (status === 'error') {
@@ -313,6 +314,7 @@ export default function PricingPage() {
       setLoading(false);
       setSubmitting(false);
     }
+    setCloseDialog(false);
   }, [status, submitting, txhash]);
   useEffect(() => {
     const getBalance = async () => {

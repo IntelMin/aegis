@@ -9,17 +9,16 @@ const usePaidUser = (contractAddress: string) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          token: contractAddress,
+          address: contractAddress,
           type: 'detailed',
         }),
       });
       const paidUserResponse = await response.json();
-      console.log({ paidUserResponse });
       if (paidUserResponse.status === 'error') {
         setPaidUser(false);
         return;
       }
-      setPaidUser(paidUserResponse.paiduser);
+      setPaidUser(paidUserResponse.paid_user);
     };
     fetchPaidUser();
   }, [contractAddress]);

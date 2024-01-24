@@ -7,18 +7,23 @@ import {
   DialogTitle,
   DialogDescription,
   DialogClose,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CreditType, creditConfig } from '@/lib/credit-config';
-import { set } from 'date-fns';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+
 interface PaymentDialogProps {
   balance: number | null;
   service: CreditType;
-  handlePayment: (type: CreditType) => void;
+  handlePayment: (type: CreditType) => Promise<any>;
   TriggerElement?: React.ReactNode;
   DummyElement?: React.ReactNode;
   open?: boolean;
+  payInProgress?: boolean;
+  paidUser?: boolean;
+  onSuccess?: () => void;
 }
 const PaymentDialog = ({
   balance,
@@ -26,10 +31,24 @@ const PaymentDialog = ({
   handlePayment,
   TriggerElement,
   DummyElement,
+  payInProgress,
   open,
+  paidUser,
+  onSuccess,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
   const [openDialog, setOpenDialog] = React.useState(false);
+
+  if (required_credits === 0) {
+    return <div onClick={() => handlePayment(service)}>{TriggerElement}</div>;
+  }
+  if (paidUser && onSuccess)
+    return (
+      <>
+        <div onClick={() => onSuccess()}>{TriggerElement}</div>
+      </>
+    );
+
   if (balance == null || balance < required_credits) {
     return (
       <Dialog open={open ? open : undefined}>
@@ -97,11 +116,20 @@ const PaymentDialog = ({
               .
             </DialogDescription>
           </DialogHeader>
-          <DialogClose>
-            <Button type="submit" onClick={() => handlePayment(service)}>
+          <DialogFooter>
+            <Button
+              disabled={payInProgress}
+              className="m-auto"
+              onClick={() =>
+                handlePayment(service).then(() => setOpenDialog(false))
+              }
+            >
+              {payInProgress && (
+                <AiOutlineLoading3Quarters className="animate-spin mr-1" />
+              )}
               Confirm to pay {required_credits} credits
             </Button>
-          </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     );

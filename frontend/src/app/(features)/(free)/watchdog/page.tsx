@@ -87,14 +87,14 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
   }, [settings.active]);
 
   return (
-    <div className="h-full w-full ">
+    <div className=" w-full ">
       <Sections
         sectionsArr={sectionsArr}
         setShowSection={setShowSection}
         showSection={showSection}
       />
       <div className="justify-center items-center w-full">
-        <div className="p-4 text-center text-2xl">
+        <div className="max-md:hidden p-4 text-center text-2xl">
           <h1 className="text-4xl text-zinc-500 mix-blend-difference">
             Live{' '}
             <span
@@ -121,7 +121,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         >
           <BlockStatus ref={statusRef} settings={settings} />
         </div>
-        <div className="max-md:flex md:flex-grow max-md:overflow-x-scroll w-full md:w-1/2 monitor">
+        <div className="max-md:flex md:flex-grow max-md:overflow-x-hidden w-screen md:w-1/2 monitor">
           <div
             className={`${
               showSection === 'monitor' ? 'flex-grow' : 'max-md:hidden'

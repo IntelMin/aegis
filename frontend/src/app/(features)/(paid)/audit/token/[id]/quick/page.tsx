@@ -86,8 +86,8 @@ const QuickAuditPage = ({ params }: Props) => {
                 Detailed Audit
               </Link>
               <p className="text-neutral-200 text-[14px] font-[300]">
-                Premium information on $AAVE token, to guide you on making the
-                best trading decisions
+                Premium information on ${tokenInfo ? tokenInfo.symbol : ''}{' '}
+                token, to guide you on making the best trading decisions
               </p>
             </div>
             <div className="w-1/2 h-full">

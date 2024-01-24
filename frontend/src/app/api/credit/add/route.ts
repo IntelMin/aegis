@@ -13,7 +13,6 @@ const publicClient = createPublicClient({
 export async function POST(req: NextRequest, res: Response) {
   const request = await req.json();
   const { email, amount, packageName, hash } = request;
-  console.log(request);
   const txn = await publicClient.getTransaction({
     hash: hash,
 
