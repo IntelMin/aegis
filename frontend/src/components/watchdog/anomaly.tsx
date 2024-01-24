@@ -25,8 +25,7 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
         prev
           .concat(
             data
-              .filter((d: any) => d.type === 'tx')
-              // .filter((d: any) => d.type === 'honeypot')
+              .filter((d: any) => d.type === 'honeypot')
               .map((d: any) => (
                 <Card
                   key={nonce.current++}
