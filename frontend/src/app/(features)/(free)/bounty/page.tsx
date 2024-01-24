@@ -28,6 +28,7 @@ import { showToast } from '@/components/toast';
 import axios from 'axios';
 import PulseLoader from 'react-spinners/PulseLoader';
 import GridLoader from 'react-spinners/GridLoader';
+import { filterSchema } from '@/components/bounty/schema';
 
 const categoryList = [
   'Bug bounty',
@@ -41,7 +42,11 @@ type Props = {};
 
 const Bounty = (props: Props) => {
   const [isPaid, setIsPaid] = useState<boolean | undefined>();
-  const [search, setSearch] = React.useState('');
+  const [name, setName] = useState<string | undefined>();
+  const [platform, setPlatform] = useState<string | undefined>();
+  const [language, setLanguage] = useState<string | undefined>();
+  const [category, setCategory] = useState<string | undefined>();
+
   const [filterOptions, setFilterOptions] = useState<any[]>([]);
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
@@ -99,16 +104,38 @@ const Bounty = (props: Props) => {
     }
   };
 
-  const handleApplyFilters = (filters: any) => {
+  const handleFilters = (filters: any) => {
     setFilterOptions(filters);
     fetchData(filters);
+  };
+
+  const handleApplyFilters = () => {
+    const filters = filterSchema.parse({
+      name,
+      platform,
+      language,
+      category,
+      isPaid,
+    });
+    handleFilters(filters);
+  };
+  const resetFilters = () => {
+    setName(undefined);
+    setPlatform(undefined);
+    setLanguage(undefined);
+    setCategory(undefined);
+    setIsPaid(undefined);
+  };
+
+  const handleResetFilters = () => {
+    const initialFilters = filterSchema.parse({});
+    resetFilters();
+    handleFilters(initialFilters);
   };
 
   useEffect(() => {
     fetchData(filterOptions);
   }, [filterOptions, offset, limit]);
-
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
 
   return (
     <div className="flex flex-col w-full monitor">
@@ -202,15 +229,15 @@ const Bounty = (props: Props) => {
               <input
                 type="text"
                 autoComplete="off"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
+                value={name}
+                onChange={e => setName(e.target.value)}
                 placeholder="Search bounty"
                 className="flex-grow text-[15px] text-white placeholder:text-zinc-200 border-none outline-none bg-transparent"
               />
             </div>
             <div className="grid grid-cols-4 max-md:w-full items-center gap-3">
               {/* Dropdown Filter */}
-              <Select>
+              <Select onValueChange={setPlatform}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center max-md:justify-center font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Platform" />
@@ -260,7 +287,7 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select>
+              <Select onValueChange={setCategory}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center max-md:justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Category" />
@@ -290,7 +317,7 @@ const Bounty = (props: Props) => {
                 </SelectContent>
               </Select>
 
-              <Select>
+              <Select onValueChange={setLanguage}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
                   <div className="flex gap-2 item-center max-md:justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Language" />
@@ -313,6 +340,7 @@ const Bounty = (props: Props) => {
 
               <Button
                 className="col-span-2 md:col-span-1 p-2 h-full flex items-center gap-2 text-zinc-500"
+                onClick={handleResetFilters}
                 style={{
                   background: '#09090B',
                 }}
