@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
@@ -12,6 +11,9 @@ import AuditHistory from '@/components/audit/detail/audit-history';
 import Attributes from '@/components/analytics/overview/attributes';
 import SecurityOverview from '@/components/analytics/overview/security';
 import GovernanceInfo from '@/components/audit/detail/overview/governance';
+import CommunityInfo from '@/components/audit/detail/overview/community';
+import SecurityInfo from '@/components/audit/detail/overview/security';
+import MarketInfo from '@/components/audit/detail/overview/market';
 
 type Props = {
   params: {
@@ -84,14 +86,14 @@ const QuickAuditPage = ({ params }: Props) => {
                 >
                   {tokenInfo && (
                     <p className="text-zinc-200 text-sm w-[52%]">
-                      View premium data on {tokenInfo.symbol} token, to guide
-                      you on making the best investment decisions
+                      Unlock comprehensive insights on the {tokenInfo.symbol}{' '}
+                      token for informed investment decisions.
                     </p>
                   )}
 
                   <Link
                     href={`/audit/token/${params?.id}/detailed`}
-                    className={`bg-[#0E76FD] border-[#0E76FD] flex items-center justify-center text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
+                    className={`bg-[#0E76FD] border-[#0E76FD] flex items-center justify-center text-zinc-50 text-md border font-semibold px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
                   >
                     Detailed Audit
                   </Link>
@@ -99,7 +101,7 @@ const QuickAuditPage = ({ params }: Props) => {
               </div>
             </div>
           </div>
-          <div className="col-span-3 grid grid-rows-3 gap-4">
+          <div className="col-span-3 grid grid-rows gap-4">
             <div className="row-span-1 grid grid-cols-3 gap-4">
               <div className="col-span-2 h-full">
                 <SecurityOverview
@@ -108,17 +110,21 @@ const QuickAuditPage = ({ params }: Props) => {
                   showDetails={false}
                 />
               </div>
-              <div className="">
+              <div className="h-full">
                 <AuditHistory />
               </div>
+            </div>
+            <div className="row-span-1 ">
+              <SecurityInfo contractAddress={contractAddress} />
             </div>
             <div className="row-span-1">
               <GovernanceInfo contractAddress={contractAddress} />
             </div>
-            <div className="row-span-1 grid grid-cols-3 gap-4">
-              <div className="bg-white p-4"></div>
-              <div className="bg-white p-4"></div>
-              <div className="bg-white p-4"></div>
+            <div className="row-span-1">
+              <CommunityInfo contractAddress={contractAddress} />
+            </div>
+            <div className="row-span-1 mb-20">
+              <MarketInfo contractAddress={contractAddress} />
             </div>
           </div>
         </div>
