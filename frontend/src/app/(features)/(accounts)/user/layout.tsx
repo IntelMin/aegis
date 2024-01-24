@@ -35,15 +35,19 @@ export default function UserProfileLayout({
 
   return (
     <div className="p-8 w-full md:max-w-[75%] m-auto">
+      <div className="mb-6 mt-6">
+        <h1 className="text-zinc-500 text-xl font-[500] w-[70%]">
+          Hello,{' '}
+          <span className="text-neutral-200 text-ellipsis">
+            {session?.data?.user?.username}
+          </span>
+        </h1>
+      </div>
+
       {/* Sidebar */}
+
       <div className="flex max-md:flex-col gap-2">
         <div className="w-[250px] max-md:justify-center max-md:w-full flex flex-col gap-4">
-          <h1 className="text-zinc-500 text-2xl font-[500] w-[70%]">
-            Hello,{' '}
-            <span className="text-neutral-200 text-ellipsis">
-              {session?.data?.user?.username}
-            </span>
-          </h1>
           <div
             style={{
               background: 'url(/backgrounds/balance.png)',
@@ -56,7 +60,7 @@ export default function UserProfileLayout({
             <p className="text-zinc-50 font-[600] text-3xl">{balance}</p>
             <p className="text-zinc-400 font-[400] text-sm">Credit Balance</p>
           </div>
-          <nav className="flex md:flex-col max-md:w-full py-5 border-b md:border-r border-zinc-900 text-sm font-medium gap-3">
+          <nav className="flex md:flex-col max-md:w-full py-2 text-sm font-medium gap-3">
             <Link
               className={`flex max-md:w-1/3 items-center font-[500] justify-center gap-3 px-3 py-2 text-[16px] transition-all  ${
                 pathname == '/user/profile'
@@ -117,7 +121,7 @@ export default function UserProfileLayout({
           </nav>
         </div>
 
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <main className="flex flex-1 flex-col gap-4 pt-0 p-4 md:gap-8 md:pt-0 md:p-6">
           {children}
 
           {/* <div className="border shadow-sm rounded-lg p-2">

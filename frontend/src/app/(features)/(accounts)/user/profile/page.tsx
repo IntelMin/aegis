@@ -21,7 +21,7 @@ const UserAccountTable = () => {
           <p className="text-md text-zinc-500">Update your information</p>
         )}
       </div>
-      <div className="border shadow-sm rounded-lg border-zinc-800 p-4 mb-4">
+      <div className="border shadow-sm bg-[#0b0b0c] border-zinc-800 p-4 mb-4">
         <h2 className="text-md pb-3 mb-4 border-b border-zinc-800">
           Personal Information
         </h2>
@@ -69,13 +69,13 @@ const UserAccountTable = () => {
           </div>
         </div>
       </div>
-      <div className="border shadow-sm rounded-lg border-zinc-800 p-4 mb-4">
+      <div className="border shadow-sm bg-[#0b0b0c] border-zinc-800 p-4 mb-4">
         <h2 className="text-md pb-3 mb-4 border-b border-zinc-800">Socials</h2>
         <div className="grid grid-cols-1 gap-6 md:flex-row md:gap-8 text-zinc-50">
           <div className="col-span-1 grid max-md:grid-cols-1 grid-cols-2 gap-6">
             <div className="col-span-1 space-y-2">
               <Label className="flex gap-2 items-center" htmlFor="name">
-                <FaXTwitter />X
+                <FaXTwitter />X (formerly twitter)
               </Label>
               <Input
                 disabled={true}
