@@ -6,17 +6,25 @@ export async function GET(req: NextRequest) {
   const address = searchParams.get('address');
   const type = searchParams.get('type');
   console.log(type);
+
+  const url = `${process.env.AEGIS_SRV}/info/${type}/${address}`;
+
   try {
-    let url = `${process.env.AEGIS_SRV}/info/${type}/${address}`;
-    const response = await axios.get(url);
-    // console.log(response.data);
-    return NextResponse.json(response.data);
-  } catch (error) {
-    if (error) {
-      console.log(error);
-      return NextResponse.json(error, { status: 404 });
-    } else {
-      return NextResponse.error();
+    const res = await fetch(url, {
+      next: {
+        revalidate: 30,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
     }
+
+    const data = await res.json();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(error, { status: 404 });
   }
 }

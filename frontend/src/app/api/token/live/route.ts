@@ -7,18 +7,24 @@ export async function GET(req: NextRequest) {
 
   console.log('address: ', address);
 
+  const url = `${process.env.AEGIS_SRV}/token/live/${address}`;
+
   try {
-    let url = `${process.env.AEGIS_SRV}/token/live/${address}`;
+    const res = await fetch(url, {
+      next: {
+        revalidate: 30,
+      },
+    });
 
-    const response = await axios.get(url);
-
-    return NextResponse.json(response.data);
-  } catch (error) {
-    if (error) {
-      console.log(error);
-      return NextResponse.json(error, { status: 404 });
-    } else {
-      return NextResponse.error();
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
     }
+
+    const data = await res.json();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(error, { status: 404 });
   }
 }
