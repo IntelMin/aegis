@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 
-const socket = io('ws://srv.aiaegis.org:4444', {
+const socket = io('wss://srv.aiaegis.org', {
   transports: ['websocket'],
 });
 

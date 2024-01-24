@@ -93,7 +93,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                 <div className="flex flex-col">
                   {/* TODO: "Ox" the x doesn't appear in the same way for both addresses */}
                   <div
-                    className="flex text-blue-400 cursor-pointer"
+                    className="flex text-blue-400 cursor-pointer font-mono text-sm"
                     onClick={handleCopy(metadata.address)}
                   >
                     0x
@@ -107,7 +107,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                     />
                   </div>
                   <div
-                    className="flex text-blue-400 cursor-pointer"
+                    className="flex text-blue-400 cursor-pointer font-mono text-sm"
                     onClick={handleCopy(liveData?.pairAddress)}
                   >
                     0x
@@ -144,15 +144,15 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
             <>
               <TokenValueContainer
                 name="MCAP"
-                value={formatNumber(liveData.fdv)}
+                value={formatNumber(liveData.fdv, 1)}
               />
               <TokenValueContainer
                 name="LIQUIDITY"
-                value={formatNumber(liveData.liquidity.usd)}
+                value={formatNumber(liveData.liquidity.usd, 1)}
               />
               <TokenValueContainer
                 name="VOL (24H)"
-                value={formatNumber(liveData.volume.h24)}
+                value={formatNumber(liveData.volume.h24, 1)}
               />
               <TokenValueContainer
                 name="AGE"

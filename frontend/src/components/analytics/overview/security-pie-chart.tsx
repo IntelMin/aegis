@@ -13,6 +13,15 @@ type props = {
 const PieGraph = (props: props) => {
   const series = [props.value];
 
+  const colors =
+    props.value <= 25
+      ? '#dc2626'
+      : props.value <= 50
+      ? '#ea580c'
+      : props.value <= 75
+      ? '#ca8a04'
+      : '#059669';
+
   const options: Props['options'] = {
     chart: {
       width: 180,
@@ -59,7 +68,7 @@ const PieGraph = (props: props) => {
             formatter: function (val: any) {
               return (props.labels ? `${val}%` : `${val}/100`) || '';
             },
-            color: '#FAFAFA',
+            color: colors,
             fontSize: '30px',
             fontWeight: 600,
             show: true,
@@ -69,7 +78,7 @@ const PieGraph = (props: props) => {
           name: {
             offsetY: 30,
             show: props.labels,
-            color: '#4ADE80',
+            color: '#666',
             fontWeight: 400,
             fontSize: '14px',
           },
@@ -77,7 +86,7 @@ const PieGraph = (props: props) => {
       },
     },
     fill: {
-      colors: ['#4ADE80'],
+      colors: [colors],
       opacity: 0.9,
       type: 'solid',
       gradient: {
@@ -107,16 +116,14 @@ const PieGraph = (props: props) => {
   };
 
   return (
-    <div id="card" className="bg-transparent p-0 m-0">
-      <div id="chart">
-        <Chart
-          options={options}
-          series={series}
-          type="radialBar"
-          height={props.height}
-          width={'100%'}
-        />
-      </div>
+    <div id="chart">
+      <Chart
+        options={options}
+        series={series}
+        type="radialBar"
+        height={props.height}
+        width={'100%'}
+      />
     </div>
   );
 };

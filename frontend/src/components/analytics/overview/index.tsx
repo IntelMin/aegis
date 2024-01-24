@@ -87,7 +87,11 @@ const TokenDetailOverView = ({
       <Statistics liveData={liveData} />
 
       {/* Token Gauge Chart */}
-      <SecurityOverview address={tokenMetaData?.address} />
+      <SecurityOverview
+        address={tokenMetaData?.address}
+        showRadar={false}
+        showDetails={true}
+      />
     </div>
   );
 };

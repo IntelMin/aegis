@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -67,11 +68,10 @@ async function init() {
     console.log('Initializing...');
 
     await Promise.all([
-      initDashboardLive(),
-      initDashboardTrending(),
-      initBounty(),
-      initAttacks(),
-
+      //   initDashboardLive(),
+      //   initDashboardTrending(),
+      //   initBounty(),
+      //   initAttacks(),
     ]);
 
     console.log('Initialization complete.');

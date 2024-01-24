@@ -1,4 +1,7 @@
-export const formatNumber = (input: number | string): string => {
+export const formatNumber = (
+  input: number | string,
+  decimals: number = 2
+): string => {
   const num = typeof input === 'string' ? parseFloat(input) : input;
 
   if (isNaN(num)) {
@@ -6,8 +9,7 @@ export const formatNumber = (input: number | string): string => {
   }
 
   const format = (value: number, suffix: string) => {
-    // Convert to string using toFixed, then remove trailing zeros and decimal point if not needed
-    return Number(value.toFixed(2)).toString() + suffix;
+    return Number(value.toFixed(decimals)).toString() + suffix;
   };
 
   if (num >= 1e9) {

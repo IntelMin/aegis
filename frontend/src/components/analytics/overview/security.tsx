@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 import PieGraph from './security-pie-chart';
 import { Skeleton } from '../../ui/skeleton';
 import axios from 'axios';
+import RadarGraph from './security-radar';
 
 const SecurityOverview: React.FC<{
   address: string;
-}> = ({ address }) => {
+  showRadar: boolean;
+  showDetails: boolean;
+}> = ({ address, showRadar, showDetails }) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
   const [score, setScores] = useState({} as any);
@@ -148,42 +151,52 @@ const SecurityOverview: React.FC<{
   return (
     <div className="border border-zinc-900 p-3 flex flex-col items-center justify-center gap-3">
       {/* <p className="text-white">Safety Overview</p> */}
-      <PieGraph value={total} height={290} labels={true} />
-      <p className="text-zinc-200 text-center font-bold mb-3">
-        {total < 50
-          ? 'Caution Advised'
-          : total < 20
-          ? 'High Risk'
-          : 'Neutral Risk'}
-      </p>
-      {data.map((item: any, index: any) => (
-        <div
-          key={index}
-          className="flex flex-col bg-zinc-900 rounded-md w-full p-3"
-        >
-          <div className="flex flex-row justify-between pb-1">
-            <div className="font-semibold text-lg">{item.label}</div>
-            <div className="flex flex-row">
-              <div className="w-[80px] flex flex-row-reverse">
-                {getColor(item.score)
-                  .reverse()
-                  .map((color, circleIndex) => (
-                    <div
-                      key={circleIndex}
-                      style={color}
-                      className={`w-6 h-6 rounded-full border border-zinc-900 border-[2px] ml-[-0.8rem] z-1${circleIndex}`}
-                    />
-                  ))}
-              </div>
+      <div className="flex flex-row justify-between w-full">
+        <PieGraph value={total} height={290} labels={true} />
+        {showRadar && <RadarGraph value={total} height={250} labels={true} />}
+      </div>
+      {!showRadar && (
+        <p className="text-zinc-200 text-center font-bold mb-3">
+          {total < 50
+            ? 'Caution Advised'
+            : total < 20
+            ? 'High Risk'
+            : 'Neutral Risk'}
+        </p>
+      )}
 
-              <div className="ml-2 w-[30px] font-bold text-lg text-right text-zinc-200 font-mono">
-                {item.score}%
+      {showDetails && (
+        <>
+          {data.map((item: any, index: any) => (
+            <div
+              key={index}
+              className="flex flex-col bg-zinc-900 rounded-md w-full p-3"
+            >
+              <div className="flex flex-row justify-between pb-1">
+                <div className="font-semibold text-lg">{item.label}</div>
+                <div className="flex flex-row">
+                  <div className="w-[80px] flex flex-row-reverse">
+                    {getColor(item.score)
+                      .reverse()
+                      .map((color, circleIndex) => (
+                        <div
+                          key={circleIndex}
+                          style={color}
+                          className={`w-6 h-6 rounded-full border border-zinc-900 border-[2px] ml-[-0.8rem] z-1${circleIndex}`}
+                        />
+                      ))}
+                  </div>
+
+                  <div className="ml-2 w-[30px] font-bold text-lg text-right text-zinc-200 font-mono">
+                    {item.score}%
+                  </div>
+                </div>
               </div>
+              <div className="text-zinc-500 text-lg">{item.description}</div>
             </div>
-          </div>
-          <div className="text-zinc-500 text-lg">{item.description}</div>
-        </div>
-      ))}
+          ))}
+        </>
+      )}
     </div>
   );
 };
