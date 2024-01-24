@@ -8,8 +8,6 @@ async function graphqlRequest(query, variables = {}) {
     variables,
   };
 
-  console.log('GraphQL request:', requestBody);
-
   try {
     const response = await axios.post(endpoint, requestBody, {
       headers: {
@@ -131,8 +129,97 @@ const fetchLiquidityPool = variables => {
   return graphqlRequest(query, variables);
 };
 
+const fetchTx = variables => {
+  const query = `
+    query Tx($hash: String!, $chain: String!) {
+      tx(hash: $hash, chain: $chain) {
+        hash
+        to
+        from
+        chain
+        gasUsed
+        gasPrice
+        gasLimit
+        input
+        call
+        nonce
+        index
+        status
+        value
+        state
+        error
+        contract_creation
+        timestamp
+        block
+        toAddressLabel {
+          src
+          label
+          address
+          tags
+        }
+        fromAddressLabel {
+          src
+          label
+          address
+          tags
+        }
+        marketData {
+          type
+          data
+        }
+        inputDecoded {
+          function
+          args
+        }
+        logs {
+          address
+          addressLabel {
+            src
+            label
+            tags
+            address
+          }
+          data
+          name
+          index
+          topic
+          rawData
+          dataLabels
+        }
+        transfers {
+          timestamp
+          to
+          from
+          value
+          address
+          symbol
+          decimals
+          usdPrice
+          imgSrc
+          isNft
+          toLabel {
+            src
+            label
+            address
+            tags
+          }
+          fromLabel {
+            src
+            label
+            address
+            tags
+          }
+        }
+      }
+    }
+  `;
+
+  return graphqlRequest(query, variables);
+};
+
 module.exports = {
   fetchContractLogsIntervals,
   fetchTokenHolders,
   fetchLiquidityPool,
+  fetchTx,
 };
