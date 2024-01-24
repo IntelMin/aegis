@@ -145,10 +145,7 @@ const Bounty = (props: Props) => {
   return (
     <div className="flex flex-col w-full monitor">
       {/* Banner Section */}
-      <div
-        className="flex flex-col relative py-16 text-center items-center justify-center gap-14 w-full monitor"
-      
-      >
+      <div className="flex flex-col relative py-16 text-center items-center justify-center gap-14 w-full monitor">
         <div className="absolute w-[311px] top-0 left-1/2 -translate-y-[50%] -translate-x-1/2 h-[311px] rounded-full bg-[#0E76FD] blur-[200px]" />
         <div className="flex flex-col gap-4">
           <h1 className="text-zinc-50 text-[40px] font-bold">Bug Bounty</h1>
@@ -193,9 +190,9 @@ const Bounty = (props: Props) => {
         {/* Filter Section */}
         <div className="w-full flex max-md:flex-col max-md:gap-6 items-center justify-between">
           {/* Left Filter Section */}
-          <div className="max-md:w-full md:w-[25%] flex gap-3 max-md:justify-center items-center">
+          <div className="max-md:w-full md:w-[30%] flex gap-3 max-md:justify-between items-center">
             <div
-              className="flex gap-3 items-center cursor-pointer"
+              className="flex max-md:w-1/2 gap-3 max-md:justify-center items-center cursor-pointer"
               onClick={() => setIsPaid(false)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
@@ -206,7 +203,7 @@ const Bounty = (props: Props) => {
               <p className="text-neutral-200 text-sm font-bold">Open Bounty</p>
             </div>
             <div
-              className="flex gap-3 items-center cursor-pointer"
+              className="flex max-md:w-1/2 gap-3 max-md:justify-center items-center cursor-pointer"
               onClick={() => setIsPaid(true)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
@@ -236,7 +233,7 @@ const Bounty = (props: Props) => {
                 className="flex-grow text-[15px] text-white placeholder:text-zinc-200 border-none outline-none bg-transparent"
               />
             </div>
-            <div className="grid grid-cols-4 md:max-w-[60%] max-md:w-full items-center gap-3">
+            <div className="grid grid-cols-4 md:max-w-[65%] max-md:w-full items-center gap-3">
               {/* Dropdown Filter */}
               <Select onValueChange={value => setPlatform(value)}>
                 <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 py-2 pl-[3px] rounded-md">
