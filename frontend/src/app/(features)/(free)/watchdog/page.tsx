@@ -38,7 +38,10 @@ export interface WatchdogSettings {
 const Watchdog: FC<WatchdogProps> = ({}) => {
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
-  const anomalyRef = useRef<{ update?: (data: any) => void }>({});
+  const anomalyRef = useRef<{
+    clear(): void;
+    update?: (data: any) => void;
+  }>();
 
   const socket = useRef<Socket>();
   const [settings, setSettings] = useState<WatchdogSettings>({
@@ -75,8 +78,8 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         // Handle log updates
         localSocket.on('log', data => {
           console.log('log received');
-          monitorRef.current?.updateLog(data);
-          anomalyRef.current?.update(data);
+          monitorRef.current?.updateLog?.(data);
+          anomalyRef.current?.update?.(data);
           console.log('Received log from socket');
         });
       }
@@ -86,7 +89,9 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
     }
 
     // Clean up the connection when component unmounts or active status changes
-    return () => socket.current?.disconnect();
+    return () => {
+      socket.current?.disconnect();
+    };
   }, [settings.active, socket]);
 
   return (
@@ -134,7 +139,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
               ref={monitorRef}
               settings={settings}
               setSettings={setSettings}
-              onClear={() => anomalyRef.current?.clear()}
+              onClear={() => anomalyRef.current?.clear?.()}
             />
           </div>
         </div>

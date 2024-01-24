@@ -2,10 +2,11 @@
 
 import React, {
   useState,
-  MouseEvent,
   useEffect,
   useRef,
   useImperativeHandle,
+  SetStateAction,
+  Dispatch,
 } from 'react';
 import ReactDOM from 'react-dom';
 import Terminal, { TerminalInput, TerminalOutput } from './terminal';
@@ -13,7 +14,7 @@ import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
 
 interface MonitorProps {
   settings: WatchdogSettings;
-  setSettings: (settings: any) => void;
+  setSettings: Dispatch<SetStateAction<WatchdogSettings>>;
   onClear: () => void;
 }
 
@@ -152,7 +153,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
         console.log('start command');
 
         if (!settings.active) {
-          setSettings((settings: any) => ({
+          setSettings(settings => ({
             ...settings,
             active: !settings.active,
           }));
@@ -276,7 +277,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
               <TerminalOutput key={1}>No address is specified</TerminalOutput>,
             ]);
           } else {
-            setSettings((settings: any) => ({
+            setSettings(settings => ({
               ...settings,
               address: settings.address.filter(addr => addr !== args[1]),
             }));
