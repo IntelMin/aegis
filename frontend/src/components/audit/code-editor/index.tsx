@@ -123,7 +123,7 @@ const CodeAuditEditor = (props: Props) => {
             <h1 className="font-bold text-md">Contract</h1>
           </div>
           {/* <!-- Editor Area --> */}
-          <div className="flex-1 bg-[#09090B] h-full overflow-y-scroll">
+          <div className="flex-1 bg-[#09090B] px-3 h-full">
             <Editor
               height="calc(100%)"
               theme="vs-dark"
@@ -179,7 +179,7 @@ const CodeAuditEditor = (props: Props) => {
             </h1>
           </div>
           {/* <!-- Placeholder for Findings Content --> */}
-          <div className="flex-1 h-full max-md:px-0 pr-5 space-y-6 overflow-y-scroll">
+          <div className="flex-1 h-full max-md:px-3 pr-5 space-y-6">
             {findings?.length > 0 ? (
               findings.map((finding: any, index: number) => (
                 <div

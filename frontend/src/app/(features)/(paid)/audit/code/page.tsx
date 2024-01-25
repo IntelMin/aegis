@@ -82,8 +82,8 @@ const CodeAudit = () => {
 
   return (
     <form onSubmit={handleSubmit} className="w-full mt-4">
-      <div className="space-y-8 md:px-5 md:py-5">
-        <div className="items-center justify-center w-full space-y-8 text-center flex-cols md:flex md:justify-between px-3">
+      <div className="space-y-8 max-md:w-full md:px-6 md:py-5">
+        <div className="items-center justify-center w-full space-y-8 text-center flex-cols md:flex md:justify-between px-3 pr-5">
           <div className="space-y-3 text-start">
             <h1 className="text-2xl text-white text-semibold">Code Audit</h1>
             <h1 className="text-md text-neutral-300">
@@ -92,16 +92,18 @@ const CodeAudit = () => {
           </div>
           <PaymentDialog
             service="code"
+            fullwidth
             balance={balance}
             handlePayment={handlePayment}
             TriggerElement={
               <Button
                 type="button"
                 disabled={loading || paymentloading}
-                className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 bg-[#0E76FD] md:space-y-4 gap-2 ${
+                className={`text-white text-sm md:px-28 w-full md:w-[387px] py-2 md:space-y-4 gap-2 ${
                   loading ? 'active' : ''
                 }`}
                 onClick={() => setOpen(true)}
+                style={{ backgroundColor: '#0E76FD', color: 'white' }}
               >
                 {loading ? 'Auditing' : 'Audit your code'}{' '}
                 {(loading || paymentloading) && (
