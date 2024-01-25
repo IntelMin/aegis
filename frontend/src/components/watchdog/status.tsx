@@ -94,8 +94,8 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
           {!settings.active ? (
             <>
               {'watchdog not started\n\n'}
-              {`TOKEN               ${settings.token ? 'ON' : 'OFF'}\n`}
-              {`HONEYPOT            ${settings.honeypot ? 'ON' : 'OFF'}\n`}
+              {`TOKEN               ${settings.token ? ' ON' : 'OFF'}\n`}
+              {`HONEYPOT            ${settings.honeypot ? ' ON' : 'OFF'}\n`}
               {settings.address.length > 0 && `ADDRESS              ON\n`}
               {settings.address
                 .map((addr, key) => addr.toLowerCase())
