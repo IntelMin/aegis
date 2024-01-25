@@ -12,7 +12,11 @@ export const formatNumber = (
     return Number(value.toFixed(decimals)).toString() + suffix;
   };
 
-  if (num >= 1e9) {
+  if (num >= 1e15) {
+    return format(num / 1e15, 'Q');
+  } else if (num >= 1e12) {
+    return format(num / 1e12, 'T');
+  } else if (num >= 1e9) {
     return format(num / 1e9, 'B');
   } else if (num >= 1e6) {
     return format(num / 1e6, 'M');
