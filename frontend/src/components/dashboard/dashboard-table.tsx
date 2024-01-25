@@ -14,6 +14,8 @@ import Image from 'next/image';
 import copy from 'copy-to-clipboard';
 import Sparkline from './dashboard-sparkline';
 import { formatAddress } from '@/utils/format-address';
+import { toast } from 'sonner';
+import Link from 'next/link';
 
 type DashboardDataTableProps = {
   tableData: any[];
@@ -41,6 +43,7 @@ const DashboardDataTable = ({
 
   const handleCopy = (data: string) => {
     copy(data);
+    toast('Copied to clipboard');
   };
 
   function timeAgo(timeInSeconds: number): string {
@@ -84,7 +87,7 @@ const DashboardDataTable = ({
             <TableCell
               className={`text-neutral-100 break-words w-[150px] text-left`}
             >
-              {item.name}
+              <Link href={`/analytics/${item.address}`}>{item.name}</Link>
             </TableCell>
 
             {/* token */}
@@ -137,7 +140,7 @@ const DashboardDataTable = ({
               className={`text-neutral-200 col-span-2 z-[0] relative `}
             >
               {/* TODO: Fix sparkline null */}
-              {/* item?.sparkline  && {<Sparkline data={item.sparkline} /> */}
+              {item?.sparkline && <Sparkline data={item.sparkline} />}
             </TableCell>
 
             {/* m-cap */}
