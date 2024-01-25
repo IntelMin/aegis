@@ -304,7 +304,11 @@ const DetailedPage = ({ params, paidUser }: Props) => {
     switch (tab) {
       case 'Overview':
         // return <OverViewReport data={infoData} token={params.id} />;
-        return <AuditOverview address={contractAddress} token={infoData} />;
+        return (
+          <div className="p-6">
+            <AuditOverview address={contractAddress} token={infoData} />
+          </div>
+        );
       case 'Code':
         return (
           // border border-zinc-800
