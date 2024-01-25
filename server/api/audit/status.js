@@ -1,12 +1,6 @@
 const express = require('express');
-const {
-  isERC20Token,
-  insertRequestdb,
-  fileExists,
-  isContractOpenSource,
-  readCache,
-  supabase,
-} = require('../../lib/utils');
+const { supabase, flattenSourcecode } = require('../../lib/utils');
+const { readCache } = require('../../lib/file');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
@@ -20,8 +14,8 @@ async function getAuditRequest(address) {
     .from('audit_requests')
     .select('*')
     .eq('contract', address);
-  console.log(error);
-  console.log({ data });
+  //   console.log(error);
+  //   console.log({ data });
 
   return { data, error };
 }
@@ -57,16 +51,15 @@ function getProgress(address) {
   return progressPercentage;
 }
 
-function getEta(address) {
+async function getEta(address) {
   let eta = 3 * 60;
 
   const basePath = path.join('./cache/contracts', address);
   const filePath = path.join(basePath, 'source.json');
 
   if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, 'utf8');
-    const json = JSON.parse(data);
-    const source_code = json['data']['source_code'];
+    const data = await readCache(filePath);
+    const source_code = flattenSourcecode(data);
     const lines = source_code.split(/\r?\n/);
     let sourceJsonLineCount = lines.length;
 
@@ -122,7 +115,7 @@ router.get('/status/:address', async (req, res) => {
   return res.status(200).send({
     status: statusResponse,
     progress: getProgress(address),
-    eta: getEta(address),
+    eta: await getEta(address),
   });
 });
 
