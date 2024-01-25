@@ -2,8 +2,8 @@
 
 import React, { useImperativeHandle, useEffect, useState, useRef } from 'react';
 import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
-import { TerminalOutput } from './terminal';
 import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 import Link from 'next/link';
 import { formatAddress } from '@/utils/format-address';
 
@@ -35,13 +35,15 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
                     <strong>Honeypot</strong>
                   </p>
                   <p>
-                    <Link
-                      className="text-gray-400 hover:underline"
-                      target="_blank"
-                      href={`https://etherscan.io/tx/${d.data.hash}`}
-                    >
-                      View TX
-                    </Link>
+                    <Button asChild size="sm" className="h-6 my-2">
+                      <Link
+                        className="dark:text-gray-300 px-1 dark:bg-zinc-700 hover:dark:bg-zinc-600"
+                        target="_blank"
+                        href={`https://etherscan.io/tx/${d.data.hash}`}
+                      >
+                        View TX
+                      </Link>
+                    </Button>
                   </p>
                   <p>
                     <Link
