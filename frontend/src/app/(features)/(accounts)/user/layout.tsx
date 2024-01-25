@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { PersonIcon, ArchiveIcon, ReaderIcon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import CountUp from 'react-countup';
 
 export default function UserProfileLayout({
   children,
@@ -57,7 +58,16 @@ export default function UserProfileLayout({
             className="border border-zinc-900 p-4 pb-6 flex flex-col gap-3 items-center justify-center"
           >
             <Image src="/icons/credits.svg" alt="" width={131} height={100} />
-            <p className="text-zinc-50 font-[600] text-3xl">{balance}</p>
+            <p className="text-zinc-50 font-[600] text-3xl">
+              <CountUp
+                start={0}
+                end={balance}
+                duration={2.5}
+                separator=","
+                decimals={0}
+                decimal="."
+              />
+            </p>
             <p className="text-zinc-400 font-[400] text-sm">Credit Balance</p>
           </div>
           <nav className="flex md:flex-col max-md:w-full py-2 text-sm font-medium gap-3">
