@@ -3,7 +3,7 @@ const router = express.Router();
 const cron = require('node-cron');
 const fetchAttacks = require('../scrapers/slowmist');
 const supabase = require('../lib/supabase');
-const { readCache, writeCache } = require('../lib/utils');
+const { readCache, writeCache } = require('../lib/file');
 
 async function fetchAttackStats() {
   console.log('Fetching attack stats');

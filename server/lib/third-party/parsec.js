@@ -22,7 +22,7 @@ async function graphqlRequest(query, variables = {}) {
 
     return response.data;
   } catch (error) {
-    console.error('GraphQL request failed:', error);
+    console.error('Parsec request failed:', error);
     return null;
   }
 }

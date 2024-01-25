@@ -4,9 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const monitorRoute = require('./api/monitor');
 const auditRoute = require('./api/audit');
-// const monitoringRoute = require('./api/monitoring');
 const tokenRoute = require('./api/token');
 const searchRoute = require('./api/search');
 const reportRoute = require('./api/report');
@@ -20,6 +18,8 @@ const {
 const { router: bountyRoute, init: initBounty } = require('./api/bounty');
 const { router: attacksRoute, init: initAttacks } = require('./api/attacks');
 
+// const monitorRoute = require('./api/monitor');
+// const monitoringRoute = require('./api/monitoring');
 // const bugbountyRoute = require('./api/bugbounty');
 // const describeRoute = require("./api/describe");
 // const markdownRoute = require("./api/markdown");
@@ -46,9 +46,7 @@ router.get('/ping', (req, res) => {
 });
 
 app.use('/dashboard', dashboardRoute);
-app.use('/monitor', monitorRoute);
 app.use('/audit', auditRoute);
-// app.use('/monitoring', monitoringRoute);
 app.use('/token', tokenRoute);
 app.use('/search', searchRoute);
 app.use('/info', infoRoute);
@@ -56,6 +54,9 @@ app.use('/report', reportRoute);
 app.use('/bounty', bountyRoute);
 app.use('/attacks', attacksRoute);
 app.use('/analytics', analyticsRoute);
+
+// app.use('/monitor', monitorRoute);
+// app.use('/monitoring', monitoringRoute);
 // app.use('/deployer', deployerRoute);
 // app.use('/code', codeRoute);
 // app.use('/trending', trendingTokens);

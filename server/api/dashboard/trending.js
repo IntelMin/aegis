@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
 const axios = require('axios');
-const { fetchData, readCache, writeCache } = require('../../lib/utils');
-const { get } = require('http');
+const { readCache, writeCache } = require('../../lib/file');
+const { listTopTokens } = require('../../lib/third-party/defined');
 
 // TODI: fix sparkline data
 async function addSparklineToTokens(tokens, interval) {
@@ -86,66 +86,26 @@ async function fetchSparkline(interval, token_address) {
 
 async function getTrending(interval) {
   let resolution = interval * 60;
+  if (interval == 24) resolution = '1D';
+
   console.log('Getting trending token data for resolution:', resolution);
-  try {
-    const { data } = await axios.post(
-      'https://graph.defined.fi/graphql',
-      {
-        query: `
-                      query {
-                          listTopTokens(
-                              networkFilter: [1]
-                              limit: 20
-                              resolution: "${resolution}"
-                          ) {
-                              name
-                              symbol
-                              address
-                              createdAt
-                              volume
-                              liquidity
-                              marketCap
-                              imageThumbUrl
-                              imageSmallUrl
-                              imageLargeUrl
-                              price
-                              priceChange
-                              priceChange1
-                              priceChange4
-                              priceChange12
-                              priceChange24
-                              topPairId
-                              exchanges {
-                                  name
-                              }
-                          }
-                      }
-                  `,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.DEFINED_FI_API_KEY,
-        },
-      }
+
+  const variables = {
+    resolution: resolution.toString(),
+    networkFilter: [1],
+    limit: 50,
+  };
+
+  const data = await listTopTokens(variables);
+
+  if (data) {
+    const tokensWithSparkline = await addSparklineToTokens(
+      data.data.listTopTokens,
+      interval
     );
 
-    if (data.errors) {
-      console.error('Error fetching data:', data.errors);
-      return [];
-    } else {
-      // console.log(data.data.listTopTokens);
-
-      const tokensWithSparkline = await addSparklineToTokens(
-        data.data.listTopTokens,
-        interval
-      );
-
-      let filename = `./cache/trending/${interval}.json`;
-      await writeCache(filename, tokensWithSparkline);
-    }
-  } catch (error) {
-    console.error(error);
+    let filename = `./cache/trending/${interval}.json`;
+    await writeCache(filename, tokensWithSparkline);
   }
 }
 
@@ -172,9 +132,10 @@ function scheduleTrendingFetch(frequency, duration) {
 }
 
 // Schedule the top tokens fetch
-scheduleTrendingFetch('*/5 * * * *', 1); // Every hour, check every 3 minutes
-scheduleTrendingFetch('*/15 * * * *', 4); // Every 4 hours, check every 10 mins
-scheduleTrendingFetch('0 * * * *', 12); // Every 12 hours, check every 60 mins
+scheduleTrendingFetch('0,30 * * * *', 1); // Every hour, check everyhalf hour
+scheduleTrendingFetch('0 */2 * * *', 4); // Every 4hrs, check every 2 hours
+scheduleTrendingFetch('0 */6 * * *', 12); // Every 12hrs, check every 6 hours
+scheduleTrendingFetch('0 */12 * * *', 24); // Every 24hrs, check every 12 hours
 
 async function init() {
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -185,6 +146,9 @@ async function init() {
 
   await new Promise(resolve => setTimeout(resolve, 2000));
   await getTrending(12);
+
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  await getTrending(24);
 }
 
 module.exports = { router, init };

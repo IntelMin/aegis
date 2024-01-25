@@ -1,10 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-const cron = require('node-cron');
-const axios = require('axios');
-const { fetchData, readCache, writeCache } = require('../../lib/utils');
 const parsec = require('../../lib/third-party/parsec');
 
 router.get('/volume', async (req, res) => {
@@ -29,6 +24,8 @@ router.get('/volume', async (req, res) => {
     // console.log(intervals);
     res.status(200).send(intervals);
   } catch (error) {
+    res.status(404).send({});
+
     console.error('Error getting logs:', error);
   }
 });

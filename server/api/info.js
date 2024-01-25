@@ -1,39 +1,13 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
-const { readCache } = require('../lib/utils');
+// const { readCache } = require('../lib/utils');
+const { readCache } = require('../lib/file');
 const getInfo = require('../modules/info');
 
 router.get('/request/:address', async (req, res) => {
   const address = req.params.address;
   console.log('-- info request: ', address);
-
-  //   let directory = `./cache/contracts/${address}`;
-  //   let files = {
-  //     info: `${directory}/info.json`,
-  //     meta: `${directory}/meta.json`,
-  //     rugpull: `${directory}/rugpull.json`,
-  //     security: `${directory}/security.json`,
-  //     source: `${directory}/source.json`,
-  //   };
-
-  //   let info_exists = false;
-  //   let token_info;
-  //   if (fs.existsSync(directory)) {
-  //     info_exists = true;
-  //     for (const key of Object.keys(files)) {
-  //       if (!fs.existsSync(files[key])) {
-  //         info_exists = false;
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   if (!info_exists) {
-  //     console.log('info not found, fetching');
-  //     token_info = getInfo(address);
-  //   } else {
-  //   }
 
   let token_info = await getInfo(address);
 
@@ -58,15 +32,28 @@ router.get('/:type/:address', async (req, res) => {
     let token_info;
     switch (info_type) {
       case 'meta':
-        token_info = filedata.data.tokens;
+        token_info = filedata.tokens;
         token_info = token_info[Object.keys(token_info)[0]];
         break;
       case 'security':
-        token_info = filedata.data.result;
+        token_info = filedata.result;
         token_info = token_info[Object.keys(token_info)[0]];
         break;
       case 'scan':
         token_info = filedata.auditLayout;
+        break;
+      case 'source':
+        token_info = filedata[0];
+
+        let sourceCode = token_info.SourceCode;
+
+        // Check if sourceCode is wrapped with {{ }}
+        if (sourceCode.startsWith('{{') && sourceCode.endsWith('}}')) {
+          sourceCode = sourceCode.slice(1, -1);
+        }
+
+        token_info = JSON.parse(sourceCode);
+
         break;
       default:
         token_info = filedata;

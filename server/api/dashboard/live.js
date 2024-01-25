@@ -4,82 +4,21 @@ const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
 const axios = require('axios');
-const { fetchData, readCache, writeCache } = require('../../lib/utils');
+const { readCache, writeCache } = require('../../lib/file');
+const { fetchLatestPairs } = require('../../lib/third-party/defined');
 
 async function getLivePairs() {
   console.log('Getting live pairs');
-  try {
-    const { data } = await axios.post(
-      'https://graph.defined.fi/graphql',
-      {
-        query: `
-        query {
-            getLatestPairs(
-              networkFilter: [1]
-              limit: 40
-            ) {
-              cursor
-              items {
-                address
-                exchangeHash
-                id
-                initialPriceUsd
-                liquidAt
-                liquidity
-                liquidityToken
-                networkId
-                newToken
-                nonLiquidityToken
-                oldToken
-                priceChange
-                priceUsd
-                transactionHash
-                token0 {
-                  address
-                  currentPoolAmount
-                  decimals
-                  id
-                  initialPoolAmount
-                  name
-                  networkId
-                  pairId
-                  poolVariation
-                  symbol
-                }
-                token1 {
-                  address
-                  currentPoolAmount
-                  decimals
-                  id
-                  initialPoolAmount
-                  name
-                  networkId
-                  pairId
-                  poolVariation
-                  symbol
-                }
-              }
-            }
-          }`,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.DEFINED_FI_API_KEY,
-        },
-      }
-    );
 
-    if (data.errors) {
-      console.error('Error fetching data:', data.errors);
-      return [];
-    } else {
-      // console.log(data.data.listTopTokens);
-      let filename = `./cache/trending/live.json`;
-      await writeCache(filename, data.data.getLatestPairs.items);
-    }
-  } catch (e) {
-    console.log(e);
+  const variables = {
+    limit: 40,
+    networkFilter: [1],
+  };
+
+  const data = await fetchLatestPairs(variables);
+  if (data) {
+    let filename = `./cache/trending/live.json`;
+    await writeCache(filename, data.data.getLatestPairs.items);
   }
 }
 

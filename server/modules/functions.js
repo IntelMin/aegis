@@ -1,4 +1,4 @@
-const { getCachedOrFreshData } = require('../lib/utils');
+const { getCached } = require('../lib/file');
 const parser = require('@solidity-parser/parser');
 const path = require('path');
 
@@ -191,7 +191,7 @@ async function getFunctions(address, source_code) {
       `../cache/contracts/${address}/functions.json`
     );
 
-    await getCachedOrFreshData(cacheFile, generateFunctions, source_code);
+    await getCached(cacheFile, generateFunctions, 2592000, source_code); // 30 days (2592000 seconds)
 
     return true;
   } catch (error) {

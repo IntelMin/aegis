@@ -1,4 +1,5 @@
-const { getCachedOrFreshData } = require('../../lib/utils');
+const { getCached, readCache } = require('../../lib/file');
+const { flattenSourcecode } = require('../../lib/utils');
 const { summaryPrompt } = require('./prompts');
 const OpenAI = require('openai');
 const fs = require('fs').promises;
@@ -24,7 +25,8 @@ const getFunctionsData = async props => {
       }
     }
   });
-  props.source.data.abi.forEach(item => {
+
+  props.abi.forEach(item => {
     if (item.type === 'function') {
       if (item.stateMutability === 'pure') {
         pureCount++;
@@ -40,13 +42,9 @@ const getFunctionsData = async props => {
   const payableFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*payable/g;
   const pureFunctionPattern = /function\s+\w+\s*\([^)]*\)\s*pure/g;
 
-  const privateMatches = props.source.data.source_code.match(
-    privateFunctionPattern
-  );
-  const payableMatches = props.source.data.source_code.match(
-    payableFunctionPattern
-  );
-  const pureMatches = props.source.data.source_code.match(pureFunctionPattern);
+  const privateMatches = props.source.match(privateFunctionPattern);
+  const payableMatches = props.source.match(payableFunctionPattern);
+  const pureMatches = props.source.match(pureFunctionPattern);
 
   const privateCount = privateMatches ? privateMatches.length : 0;
   pureCount = pureMatches ? pureMatches.length : 0;
@@ -215,23 +213,45 @@ const generateString = async data => {
 };
 
 async function createSummary(address) {
-  const security = require('../../cache/contracts/' +
-    address +
-    '/security.json');
-  const functions = require('../../cache/contracts/' +
-    address +
-    '/functions.json');
-  const source = require('../../cache/contracts/' + address + '/source.json');
-  const findings = require('../../cache/contracts/' +
-    address +
-    '/findings.json');
+  const basePath = `./cache/contracts/${address}/`;
+
+  //   console.log(`basePath: ${basePath}`);
+
+  //   console.log(`current working directory: ${process.cwd()}`);
+
+  //   //   server/cache/contracts/0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3/findings.json
+
+  //   // current working directory for this file:
+  //   console.log(`__dirname: ${__dirname}`);
+
+  //   const check = fileExists(`${basePath}functions.json`);
+  //   const findings2 = await readCache(
+  //     `./cache/contracts/${address}/functions.json`
+  //   );
+
+  //   console.log(`----findings length: ${findings2}`);
+
+  //   if (!check) {
+  //     throw new Error('No data found');
+  //   } else {
+  //     console.log('Data found');
+  //     throw new Error('---- found');
+  //   }
+
+  const security = await readCache(`${basePath}security.json`);
+  const functions = await readCache(`${basePath}functions.json`);
+  const findings = await readCache(`${basePath}findings.json`);
+  let source = await readCache(`${basePath}source.json`);
+  let abi = JSON.parse(source[0].ABI);
+  source = flattenSourcecode(source);
 
   const functionsData = await getFunctionsData({
     functions: functions,
+    abi: abi,
     source: source,
   });
   const findingsData = await getFindingsData(findings);
-  const parsedSecurity = security.data.result[address.toLowerCase()];
+  const parsedSecurity = security.result[address.toLowerCase()];
 
   const data = {
     token_name: parsedSecurity.token_name,
@@ -276,7 +296,7 @@ const getSummary = async address => {
       `../../cache/contracts/${address}/summary.json`
     );
 
-    await getCachedOrFreshData(cacheFile, createSummary, address);
+    await getCached(cacheFile, createSummary, 2592000, address); // 30 days (2592000 seconds)
 
     return true;
   } catch (error) {

@@ -1,6 +1,6 @@
-const { readCache, supabase, modifyRequestdb } = require('./lib/utils');
-
 const path = require('path');
+const { supabase, modifyRequestdb, flattenSourcecode } = require('./lib/utils');
+const { readCache } = require('./lib/file');
 const getInfo = require('./modules/info');
 const getTree = require('./modules/tree');
 const getDependencies = require('./modules/dependencies');
@@ -35,9 +35,8 @@ async function worker() {
           .join(__dirname, `./cache/contracts/${address}/source.json`)
           .toString();
         source_code = await readCache(source_file);
-        console.log('-- source.json', source_code);
+        source_code = flattenSourcecode(source_code);
 
-        source_code = source_code['data']['source_code'];
         // generate tree.json
         const tree = await getTree(address, source_code);
         if (!tree) {
@@ -69,7 +68,7 @@ async function worker() {
           .join(__dirname, `./cache/contracts/${address}/source.json`)
           .toString();
         source_code = await readCache(source_file);
-        source_code = source_code['data']['source_code'];
+        source_code = flattenSourcecode(source_code);
 
         // generate findings.json
         start_time = new Date().getTime();

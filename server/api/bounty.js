@@ -3,7 +3,7 @@ const router = express.Router();
 const cron = require('node-cron');
 const fetchBounties = require('../scrapers/solidit');
 const supabase = require('../lib/supabase');
-const { readCache, writeCache } = require('../lib/utils');
+const { readCache, writeCache } = require('../lib/file');
 
 async function fetchBountyStats() {
   console.log('Fetching bounty stats');

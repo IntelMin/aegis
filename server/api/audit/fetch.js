@@ -1,14 +1,7 @@
 const express = require('express');
-const {
-  isERC20Token,
-  insertRequestdb,
-  fileExists,
-  isContractOpenSource,
-  readCache,
-} = require('../../lib/utils');
+const { readCache } = require('../../lib/file');
 const router = express.Router();
 const path = require('path');
-const fs = require('fs');
 
 router.get('/fetch/:address', async (req, res) => {
   const address = req.params.address;
