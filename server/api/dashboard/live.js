@@ -8,17 +8,22 @@ const { readCache, writeCache } = require('../../lib/file');
 const { fetchLatestPairs } = require('../../lib/third-party/defined');
 
 async function getLivePairs() {
-  console.log('Getting live pairs');
+  try {
+    console.log('Getting live pairs');
 
-  const variables = {
-    limit: 40,
-    networkFilter: [1],
-  };
+    const variables = {
+      limit: 40,
+      networkFilter: [1],
+    };
 
-  const data = await fetchLatestPairs(variables);
-  if (data) {
-    let filename = `./cache/trending/live.json`;
-    await writeCache(filename, data.data.getLatestPairs.items);
+    const data = await fetchLatestPairs(variables);
+
+    if (data) {
+      let filename = `./cache/trending/live.json`;
+      await writeCache(filename, data.data.getLatestPairs.items);
+    }
+  } catch (error) {
+    console.error('Error getting live pairs:', error);
   }
 }
 
