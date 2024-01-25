@@ -31,20 +31,18 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
                   key={nonce.current++}
                   className="p-2 whitespace-pre-wrap break-all bg-zinc-800 border-zinc-700 text-gray-500"
                 >
-                  <p className="text-gray-300">
-                    <strong>Honeypot</strong>
-                  </p>
-                  <p>
-                    <Button asChild size="sm" className="h-6 my-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <strong className="text-gray-300">Honeypot</strong>
+                    <Button asChild size="sm" className="h-6">
                       <Link
-                        className="dark:text-gray-300 px-1 dark:bg-zinc-700 hover:dark:bg-zinc-600"
+                        className="dark:text-gray-400 px-1 dark:bg-zinc-700 hover:dark:bg-zinc-600"
                         target="_blank"
                         href={`https://etherscan.io/tx/${d.data.hash}`}
                       >
                         View TX
                       </Link>
                     </Button>
-                  </p>
+                  </div>
                   <p>
                     <Link
                       className="text-gray-400 hover:underline"
