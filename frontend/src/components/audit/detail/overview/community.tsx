@@ -16,9 +16,13 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 
 interface CommunityInfoProps {
   contractAddress: string;
+  communityScore: number;
 }
 
-const CommunityInfo: React.FC<CommunityInfoProps> = ({ contractAddress }) => {
+const CommunityInfo: React.FC<CommunityInfoProps> = ({
+  contractAddress,
+  communityScore,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -35,7 +39,7 @@ const CommunityInfo: React.FC<CommunityInfoProps> = ({ contractAddress }) => {
         <div className="flex flex-row align-center">
           <h1 className="text-xl font-semibold w-[120px]">Community</h1>
           <div className="translate-y-1">
-            <SecurityScale value={80} />
+            <SecurityScale value={communityScore} />
           </div>
         </div>
         <button

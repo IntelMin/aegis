@@ -16,9 +16,13 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 
 interface GovernanceInfoProps {
   contractAddress: string;
+  governanceScore: number;
 }
 
-const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
+const GovernanceInfo: React.FC<GovernanceInfoProps> = ({
+  contractAddress,
+  governanceScore,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -80,7 +84,7 @@ const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
     xaxis: {
       categories: [2008],
       labels: {
-        formatter: function (val) {
+        formatter: function (val: string) {
           return val + '%';
         },
       },
@@ -93,7 +97,7 @@ const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
     },
     tooltip: {
       y: {
-        formatter: function (val) {
+        formatter: function (val: string) {
           return val + 'K';
         },
       },
@@ -118,7 +122,7 @@ const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
         <div className="flex flex-row align-center">
           <h1 className="text-xl font-semibold w-[120px]">Governance</h1>
           <div className="translate-y-1">
-            <SecurityScale value={43} />
+            <SecurityScale value={governanceScore} />
           </div>
         </div>
         <button

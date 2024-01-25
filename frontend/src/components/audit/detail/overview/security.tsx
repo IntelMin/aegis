@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import React, { useEffect, useState } from 'react';
+
 import SecurityScale from '@/components/analytics/overview/security-scale';
 import { ChevronDownIcon, ChevronUpIcon, InfoIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -16,9 +11,13 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 
 interface SecurityInfoProps {
   contractAddress: string;
+  securityScore: number;
 }
 
-const SecurityInfo: React.FC<SecurityInfoProps> = ({ contractAddress }) => {
+const SecurityInfo: React.FC<SecurityInfoProps> = ({
+  contractAddress,
+  securityScore,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -35,7 +34,7 @@ const SecurityInfo: React.FC<SecurityInfoProps> = ({ contractAddress }) => {
         <div className="flex flex-row align-center">
           <h1 className="text-xl font-semibold w-[120px]">Security</h1>
           <div className="translate-y-1">
-            <SecurityScale value={80} />
+            <SecurityScale value={securityScore} />
           </div>
         </div>
         <button
