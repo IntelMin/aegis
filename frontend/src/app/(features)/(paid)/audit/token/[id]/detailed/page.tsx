@@ -47,7 +47,6 @@ type Props = {
   params: {
     id: string;
   };
-  paidUser: boolean;
 };
 
 type Finding = {
@@ -116,7 +115,7 @@ const getProgressMessage = (progress: number) => {
   }
 };
 
-const DetailedPage = ({ params, paidUser }: Props) => {
+const DetailedPage = ({ params }: Props) => {
   const router = useRouter();
   const tabArr = ['Overview', 'Code', 'Functions', 'Dependency'];
   const contractAddress = params.id;
