@@ -19,7 +19,7 @@ interface GovernanceInfoProps {
 }
 
 const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
@@ -135,8 +135,7 @@ const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
 
       {isExpanded && (
         <div className="grid grid-cols-4 gap-4 mt-3 ">
-          {/* Left section for the pie chart and token holders */}
-          <TooltipProvider>
+          {/* <TooltipProvider>
             <div className="col-span-1">
               <div className="p-4 rounded-md bg-zinc-900">
                 <p className="text-2xl font-mono">4,478</p>
@@ -222,7 +221,7 @@ const GovernanceInfo: React.FC<GovernanceInfoProps> = ({ contractAddress }) => {
               width={'100%'}
               height={300}
             />
-          </div>
+          </div> */}
           {/* <div className="col-span-2">
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-1 p-4 border border-blue-700 rounded-md">

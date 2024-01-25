@@ -19,7 +19,7 @@ interface SecurityInfoProps {
 }
 
 const SecurityInfo: React.FC<SecurityInfoProps> = ({ contractAddress }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);

@@ -83,7 +83,7 @@ const SecurityScale = ({ value }: { value: number }) => {
       </div>
 
       <div className="ml-2 w-[30px] font-bold text-lg text-right text-zinc-200 font-mono">
-        {value}%
+        {Math.round(value)}%
       </div>
     </div>
   );

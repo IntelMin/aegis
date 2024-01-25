@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { Props } from 'react-apexcharts';
 import { isViewportValid } from '@/utils/media-query';
 import PieChart from './pie-chart';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 }) as React.FC<Props>;
 
-const FindingsGraph = (props: {}) => {
+interface GovernanceInfoProps {
+  address: string;
+}
+
+const FindingsGraph: React.FC<GovernanceInfoProps> = ({ address }) => {
   const isMobile = isViewportValid(768);
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const series = [0, 1, 0, 0];
   const customSegmentNames = ['HIGH', 'MEDIUM', 'LOW', 'INFO'];
   const colors = ['#F97316', '#FCD34D', '#A855F7', '#60A5FA'];
@@ -67,6 +73,19 @@ const FindingsGraph = (props: {}) => {
       },
     ],
   };
+
+  useMemo(() => {
+    if (!address) return;
+
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 2000);
+  }, [address]);
+
+  if (!isLoaded) {
+    return <Skeleton className="h-full w-full" />;
+  }
+
   return (
     <div className="w-full p-3 border border-zinc-900 h-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between">

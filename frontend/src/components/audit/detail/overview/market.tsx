@@ -19,7 +19,7 @@ interface MarketInfoProps {
 }
 
 const MarketInfo: React.FC<MarketInfoProps> = ({ contractAddress }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
