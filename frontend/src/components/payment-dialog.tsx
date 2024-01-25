@@ -61,18 +61,24 @@ const PaymentDialog = ({
 
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Credit balance low</DialogTitle>
-            <DialogDescription>
-              You have {balance ? balance : 0} credits available. You need{' '}
-              {required_credits} credits{' '}
-              {service == 'code'
-                ? 'to audit your code'
-                : service == 'detailed'
-                ? 'to perform detailed audit'
-                : service == 'quick'
-                ? 'to get a quick audit'
-                : 'to get a PDF report'}
-              . Please add credits to your account.
+            <DialogTitle>Not Enough Credits</DialogTitle>
+            <DialogDescription className="space-y-2 text-md">
+              <p className="mt-3">
+                {balance && balance > 0
+                  ? `You currently have ${balance} credits available. `
+                  : "It looks like you don't have any credits at the moment. "}
+              </p>
+              <p>
+                <strong>{required_credits} credits</strong> are needed{' '}
+                {service == 'code'
+                  ? 'to audit your code. '
+                  : service == 'detailed'
+                  ? 'for a detailed audit. '
+                  : service == 'quick'
+                  ? 'for a quick audit. '
+                  : 'to generate a PDF report. '}
+              </p>
+              <p>Please add more credits to your account to proceed.</p>
             </DialogDescription>
           </DialogHeader>
           <DialogClose>
@@ -111,7 +117,7 @@ const PaymentDialog = ({
               {service == 'code'
                 ? 'to audit your code'
                 : service == 'detailed'
-                ? 'to perform detailed audit'
+                ? 'to perform a detailed audit'
                 : 'to get a PDF report'}
               .
             </DialogDescription>
