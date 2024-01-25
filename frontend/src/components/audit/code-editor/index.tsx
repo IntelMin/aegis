@@ -95,7 +95,7 @@ const CodeAuditEditor = (props: Props) => {
           </div>
         </button>
       </div>
-      <div className="flex h-screen bg-black overflow-x-auto max-md:mx-4">
+      <div className="flex h-screen overflow-x-auto max-md:mx-4">
         {isReadOnly && (
           <div
             className={` ${
@@ -204,7 +204,7 @@ const CodeAuditEditor = (props: Props) => {
                   <p className="text-xs">{finding.reason}</p>
                 </div>
               ))
-            ) : (props.nofindings? ((
+            ) : props.nofindings ? (
               <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-800">
                 <Image
                   src="/icons/findings-empty.svg"
@@ -214,7 +214,7 @@ const CodeAuditEditor = (props: Props) => {
                 />
                 <h1 className="text-sm text-white">No vulnerabilities found</h1>
               </div>
-              )):(
+            ) : (
               <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-800">
                 <Image
                   src="/icons/findings-empty.svg"
@@ -224,8 +224,7 @@ const CodeAuditEditor = (props: Props) => {
                 />
                 <h1 className="text-sm text-white">No findings available</h1>
               </div>
-            ))}
-
+            )}
           </div>
         </div>
       </div>
