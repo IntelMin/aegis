@@ -25,14 +25,16 @@ async function etherscanRequest(module, action, params = {}) {
       if (response.data && response.data.status !== '0') {
         return response.data.result;
       } else {
-        console.log(`Etherscan request failed: ${response.data}`);
+        console.log(
+          `Etherscan request failed: ${url} -- ${response.data.message}`
+        );
       }
     } catch (error) {
       console.error('Etherscan request failed, retrying...', error);
       if (i < maxRetries - 1) {
         await new Promise(resolve => setTimeout(resolve, retryDelay));
       } else {
-        return null; // Return null after max retries
+        return null;
       }
     }
   }

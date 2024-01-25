@@ -11,6 +11,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { Loader } from 'lucide-react';
 
+const AuditOverview = dynamic(
+  () => import('@/components/audit/detail/overview'),
+  {
+    loading: () => <GridLoader color="white" />,
+  }
+);
+
 const FunctionReport = dynamic(
   () => import('@/components/audit/detail/function-report'),
   {
@@ -18,12 +25,13 @@ const FunctionReport = dynamic(
   }
 );
 
-const OverViewReport = dynamic(
-  () => import('@/components/audit/detail/overview-report'),
-  {
-    loading: () => <GridLoader color="white" />,
-  }
-);
+// const OverViewReport = dynamic(
+//   () => import('@/components/audit/detail/overview-report'),
+//   {
+//     loading: () => <GridLoader color="white" />,
+//   }
+// );
+
 const CodeEditor = dynamic(() => import('@/components/audit/code-editor'), {
   loading: () => <GridLoader color="white" />,
 });
@@ -126,6 +134,7 @@ const DetailedPage = ({ params }: Props) => {
   const [statusEta, setStatusEta] = useState<number | null>(null);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const paiduser = usePaidUser(contractAddress);
+
   useEffect(() => {
     console.log({ paiduser });
     if (paiduser == false) {
@@ -293,7 +302,12 @@ const DetailedPage = ({ params }: Props) => {
   const renderComponent = () => {
     switch (tab) {
       case 'Overview':
-        return <OverViewReport data={infoData} token={params.id} />;
+        // return <OverViewReport data={infoData} token={params.id} />;
+        return (
+          <div className="p-6">
+            <AuditOverview address={contractAddress} token={infoData} />
+          </div>
+        );
       case 'Code':
         return (
           // border border-zinc-800

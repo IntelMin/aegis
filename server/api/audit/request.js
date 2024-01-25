@@ -2,11 +2,10 @@ const express = require('express');
 const {
   isERC20Token,
   insertRequestdb,
-  fileExists,
   isContractOpenSource,
   supabase,
 } = require('../../lib/utils');
-
+const { fileExists } = require('../../lib/file');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');

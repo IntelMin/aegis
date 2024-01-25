@@ -5,26 +5,35 @@ const axios = require('axios');
 const path = require('path');
 const crypto = require('crypto');
 const supabase = require('./supabase');
+const etherscanRequest = require('./third-party/etherscan');
+const { fetchCache } = require('./file');
 
-// TODO: Move to third-party/etherscan.js
 async function isContractOpenSource(address) {
-  const apiKey = 'EYEC357Q2UY267KX88U25HZ57KIPNT4CYB'; // Replace with your Etherscan API key
-  const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${address}&apikey=${apiKey}`;
+  try {
+    const data = await etherscanRequest('contract', 'getsourcecode', {
+      address: address,
+    });
 
-  const response = await axios.get(url);
-  const data = response.data;
-
-  // If the contract is open source, the sourceCode field will not be empty
-  return data.result[0].SourceCode !== '';
+    if (data) {
+      return data[0].SourceCode !== '';
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('Error making the request', error);
+    return false;
+  }
 }
 
-// TODO: Move to third-party/etherscan.js
 async function isERC20Token(address) {
-  const token_info = await fetchAndCacheData(
-    'info',
+  const filepath = './cache/contracts/' + address + '/info.json';
+
+  const token_info = await fetchCache(
+    filepath,
     `https://eth.blockscout.com/api/v2/tokens/${address}`,
-    address
+    1
   );
+
   return token_info.type === 'ERC-20';
 }
 
@@ -167,23 +176,24 @@ function flattenSourcecode(sourcecode) {
   let source_code = sourcecode[0];
   source_code = source_code.SourceCode;
 
+  let flattenedSource = '';
+
   // Check if sourceCode is wrapped with {{ }}
   if (source_code.startsWith('{{') && source_code.endsWith('}}')) {
     source_code = source_code.slice(1, -1);
-  }
+    source_code = JSON.parse(source_code);
 
-  source_code = JSON.parse(source_code);
+    console.log('-- source.json');
 
-  console.log('-- source.json');
-
-  let flattenedSource = '';
-
-  if (source_code && typeof source_code.sources === 'object') {
-    for (const file in source_code.sources) {
-      if (source_code.sources.hasOwnProperty(file)) {
-        flattenedSource += source_code.sources[file].content + '\n\n';
+    if (source_code && typeof source_code.sources === 'object') {
+      for (const file in source_code.sources) {
+        if (source_code.sources.hasOwnProperty(file)) {
+          flattenedSource += source_code.sources[file].content + '\n\n';
+        }
       }
     }
+  } else {
+    flattenedSource = source_code;
   }
 
   return flattenedSource.trim();
