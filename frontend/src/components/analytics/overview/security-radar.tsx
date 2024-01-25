@@ -9,12 +9,13 @@ type props = {
   value: number;
   height?: number;
   labels?: boolean;
+  scandata?: number[];
 };
 const RadarGraph = (props: props) => {
   const series = [
     {
       name: 'Score',
-      data: [80, 50, 30, 40],
+      data: props.scandata || [],
     },
   ];
 

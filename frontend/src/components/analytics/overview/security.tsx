@@ -27,7 +27,6 @@ const SecurityOverview: React.FC<{
       );
 
       const data = response.data;
-
       setTotal(Math.round(data.auditScore));
 
       setData([
@@ -78,7 +77,7 @@ const SecurityOverview: React.FC<{
 
     loadData();
   }, [address]);
-
+  console.log('data', data);
   if (isLoading) {
     return <Skeleton className="w-[100%] h-[320px] aspect-square" />;
   }
@@ -87,7 +86,16 @@ const SecurityOverview: React.FC<{
       {/* <p className="text-white">Safety Overview</p> */}
       <div className="flex flex-row justify-between w-full">
         <PieGraph value={total} height={290} labels={true} />
-        {showRadar && <RadarGraph value={total} height={250} labels={true} />}
+        {showRadar && (
+          <RadarGraph
+            value={total}
+            height={250}
+            labels={true}
+            scandata={
+              data?.length > 0 ? data.map(item => item.score) : [0, 0, 0, 0]
+            }
+          />
+        )}
       </div>
       {!showRadar && (
         <p className="text-zinc-200 text-center font-bold mb-3">

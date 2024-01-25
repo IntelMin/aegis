@@ -16,9 +16,13 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 
 interface MarketInfoProps {
   contractAddress: string;
+  marketScore: number;
 }
 
-const MarketInfo: React.FC<MarketInfoProps> = ({ contractAddress }) => {
+const MarketInfo: React.FC<MarketInfoProps> = ({
+  contractAddress,
+  marketScore,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -35,7 +39,7 @@ const MarketInfo: React.FC<MarketInfoProps> = ({ contractAddress }) => {
         <div className="flex flex-row align-center">
           <h1 className="text-xl font-semibold w-[120px]">Market</h1>
           <div className="translate-y-1">
-            <SecurityScale value={24} />
+            <SecurityScale value={marketScore} />
           </div>
         </div>
         <button
