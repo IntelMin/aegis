@@ -36,7 +36,7 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      <div className="col-span-1">
+      <div className="col-span-4 md:col-span-1">
         <div className="">
           <div className="flex">
             <Attributes tokenAddress={address} />
@@ -66,16 +66,16 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
           </div>
         </div>
       </div>
-      <div className="col-span-3 grid grid-rows gap-4">
+      <div className="col-span-4 md:col-span-3 grid grid-rows gap-4">
         <div className="row-span-1 grid grid-cols-3 gap-4">
-          <div className="col-span-2 h-full">
+          <div className="col-span-3 md:col-span-2 h-full">
             <SecurityOverview
               address={address}
               showRadar={true}
               showDetails={false}
             />
           </div>
-          <div className="h-full">
+          <div className="h-full max-md:w-screen">
             <FindingsGraph address={address} />
           </div>
         </div>
