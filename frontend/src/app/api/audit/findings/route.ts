@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
         const med = data.table.number_of_medium_severity_issues
         const high = data.table.number_of_high_severity_issues
         const low = data.table.number_of_low_severity_issues
-        console.log(data)
         return NextResponse.json({ medium: med, high: high, low: low });
     } catch (error) {
         console.error(error);
