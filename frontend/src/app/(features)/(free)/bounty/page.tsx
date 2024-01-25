@@ -163,7 +163,7 @@ const Bounty = (props: Props) => {
           <div>
             <Image
               alt="image"
-              src="/icons/bounty/certik.svg"
+              src="/icons/bounty/immunef.svg"
               width={100}
               height={50}
             />
@@ -179,7 +179,7 @@ const Bounty = (props: Props) => {
           <div>
             <Image
               alt="image"
-              src="/icons/bounty/immunef.svg"
+              src="/icons/bounty/certik.svg"
               width={100}
               height={50}
             />
@@ -229,7 +229,7 @@ const Bounty = (props: Props) => {
                 autoComplete="off"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="Search bounty"
+                placeholder="Search for a bounty"
                 className="flex-grow text-[15px] text-white placeholder:text-zinc-200 border-none outline-none bg-transparent"
               />
             </div>

@@ -62,7 +62,7 @@ const NavHeader = ({ show, setShow }: Props) => {
   };
 
   return (
-    <div className="sticky z-[10] w-full top-0 bg-black">
+    <div className="sticky z-[10] w-full top-0 bg-[#09090b]">
       <header
         className="flex py-3 px-4 md:px-10 items-center justify-between border-b border-zinc-800"
         suppressHydrationWarning={true}
