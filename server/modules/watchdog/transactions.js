@@ -197,20 +197,11 @@ async function processTransactionsFromQueue(transactionQueue, node, io) {
     }
 
     const results = [];
-
-    results.push({
-      type: 'tx',
-      data: {
-        hash,
-        from,
-        to,
-        action,
-      },
-    });
-
     const type = await checkType(to);
+    let token = false;
+
     if (type === 'contract') {
-      const token = await isTokenContract(to);
+      token = await isTokenContract(to);
       if (token) {
         const honeypot = await isHoneypot(to);
         // console.log(honeypot);
@@ -232,6 +223,20 @@ async function processTransactionsFromQueue(transactionQueue, node, io) {
       // const risk = await fetchAddress(to);
       // console.log(risk);
     }
+
+    results.push({
+      type: 'tx',
+      data: {
+        hash,
+        from,
+        fromAddr: response.from.toLowerCase(),
+        to,
+        toAddr: response.to?.toLowerCase(),
+        action,
+        contract: type === 'contract',
+        token,
+      },
+    });
 
     return { results, type };
   };

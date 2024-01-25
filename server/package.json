@@ -6,7 +6,8 @@
   "scripts": {
     "server": "node server.js",
     "worker": "node worker.js",
-    "report": "node report.js"
+    "report": "node report.js",
+    "watchdog": "node watchdog.js"
   },
   "author": "ocvc",
   "dependencies": {

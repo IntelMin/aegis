@@ -19,7 +19,6 @@ const node = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
 
 const Network = () => {
   const transactionQueue = [];
-  const RATE_LIMIT = 10; // transactions per second, adjustable
 
   const load = async () => {
     try {

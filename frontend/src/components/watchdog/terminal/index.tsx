@@ -25,10 +25,11 @@ export interface Props {
   height?: string;
   children?: ReactNode;
   onInput?: ((input: string) => void) | null | undefined;
+  onClear: () => void;
 }
 
 const Terminal = forwardRef(function TerminalComponent(
-  { name, prompt, height = '600px', onInput, children }: Props,
+  { name, prompt, height = '600px', onInput, onClear, children }: Props,
   ref
 ) {
   const [currentLineInput, setCurrentLineInput] = useState('');
@@ -116,6 +117,8 @@ const Terminal = forwardRef(function TerminalComponent(
 
   const [displayedOutputs, setDisplayedOutputs] = useState<ReactNode[]>([]);
 
+  const outputKey = useRef<number>(0);
+
   useEffect(() => {
     if (!Array.isArray(children) || children.length === 0) {
       return;
@@ -125,12 +128,17 @@ const Terminal = forwardRef(function TerminalComponent(
       for (let i = 0; i < children.length; i++) {
         // Wait for the next frame to update
         await new Promise(resolve => requestAnimationFrame(resolve));
-
+        console.log(outputKey.current);
         setDisplayedOutputs(prevOutputs => {
           const newChild = React.cloneElement(children[i], {
-            key: `child-${i}`,
+            key: `child-${outputKey.current++}`,
           });
-          return [...prevOutputs, newChild].slice(-50);
+          const arr = prevOutputs.concat(newChild).slice(-50);
+          if (prevOutputs.length >= 50) {
+            return [prevOutputs[0]].concat(arr);
+          } else {
+            return arr;
+          }
         });
 
         scrollIntoViewRef?.current?.scrollIntoView({
@@ -153,7 +161,9 @@ const Terminal = forwardRef(function TerminalComponent(
   }, [displayedOutputs]); // Depend on lineData, assuming it's updated in displayChildren
 
   const clearOutput = () => {
-    setDisplayedOutputs([]);
+    // keep welcome terminal
+    setDisplayedOutputs(prev => prev.slice(0, 1));
+    onClear();
   };
 
   useImperativeHandle(ref, () => ({

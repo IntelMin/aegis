@@ -20,6 +20,9 @@ async function processBlockFromQueue(transactionQueue, node, io) {
       //   current_block = blockInfo;
       //   io.emit('block_status', blockInfo);
 
+      // clear queue
+      transactionQueue.splice(0, transactionQueue.length);
+
       block.transactions.forEach(tx => {
         let augmentedTransaction = {
           tx,
