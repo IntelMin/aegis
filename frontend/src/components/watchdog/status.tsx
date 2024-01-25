@@ -8,14 +8,10 @@ import React, {
 } from 'react';
 import { CubeAscii } from 'cube-ascii-react';
 import { formatAge } from '@/utils/format-age';
+import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
 
 interface BlockStatusProps {
-  settings: {
-    active: boolean;
-    address: boolean;
-    honeypot: boolean;
-    contracts: boolean;
-  };
+  settings: WatchdogSettings;
 }
 
 const BlockStatus = React.forwardRef(function BlockStatusComponent(
@@ -94,43 +90,54 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
       </div>
 
       <div className="font-thin text-sm text-zinc-600 w-full justify-center mt-5">
-        {isLoaded && blockCount > 0 ? (
-          <pre>
-            {'Watching...\n\n'}
-            {'BLOCK:          '}
-            <span className="text-zinc-500">
-              {padWithSpaces(blockCount.toString(), 7)}
-            </span>
-            {'\n'}
-            {'TXNS:           '}
-            <span className="text-zinc-500">
-              {padWithSpaces(blockTxns.toString(), 7)}
-            </span>
-            {'\n'}
-            {'ADDRESSES:      '}
-            <span className="text-zinc-500">
-              {padWithSpaces(blockAddresses.toString(), 7)}
-            </span>
-            {'\n'}
-            {'CONTRACTS:      '}
-            <span className="text-zinc-500">
-              {padWithSpaces(blockContracts.toString(), 7)}
-            </span>
-            {'\n\n'}
-            {'BLOCK #:       '}
-            <span className="text-zinc-500">
-              {padWithSpaces(lastBlock.toString(), 7)}
-            </span>
-            {'\n\n'}
-            {'UPDATED:        '}
-            <span className="text-zinc-500">
-              {padWithSpaces(updatedOn.toString(), 3)} ago
-            </span>
-            {'\n'}
-          </pre>
-        ) : (
-          <pre>Waiting...</pre>
-        )}
+        <pre className="mb-6 whitespace-pre-wrap break-all">
+          {`token      ${settings.token ? 'on' : 'off'}\n`}
+          {`honeypot   ${settings.honeypot ? 'on' : 'off'}\n`}
+          {settings.address
+            .map((addr, key) => `address    on\n${addr.toLowerCase()}`)
+            .join('\n')}
+        </pre>
+        <pre>
+          {!settings.active ? (
+            'watchdog not started'
+          ) : isLoaded && blockCount > 0 ? (
+            <>
+              {'Watching...\n\n'}
+              {'BLOCK:          '}
+              <span className="text-zinc-500">
+                {padWithSpaces(blockCount.toString(), 7)}
+              </span>
+              {'\n'}
+              {'TXNS:           '}
+              <span className="text-zinc-500">
+                {padWithSpaces(blockTxns.toString(), 7)}
+              </span>
+              {'\n'}
+              {'ADDRESSES:      '}
+              <span className="text-zinc-500">
+                {padWithSpaces(blockAddresses.toString(), 7)}
+              </span>
+              {'\n'}
+              {'CONTRACTS:      '}
+              <span className="text-zinc-500">
+                {padWithSpaces(blockContracts.toString(), 7)}
+              </span>
+              {'\n\n'}
+              {'BLOCK #:       '}
+              <span className="text-zinc-500">
+                {padWithSpaces(lastBlock.toString(), 7)}
+              </span>
+              {'\n\n'}
+              {'UPDATED:        '}
+              <span className="text-zinc-500">
+                {padWithSpaces(updatedOn.toString(), 3)} ago
+              </span>
+              {'\n'}
+            </>
+          ) : (
+            'Waiting...'
+          )}
+        </pre>
       </div>
     </div>
   );

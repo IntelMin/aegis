@@ -3,45 +3,59 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Monitor from '@/components/watchdog/monitor';
 import BlockStatus from '@/components/watchdog/status';
+import Anomaly from '@/components/watchdog/anomaly';
 import { io, Socket } from 'socket.io-client';
 import { Sections } from '@/components/sections';
 
 interface WatchdogProps {}
 
+const websocket_url = process.env.NEXT_PUBLIC_AEGIS_WSS;
+
+console.log('websocket_url', websocket_url);
+
+const sectionsArr = [
+  {
+    name: 'Status',
+    val: 'status',
+  },
+  {
+    name: 'Monitor',
+    val: 'monitor',
+  },
+  {
+    name: 'Anomalies',
+    val: 'anomalies',
+  },
+];
+
+export interface WatchdogSettings {
+  active: boolean;
+  address: string[];
+  honeypot: boolean;
+  token: boolean;
+}
+
 const Watchdog: FC<WatchdogProps> = ({}) => {
-  const websocket_url = process.env.NEXT_PUBLIC_AEGIS_WSS;
-  console.log('websocket_url', websocket_url);
   const statusRef = useRef<{ updateBlock?: (data: any) => void }>({});
   const monitorRef = useRef<{ updateLog?: (data: any) => void }>({});
-  const [settings, setSettings] = useState({
+  const anomalyRef = useRef<{
+    clear(): void;
+    update?: (data: any) => void;
+  }>();
+
+  const socket = useRef<Socket>();
+  const [settings, setSettings] = useState<WatchdogSettings>({
     active: false,
-    address: true,
-    honeypot: true,
-    contracts: true,
+    address: [],
+    honeypot: false,
+    token: false,
   });
-  const [socket, setSocket] = useState<Socket>();
   const [showSection, setShowSection] = useState('monitor');
-  const sectionsArr = [
-    {
-      name: 'Status',
-      val: 'status',
-    },
-    {
-      name: 'Monitor',
-      val: 'monitor',
-    },
-    {
-      name: 'Anomalies',
-      val: 'anomalies',
-    },
-  ];
 
   useEffect(() => {
-    let localSocket: Socket | null = null;
-
     if (settings.active) {
-      localSocket = io(websocket_url || '');
-      setSocket(localSocket);
+      const localSocket = io(websocket_url || '');
+      socket.current = localSocket;
 
       if (localSocket) {
         localSocket.on('connect', () => {
@@ -64,27 +78,21 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         // Handle log updates
         localSocket.on('log', data => {
           console.log('log received');
-          if (monitorRef.current?.updateLog) {
-            console.log('trying...');
-            monitorRef.current.updateLog(data);
-          }
+          monitorRef.current?.updateLog?.(data);
+          anomalyRef.current?.update?.(data);
           console.log('Received log from socket');
         });
       }
     } else {
       // Disconnect if the socket is established
-      if (socket) {
-        socket.disconnect();
-      }
+      socket.current?.disconnect();
     }
 
     // Clean up the connection when component unmounts or active status changes
     return () => {
-      if (socket) {
-        socket.disconnect();
-      }
+      socket.current?.disconnect();
     };
-  }, [settings.active]);
+  }, [settings.active, socket]);
 
   return (
     <div className=" w-full ">
@@ -131,6 +139,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
               ref={monitorRef}
               settings={settings}
               setSettings={setSettings}
+              onClear={() => anomalyRef.current?.clear?.()}
             />
           </div>
         </div>
@@ -140,7 +149,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
             showSection === 'anomalies' ? '' : 'max-md:hidden'
           } flex-none w-full md:w-1/4 border border-zinc-800 max-md:min-h-[500px] p-2 bg-zinc-900`}
         >
-          <pre className="text-zinc-600">Anomalies...</pre>
+          <Anomaly ref={anomalyRef} settings={settings} />
         </div>
       </div>
     </div>
