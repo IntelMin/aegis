@@ -1,7 +1,8 @@
-// Add report worker logic hereconst { report } = require("process");
 const supabase = require('./lib/supabase');
-const generatePDF = require('./modules/report/generate');
 const fs = require('fs');
+const { readCache } = require('./lib/file');
+const { insertRequestdb } = require('./lib/utils');
+const generatePDF = require('./modules/report/generate');
 // const { Octokit } = require('@octokit/rest');
 
 // const octokit = new Octokit({
@@ -76,14 +77,12 @@ async function pushToGithub(address) {
   }
 }
 
-const getName = address => {
+const getName = async address => {
   const filePath = `./cache/contracts/${address}/meta.json`;
   try {
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    const meta = JSON.parse(fileContent);
+    const meta = await readCache(filePath);
     const info = meta?.tokens[0];
     const name = info?.symbol;
-    console.log('info', info);
     const image_url = info?.imageSmallUrl;
     // Use the name variable here
     console.log('Name:', name);
@@ -94,26 +93,57 @@ const getName = address => {
     return address;
   }
 };
+
 async function reportWorker() {
   const requests = await fetchDataFromTable();
   if (requests?.length === 0) {
-    console.log('No requests found');
+    // console.log('No requests found');
     return;
   }
   for (const row of requests) {
     const address = row.address;
     console.log('Processing: ', address, row.status);
-    const { name, image_url } = getName(address);
     try {
       if (row.status === 'requested') {
-        await generatePDF(address, name).then(() =>
-          console.log('Generated PDF')
-        );
-        console.log('-- generated pdf ', name, '.pdf');
+        const { data: auditRequests, error: error_req } = await supabase
+          .from('audit_requests')
+          .select('*')
+          .eq('contract', address);
 
-        await modifyreportRequestdb(address, 'completed', name, image_url);
+        if (error_req) {
+          console.log('Error fetching audit request:', error_req);
+          continue;
+        } else if (auditRequests.length === 0) {
+          // Create a new audit request
 
-        console.log('-- pushed to supabase');
+          console.log('No audit request found for the given address');
+
+          await insertRequestdb({ contract: address, status: 'pending' });
+          console.log('-- created audit request');
+          continue;
+        } else {
+          // Found an audit request
+          const auditRequest = auditRequests[0];
+          console.log(`Audit Status: ${auditRequest.status}`);
+
+          // Check if audit request is completed
+          if (auditRequest.status === 'completed') {
+            const { name, image_url } = await getName(address);
+
+            await generatePDF(address, name).then(() =>
+              console.log('Generated PDF')
+            );
+            console.log('-- generated pdf ', name, '.pdf');
+
+            await modifyreportRequestdb(address, 'completed', name, image_url);
+
+            console.log('-- pushed to supabase');
+          } else {
+            // Wait for audit request to complete
+            console.log('Audit request is not completed');
+            continue;
+          }
+        }
       }
     } catch (error) {
       console.error('Error while processing: ', address, error);
@@ -122,11 +152,13 @@ async function reportWorker() {
     }
   }
 }
+
 const runReportWorker = async () => {
   while (true) {
     await reportWorker();
     await new Promise(resolve => setTimeout(resolve, 10000));
   }
 };
+
 runReportWorker();
 // generatePDF("0x514910771AF9Ca656af840dff83E8264EcF986CA");

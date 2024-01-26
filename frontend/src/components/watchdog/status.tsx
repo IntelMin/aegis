@@ -91,15 +91,16 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
 
       <div className="font-thin text-sm text-zinc-600 w-full justify-center mt-5">
         <pre className="mb-6 whitespace-pre-wrap break-all">
-          {`token      ${settings.token ? 'on' : 'off'}\n`}
-          {`honeypot   ${settings.honeypot ? 'on' : 'off'}\n`}
-          {settings.address
-            .map((addr, key) => `address    on\n${addr.toLowerCase()}`)
-            .join('\n')}
-        </pre>
-        <pre>
           {!settings.active ? (
-            'watchdog not started'
+            <>
+              {'watchdog not started\n\n'}
+              {`TOKEN               ${settings.token ? ' ON' : 'OFF'}\n`}
+              {`HONEYPOT            ${settings.honeypot ? ' ON' : 'OFF'}\n`}
+              {settings.address.length > 0 && `ADDRESS              ON\n`}
+              {settings.address
+                .map((addr, key) => addr.toLowerCase())
+                .join('\n')}
+            </>
           ) : isLoaded && blockCount > 0 ? (
             <>
               {'Watching...\n\n'}
@@ -127,6 +128,13 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
               <span className="text-zinc-500">
                 {padWithSpaces(lastBlock.toString(), 7)}
               </span>
+              {'\n\n'}
+              {`TOKEN               ${settings.token ? ' ON' : 'OFF'}\n`}
+              {`HONEYPOT            ${settings.honeypot ? ' ON' : 'OFF'}\n`}
+              {settings.address.length > 0 && `ADDRESS              ON\n`}
+              {settings.address
+                .map((addr, key) => addr.toLowerCase())
+                .join('\n')}
               {'\n\n'}
               {'UPDATED:        '}
               <span className="text-zinc-500">

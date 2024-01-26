@@ -6,12 +6,9 @@ path = require('path');
 const { loadData, getTemplates, renderTemplate } = require('./shared');
 
 async function generatePDF(address, name) {
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
-
   // get data
   const contract_dir = path.join(__dirname, `../../cache/contracts/${address}`);
-  const data = loadData(contract_dir);
+  const data = await loadData(contract_dir);
 
   // get templates
   const templates = getTemplates();
@@ -26,6 +23,9 @@ async function generatePDF(address, name) {
 
   // combine templates into render.ejs
   const combinedContent = await renderTemplate('render.ejs', renderedTemplates);
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+
   await page.setContent(combinedContent);
 
   await page.addStyleTag({ path: path.join(__dirname, 'assets', 'style.css') });

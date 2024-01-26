@@ -77,7 +77,7 @@ const SecurityOverview: React.FC<{
 
     loadData();
   }, [address]);
-  console.log('data', data);
+
   if (isLoading) {
     return <Skeleton className="w-[100%] h-[320px] aspect-square" />;
   }

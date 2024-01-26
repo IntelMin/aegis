@@ -166,7 +166,7 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
                   Loading...
                 </p>
               ) : (
-                <div className="h-[200px] overflow-y-scroll">
+                <div className="h-[200px] overflow-y-scroll space-y-2">
                   {tokenState?.tokenInfo
                     ?.split('.')
                     ?.slice(0, -1)

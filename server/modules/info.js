@@ -1,6 +1,6 @@
 const path = require('path');
 const axios = require('axios');
-const { getCached, fetchCache } = require('../lib/file');
+const { getCached, fetchCache, readCache } = require('../lib/file');
 const { fetchTokens } = require('../lib/third-party/defined');
 const etherscanRequest = require('../lib/third-party/etherscan');
 
@@ -58,6 +58,66 @@ async function getSource(address) {
   }
 }
 
+async function getPair(filepath, address) {
+  try {
+    const { CurlImpersonate } = require('node-curl-impersonate');
+
+    const security = await readCache(filepath + 'security.json');
+    const tokenData = security.result[Object.keys(security.result)[0]];
+    const dexes = tokenData.dex;
+
+    let highestLiquidityDex = dexes[0];
+    for (const dex of dexes) {
+      if (
+        parseFloat(dex.liquidity) > parseFloat(highestLiquidityDex.liquidity)
+      ) {
+        highestLiquidityDex = dex;
+      }
+    }
+
+    const pair = highestLiquidityDex.pair;
+
+    const url = `https://www.dextools.io/shared/data/pair?address=${pair}&chain=ether&audit=true&locks=true`;
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8',
+        Referer: `https://www.dextools.io/app/en/ether/pair-explorer/${pair}`,
+        'Sec-Ch-Ua':
+          '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"macOS"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      impersonate: 'chrome-110',
+      verbose: false,
+    };
+
+    const curl = new CurlImpersonate(url, options);
+
+    curl
+      .makeRequest()
+      .then(response => {
+        data = response.response;
+        return data;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        return null;
+      });
+  } catch (error) {
+    return null;
+  }
+}
+
 const requestRegistry = {};
 
 async function getInfo(address) {
@@ -74,7 +134,7 @@ async function getInfo(address) {
         fetchCache(
           filepath + 'info.json',
           `https://eth.blockscout.com/api/v2/tokens/${address}`,
-          1
+          3
         ),
         getCached(filepath + 'meta.json', getMetadata, 3600, address),
         getCached(filepath + 'source.json', getSource, 43200, address),
@@ -92,6 +152,9 @@ async function getInfo(address) {
         ),
         getCached(filepath + 'scan.json', getScan, 3600, address),
       ]);
+
+      await getCached(filepath + 'pair.json', getPair, 3600, filepath, address);
+
       return true;
     } catch (error) {
       console.error('Error in getInfo:', error);

@@ -2,9 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 
-router.get('/pair', async (req, res) => {
-  const { q } = req.query;
+router.get('/:query', async (req, res) => {
+  const q = req.params.query;
   console.log('query', q);
+
+  if (!q || q.length < 2) {
+    return res.status(400).send('Bad Request');
+  }
 
   const { CurlImpersonate } = require('node-curl-impersonate');
 
@@ -127,8 +131,13 @@ router.get('/pair', async (req, res) => {
           //   console.log('schemaVersion:', schemaVersion);
 
           // PairData
-          const arrayLength = readArrayLen();
-          //   console.log('results len:', arrayLength);
+          let arrayLength = 0;
+          try {
+            arrayLength = readArrayLen();
+            //   console.log('results len:', arrayLength);
+          } catch (error) {
+            break;
+          }
 
           for (let i = 0; i < arrayLength; i++) {
             // console.log(`loop ${i} of ${arrayLength}`);
@@ -185,28 +194,29 @@ router.get('/pair', async (req, res) => {
             // { "hex": "02", "ascii": ".", "decimal": "2" },
             // { "hex": "61", "ascii": "a", "decimal": "97" },
 
-            let end = false;
-            while (!end) {
-              let byte = readByte();
-              if (byte === 2) {
-                let nextByte = readByte();
-                if (nextByte === 97) {
-                  break;
+            try {
+              let end = false;
+              while (!end) {
+                let byte = readByte();
+                if (byte === 2) {
+                  let nextByte = readByte();
+                  if (nextByte === 97) {
+                    break;
+                  }
                 }
               }
-            }
 
-            const dex_2 = readString();
-            // console.log('dex_2:', dex_2);
+              const dex_2 = readString();
+              // console.log('dex_2:', dex_2);
 
-            readByte();
-
-            if (index < binaryData.length) {
               readByte();
-            }
 
-            // console.log(`binaryData.length: ${binaryData.length}`);
-            // console.log(`index: ${index}`);
+              if (index < binaryData.length) {
+                readByte();
+              }
+            } catch (error) {
+              break;
+            }
 
             processed.push({
               chainId,
@@ -218,6 +228,13 @@ router.get('/pair', async (req, res) => {
               price,
               priceUsd,
             });
+
+            // console.log(`binaryData.length: ${binaryData.length}`);
+            // console.log(`index: ${index}`);
+
+            if (index == binaryData.length) {
+              break;
+            }
           }
         }
 
@@ -236,7 +253,19 @@ router.get('/pair', async (req, res) => {
         return b.priceUsd - a.priceUsd;
       });
 
-      res.status(200).send(sorted);
+      // Reduce to unique baseToken.address
+      let unique = sorted.reduce((accumulator, current) => {
+        if (
+          !accumulator.some(
+            item => item.baseToken.address === current.baseToken.address
+          )
+        ) {
+          accumulator.push(current);
+        }
+        return accumulator;
+      }, []);
+
+      res.status(200).send(unique);
     })
     .catch(error => {
       console.error('Error:', error);
