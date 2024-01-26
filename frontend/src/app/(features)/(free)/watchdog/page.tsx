@@ -95,7 +95,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
   }, [settings.active, socket]);
 
   return (
-    <div className=" w-full ">
+    <div className=" w-full">
       <Sections
         sectionsArr={sectionsArr}
         setShowSection={setShowSection}
@@ -121,7 +121,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
           </h1>
         </div>
       </div>
-      <div className={`flex justify-center items-stretch p-4`}>
+      <div className={`flex justify-center items-stretch max-md:py-4 md:p-4`}>
         <div
           className={`${
             showSection === 'status' ? 'flex' : 'max-md:hidden'
@@ -131,7 +131,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
         </div>
         <div className="max-md:flex md:flex-grow max-md:overflow-x-hidden w-screen md:w-1/2 monitor">
           <div
-            className={`${
+            className={` ${
               showSection === 'monitor' ? 'flex-grow' : 'max-md:hidden'
             }`}
           >

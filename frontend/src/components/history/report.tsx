@@ -7,6 +7,8 @@ import { formatTime } from '@/utils/format-time';
 import { Skeleton } from '../ui/skeleton';
 import { toast } from '../ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
+import { Table } from 'lucide-react';
+import { EmptyRow } from './empty-row';
 
 type Historytype = {
   type: string;
@@ -113,23 +115,7 @@ export const ReportTableBody = ({ data }: Props) => {
   return (
     <TableBody>
       {audit_data.length == 0 ? (
-        <TableRow
-          className=" flex flex-row w-full items-center bg-zinc-900 border-b border-zinc-800 "
-          key={1}
-        >
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-        </TableRow>
+        <EmptyRow col={3} message="Reports don't appear currently" />
       ) : (
         audit_data.map((item, index: number) => (
           <TableRow
@@ -138,7 +124,7 @@ export const ReportTableBody = ({ data }: Props) => {
           >
             {loading ? (
               <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
-                <Skeleton className="w-[30px] h-[20px]" />
+                <Skeleton className="w-full h-[20px]" />
               </TableCell>
             ) : (
               <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">

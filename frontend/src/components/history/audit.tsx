@@ -8,6 +8,7 @@ import { FaEye } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
 import { Loader } from 'lucide-react';
+import { EmptyRow } from './empty-row';
 type Historytype = {
   type: string;
   created_at: Date;
@@ -57,26 +58,22 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
     }
     fetchData();
   }, [data]);
+
+  if (loading)
+    return (
+      <TableBody>
+        <TableCell colSpan={code ? 2 : 3}>
+          <Loader className="w-full h-[30px]" />
+        </TableCell>
+      </TableBody>
+    );
   return (
     <TableBody>
       {audit_data.length == 0 ? (
-        <TableRow
-          className=" flex flex-row w-full items-center bg-zinc-900 border-b border-zinc-800 "
-          key={1}
-        >
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-          <TableCell className="flex items-center justify-center gap-2 text-center">
-            <Skeleton className="w-[30px] h-[20px]" />
-          </TableCell>
-        </TableRow>
+        <EmptyRow
+          col={code ? 2 : 3}
+          message="Detailed Audits don't appear currently"
+        />
       ) : (
         audit_data.map((item, index: number) => (
           <TableRow

@@ -24,6 +24,7 @@ interface PaymentDialogProps {
   payInProgress?: boolean;
   paidUser?: boolean;
   onSuccess?: () => void;
+  fullwidth?: boolean;
 }
 const PaymentDialog = ({
   balance,
@@ -35,6 +36,7 @@ const PaymentDialog = ({
   open,
   paidUser,
   onSuccess,
+  fullwidth,
 }: PaymentDialogProps) => {
   const required_credits = creditConfig[service];
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -53,7 +55,9 @@ const PaymentDialog = ({
     return (
       <Dialog open={open ? open : undefined}>
         {TriggerElement ? (
-          <DialogTrigger>{TriggerElement}</DialogTrigger>
+          <DialogTrigger className={`${fullwidth ? 'max-md:w-full' : ''}`}>
+            {TriggerElement}
+          </DialogTrigger>
         ) : (
           <></>
         )}
