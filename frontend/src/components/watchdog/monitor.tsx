@@ -30,16 +30,18 @@ const Monitor = React.forwardRef(function MonitorComponent(
   const [lineData, setLineData] = useState<JSX.Element[]>([]);
 
   const formatAddressForDisplay = (addr: string) => {
-    if (isViewportValid(768) && addr) {
-      const val = addr.split(' ');
-      console.log(val[val.length - 1], 'last');
-      if (val.length > 1) {
-        if (val[val.length - 1].length < 24) return addr;
-        return `${val[0]} ${formatAddress(val[val.length - 1])}`;
-      }
-      if (val[0].length < 24) return addr;
+    if (!isViewportValid(768) || !addr) {
+      return addr;
+    }
+    const parts = addr.split(' ');
+    const lastPart = parts[parts.length - 1];
+    if (parts.length > 1 && lastPart.length >= 24) {
+      return `${parts[0]} ${formatAddress(lastPart)}`;
+    }
+    if (parts.length === 1 && lastPart.length >= 24) {
       return formatAddress(addr);
-    } else return addr;
+    }
+    return addr;
   };
 
   useEffect(() => {
