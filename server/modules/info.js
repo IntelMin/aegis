@@ -134,7 +134,7 @@ async function getInfo(address) {
         fetchCache(
           filepath + 'info.json',
           `https://eth.blockscout.com/api/v2/tokens/${address}`,
-          1
+          3
         ),
         getCached(filepath + 'meta.json', getMetadata, 3600, address),
         getCached(filepath + 'source.json', getSource, 43200, address),
