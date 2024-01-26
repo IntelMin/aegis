@@ -1,6 +1,8 @@
 const path = require('path');
 const ejs = require('ejs');
 const fs = require('fs');
+const { readCache } = require('../../lib/file');
+const { flattenSourcecode } = require('../../lib/utils');
 
 async function renderTemplate(filename, data) {
   const templateString = fs.readFileSync(
@@ -15,23 +17,15 @@ function readJSONFile(filePath) {
   return JSON.parse(jsonString);
 }
 
-function loadData(directory) {
+async function loadData(directory) {
   const data = {};
   const files = fs.readdirSync(directory);
   for (const file of files) {
     const catagory = file.split('.')[0];
     const filePath = path.join(directory, file);
-    const fileContents = fs.readFileSync(filePath, 'utf-8');
-    const fileData = JSON.parse(fileContents);
-    if (
-      fileData?.hasOwnProperty('data') &&
-      Object.keys(fileData).length <= 2 &&
-      fileData.hasOwnProperty('time')
-    ) {
-      data[catagory] = fileData.data;
-    } else {
-      data[catagory] = fileData;
-    }
+    const fileData = await readCache(filePath);
+
+    data[catagory] = fileData;
   }
 
   // date
@@ -41,9 +35,8 @@ function loadData(directory) {
   const contractAddress = Object.keys(data.security.result)[0];
 
   data.security = data.security.result[contractAddress];
-  data.source = data.source[0];
-  data.source.abi = JSON.parse(data.source.ABI);
-  data.source.source_code = data.source.SourceCode;
+  data.source.abi = JSON.parse(data.source[0].ABI);
+  data.source.source_code = flattenSourcecode(data.source);
   data.extra = {
     currentDate: formattedDate,
   };
