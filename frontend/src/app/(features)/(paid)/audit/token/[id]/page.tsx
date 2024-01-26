@@ -166,7 +166,7 @@ const TokenAuditOption = ({ params }: props) => {
                     service="detailed"
                     TriggerElement={
                       <div
-                        className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                        className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
                         {submitting ? (
                           <ScaleLoader width={4} height={10} color="white" />
@@ -202,7 +202,7 @@ const TokenAuditOption = ({ params }: props) => {
                     service="quick"
                     TriggerElement={
                       <div
-                        className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                        className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
                       >
                         {submitting ? (
                           <ScaleLoader width={4} height={10} color="white" />

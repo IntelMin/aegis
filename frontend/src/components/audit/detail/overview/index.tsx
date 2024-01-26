@@ -10,6 +10,7 @@ import SecurityInfo from '@/components/audit/detail/overview/security';
 import MarketInfo from '@/components/audit/detail/overview/market';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import useTokenInfo from '@/hooks/useTokenInfo';
 
 interface AuditOverviewProps {
   address: string;
@@ -18,7 +19,12 @@ interface AuditOverviewProps {
 
 const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
   const [isLoading, setLoading] = useState(true);
-
+  const {
+    isFetching: isFetchingscan,
+    tokenInfo: tokenInfoscan,
+    error: errorscan,
+  } = useTokenInfo(address, 'scan', true);
+  console.log('tokenInfoscan', tokenInfoscan);
   useMemo(() => {
     if (!address) return;
 
@@ -30,7 +36,7 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      <div className="col-span-1">
+      <div className="col-span-4 md:col-span-1">
         <div className="">
           <div className="flex">
             <Attributes tokenAddress={address} />
@@ -60,43 +66,61 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
           </div>
         </div>
       </div>
-      <div className="col-span-3 grid grid-rows gap-4">
+      <div className="col-span-4 md:col-span-3 grid grid-rows gap-4">
         <div className="row-span-1 grid grid-cols-3 gap-4">
-          <div className="col-span-2 h-full">
+          <div className="col-span-3 md:col-span-2 h-full">
             <SecurityOverview
               address={address}
               showRadar={true}
               showDetails={false}
             />
           </div>
-          <div className="h-full">
+          <div className="h-full max-md:w-screen">
             <FindingsGraph address={address} />
           </div>
         </div>
         <div className="row-span-1 ">
           {!isLoading ? (
-            <SecurityInfo contractAddress={address} />
+            <SecurityInfo
+              contractAddress={address}
+              securityScore={
+                tokenInfoscan.securityScore ? tokenInfoscan.securityScore : 0
+              }
+            />
           ) : (
             <Skeleton className="h-14 w-full" />
           )}
         </div>
         <div className="row-span-1">
           {!isLoading ? (
-            <GovernanceInfo contractAddress={address} />
+            <GovernanceInfo
+              contractAddress={address}
+              governanceScore={
+                tokenInfoscan.decentralisationScore
+                  ? tokenInfoscan.decentralisationScore
+                  : 0
+              }
+            />
           ) : (
             <Skeleton className="h-14 w-full" />
           )}
         </div>
         <div className="row-span-1">
           {!isLoading ? (
-            <CommunityInfo contractAddress={address} />
+            <CommunityInfo
+              contractAddress={address}
+              communityScore={tokenInfoscan ? tokenInfoscan.communityScore : 0}
+            />
           ) : (
             <Skeleton className="h-14 w-full" />
           )}
         </div>
         <div className="row-span-1 mb-20">
           {!isLoading ? (
-            <MarketInfo contractAddress={address} />
+            <MarketInfo
+              contractAddress={address}
+              marketScore={tokenInfoscan ? tokenInfoscan.marketScore : 0}
+            />
           ) : (
             <Skeleton className="h-14 w-full" />
           )}

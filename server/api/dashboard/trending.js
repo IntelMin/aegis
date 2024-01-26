@@ -85,27 +85,31 @@ async function fetchSparkline(interval, token_address) {
 }
 
 async function getTrending(interval) {
-  let resolution = interval * 60;
-  if (interval == 24) resolution = '1D';
+  try {
+    let resolution = interval * 60;
+    if (interval == 24) resolution = '1D';
 
-  console.log('Getting trending token data for resolution:', resolution);
+    console.log('Getting trending token data for resolution:', resolution);
 
-  const variables = {
-    resolution: resolution.toString(),
-    networkFilter: [1],
-    limit: 50,
-  };
+    const variables = {
+      resolution: resolution.toString(),
+      networkFilter: [1],
+      limit: 50,
+    };
 
-  const data = await listTopTokens(variables);
+    const data = await listTopTokens(variables);
 
-  if (data) {
-    const tokensWithSparkline = await addSparklineToTokens(
-      data.data.listTopTokens,
-      interval
-    );
+    if (data) {
+      const tokensWithSparkline = await addSparklineToTokens(
+        data.data.listTopTokens,
+        interval
+      );
 
-    let filename = `./cache/trending/${interval}.json`;
-    await writeCache(filename, tokensWithSparkline);
+      let filename = `./cache/trending/${interval}.json`;
+      await writeCache(filename, tokensWithSparkline);
+    }
+  } catch (error) {
+    console.error('Error occurred while getting trending token data:', error);
   }
 }
 

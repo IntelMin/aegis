@@ -31,17 +31,17 @@ router.get('/pair', async (req, res) => {
 
       binary = response.response;
 
-      let raw_output = '';
+      //   let raw_output = '';
 
-      for (let i = 0; i < binary.length; i++) {
-        let charCode = binary.charCodeAt(i);
+      //   for (let i = 0; i < binary.length; i++) {
+      //     let charCode = binary.charCodeAt(i);
 
-        raw_output += `0x${charCode
-          .toString(16)
-          .padStart(2, '0')}\t${charCode}\t\t${binary[i]}\n`;
-      }
+      //     raw_output += `0x${charCode
+      //       .toString(16)
+      //       .padStart(2, '0')}\t${charCode}\t\t${binary[i]}\n`;
+      //   }
 
-      fs.writeFileSync('test.raw', raw_output);
+      //   fs.writeFileSync('test.raw', raw_output);
 
       function parseBinary(binary) {
         let binaryData = Buffer.isBuffer(binary)
@@ -57,7 +57,7 @@ router.get('/pair', async (req, res) => {
 
         function readInt() {
           let byte = readByte();
-          console.log('byte:', byte);
+          //   console.log('byte:', byte);
           // convert byte to decimal
           let dec = byte.toString(10);
           return dec;
@@ -67,7 +67,7 @@ router.get('/pair', async (req, res) => {
           let length = readInt();
           length = length / 2;
 
-          console.log('strlen:', length);
+          //   console.log('strlen:', length);
           let str = '';
           for (let i = 0; i < length; i++) {
             str += String.fromCharCode(readByte());
@@ -78,7 +78,7 @@ router.get('/pair', async (req, res) => {
         function readArrayLen() {
           let sizeLength = readByte();
           sizeLength = sizeLength / 2;
-          console.log('sizeLength:', sizeLength);
+          //   console.log('sizeLength:', sizeLength);
           let arrayLength = 0;
 
           readByte();
@@ -88,13 +88,13 @@ router.get('/pair', async (req, res) => {
 
         function readToken() {
           const address = readString();
-          console.log('address:', address);
+          //   console.log('address:', address);
 
           const name = readString();
-          console.log('name:', name);
+          //   console.log('name:', name);
 
           const symbol = readString();
-          console.log('symbol:', symbol);
+          //   console.log('symbol:', symbol);
 
           return { address, name, symbol };
         }
@@ -123,74 +123,120 @@ router.get('/pair', async (req, res) => {
         while (index < binaryData.length) {
           // schemaVersion
           let schemaVersion = readString();
-          processed.push({ schemaVersion });
-          console.log('schemaVersion:', schemaVersion);
+          //   processed.push({ schemaVersion });
+          //   console.log('schemaVersion:', schemaVersion);
 
           // PairData
           const arrayLength = readArrayLen();
-          console.log('arrayLength:', arrayLength);
+          //   console.log('results len:', arrayLength);
 
-          let dataArray = [];
           for (let i = 0; i < arrayLength; i++) {
+            // console.log(`loop ${i} of ${arrayLength}`);
+
             let chainId = readString();
-            processed.push({ chainId });
-            console.log('chainId:', chainId);
+            // console.log('chainId:', chainId);
 
             let dexId = readString();
-            processed.push({ dexId });
-            console.log('dexId:', dexId);
+            // console.log('dexId:', dexId);
 
-            const labels = readArrayLen();
-            console.log('labels:', labels);
+            const hasLabel = readByte();
+            // console.log('hasLabel:', hasLabel);
 
-            const version = readString();
-            console.log('version:', version);
+            if (hasLabel) {
+              const labels = readByte() / 2;
+              //   console.log('labels:', labels);
+
+              for (let j = 0; j < labels; j++) {
+                const label = readString();
+                // console.log('label:', label);
+              }
+            }
+
+            // const version = readString();
+            // console.log('version:', version);
 
             const pairAddress = readString();
-            console.log('pairAddress:', pairAddress);
+            // console.log('pairAddress:', pairAddress);
 
             const baseToken = readToken();
-            console.log('baseToken:', baseToken);
+            // console.log('baseToken:', baseToken);
 
             const quoteToken = readToken();
-            console.log('quoteToken:', quoteToken);
+            // console.log('quoteToken:', quoteToken);
 
             const quoteTokenSymbol = readString();
-            console.log('quoteTokenSymbol:', quoteTokenSymbol);
+            // console.log('quoteTokenSymbol:', quoteTokenSymbol);
 
             const price = readString();
-            console.log('price:', price);
+            // console.log('price:', price);
 
             readByte();
 
-            const priceUSD = readString();
-            console.log('priceUSD:', priceUSD);
+            const priceUsd = readString();
 
-            const transactions = readTransactions();
-            console.log('transactions:', transactions);
+            // const priceArray = readByte() / 2;
+            // console.log('priceArray:', priceArray);
 
-            break;
+            // for (let k = 0; k < priceArray; k++) {
+            //   const price = readString();
+            //   console.log('priceUsd:', price);
+            // }
 
-            // let dexId = readString();
-            // processed.push({ dexId });
-            // console.log('dexId:', dexId);
+            // { "hex": "02", "ascii": ".", "decimal": "2" },
+            // { "hex": "61", "ascii": "a", "decimal": "97" },
 
-            dataArray.push(readString());
-            break;
+            let end = false;
+            while (!end) {
+              let byte = readByte();
+              if (byte === 2) {
+                let nextByte = readByte();
+                if (nextByte === 97) {
+                  break;
+                }
+              }
+            }
+
+            const dex_2 = readString();
+            // console.log('dex_2:', dex_2);
+
+            readByte();
+
+            if (index < binaryData.length) {
+              readByte();
+            }
+
+            // console.log(`binaryData.length: ${binaryData.length}`);
+            // console.log(`index: ${index}`);
+
+            processed.push({
+              chainId,
+              dexId,
+              pairAddress,
+              baseToken,
+              quoteToken,
+              quoteTokenSymbol,
+              price,
+              priceUsd,
+            });
           }
-          break;
-          processed.push({ dataArray });
         }
 
         return processed;
       }
 
       let processed = parseBinary(binary);
-      console.log(processed);
+      //   console.log(processed);
+      //   console.log('a_processed', processed.join('\n'));
 
-      console.log('a_processed', processed.join('\n'));
+      // only return results with chainId == ethereum
+      let filtered = processed.filter(item => item.chainId === 'ethereum');
 
-      res.status(200).send(processed);
+      // sort by priceUsd
+      let sorted = filtered.sort((a, b) => {
+        return b.priceUsd - a.priceUsd;
+      });
+
+      res.status(200).send(sorted);
     })
     .catch(error => {
       console.error('Error:', error);

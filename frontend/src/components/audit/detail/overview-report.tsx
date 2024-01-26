@@ -38,7 +38,7 @@ const OverViewReport = (props: Props) => {
         </div>
         <div className="flex flex-col col-span-11 md:col-span-5 gap-5">
           {/* Audit History */}
-          <AuditHistory />
+          <AuditHistory address={props.token} />
           {/* Audit Details */}
           <div className="flex flex-col w-full gap-4 p-6 border border-zinc-900">
             <h3 className="text-neutral-200 text-[20px] font-[600] border-b border-zinc-900 pb-3">

@@ -2,6 +2,7 @@ const express = require('express');
 const { readCache } = require('../../lib/file');
 const router = express.Router();
 const path = require('path');
+const { flattenSourcecode } = require('../../lib/utils');
 
 router.get('/fetch/:address', async (req, res) => {
   const address = req.params.address;
@@ -9,7 +10,8 @@ router.get('/fetch/:address', async (req, res) => {
   let filedata = await readCache(
     path.join(__dirname, `../../cache/contracts/${address}/source.json`)
   );
-  let source_code = filedata?.['data']['source_code'];
+  let source_code = filedata;
+  source_code = flattenSourcecode(source_code);
 
   const securityCacheFile = path.join(
     __dirname,
@@ -75,12 +77,12 @@ router.get('/fetch/:address', async (req, res) => {
     delete solidity['additional_sources'];
   }
 
-  let parse_meta = metadataCache['data']['tokens'][0];
-  let parse_token = tokenCache['data'];
+  let parse_meta = metadataCache['tokens'][0];
+  let parse_token = tokenCache;
   //   let parse_functions = functionsCache["data"];
   //   let parse_dependencies = dependenciesCache["data"];
-  let parse_rugpull = rugpullCache['data']['result'];
-  let parse_security = securityCache['data']['result'];
+  let parse_rugpull = rugpullCache['result'];
+  let parse_security = securityCache['result'];
 
   parse_security = parse_security[Object.keys(parse_security)[0]];
 
