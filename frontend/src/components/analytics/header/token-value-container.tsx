@@ -9,7 +9,7 @@ const TokenValueContainer = ({ value, name }: TokenValueContainerProps) => {
   return (
     <div
       key={name}
-      className="bg-zinc-900 px-4 py-[6px] rounded-[6px] overflow-hidden flex-1"
+      className="bg-zinc-900 px-4 py-[6px] rounded-[6px] overflow-hidden flex-1 flex flex-col items-center justify-center gap-1"
     >
       <h1 className="text-neutral-200 text-[16px] font-[600] text-center">
         {value}

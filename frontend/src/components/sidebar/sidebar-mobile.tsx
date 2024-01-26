@@ -27,7 +27,7 @@ const MobileSidebar = ({ setShow }: Props) => {
               router.push('/user/profile');
               if (setShow) setShow(false);
             }}
-            className="col-span-2 bg-zinc-800 p-3 rounded-[4px] flex justify-center gap-2 items-center text-white text-[16px] font-[300]"
+            className="col-span-2 bg-zinc-800 p-3 rounded-[4px] flex justify-center gap-2 items-center text-white text-[16px] mb-3 font-[300]"
           >
             <Image
               alt="user"
@@ -59,7 +59,7 @@ const MobileSidebar = ({ setShow }: Props) => {
         {session.status == 'authenticated' && (
           <button
             type="button"
-            className="w-full bg-[#0E76FD] font-[300] text-white py-3"
+            className="w-full bg-[#0E76FD] font-[300] text-white py-3 mt-12"
             onClick={() => signOut()}
           >
             Sign Out

@@ -48,9 +48,9 @@ const Monitor = React.forwardRef(function MonitorComponent(
   address   [on|off] [address]     toggle address detection
   honeypot  [on|off]               toggle honeypot detection
 
-  clear                   clear the terminal
-  start                   start scanning
-  stop                    stop scanning
+  clear                            clear the terminal
+  start                            start scanning
+  stop                             stop scanning
   `}
       </pre>
     </TerminalOutput>

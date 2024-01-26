@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Table, TableHead, TableHeader } from '@/components/ui/table';
+import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 
 import React, { useEffect } from 'react';
@@ -126,14 +126,16 @@ const UserAccountTable = () => {
       </div>
       <Table className="p-3 border border-zinc-800 w-full">
         <TableHeader className="">
-          {tableHead.map((item, i) => (
-            <TableHead
-              key={i}
-              className="py-4 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center"
-            >
-              {item}
-            </TableHead>
-          ))}
+          <TableRow>
+            {tableHead.map((item, i) => (
+              <TableHead
+                key={i}
+                className="py-4 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center"
+              >
+                {item}
+              </TableHead>
+            ))}
+          </TableRow>
         </TableHeader>
         {renderTableBody()}
       </Table>

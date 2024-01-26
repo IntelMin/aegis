@@ -16,6 +16,7 @@ import Sparkline from './dashboard-sparkline';
 import { formatAddress } from '@/utils/format-address';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { truncateString } from '@/utils/truncate-string';
 
 type DashboardDataTableProps = {
   tableData: any[];
@@ -163,9 +164,7 @@ const DashboardDataTable = ({
             <TableCell className={`text-neutral-200 col-span-1`}>
               <div className="flex flex-col p-0 m-0">
                 <p className="text-[13px] text-neutral-300">
-                  {parseFloat(
-                    parseFloat(item.volume).toFixed(2)
-                  ).toLocaleString('en')}
+                  {truncateString(item.volume)}
                 </p>
                 <p className="text-[13px] text-neutral-500">
                   {parseFloat(
