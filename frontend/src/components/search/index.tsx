@@ -27,23 +27,21 @@ const Search = (props: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [results, setResults] = React.useState([]);
   const [query, setQuery] = React.useState('');
-  const [queryHistory, setQueryHistory] = React.useState([]);
-  const [debounceTimeout, setDebounceTimeout] = React.useState(null);
+  const [queryHistory, setQueryHistory] = React.useState<any>([]);
+  const [debounceTimeout, setDebounceTimeout] =
+    React.useState<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
-    // Clear any existing timeout to reset the timer
     if (debounceTimeout) {
       clearTimeout(debounceTimeout);
     }
 
-    // Don't do anything if the query is too short
     if (!query || query.length < 2) {
       setResults([]);
       setLoading(false);
       return;
     }
 
-    // Set a new timeout
     const newTimeout = setTimeout(async () => {
       setLoading(true);
       const existingEntry = queryHistory.find(
@@ -67,12 +65,10 @@ const Search = (props: Props) => {
           setLoading(false);
         }
       }
-    }, 500); // 500ms debounce time
+    }, 200);
 
-    // Save the timeout in state
     setDebounceTimeout(newTimeout);
 
-    // Cleanup function to clear the timeout when component unmounts or before next effect runs
     return () => clearTimeout(newTimeout);
   }, [query]);
 
