@@ -305,7 +305,11 @@ const DetailedPage = ({ params }: Props) => {
         // return <OverViewReport data={infoData} token={params.id} />;
         return (
           <div className="p-6">
-            <AuditOverview address={contractAddress} token={infoData} />
+            <AuditOverview
+              address={contractAddress}
+              token={infoData}
+              premium={true}
+            />
           </div>
         );
       case 'Code':

@@ -15,24 +15,21 @@ import useTokenInfo from '@/hooks/useTokenInfo';
 interface AuditOverviewProps {
   address: string;
   token: any;
+  premium?: boolean;
 }
 
-const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
-  const [isLoading, setLoading] = useState(true);
+const AuditOverview: React.FC<AuditOverviewProps> = ({
+  address,
+  token,
+  premium,
+}) => {
+  //   const [isLoading, setLoading] = useState(true);
   const {
     isFetching: isFetchingscan,
     tokenInfo: tokenInfoscan,
     error: errorscan,
   } = useTokenInfo(address, 'scan', true);
   console.log('tokenInfoscan', tokenInfoscan);
-  useMemo(() => {
-    if (!address) return;
-
-    // setLoading false after 10 seconds
-    setTimeout(() => {
-      setLoading(false);
-    }, 10000);
-  }, [address]);
 
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -42,28 +39,30 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
             <Attributes tokenAddress={address} />
           </div>
 
-          <div className="flex bg-gradient-to-r from-[#001735] to-[#000] mt-3">
-            <div
-              className="flex flex-col gap-5 px-4 py-4 bg-[url(/backgrounds/audit-detail.png)] bg-no-repeat"
-              style={{
-                backgroundSize: '70%',
-                backgroundPosition: 'bottom right',
-              }}
-            >
-              <p className="text-zinc-200 text-sm w-[52%]">
-                Unlock comprehensive insights on the{' '}
-                {token ? token.symbol : '...'} token for informed investment
-                decisions.
-              </p>
-
-              <Link
-                href={`/audit/token/${address}/detailed`}
-                className={`bg-[#0E76FD] border-[#0E76FD] flex items-center justify-center text-zinc-50 text-md border font-semibold px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
+          {!premium && (
+            <div className="flex bg-gradient-to-r from-[#001735] to-[#000] mt-3">
+              <div
+                className="flex flex-col gap-5 px-4 py-4 bg-[url(/backgrounds/audit-detail.png)] bg-no-repeat"
+                style={{
+                  backgroundSize: '70%',
+                  backgroundPosition: 'bottom right',
+                }}
               >
-                Detailed Audit
-              </Link>
+                <p className="text-zinc-200 text-sm w-[52%]">
+                  Unlock comprehensive insights on the{' '}
+                  {token ? token.symbol : '...'} token for informed investment
+                  decisions.
+                </p>
+
+                <Link
+                  href={`/audit/token/${address}/detailed`}
+                  className={`bg-[#0E76FD] border-[#0E76FD] flex items-center justify-center text-zinc-50 text-md border font-semibold px-2 h-[40px] w-fit text-center transition-all ease-in duration-200`}
+                >
+                  Detailed Audit
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <div className="col-span-4 md:col-span-3 grid grid-rows gap-4">
@@ -80,25 +79,21 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
           </div>
         </div>
         <div className="row-span-1 ">
-          {!isLoading ? (
+          {!isFetchingscan ? (
             <SecurityInfo
               contractAddress={address}
-              securityScore={
-                tokenInfoscan.securityScore ? tokenInfoscan.securityScore : 0
-              }
+              securityScore={tokenInfoscan ? tokenInfoscan.securityScore : 0}
             />
           ) : (
             <Skeleton className="h-14 w-full" />
           )}
         </div>
         <div className="row-span-1">
-          {!isLoading ? (
+          {!isFetchingscan ? (
             <GovernanceInfo
               contractAddress={address}
               governanceScore={
-                tokenInfoscan.decentralisationScore
-                  ? tokenInfoscan.decentralisationScore
-                  : 0
+                tokenInfoscan ? tokenInfoscan.decentralisationScore : 0
               }
             />
           ) : (
@@ -106,7 +101,7 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
           )}
         </div>
         <div className="row-span-1">
-          {!isLoading ? (
+          {!isFetchingscan ? (
             <CommunityInfo
               contractAddress={address}
               communityScore={tokenInfoscan ? tokenInfoscan.communityScore : 0}
@@ -116,7 +111,7 @@ const AuditOverview: React.FC<AuditOverviewProps> = ({ address, token }) => {
           )}
         </div>
         <div className="row-span-1 mb-20">
-          {!isLoading ? (
+          {!isFetchingscan ? (
             <MarketInfo
               contractAddress={address}
               marketScore={tokenInfoscan ? tokenInfoscan.marketScore : 0}
