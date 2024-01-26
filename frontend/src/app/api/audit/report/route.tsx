@@ -139,7 +139,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
   if (report_request.status === 'requested') {
     return NextResponse.json({
-      status: 'success',
+      status: 'requested',
       message: 'Report requested successfully.',
     });
   }
