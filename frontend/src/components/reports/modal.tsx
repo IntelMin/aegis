@@ -4,12 +4,13 @@ import { set } from 'date-fns';
 import Image from 'next/image';
 import React, { use, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { toast } from '../ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import usePayment from '@/hooks/usePayment';
 import useBalance from '@/hooks/useBalance';
 import { useSession } from 'next-auth/react';
 import PaymentDialog from '../payment-dialog';
+import { toast } from 'sonner';
+import { showToast } from '../toast';
 
 type Props = {
   tokenState: {
@@ -41,9 +42,9 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
       headers: { 'Content-Type': 'application/json' },
     });
     if (response.status === 404) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      showToast({
+        message: 'Report not found.',
+        type: 'error',
         description: 'Report not found.',
       });
       setSubmitting(false);
@@ -53,9 +54,9 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
     if (response.ok) {
       const data = await response.json();
       if (data.status === 'failed') {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
+        showToast({
+          message: 'Error',
+          type: 'error',
           description: data.message,
         });
         setSubmitting(false);
@@ -81,16 +82,17 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
         // Remove the link when done
         setSubmitting(false);
         document.body.removeChild(link);
-        toast({
-          variant: 'default',
-          title: 'Success',
-          description: 'Report downloaded successfully.',
+        showToast({
+          message: 'Success.',
+          type: 'success',
+          description: 'Report downloaded Successfully.',
         });
       }
     }
   };
   const handleCopy = (data: string) => {
     copy(data);
+    toast('Copied to clipboard');
   };
 
   return (

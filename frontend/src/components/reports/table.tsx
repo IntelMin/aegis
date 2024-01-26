@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/tooltip';
 import Image from 'next/image';
 import { formatAddress } from '@/utils/format-address';
-import copy from 'copy-to-clipboard';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
 import { formatDate } from '@/utils/format-date';
@@ -86,9 +85,6 @@ const ReportsRow = ({
   setTokenState,
   setShowModal,
 }: ReportRow) => {
-  const handleCopy = (data: string) => {
-    copy(data);
-  };
   const dataToPercent = (data: number[]) => {
     const total = data.reduce((a, b) => a + b, 0);
     if (total === 0) {
@@ -132,9 +128,6 @@ const ReportsRow = ({
         <p className="text-[12px] text-blue-400 uppercase">
           {formatAddress(data?.tokenAddress)}
         </p>
-        <button type="button" onClick={() => handleCopy(data?.tokenAddress)}>
-          <Image src="/icons/copy.svg" alt="copy" width={12} height={12} />
-        </button>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
