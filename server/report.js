@@ -81,9 +81,8 @@ const getName = address => {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const meta = JSON.parse(fileContent);
-    const info = meta?.tokens[0];
+    const info = meta?.data?.tokens[0];
     const name = info?.symbol;
-    console.log('info', info);
     const image_url = info?.imageSmallUrl;
     // Use the name variable here
     console.log('Name:', name);
