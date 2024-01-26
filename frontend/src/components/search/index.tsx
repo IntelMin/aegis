@@ -1,17 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import {
-  CalendarIcon,
-  EnvelopeClosedIcon,
-  FaceIcon,
-  GearIcon,
-  PersonIcon,
-  RocketIcon,
-} from '@radix-ui/react-icons';
 
 import {
+  Command,
   CommandDialog,
+  CommandLoading,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -22,11 +16,65 @@ import {
 } from '@/components/ui/command';
 
 import Image from 'next/image';
+import axios from 'axios';
+import Link from 'next/link';
+import { formatCurrency } from '@/utils/format-currency';
 
 type Props = {};
 
 const Search = (props: Props) => {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [results, setResults] = React.useState([]);
+  const [query, setQuery] = React.useState('');
+  const [queryHistory, setQueryHistory] = React.useState([]);
+  const [debounceTimeout, setDebounceTimeout] = React.useState(null);
+
+  React.useEffect(() => {
+    // Clear any existing timeout to reset the timer
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    // Don't do anything if the query is too short
+    if (!query || query.length < 2) {
+      setResults([]);
+      setLoading(false);
+      return;
+    }
+
+    // Set a new timeout
+    const newTimeout = setTimeout(async () => {
+      setLoading(true);
+      const existingEntry = queryHistory.find(
+        (entry: any) => entry.query === query
+      );
+
+      if (existingEntry) {
+        setResults(existingEntry.results);
+        setLoading(false);
+      } else {
+        try {
+          const res = await axios.get(`/api/search/?query=${query}`);
+          setResults(res.data);
+          // Update query history
+          const newEntry = { query, results: res.data };
+          const updatedHistory = [newEntry, ...queryHistory.slice(0, 9)];
+          setQueryHistory(updatedHistory);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    }, 500); // 500ms debounce time
+
+    // Save the timeout in state
+    setDebounceTimeout(newTimeout);
+
+    // Cleanup function to clear the timeout when component unmounts or before next effect runs
+    return () => clearTimeout(newTimeout);
+  }, [query]);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -63,114 +111,153 @@ const Search = (props: Props) => {
         </div>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/live-monitoring.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Analytics</span>
-            </CommandItem>
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/live-monitoring.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Pen Testing</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Audit">
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/code-audit.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Code</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/token-audit.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Audit</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Leaderboards">
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/trending.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Trending</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/security.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Security Scores</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Image
-                alt="analytics"
-                src={`/icons/nav/bug-bounty.svg`}
-                width={18}
-                height={18}
-                style={{
-                  filter: 'invert(100%) brightness(150%) contrast(100%)',
-                }}
-                className="mr-2"
-              />
-              <span>Bug Bounty</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
+        <Command>
+          <CommandInput
+            placeholder="Type a command or search..."
+            value={query}
+            onValueChange={setQuery}
+            loading={loading}
+          />
+          <CommandList>
+            {query.length > 0 && (
+              <CommandEmpty>
+                {query.length <= 2
+                  ? 'Please enter more than 2 characters.'
+                  : !loading && results.length === 0
+                  ? 'No results found'
+                  : ''}
+              </CommandEmpty>
+            )}
+
+            {query.length > 2 && (
+              <CommandGroup heading="Search">
+                {results.map((item: any) => {
+                  return (
+                    <Link
+                      href={`/analytics/${item?.baseToken.address}`}
+                      key={`${item?.pairAddress}`}
+                      onClick={() => setOpen(false)}
+                    >
+                      <CommandItem
+                        value={item.baseToken.name}
+                        className="cursor-pointer justify-between"
+                      >
+                        <span>{item.baseToken.name}</span>
+                        <span>${item.priceUsd}</span>
+                      </CommandItem>
+                    </Link>
+                  );
+                })}
+              </CommandGroup>
+            )}
+          </CommandList>
+          <CommandList>
+            <CommandGroup heading="Overview">
+              <CommandItem>
+                <Image
+                  alt="dashboard"
+                  src={`/icons/nav/dashboard.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Dashboard</span>
+              </CommandItem>
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/live-monitoring.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Analytics</span>
+              </CommandItem>
+            </CommandGroup>
+            <CommandSeparator />
+            <CommandGroup heading="Audit">
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/code-audit.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Code</span>
+                <CommandShortcut>⌘P</CommandShortcut>
+              </CommandItem>
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/token-audit.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Audit</span>
+                <CommandShortcut>⌘B</CommandShortcut>
+              </CommandItem>
+            </CommandGroup>
+            <CommandSeparator />
+            <CommandGroup heading="Leaderboards">
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/trending.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Trending</span>
+                <CommandShortcut>⌘P</CommandShortcut>
+              </CommandItem>
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/security.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Security Scores</span>
+                <CommandShortcut>⌘B</CommandShortcut>
+              </CommandItem>
+              <CommandItem>
+                <Image
+                  alt="analytics"
+                  src={`/icons/nav/bug-bounty.svg`}
+                  width={18}
+                  height={18}
+                  style={{
+                    filter: 'invert(100%) brightness(150%) contrast(100%)',
+                  }}
+                  className="mr-2"
+                />
+                <span>Bug Bounty</span>
+                <CommandShortcut>⌘B</CommandShortcut>
+              </CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </CommandDialog>
     </>
   );

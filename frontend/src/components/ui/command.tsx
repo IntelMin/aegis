@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';
-import { Search } from 'lucide-react';
+import { Loader, Loader2, Search } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -37,12 +37,21 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   );
 };
 
+interface CommandInputProps
+  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> {
+  loading: boolean;
+}
+
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
+  CommandInputProps
+>(({ className, loading, ...props }, ref) => (
   <div className="flex items-center px-3 border-b" cmdk-input-wrapper="">
-    <Search className="w-4 h-4 mr-2 opacity-50 shrink-0" />
+    {loading ? (
+      <Loader2 className="w-4 h-4 mr-2 opacity-50 shrink-0 animate-rotatee" />
+    ) : (
+      <Search className="w-4 h-4 mr-2 opacity-50 shrink-0" />
+    )}
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
@@ -81,6 +90,13 @@ const CommandEmpty = React.forwardRef<
 ));
 
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
+
+const CommandLoading = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Loading>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Loading>
+>((props, ref) => <CommandPrimitive.Loading ref={ref} {...props} />);
+
+CommandLoading.displayName = CommandPrimitive.Loading.displayName;
 
 const CommandGroup = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Group>,
@@ -152,4 +168,5 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
+  CommandLoading,
 };
