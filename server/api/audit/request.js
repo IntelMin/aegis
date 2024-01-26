@@ -75,7 +75,11 @@ router.get('/request/:address', async (req, res) => {
     await insertRequestdb({ contract: address, status: 'pending' });
     return res.status(200).send(NEW_AUDIT_RETURN_CODE.success);
   } catch (error) {
-    return res.status(500).send(NEW_AUDIT_RETURN_CODE.errorFetchingDb);
+    if (error.code && error.code === '23505') {
+      return res.status(404).send(NEW_AUDIT_RETURN_CODE.requested);
+    } else {
+      return res.status(500).send(NEW_AUDIT_RETURN_CODE.errorFetchingDb);
+    }
   } finally {
     processingContracts.delete(address);
   }
