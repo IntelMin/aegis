@@ -11,6 +11,8 @@ import React, {
 import ReactDOM from 'react-dom';
 import Terminal, { TerminalInput, TerminalOutput } from './terminal';
 import { WatchdogSettings } from '@/app/(features)/(free)/watchdog/page';
+import { formatAddress } from '@/utils/format-address';
+import { isViewportValid } from '@/utils/media-query';
 
 interface MonitorProps {
   settings: WatchdogSettings;
@@ -27,11 +29,24 @@ const Monitor = React.forwardRef(function MonitorComponent(
 
   const [lineData, setLineData] = useState<JSX.Element[]>([]);
 
+  const formatAddressForDisplay = (addr: string) => {
+    if (isViewportValid(768) && addr) {
+      const val = addr.split(' ');
+      console.log(val[val.length - 1], 'last');
+      if (val.length > 1) {
+        if (val[val.length - 1].length < 24) return addr;
+        return `${val[0]} ${formatAddress(val[val.length - 1])}`;
+      }
+      if (val[0].length < 24) return addr;
+      return formatAddress(addr);
+    } else return addr;
+  };
+
   useEffect(() => {
     // prettier-ignore
     const initialData = (
       <TerminalOutput key={'intro'}>
-      <pre className='max-md:scale-75 max-md:translate-x-[-50px]'>
+      <pre className='max-md:scale-95 max-md:translate-x-[-20px]'>
       {`
           _    _____ ____ ___ ____      / \__
          / \\  | ____/ ___|_ _/ ___|    (    @\___
@@ -43,12 +58,12 @@ const Monitor = React.forwardRef(function MonitorComponent(
       {'\n\n'}
       {`The following commands are supported:
   
-  token     [on|off]               toggle token detection
-  address                          list address detection
-  address   [on|off] [address]     toggle address detection
-  honeypot  [on|off]               toggle honeypot detection
+  token     [on|off]               toggle token 
+  address                          list address 
+  address   [on|off] [addr]        toggle address 
+  honeypot  [on|off]               toggle honeypot 
 
-  clear                            clear the terminal
+  clear                            clear terminal
   start                            start scanning
   stop                             stop scanning
   `}
@@ -102,16 +117,16 @@ const Monitor = React.forwardRef(function MonitorComponent(
           setLineData([
             <TerminalOutput key={key}>
               <pre>
-                {d.data.hash}
+                {formatAddressForDisplay(d.data.hash)}
                 {'\n'}
                 {'├── FROM    '}
-                {d.data.from}
+                {formatAddressForDisplay(d.data.from)}
                 {'\n'}
                 {'│    └─ TO  '}
-                {d.data.to}
+                {formatAddressForDisplay(d.data.to)}
                 {'\n'}
                 {'└── ACTION  '}
-                {d.data.action}
+                {formatAddressForDisplay(d.data.action)}
               </pre>
             </TerminalOutput>,
           ]);

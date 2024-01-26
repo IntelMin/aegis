@@ -121,7 +121,7 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
           </h1>
         </div>
       </div>
-      <div className={`flex justify-center items-stretch p-4`}>
+      <div className={`flex justify-center items-stretch max-md:py-4 md:p-4`}>
         <div
           className={`${
             showSection === 'status' ? 'flex' : 'max-md:hidden'
