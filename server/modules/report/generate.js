@@ -23,7 +23,11 @@ async function generatePDF(address, name) {
 
   // combine templates into render.ejs
   const combinedContent = await renderTemplate('render.ejs', renderedTemplates);
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true,
+  });
+
   const page = await browser.newPage();
 
   await page.setContent(combinedContent);
