@@ -36,7 +36,8 @@ async function fetchDataFromTable() {
       .select('*')
       .eq('status', 'requested');
     if (error) {
-      throw new Error(error.message);
+      //   throw new Error(error.message);
+      return [];
     }
     return data;
   } catch (error) {
@@ -135,6 +136,11 @@ async function reportWorker() {
             );
             console.log('-- generated pdf ', name, '.pdf');
 
+            // while loop to wait for the file to be generated
+            while (!fs.existsSync(`./cache/reports/${address}/${name}.pdf`)) {
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
             await modifyreportRequestdb(address, 'completed', name, image_url);
 
             console.log('-- pushed to supabase');
@@ -147,7 +153,7 @@ async function reportWorker() {
       }
     } catch (error) {
       console.error('Error while processing: ', address, error);
-      //   modifyreportRequestdb(address, 'failed');
+      modifyreportRequestdb(address, 'failed');
       console.log('-- modified status to failed');
     }
   }

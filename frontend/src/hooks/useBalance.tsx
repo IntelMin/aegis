@@ -1,26 +1,32 @@
-import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { showToast } from '@/components/toast';
 
-const useBalance = (email: string) => {
+const useBalance = () => {
   const [balance, setBalance] = useState(null);
+  const [isFetchingBalance, setIsFetchingBalance] = useState(true);
+
   useEffect(() => {
     const getBalance = async () => {
-      const res = await fetch('/api/credit/balance', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: email,
-        }),
-      });
-      const data = await res.json();
-      setBalance(data?.balance);
+      setIsFetchingBalance(true);
+      try {
+        const response = await axios.get('/api/credit/balance');
+        setBalance(response.data.balance);
+      } catch (error: any) {
+        showToast({
+          type: 'error',
+          message: 'Balance Error',
+          description: 'Error fetching balance',
+        });
+      } finally {
+        setIsFetchingBalance(false);
+      }
     };
 
-    if (email) {
-      getBalance();
-    }
-  }, [email]);
+    getBalance();
+  }, []);
 
-  return { balance, setBalance };
+  return { balance, isFetchingBalance };
 };
 
 export default useBalance;

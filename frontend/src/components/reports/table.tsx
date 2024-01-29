@@ -22,9 +22,7 @@ import { formatDate } from '@/utils/format-date';
 import { formatTime } from '@/utils/format-time';
 
 type Props = {
-  tablehead: string[];
   loading?: boolean;
-  user_id?: number;
   tokenState: {
     tokenIcon: string;
     tokenName: string;
@@ -43,15 +41,16 @@ type Props = {
     }>
   >;
 };
+
 type Report = {
   id: number;
   name: string;
   address: string;
-  user_id: number;
   status: string;
   image_url: string;
   created_at: Date;
 };
+
 interface ReportState {
   tokenIcon: string;
   tokenName: string;
@@ -61,8 +60,8 @@ interface ReportState {
   auditTime: string;
   percentageData?: number[];
   imageSmallUrl?: string;
-  user_id?: number;
 }
+
 type ReportRow = {
   data: ReportState;
   loading?: boolean;
@@ -211,16 +210,13 @@ const ReportsRow = ({
 };
 
 export const ReportsTable = ({
-  tablehead,
   setShowModal,
   setTokenState,
   tokenState,
-  user_id,
 }: Props) => {
   const [tableData, setTableData] = React.useState<ReportState[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [reportLoading, setReportLoading] = React.useState(false);
-  console.log('tableData', user_id);
   useEffect(() => {
     async function fetchReports() {
       setLoading(true);
@@ -234,7 +230,6 @@ export const ReportsTable = ({
           tokenAddress: report.address,
           auditDate: new Date(report.created_at).toLocaleDateString(),
           auditTime: new Date(report.created_at).toLocaleTimeString(),
-          user_id: report.user_id,
         };
       });
       setTableData(table_report);
@@ -255,7 +250,6 @@ export const ReportsTable = ({
               data.table.number_of_medium_severity_issues,
               data.table.number_of_low_severity_issues,
             ],
-            user_id: report.user_id,
           };
         })
       );
@@ -292,9 +286,13 @@ export const ReportsTable = ({
     <>
       <Table>
         <TableHeader className="bg-[#0D0D0D]">
-          {tablehead?.map((head, index) => (
-            <TableHead key={index}>{head}</TableHead>
-          ))}
+          <TableRow>
+            <TableHead></TableHead>
+            <TableHead>TOKENS</TableHead>
+            <TableHead>CA</TableHead>
+            <TableHead>AUDITED DATE</TableHead>
+            <TableHead>FINDINGS</TableHead>
+          </TableRow>
         </TableHeader>
         <TableBody
           className={
@@ -320,28 +318,16 @@ export const ReportsTable = ({
               </TableCell>
             </TableRow>
           )}
-          {tableData?.map((data, i) =>
-            user_id ? (
-              user_id == data.user_id ? (
-                <ReportsRow
-                  data={data}
-                  i={i}
-                  loading={loading}
-                  setTokenState={setTokenState}
-                  setShowModal={setShowModal}
-                />
-              ) : null
-            ) : (
-              <ReportsRow
-                key={i}
-                data={data}
-                i={i}
-                loading={loading}
-                setTokenState={setTokenState}
-                setShowModal={setShowModal}
-              />
-            )
-          )}
+          {tableData?.map((data, i) => (
+            <ReportsRow
+              key={i}
+              data={data}
+              i={i}
+              loading={loading}
+              setTokenState={setTokenState}
+              setShowModal={setShowModal}
+            />
+          ))}
         </TableBody>
       </Table>
       {tableData.length === 0 && !reportLoading && (

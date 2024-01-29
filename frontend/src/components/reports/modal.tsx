@@ -1,15 +1,13 @@
-import { formatAddress } from '@/utils/format-address';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import copy from 'copy-to-clipboard';
-import { set } from 'date-fns';
 import Image from 'next/image';
-import React, { use, useEffect } from 'react';
+import { formatAddress } from '@/utils/format-address';
 import { IoMdClose } from 'react-icons/io';
-import { toast } from '../ui/use-toast';
-import ScaleLoader from 'react-spinners/ScaleLoader';
-import usePayment from '@/hooks/usePayment';
-import useBalance from '@/hooks/useBalance';
-import { useSession } from 'next-auth/react';
-import PaymentDialog from '../payment-dialog';
+import { showToast } from '@/components/toast';
+import PaymentDialog from '../payment/dialog';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { Lock } from 'lucide-react';
 
 type Props = {
   tokenState: {
@@ -23,74 +21,82 @@ type Props = {
 };
 
 export const Modal = ({ tokenState, setShowModal }: Props) => {
-  const session = useSession();
-  const { balance, setBalance } = useBalance(
-    session.data?.user?.email as string
-  );
-  const { handlePayment, loading } = usePayment({
-    balance,
-    onSuccess: () => {
-      requestReport(tokenState?.tokenAddress);
-    },
-  });
   const [submitting, setSubmitting] = React.useState(false);
-  const requestReport = async (address: string) => {
-    setSubmitting(true);
-    const response = await fetch(`/api/audit/report?address=${address}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (response.status === 404) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Report not found.',
+  const [downloading, setDownloading] = React.useState(false);
+
+  const requestReport = (address: string) => {
+    setDownloading(true);
+
+    axios
+      .get(`/api/audit/report?address=${address}`)
+      .then((response: any) => {
+        const data = response.data;
+
+        if (data.status === 'failed') {
+          showToast({
+            type: 'error',
+            message: 'Error',
+            description: 'Your report has not been generated yet.',
+          });
+          setDownloading(false);
+          return;
+        }
+
+        if (data.status === 'success') {
+          const pdfData = data.report;
+
+          showToast({
+            type: 'success',
+            message: 'Success',
+            description: 'Your report has been downloaded.',
+          });
+
+          const byteCharacters = atob(pdfData);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+
+          const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+          const pdfUrl = URL.createObjectURL(pdfBlob);
+
+          const link = document.createElement('a');
+          link.href = pdfUrl;
+          link.download =
+            data.name && data.name !== 'undefined'
+              ? `${data.name}.pdf`
+              : 'report.pdf';
+          document.body.appendChild(link);
+
+          link.click();
+
+          document.body.removeChild(link);
+          URL.revokeObjectURL(pdfUrl);
+
+          setDownloading(false);
+        }
+      })
+      .catch((error: any) => {
+        showToast({
+          type: 'error',
+          message: 'Error',
+          description: 'There was an error fetching your report.',
+        });
+        setDownloading(false);
+      })
+      .finally(() => {
+        setDownloading(false);
       });
-      setSubmitting(false);
-      return;
-    }
-
-    if (response.ok) {
-      const data = await response.json();
-      if (data.status === 'failed') {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: data.message,
-        });
-        setSubmitting(false);
-        return;
-      }
-      if (data.status === 'success') {
-        const pdfData = data.report; // base64-encoded PDF data
-        const pdfBlob = new Blob([atob(pdfData)], {
-          type: 'application/pdf',
-        });
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        link.download =
-          data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-        // Append the link to the body
-        document.body.appendChild(link);
-
-        // Programmatically click the link to start the download
-        link.click();
-
-        // Remove the link when done
-        setSubmitting(false);
-        document.body.removeChild(link);
-        toast({
-          variant: 'default',
-          title: 'Success',
-          description: 'Report downloaded successfully.',
-        });
-      }
-    }
   };
+
   const handleCopy = (data: string) => {
     copy(data);
+    showToast({
+      type: 'success',
+      message: 'Success',
+      description: 'Copied to clipboard.',
+    });
   };
 
   return (
@@ -180,37 +186,57 @@ export const Modal = ({ tokenState, setShowModal }: Props) => {
                     ))}
                 </div>
               )}
-              {submitting || loading ? (
-                <div className="flex items-center justify-center bg-[#0E76FD] w-full p-2">
-                  <ScaleLoader width={4} height={10} color="white" />
-                </div>
-              ) : (
+              <button
+                className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
+                disabled={submitting}
+                // onClick={() => requestReport(tokenState?.tokenAddress)}
+              >
                 <PaymentDialog
                   service="report"
-                  balance={balance}
-                  handlePayment={handlePayment}
-                  TriggerElement={
-                    <button
-                      className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-full"
-                      // onClick={() => requestReport(tokenState?.tokenAddress)}
-                    >
-                      <Image
-                        src="/icons/nav/reports.svg"
-                        alt="report-icon"
-                        width={16}
-                        height={16}
-                        style={{
-                          filter:
-                            'invert(100%) brightness(1000%) contrast(100%)',
-                        }}
-                      />
-                      <p className="text-[16px] font-[500] text-zinc-50">
-                        Download Report
-                      </p>
-                    </button>
+                  address={tokenState?.tokenAddress}
+                  onPrep={async () => {
+                    return true;
+                  }}
+                  UnlockedElement={
+                    <div className="flex flex-row w-full justify-center">
+                      {submitting || downloading ? (
+                        <>
+                          <AiOutlineLoading3Quarters className="animate-spin mr-1" />
+                          <p className="text-[16px] font-[500] text-zinc-50">
+                            Downloading Report
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src="/icons/nav/reports.svg"
+                            alt="report-icon"
+                            className="mr-2"
+                            width={16}
+                            height={16}
+                            style={{
+                              filter:
+                                'invert(100%) brightness(1000%) contrast(100%)',
+                            }}
+                          />
+                          <p className="text-[16px] font-[500] text-zinc-50">
+                            Download Report
+                          </p>
+                        </>
+                      )}
+                    </div>
                   }
+                  LockedElement={
+                    <div className="flex flex-row">
+                      <Lock className="mr-2" />
+                      <p className="text-[16px] font-[500] text-zinc-50">
+                        Unlock Report
+                      </p>
+                    </div>
+                  }
+                  onSuccess={() => requestReport(tokenState?.tokenAddress)}
                 />
-              )}
+              </button>
             </div>
           </div>
         </div>

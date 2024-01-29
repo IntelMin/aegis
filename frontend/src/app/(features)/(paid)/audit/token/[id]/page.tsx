@@ -6,13 +6,10 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import useTokenInfo from '@/hooks/useTokenInfo';
-import useBalance from '@/hooks/useBalance';
-import usePayment from '@/hooks/usePayment';
-import { showToast } from '@/components/toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import PaymentDialog from '@/components/payment-dialog';
-import ScaleLoader from 'react-spinners/ScaleLoader';
-import usePaidUser from '@/hooks/usePaiduser';
+import PaymentDialog from '@/components/payment/dialog';
+import { Lock } from 'lucide-react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 type props = {
   params: {
@@ -42,66 +39,28 @@ const SkeletonLoader = () => (
 );
 
 const TokenAuditOption = ({ params }: props) => {
-  const session = useSession();
-  // const [balance, setBalance] = React.useState<number>(0);
   const [metadata, setMetadata] = React.useState<any>();
-  const paiduser = usePaidUser(params?.id);
-  const { balance, setBalance } = useBalance(
-    session.data?.user?.email as string
-  );
   const router = useRouter();
-  const { handlePayment, loading } = usePayment({
-    address: params?.id,
-    balance,
-    onSuccess: auditType => {
-      router.push(`/audit/token/${params?.id}/${auditType}`);
-    },
-  });
   const [submitting, setSubmitting] = React.useState<boolean>(false);
-  const [submittedAddress, setSubmittedAddress] = React.useState<string>('');
 
   const { isFetching, tokenRequestInfo, tokenInfo, error } = useTokenInfo(
     params.id,
     'meta',
     true
   );
+
   useEffect(() => {
     console.log({ tokenInfo });
     if (!isFetching && tokenRequestInfo && !error) {
       console.log({ tokenInfo });
       setMetadata(tokenInfo);
     }
-  }, [submittedAddress, isFetching, tokenRequestInfo, error]);
-
-  useEffect(() => {
-    if (!submitting) return;
-
-    if (!isFetching && tokenRequestInfo && !error) {
-      setSubmitting(false);
-
-      router.push(`/audit/token/${submittedAddress}`);
-    }
-
-    if (error) {
-      showToast({
-        type: 'error',
-        message: 'Error',
-        description: 'There was an error fetching token information',
-      });
-      setSubmitting(false);
-    }
-  }, [
-    submitting,
-    isFetching,
-    tokenRequestInfo,
-    error,
-    submittedAddress,
-    router,
-  ]);
+  }, [isFetching, tokenRequestInfo, error]);
 
   if (error) {
     return <div>Error loading token information</div>;
   }
+
   return (
     <div
       className={`bg-[url(/backgrounds/audit-token-option.png)]  max-md:min-h-screen md:h-[calc(100vh-80px)] bg-cover max-md:pt-[80px] max-md:px-4 pt-[30px] w-full flex flex-col gap-8 md:gap-[72px] items-center justify-center`}
@@ -161,27 +120,47 @@ const TokenAuditOption = ({ params }: props) => {
                 className={`from-[#001735] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
-                  <PaymentDialog
-                    balance={balance}
-                    service="detailed"
-                    TriggerElement={
-                      <div
-                        className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                      >
-                        {submitting ? (
-                          <ScaleLoader width={4} height={10} color="white" />
-                        ) : (
-                          'Detailed Audit'
-                        )}
-                      </div>
-                    }
-                    payInProgress={loading}
-                    handlePayment={handlePayment}
-                    paidUser={paiduser ?? undefined}
-                    onSuccess={() => {
-                      router.push(`/audit/token/${params?.id}/detailed`);
-                    }}
-                  />
+                  <div
+                    className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                  >
+                    <PaymentDialog
+                      service="detailed"
+                      address={params?.id}
+                      onPrep={async () => {
+                        return true;
+                      }}
+                      UnlockedElement={
+                        <div className="flex flex-row w-full items-center justify-center">
+                          {submitting ? (
+                            <>
+                              <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                              <p className="text-[16px] font-[500] text-zinc-50">
+                                Loading...
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-[16px] font-[500] text-zinc-50">
+                                Detailed Audit
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      }
+                      LockedElement={
+                        <div className="flex flex-row items-center">
+                          <Lock className="mr-2 w-5 h-5" />
+                          <p className="text-[16px] font-[500] text-zinc-50">
+                            Detailed Audit
+                          </p>
+                        </div>
+                      }
+                      onSuccess={() => {
+                        setSubmitting(true);
+                        router.push(`/audit/token/${params?.id}/detailed`);
+                      }}
+                    />
+                  </div>
                 </div>
                 <Image
                   alt="detailed-audit"
@@ -197,23 +176,49 @@ const TokenAuditOption = ({ params }: props) => {
                 className={` from-[#19191B] to-[#000] cursor-pointer group pt-12 bg-gradient-to-b w-[340px] flex items-center justify-between flex-col gap-3 px-4 transition-all ease-in duration-200 border border-zinc-800 min-h-[380px]`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-3">
-                  <PaymentDialog
-                    balance={balance}
-                    service="quick"
-                    TriggerElement={
-                      <div
-                        className={`border-zinc-700 bg-zinc-900 text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
-                      >
-                        {submitting ? (
-                          <ScaleLoader width={4} height={10} color="white" />
-                        ) : (
-                          'Quick Audit'
-                        )}
-                      </div>
-                    }
-                    payInProgress={loading}
-                    handlePayment={handlePayment}
-                  />
+                  <div className="flex flex-col items-center justify-center w-full gap-3">
+                    <div
+                      className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[18px] border font-[400] px-2 h-[40px] w-fit flex items-center justify-center text-center transition-all ease-in duration-200`}
+                    >
+                      <PaymentDialog
+                        service="quick"
+                        address={params?.id}
+                        onPrep={async () => {
+                          return true;
+                        }}
+                        UnlockedElement={
+                          <div className="flex flex-row w-full items-center justify-center">
+                            {submitting ? (
+                              <>
+                                <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                                <p className="text-[16px] font-[500] text-zinc-50">
+                                  Loading...
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p className="text-[16px] font-[500] text-zinc-50">
+                                  Quick Audit
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        }
+                        LockedElement={
+                          <div className="flex flex-row items-center">
+                            <Lock className="mr-2 w-5 h-5" />
+                            <p className="text-[16px] font-[500] text-zinc-50">
+                              Quick Audit
+                            </p>
+                          </div>
+                        }
+                        onSuccess={() => {
+                          setSubmitting(true);
+                          router.push(`/audit/token/${params?.id}/quick`);
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <Image
                   alt="detailed-audit"

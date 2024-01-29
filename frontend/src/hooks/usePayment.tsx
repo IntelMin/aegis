@@ -1,95 +1,80 @@
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { creditConfig, CreditType } from '@/lib/credit-config';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { CreditType } from '@/lib/credit-config';
 import { useSession } from 'next-auth/react';
 import { showToast } from '@/components/toast';
 
-interface usePaymentProps {
-  address?: string;
-  balance: number | null;
-  onSuccess?: (type: CreditType) => void;
-}
-const usePayment = ({ address, balance, onSuccess }: usePaymentProps) => {
-  const router = useRouter();
+const usePayment = () => {
   const session = useSession();
-  const [loading, setLoading] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [hasPaid, setHasPaid] = useState<boolean>(false);
+  const [isFetchingPaid, setIsFetchingPaid] = useState(true);
 
-  const handlePayment = async (type: CreditType) => {
-    if (session.status === 'unauthenticated') {
-      router.push('/login');
-      return new Error('Not authenticated');
-    }
-    if (!session.data) {
-      return new Error('Not authenticated');
-    }
-
-    const cost = creditConfig[type];
-
-    if (cost === 0) {
-      onSuccess?.(type);
-      return;
-    }
-
-    if (!balance || balance === 0 || balance < cost) {
+  const fetchPaidStatus = async (type: string, address: string | undefined) => {
+    setIsFetchingPaid(true);
+    try {
+      const response = await axios.post('/api/credit/paid', {
+        address: address || '',
+        type,
+      });
+      console.log(`address: ${address}`);
+      console.log(response.data);
+      setHasPaid(response.data.paid);
+    } catch (err) {
       showToast({
         type: 'error',
         message: 'Error',
-        description: 'You do not have enough credits to perform this action',
+        description: 'There was an error fetching your payment status.',
       });
-
-      return new Error('Not enough credits');
-    }
-    setLoading(true);
-    const res = await fetch('/api/credit/pay', {
-      method: 'POST',
-      body: JSON.stringify({
-        type: type,
-        address: address ? address : '',
-      }),
-    });
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) {
-      showToast({
-        type: 'error',
-        message: 'Error',
-        description: 'There was an error with your payment',
-      });
-
-      setLoading(false);
-
-      return new Error('Credit payment error');
-    }
-    if (data?.status === 'success') {
-      showToast({
-        type: 'success',
-        message: 'Success',
-        description: 'Payment successful',
-      });
-      session.update({
-        ...session.data,
-        user: {
-          ...session.data?.user,
-          balance: data?.balance,
-          paid_code: true,
-        },
-      });
-      if (onSuccess) {
-        onSuccess(type); // Call onSuccess callback if provided
-      }
-      setLoading(false);
-    } else {
-      showToast({
-        type: 'error',
-        message: 'Error',
-        description: 'There was an error with your payment',
-      });
-
-      return new Error('Credit payment error');
+      setHasPaid(false);
+    } finally {
+      setIsFetchingPaid(false);
     }
   };
 
-  return { handlePayment, loading };
+  const handlePayment = async (type: string, address: string | undefined) => {
+    setIsProcessingPayment(true);
+    try {
+      const response = await axios.post('/api/credit/pay', { type, address });
+      const data = response.data;
+
+      if (data.status !== 'success') {
+        showToast({
+          type: 'error',
+          message: 'Payment Error',
+          description: data.message || 'Failed to process payment',
+        });
+      } else {
+        showToast({
+          type: 'success',
+          message: 'Success',
+          description: `Payment successful. You now have ${data.credits} credits remaining.`,
+        });
+        session.update({
+          ...session.data,
+          user: { ...session.data?.user, balance: data.credits },
+        });
+        setHasPaid(true);
+      }
+    } catch (error: any) {
+      showToast({
+        type: 'error',
+        message: 'Payment Error',
+        description:
+          error.response?.data?.message || 'Failed to process payment',
+      });
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  return {
+    fetchPaidStatus,
+    handlePayment,
+    isProcessingPayment,
+    isFetchingPaid,
+    hasPaid,
+  };
 };
 
 export default usePayment;

@@ -6,177 +6,149 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest, res: NextResponse) {
   const request = await req.json();
   const { address } = request;
-  const session = await getServerSession(authOptions);
-  const email = session?.user?.email;
-  if (!email) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'User not logged in.',
-    });
-  }
-  const user = await db.user.findFirst({
-    where: {
-      email: email,
-    },
-  });
-  if (!user) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'User not found.',
-    });
-  }
-  const user_id = user.id;
-  console.log('user_id', session);
-  const paid_user = await db.paid_audits.findFirst({
-    where: {
-      user_id: Number(user_id),
-      address: address,
-      type: 'report',
-    },
-  });
-  // if (!paid_user) {
-  //   return NextResponse.json({
-  //     status: 'failed',
-  //     message: "You have't paid for this report yet.",
-  //   });
-  // }
-  const report_request = await db.report_requests.findFirst({
-    where: {
-      address: address,
-    },
-  });
-  if (!report_request) {
-    const insert_report_request = await db.report_requests.create({
-      data: {
+
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({
+        status: 'error',
+        message: 'User not logged in.',
+      });
+    }
+
+    const paid = await db.paid_audits.findFirst({
+      where: {
+        user_id: session.user.id,
         address: address,
-        user_id: Number(user_id),
+        type: 'report',
+      },
+    });
+
+    if (!paid) {
+      return NextResponse.json({
+        status: 'error',
+        message: "You haven't paid for this report yet.",
+      });
+    }
+
+    const existingRequest = await db.report_requests.findFirst({
+      where: { address, user_id: session.user.id },
+    });
+
+    if (existingRequest) {
+      return NextResponse.json({
+        status:
+          existingRequest.status !== 'completed' ? 'requested' : 'success',
+        message:
+          existingRequest.status === 'completed'
+            ? 'Report ready to download'
+            : 'Report already requested',
+      });
+    }
+
+    await db.report_requests.create({
+      data: {
+        address,
+        user_id: session.user.id,
         status: 'requested',
       },
     });
-    return NextResponse.json({
-      status: 'success',
-      message: 'Report requested successfully.',
-    });
-  }
-  if (report_request.status === 'requested') {
-    return NextResponse.json({
-      status: 'success',
-      message: 'Report requested successfully.',
-    });
-  }
-  if (report_request.status === 'completed') {
-    return NextResponse.json({
-      status: 'success',
-      message: 'Report ready to download',
-    });
-  }
 
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       address: address,
-  //       user_id: user_id,
-  //     }),
-  //   });
-  //   const report_response = await report_request.json();
-}
-
-export async function GET(req: NextRequest, res: NextResponse) {
-  const url = new URL(req.nextUrl);
-  const address = url.searchParams.get('address');
-  console.log('address1', address);
-  if (!address) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'Address not provided.',
-    });
-  }
-  const session = await getServerSession(authOptions);
-  const email = session?.user?.email;
-  if (!email) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'User not logged in.',
-    });
-  }
-  const user = await db.user.findFirst({
-    where: {
-      email: email,
-    },
-  });
-  if (!user) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'User not found.',
-    });
-  }
-  const user_id = user.id;
-  const paid_user = await db.paid_audits.findFirst({
-    where: {
-      user_id: Number(user_id),
-      address: address,
-      type: 'report',
-    },
-  });
-  // if (!paid_user) {
-  //   return NextResponse.json({
-  //     status: 'failed',
-  //     message: "You have't paid for this report yet.",
-  //   });
-  // }
-  const report_request = await db.report_requests.findFirst({
-    where: {
-      address: address,
-    },
-  });
-  if (!report_request) {
-    return NextResponse.json({
-      status: 'failed',
-      message: 'Report not requested yet.',
-    });
-  }
-  if (report_request.status === 'requested') {
     return NextResponse.json({
       status: 'requested',
       message: 'Report requested successfully.',
     });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      status: 'success',
+      message: 'Error requesting report',
+    });
   }
-  const report = await fetch(
-    `${process.env.AEGIS_SRV}/api/audit/report/${address}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-  console.log('report', report_request);
-  const report_response = await report.blob();
-  const reportData = await report_response.arrayBuffer();
-  const reportBase64 = btoa(
-    String.fromCharCode.apply(null, Array.from(new Uint8Array(reportData)))
-  );
+}
 
-  return NextResponse.json({
-    status: 'success',
-    message: 'Report encoded to base64 successfully.',
-    report: reportBase64,
-    name: `${report_request.name}`,
-  });
-  // console.log('report_request', report_request);
-  // if (report_request.status === 'completed') {
-  //   const reportUrl = new URL(
-  //     `${process.env.AEGIS_SRV}/api/audit/report/${address}`
-  //   );
-  //   return NextResponse.redirect(reportUrl);
-  // }
-  // console.log('report_request', report_request);
-  // if (report_request.status === 'completed') {
-  //   const reportUrl = new URL(
-  //     `${process.env.AEGIS_SRV}/api/audit/report/${address}`
-  //   );
-  //   return NextResponse.redirect(reportUrl);
-  // }
+export async function GET(req: NextRequest, res: NextResponse) {
+  const url = new URL(req.nextUrl);
+  const address = url.searchParams.get('address') || '';
+  console.log('Fetching report for: ', address);
+
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({
+        status: 'failed',
+        message: 'User not logged in.',
+      });
+    }
+
+    const paid = await db.paid_audits.findFirst({
+      where: {
+        user_id: session.user.id,
+        address: address,
+        type: 'report',
+      },
+    });
+
+    if (!paid) {
+      return NextResponse.json({
+        status: 'failed',
+        message: "You haven't paid for this report yet.",
+      });
+    }
+
+    const existingRequest = await db.report_requests.findFirst({
+      where: { address, user_id: session.user.id },
+    });
+
+    if (existingRequest) {
+      if (existingRequest.status === 'requested') {
+        return NextResponse.json({
+          status: 'requested',
+          message: 'Report requested successfully.',
+        });
+      } else if (existingRequest.status === 'failed') {
+        return NextResponse.json({
+          status: 'failed',
+          message: 'Report failed to generate.',
+        });
+      }
+    }
+
+    const report = await fetch(
+      `${process.env.AEGIS_SRV}/report/download/${address.trim()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!report.ok) {
+      console.error('Failed to fetch report:', report.statusText);
+      return NextResponse.json({
+        status: 'failed',
+        message: 'Failed to fetch report.',
+      });
+    }
+
+    const report_response = await report.json();
+    // const reportData = await report_response.arrayBuffer();
+    // const reportBase64 = btoa(
+    //   String.fromCharCode.apply(null, Array.from(new Uint8Array(reportData)))
+    // );
+
+    return NextResponse.json({
+      status: 'success',
+      message: 'Report downloaded successfully.',
+      report: report_response.report,
+      name: report_response.name,
+    });
+  } catch (error) {
+    console.error('Error fetching report:', error);
+    return NextResponse.json({
+      status: 'failed',
+      message: 'An unexpected error occurred while fetching the report.',
+    });
+  }
 }

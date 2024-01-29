@@ -58,13 +58,15 @@ async function getSource(address) {
   }
 }
 
-async function getPair(filepath, address) {
+async function getPair(filepath) {
   try {
     const { CurlImpersonate } = require('node-curl-impersonate');
 
     const security = await readCache(filepath + 'security.json');
     const tokenData = security.result[Object.keys(security.result)[0]];
     const dexes = tokenData.dex;
+
+    console.log('dexes', dexes);
 
     let highestLiquidityDex = dexes[0];
     for (const dex of dexes) {
@@ -87,17 +89,8 @@ async function getPair(filepath, address) {
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8',
         Referer: `https://www.dextools.io/app/en/ether/pair-explorer/${pair}`,
-        'Sec-Ch-Ua':
-          '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-        'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Ch-Ua-Platform': '"macOS"',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-origin',
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
-      impersonate: 'chrome-110',
+      impersonate: 'chrome-116',
       verbose: false,
     };
 
@@ -107,6 +100,7 @@ async function getPair(filepath, address) {
       .makeRequest()
       .then(response => {
         data = response.response;
+        console.log(data);
         return data;
       })
       .catch(error => {
@@ -153,7 +147,7 @@ async function getInfo(address) {
         getCached(filepath + 'scan.json', getScan, 3600, address),
       ]);
 
-      await getCached(filepath + 'pair.json', getPair, 3600, filepath, address);
+      // await getCached(filepath + 'pair.json', getPair, 3600, filepath);
 
       return true;
     } catch (error) {

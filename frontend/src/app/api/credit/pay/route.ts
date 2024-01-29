@@ -3,85 +3,86 @@ import { creditConfig } from '@/lib/credit-config';
 import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-type creditconfigType = keyof typeof creditConfig
+
+type CreditConfigType = keyof typeof creditConfig;
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const session = await getServerSession(authOptions)
-  const email = session?.user?.email
-  if (!email) {
-    return NextResponse.json({ status: "error" }, { status: 401 })
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+  if (!userId) {
+    return NextResponse.json({ status: 'error', message: 'Unauthorized' });
   }
-  const user = await db.user.findUnique({ where: { email: email } })
-  const id = user?.id
-  const request = await req.json()
-  const { type } = request
-  if (!id) {
-    return NextResponse.json({ status: "error" }, { status: 401 })
-  }
-  const selected_type = ["detailed", "report", "quick", "code"].find((t) => t === type)
-  if (!selected_type) {
-    return NextResponse.json({ status: "error" }, { status: 401 })
-  }
-  const requested_credit = creditConfig[type as creditconfigType]
 
-  const user_credit = await db.credit_balance.findFirst({
-    where: { user_id: Number(id) },
-  })
+  const { type, address } = await req.json();
+  if (!Object.keys(creditConfig).includes(type)) {
+    return NextResponse.json({
+      status: 'error',
+      message: 'Invalid audit type requested',
+    });
+  }
 
-  if (!user_credit) {
-    return NextResponse.json({ status: "error" }, { status: 401 })
+  const existingAudit = await db.paid_audits.findFirst({
+    where: { user_id: userId, type, address },
+  });
+
+  let userCredit = await db.credit_balance.findFirst({
+    where: { user_id: userId },
+  });
+  if (!userCredit) {
+    userCredit = await db.credit_balance.create({
+      data: { user_id: userId, credits: 0 },
+    });
   }
-  if (requested_credit === null || requested_credit === undefined) {
-    return NextResponse.json({ status: "error" }, { status: 401 })
+
+  if (existingAudit) {
+    return NextResponse.json({
+      status: 'success',
+      message: 'Already paid',
+      credits: userCredit.credits,
+    });
   }
-  if (user_credit?.credits < requested_credit) {
-    const url = new URL("/payment", req.nextUrl)
-    return NextResponse.redirect("/payment")
+
+  const requestedCredit = creditConfig[type as CreditConfigType];
+  if (userCredit.credits < requestedCredit) {
+    return NextResponse.json({
+      status: 'error',
+      message: 'Insufficient credits',
+    });
   }
+
   try {
-    const insert_tx = await db.credit_transactions.create({
+    const creditTransaction = await db.credit_transactions.create({
       data: {
-        type: selected_type,
-        cost: requested_credit,
-        created_at: new Date(),
-        user: {
-          connect: {
-            id: Number(id)
-          }
-        }
-      }
-    })
-    const updated_credit = await db.credit_balance.update({
-      where: { user_id: Number(id) },
+        type,
+        cost: requestedCredit,
+        user: { connect: { id: userId } },
+      },
+    });
+
+    const updatedCredit = await db.credit_balance.update({
+      where: { user_id: userId },
+      data: { credits: userCredit.credits - requestedCredit },
+    });
+
+    await db.paid_audits.create({
       data: {
-        credits: user_credit?.credits - requested_credit,
-      }
-    })
-    console.log(updated_credit)
-    console.log(insert_tx)
-    if (!updated_credit || !insert_tx) {
-      return NextResponse.error()
-    }
-    const { address } = request
-    const insert_audit = await db.paid_audits.create({
-      data: {
-        address: address ? address : " ",
-        credit_transaction_id: id,
-        type: selected_type,
+        address: address ?? '',
+        credit_transaction_id: creditTransaction.id,
+        type,
+        user: { connect: { id: userId } },
+      },
+    });
 
-        user: {
-          connect: {
-            id: Number(id)
-          }
-        },
-      }
-    })
-
-
-    return NextResponse.json({ status: "success", allow: selected_type, credits: updated_credit.credits })
+    return NextResponse.json({
+      status: 'success',
+      credits: updatedCredit.credits,
+    });
   } catch (e) {
-    console.log(e)
-    return NextResponse.json({ status: "error" }, { status: 401 })
+    console.error(e);
+    return NextResponse.json({
+      status: 'error',
+      message: 'Payment error',
+      credits: userCredit.credits,
+    });
   }
-
 }

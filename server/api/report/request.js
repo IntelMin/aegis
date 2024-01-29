@@ -3,9 +3,9 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 
-const supabase = require('../lib/supabase');
+const supabase = require('../../lib/supabase');
 
-router.get('/:address/:user_id', async (req, res) => {
+router.get('/request/:address/:user_id', async (req, res) => {
   const address = req.params.address;
   const user_id = req.params.user_id;
 

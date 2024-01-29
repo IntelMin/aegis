@@ -1,20 +1,17 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
-
-import { tableData, tablehead } from '@/components/reports/constant';
-import { Modal } from '@/components/reports/modal';
-import { ReportsTable } from '@/components/reports/table';
-import { toast } from '@/components/ui/use-toast';
-import usePayment from '@/hooks/usePayment';
-import useTokenInfo from '@/hooks/useTokenInfo';
-import { useSession } from 'next-auth/react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import ScaleLoader from 'react-spinners/ScaleLoader';
-import useBalance from '@/hooks/useBalance';
-import PaymentDialog from '@/components/payment-dialog';
-import { add, set } from 'date-fns';
+import { showToast } from '@/components/toast';
+import { Modal } from '@/components/reports/modal';
+import { ReportsTable } from '@/components/reports/table';
+import PaymentDialog from '@/components/payment/dialog';
+import useAddressVerification from '@/hooks/useAddressVerification';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { Lock } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
 
 type Props = {};
 type tokenState = {
@@ -24,21 +21,8 @@ type tokenState = {
   tokenAddress: string;
   loading?: boolean;
 };
-type usertype = {
-  id?: number;
-  email?: string;
-  username?: string;
-  password?: string;
-  role?: string;
-  created_at?: Date;
-  updated_at?: Date;
-};
+
 const RequestReportPage = (props: Props) => {
-  const session = useSession();
-  const { balance, setBalance } = useBalance(
-    session.data?.user?.email as string
-  );
-  const [user, setUser] = useState<usertype>({}); // user state
   const [tokenState, setTokenState] = useState<tokenState>({
     tokenIcon: '',
     tokenName: '',
@@ -48,157 +32,160 @@ const RequestReportPage = (props: Props) => {
   });
   const [requestAddress, setRequestAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { handlePayment, loading } = usePayment({
-    balance,
-    onSuccess: () => {
-      requestNewReport(requestAddress);
-      setOpen(false);
-    },
-  });
+  const [showModal, setShowModal] = useState(false);
+  const { checkAddress, isCheckingAddress } = useAddressVerification();
+  const [isAddressValid, setIsAddressValid] = useState(false);
+
+  const requestSentRef = useRef(false);
+  const downloadInitiatedRef = useRef(false);
+
+  const intervalIdRef = useRef<NodeJS.Timeout | number | null>(null);
+  const [startPolling, setStartPolling] = useState(false);
+
+  useEffect(() => {
+    const pollForReport = async () => {
+      try {
+        const contractAddress = requestAddress;
+        const response = await fetch(
+          `/api/audit/report?address=${contractAddress}`
+        );
+        if (!response.ok) {
+          throw new Error('Invalid contract address');
+        }
+
+        const reportData = await response.json();
+        if (reportData.status === 'success') {
+          setStartPolling(false);
+          downloadReport(reportData);
+        } else if (reportData.status === 'failed') {
+          setStartPolling(false);
+          handleError(reportData.message);
+        }
+      } catch (error: any) {
+        console.error('Error in polling report:', error);
+        setStartPolling(false);
+        handleError(error?.message);
+      }
+    };
+
+    if (startPolling) {
+      pollForReport();
+      intervalIdRef.current = setInterval(pollForReport, 15000);
+    }
+
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+      if (startPolling) {
+        setStartPolling(false);
+      }
+      requestSentRef.current = false;
+      downloadInitiatedRef.current = false;
+    };
+  }, [startPolling]);
 
   const requestNewReport = async (address: string) => {
+    if (requestSentRef.current) {
+      return;
+    }
+
     const contractAddress = address;
     try {
       setSubmitting(true);
+      requestSentRef.current = true;
 
       const response = await fetch('/api/audit/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: contractAddress,
-        }),
+        body: JSON.stringify({ address: contractAddress }),
       });
       const data = await response.json();
+
       if (data.status === 'failed') {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: data.message,
-        });
-        setSubmitting(false);
+        handleError(data.message);
         return;
       }
 
-      if (data.status === 'success') {
-        const intervalId = setInterval(async () => {
-          const response = await fetch(
-            `/api/audit/report?address=${contractAddress}`,
-            {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-            }
-          );
-          if (response.status === 404) {
-            toast({
-              variant: 'destructive',
-              title: 'Error',
-              description: 'Please enter a valid contract address',
-            });
-            setSubmitting(false);
-            clearInterval(intervalId);
-            return;
-          }
-          if (response.ok) {
-            const data = await response.json();
-
-            if (data.status === 'success') {
-              const pdfData = data.report; // base64-encoded PDF data
-              const pdfBlob = new Blob([atob(pdfData)], {
-                type: 'application/pdf',
-              });
-              const pdfUrl = URL.createObjectURL(pdfBlob);
-              const link = document.createElement('a');
-              link.href = pdfUrl;
-              link.download =
-                data.name != 'undefined' ? `${data.name}` : 'report.pdf'; // specify the filename for the downloaded PDF
-
-              // Append the link to the body
-              document.body.appendChild(link);
-
-              // Programmatically click the link to start the download
-              link.click();
-
-              // Remove the link when done
-              document.body.removeChild(link);
-              setSubmitting(false);
-              clearInterval(intervalId);
-            }
-          }
-        }, 5000);
+      if (data.status === 'success' || data.status === 'requested') {
+        setStartPolling(true);
       }
     } catch (error) {
       console.error('Error requesting report:', error);
+      handleError('An error occurred while requesting the report.');
+    } finally {
+      requestSentRef.current = false;
     }
   };
 
-  const verifyAddress = async (address: string) => {
-    const response = await fetch(`/api/token/check?token=${address}`);
-    const res = await response.json();
-    console.log(res);
-    return res.data;
+  const handleError = (message: string) => {
+    showToast({
+      type: 'error',
+      message: 'Error',
+      description: message,
+    });
+    setSubmitting(false);
   };
 
-  const handleSubmit = async () => {
-    // e.preventDefault();
-    if (!requestAddress) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Please enter a valid contract address',
-      });
+  const downloadReport = (data: any) => {
+    if (downloadInitiatedRef.current) {
       return;
     }
-    if (requestAddress.slice(0, 2) !== '0x') {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Please enter a valid contract address',
-      });
-      return;
-    }
-    const verify = await verifyAddress(requestAddress);
-    console.log(verify);
-    if (!verify) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Please enter a valid contract address',
-      });
-      return;
-    }
-    setOpen(true);
-  };
-  const [addressState, setAddressState] = useState('');
 
-  const [showModal, setShowModal] = useState(false);
-  useEffect(() => {
-    async function getuser() {
-      const response = await fetch('/api/profile');
-      const data = await response.json();
-      if (data.user) {
-        setUser(data.user);
-        return data.user;
-      }
-    }
-    getuser();
-  }, []);
+    downloadInitiatedRef.current = true;
 
-  const handleOutsideClick = (event: MouseEvent) => {
-    const modal = document.querySelector('.modal'); // Adjust the selector based on your modal structure
-    setOpen(false);
-    if (modal && !modal.contains(event.target as Node)) {
-      setShowModal(false);
+    const pdfData = data.report;
+
+    showToast({
+      type: 'success',
+      message: 'Success',
+      description: 'Your report has been downloaded.',
+    });
+
+    const byteCharacters = atob(pdfData);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download =
+      data.name && data.name !== 'undefined'
+        ? `${data.name}.pdf`
+        : 'report.pdf';
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(pdfUrl);
+
+    downloadInitiatedRef.current = false;
+
+    setSubmitting(false);
   };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     const modal = document.querySelector('.modal');
+  //     if (modal && !modal.contains(event.target as Node)) {
+  //       setShowModal(false);
+  //     }
+  //   };
 
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
+  //   useEffect(() => {
+  //     document.addEventListener('mousedown', handleOutsideClick);
+
+  //     return () => {
+  //       document.removeEventListener('mousedown', handleOutsideClick);
+  //     };
+  //   }, []);
+
   return (
     <div className="min-h-screen w-full">
       <div
@@ -222,55 +209,91 @@ const RequestReportPage = (props: Props) => {
             placeholder="Token address"
             className="border-0 bg-transparent px-2 border-r border-r-zinc-700 flex-1 outline-none"
             value={requestAddress}
+            disabled={submitting}
             onChange={e => {
               setRequestAddress(e.target.value);
             }}
           />
-          <PaymentDialog
-            service="report"
-            balance={balance}
-            handlePayment={handlePayment}
-            open={open}
-            DummyElement={
-              <button
-                type="submit"
-                disabled={submitting || balance == null || addressState !== ''}
-                className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1"
-                onClick={() => {
-                  if (addressState !== '') {
-                    toast({
-                      variant: 'destructive',
-                      title: 'Error',
-                      description: 'Please enter a valid contract address',
-                    });
-                  } else {
-                    handleSubmit();
-                  }
-                }}
-              >
-                {submitting ? (
-                  <ScaleLoader width={6} height={12} color="white" />
-                ) : (
-                  <>
-                    <Image
-                      src="/icons/nav/reports.svg"
-                      alt="report-icon"
-                      width={16}
-                      height={16}
-                      style={{
-                        filter: 'invert(100%) brightness(1000%) contrast(100%)',
-                      }}
-                    />
-                    <p className="text-[16px] font-[500] text-zinc-50">
-                      Generate Report
-                    </p>
-                  </>
-                )}
-              </button>
-            }
-          />
+
+          <button
+            className="bg-[#0E76FD] p-2 flex items-center justify-center gap-1 w-[200px]"
+            // disabled={submitting || isCheckingAddress}
+
+            // onClick={() => requestReport(tokenState?.tokenAddress)}
+          >
+            <PaymentDialog
+              service="report"
+              address={requestAddress}
+              onPrep={async () => {
+                console.log(`onPrep check`);
+                const isValid = await checkAddress(requestAddress);
+                if (!isValid) {
+                  setIsAddressValid(false);
+                  return false;
+                } else {
+                  setIsAddressValid(true);
+                  return true;
+                }
+              }}
+              UnlockedElement={
+                <div className="flex flex-row w-full items-center justify-center">
+                  {submitting ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                      <p className="text-[16px] font-[500] text-zinc-50">
+                        Generating
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <Image
+                        src="/icons/nav/reports.svg"
+                        alt="report-icon"
+                        className="mr-2"
+                        width={16}
+                        height={16}
+                        style={{
+                          filter:
+                            'invert(100%) brightness(1000%) contrast(100%)',
+                        }}
+                      />
+                      <p className="text-[16px] font-[500] text-zinc-50">
+                        Generate Report
+                      </p>
+                    </>
+                  )}
+                </div>
+              }
+              LockedElement={
+                <div className="flex flex-row items-center">
+                  <Lock className="mr-2 w-5 h-5" />
+                  <p className="text-[16px] font-[500] text-zinc-50">
+                    Generate Report
+                  </p>
+                </div>
+              }
+              onSuccess={() => requestNewReport(requestAddress)}
+            />
+          </button>
         </div>
       </div>
+      {submitting && (
+        <Alert className="m-2 w-1/4 m-auto mb-3">
+          <InfoCircledIcon className="h-4 w-4" />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription className="space-y-2">
+            <p>
+              Your report is now being generated. It will automatically download
+              once it&apos;s ready.
+            </p>
+            <p>
+              <strong>Important:</strong> It may take up to 5 minutes to
+              generate your report. Your patience is appreciated.
+            </p>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Request Section */}
       <div className="flex flex-col items-center justify-center gap-6">
         <Link
@@ -280,29 +303,11 @@ const RequestReportPage = (props: Props) => {
           View All Reports
         </Link>
         <div className="w-[80%]">
-          {user ? (
-            <ReportsTable
-              tablehead={tablehead}
-              setShowModal={setShowModal}
-              setTokenState={setTokenState}
-              tokenState={tokenState}
-              user_id={user.id}
-            />
-          ) : (
-            <>
-              <div className="w-[full] flex justify-center items-center flex-col my-4">
-                <Image
-                  src="/icons/no-data.svg"
-                  alt="no-data"
-                  width={155}
-                  height={150}
-                />
-                <p className="text-zinc-400 text-[12px] text-[400]">
-                  Log in to see your reports
-                </p>
-              </div>
-            </>
-          )}
+          <ReportsTable
+            setShowModal={setShowModal}
+            setTokenState={setTokenState}
+            tokenState={tokenState}
+          />
         </div>
       </div>
       {showModal && (

@@ -15,6 +15,11 @@ async function worker() {
     .select('*')
     .or('status.eq.pending,status.eq.partial');
 
+  if (error_req) {
+    // console.log('No requests found');
+    return;
+  }
+
   for (const row of auditRequests) {
     const address = row.contract;
     let source_code = '';
@@ -107,7 +112,7 @@ const runWorker = async () => {
     } catch (e) {
       console.log(e);
     }
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
   }
 };
 

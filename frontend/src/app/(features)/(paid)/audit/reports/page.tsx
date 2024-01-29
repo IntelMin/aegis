@@ -6,10 +6,6 @@ import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {
-  // tableData,
-  tablehead,
-} from '@/components/reports/constant';
 type tokenState = {
   tokenIcon: string;
   tokenName: string;
@@ -58,7 +54,6 @@ const ReportsPage = () => {
           </Link>
         </div>
         <ReportsTable
-          tablehead={tablehead}
           setShowModal={setShowModal}
           setTokenState={setTokenState}
           tokenState={tokenState}

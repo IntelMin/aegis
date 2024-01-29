@@ -30,6 +30,7 @@ async function loadData(directory) {
 
   // date
   const currentDate = new Date();
+  const unixTimestamp = Math.floor(currentDate.getTime() / 1000);
   const options = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = currentDate.toLocaleDateString('en-US', options);
   const contractAddress = Object.keys(data.security.result)[0];
@@ -39,6 +40,7 @@ async function loadData(directory) {
   data.source.source_code = flattenSourcecode(data.source);
   data.extra = {
     currentDate: formattedDate,
+    unixTimestamp: unixTimestamp,
   };
 
   return data;
