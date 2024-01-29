@@ -115,7 +115,10 @@ router.get('/status/:address', async (req, res) => {
   return res.status(200).send({
     status: statusResponse,
     progress: getProgress(address),
-    eta: await getEta(address),
+    eta:
+      statusResponse === AUDIT_STATUS_RETURN_CODE.notRequested
+        ? 3 * 60
+        : await getEta(address),
   });
 });
 

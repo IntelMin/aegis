@@ -1,20 +1,26 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { tableData, tablehead } from '@/components/reports/constant';
+import { tablehead } from '@/components/reports/constant';
 import { Modal } from '@/components/reports/modal';
 import { ReportsTable } from '@/components/reports/table';
 import { toast } from '@/components/ui/use-toast';
 import usePayment from '@/hooks/usePayment';
-import useTokenInfo from '@/hooks/useTokenInfo';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import useBalance from '@/hooks/useBalance';
 import PaymentDialog from '@/components/payment-dialog';
-import { add, set } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogClose,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 type Props = {};
 type tokenState = {
@@ -56,6 +62,7 @@ const RequestReportPage = (props: Props) => {
       setOpen(false);
     },
   });
+  const [openAuditModal, setOpenAuditModal] = useState(false);
 
   const requestNewReport = async (address: string) => {
     const contractAddress = address;
@@ -157,6 +164,9 @@ const RequestReportPage = (props: Props) => {
       });
       return;
     }
+
+    setSubmitting(true);
+
     const verify = await verifyAddress(requestAddress);
     console.log(verify);
     if (!verify) {
@@ -167,7 +177,24 @@ const RequestReportPage = (props: Props) => {
       });
       return;
     }
-    setOpen(true);
+
+    const { status } = await fetch('/api/audit/status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'audit_status',
+        address: requestAddress,
+      }),
+    }).then(res => res.json());
+
+    setSubmitting(false);
+
+    if (status === 2) {
+      // complete
+      setOpen(true);
+    } else {
+      setOpenAuditModal(true);
+    }
   };
   const [addressState, setAddressState] = useState('');
 
@@ -214,6 +241,20 @@ const RequestReportPage = (props: Props) => {
           Request Audit Report
         </h1>
       </div>
+      <Dialog open={openAuditModal} onOpenChange={setOpenAuditModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              The token has not been audited. Audit the token first.
+            </DialogTitle>
+          </DialogHeader>
+          <DialogClose>
+            <Link href={`/audit/token/${requestAddress}/detailed`}>
+              <Button>Go to audit</Button>
+            </Link>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
       {/* Input Section */}
       <div className="flex items-center justify-center -translate-y-1/2">
         <div className="w-[590px] flex items-center bg-zinc-900 p-3 border border-zinc-700 gap-3">
