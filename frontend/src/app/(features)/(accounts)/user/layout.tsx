@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PersonIcon, ArchiveIcon, ReaderIcon } from '@radix-ui/react-icons';
 import { useSession } from 'next-auth/react';
+import useBalance from '@/hooks/useBalance';
 import Image from 'next/image';
 import CountUp from 'react-countup';
 
@@ -15,24 +16,7 @@ export default function UserProfileLayout({
 }) {
   const session = useSession();
   const pathname = usePathname();
-  const [balance, setBalance] = React.useState<number>(0);
-
-  useEffect(() => {
-    const getBalance = async () => {
-      console.log(session?.data?.user?.email);
-      const res = await fetch('/api/credit/balance', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: session?.data?.user?.email,
-        }),
-      });
-      const data = await res.json();
-      setBalance(data?.balance);
-    };
-    if (session?.data?.user?.email) {
-      getBalance();
-    }
-  }, [session?.data?.user?.email]);
+  const { balance, isFetchingBalance } = useBalance();
 
   return (
     <div className="p-8 w-full md:max-w-[75%] m-auto">
@@ -59,14 +43,18 @@ export default function UserProfileLayout({
           >
             <Image src="/icons/credits.svg" alt="" width={131} height={100} />
             <p className="text-zinc-50 font-[600] text-3xl">
-              <CountUp
-                start={0}
-                end={balance}
-                duration={2.5}
-                separator=","
-                decimals={0}
-                decimal="."
-              />
+              {!isFetchingBalance ? (
+                <CountUp
+                  start={0}
+                  end={balance ? balance : 0}
+                  duration={2.5}
+                  separator=","
+                  decimals={0}
+                  decimal="."
+                />
+              ) : (
+                <>...</>
+              )}
             </p>
             <p className="text-zinc-400 font-[400] text-sm">Credit Balance</p>
           </div>
