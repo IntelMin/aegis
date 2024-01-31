@@ -33,31 +33,33 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
   const router = useRouter();
   const [audit_data, setAuditData] = React.useState<auditDataType[]>([]);
   const [loading, setLoading] = React.useState(false);
+
   useEffect(() => {
     async function fetchData() {
-      if (data.length === 0) return;
-      if (code) return;
-      setLoading(true);
-      const _audit_data: auditDataType[] = [];
-      const r = data.forEach(async item => {
-        if (item.address === null) return;
-        const res = await fetch(
-          `/api/token/info?address=${item.address}&type=meta`
-        );
-        const data = await res.json();
-        _audit_data.push({
-          address: item.address,
-          created_at: item.created_at,
+      if (data.length === 0 || code) return;
 
-          symbol: data.symbol,
-          imageSmallUrl: data.imageSmallUrl,
-        });
+      setLoading(true);
+
+      const fetchPromises = data.map(item => {
+        if (item.address === null) return null;
+        return fetch(`/api/token/info?address=${item.address}&type=meta`)
+          .then(res => res.json())
+          .then(fetchedData => ({
+            address: item.address,
+            created_at: item.created_at,
+            symbol: fetchedData.symbol,
+            imageSmallUrl: fetchedData.imageSmallUrl,
+          }));
       });
-      setAuditData(_audit_data);
-      setLoading(false);
+
+      Promise.all(fetchPromises).then(results => {
+        const filteredResults = results.filter(result => result !== null);
+        setAuditData(filteredResults as auditDataType[]);
+        setLoading(false);
+      });
     }
     fetchData();
-  }, [data]);
+  }, [data, code]);
 
   if (loading)
     return (
@@ -67,13 +69,11 @@ export const AuditTableBody = ({ data, code, type }: Props) => {
         </TableCell>
       </TableBody>
     );
+
   return (
     <TableBody>
-      {audit_data.length == 0 ? (
-        <EmptyRow
-          col={code ? 2 : 3}
-          message="Detailed Audits don't appear currently"
-        />
+      {audit_data.length === 0 ? (
+        <EmptyRow col={3} message="No detail audits performed yet" />
       ) : (
         audit_data.map((item, index: number) => (
           <TableRow

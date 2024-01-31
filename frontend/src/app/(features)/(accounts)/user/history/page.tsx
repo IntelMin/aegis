@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiChevronDown } from 'react-icons/bi';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { ReportTableBody } from '@/components/history/report';
@@ -18,90 +18,75 @@ type typeconfig = {
   quick: string;
 };
 const UserAccountTable = () => {
-  const [history, setHistory] = React.useState([]);
-  const [detailed_history, setDetailedHistory] = React.useState([]);
-  const [quick_history, setQuickHistory] = React.useState([]);
-  const [code_history, setCodeHistory] = React.useState([]);
-  const [report_history, setReportHistory] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [type, setType] = React.useState('Reports');
+  const [allAudits, setAllAudits] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState('report');
 
-  const reportsTableHead = ['TOKEN', 'DATE', 'FILE'];
-  const auditTableHead = ['TOKEN', 'DATE', 'VIEW'];
-  const codeAuditTableHead = ['DATE', 'VIEW'];
-
-  const [tableHead, setTableHead] = React.useState(reportsTableHead);
-
-  const renderTableBody = () => {
-    switch (type) {
-      case 'Reports':
-        return <ReportTableBody data={report_history} />;
-      case 'Detailed Audit':
-        return <AuditTableBody data={detailed_history} type="detailed" />;
-      case 'Quick Audit':
-        return <AuditTableBody data={quick_history} type="quick" />;
-      case 'Code Audit':
-        return <AuditTableBody data={code_history} code />;
-      default:
-        break;
-    }
+  const tableHeads = {
+    report: ['TOKEN', 'DATE', 'FILE'],
+    detailed: ['TOKEN', 'DATE', 'VIEW'],
+    quick: ['TOKEN', 'DATE', 'VIEW'],
+    code: ['DATE', 'VIEW'],
   };
-  const handleTableTypeChange = (value: string) => {
-    setType(value);
-    if (value === 'Reports') setTableHead(reportsTableHead);
-    if (value === 'Detailed Audit') setTableHead(auditTableHead);
-    if (value === 'Quick Audit') setTableHead(auditTableHead);
-    if (value === 'Code Audit') setTableHead(codeAuditTableHead);
-    console.log(value);
+
+  const Typeconfig: any = {
+    detailed: 'Detailed Audit',
+    code: 'Code Audit',
+    report: 'Reports',
+    quick: 'Quick Audit',
   };
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-
-      const paid_audits = await fetch('/api/credit/paidaudit');
-      const paid_audits_json = await paid_audits.json();
-
-      if (paid_audits_json.paid_audits.length > 0) {
-        setDetailedHistory(
-          paid_audits_json.paid_audits.filter(
-            (item: any) => item.type == 'detailed'
-          )
-        );
-        setQuickHistory(
-          paid_audits_json.paid_audits.filter(
-            (item: any) => item.type == 'quick'
-          )
-        );
-        setCodeHistory(
-          paid_audits_json.paid_audits.filter(
-            (item: any) => item.type == 'code'
-          )
-        );
-        setReportHistory(
-          paid_audits_json.paid_audits.filter(
-            (item: any) => item.type == 'report'
-          )
-        );
+      try {
+        const response = await fetch('/api/credit/paid');
+        const data = await response.json();
+        console.log(`paid audits: ${data.paid_audits}`);
+        setAllAudits(data.paid_audits || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-
       setLoading(false);
     }
     fetchData();
   }, []);
 
+  const filteredAudits = () => {
+    return allAudits.filter(
+      (audit: any) => audit.type === type.toLowerCase().trim()
+    );
+  };
+
+  const renderTableBody = () => {
+    const data = filteredAudits();
+    switch (type) {
+      case 'report':
+        console.log(`report data: ${data}`);
+        return <ReportTableBody data={data} />;
+      case 'detailed':
+        return <AuditTableBody data={data} type="detailed" />;
+      case 'quick':
+        return <AuditTableBody data={data} type="quick" />;
+      case 'code':
+        return <AuditTableBody data={data} code />;
+      default:
+        return null;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-full">
-        <Loader className="w-6 h-6 text-blue-400" />
+        <Loader className="w-6 h-6 text-blue-400 animate-spin" />
       </div>
     );
   }
-  const Typeconfig: typeconfig = {
-    detailed: 'Detailed audit',
-    code: 'Code audit',
-    report: 'Report generation',
-    quick: 'Quick audit',
+
+  const handleTableTypeChange = (value: string) => {
+    setType(value);
   };
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex max-md:flex-col max-md:mb-6 gap-4 items-start justify-between">
@@ -112,24 +97,24 @@ const UserAccountTable = () => {
         <Select onValueChange={handleTableTypeChange}>
           <SelectTrigger className="max-md:w-full outline-none">
             <div className="flex items-center gap-6 justify-between text-sm pl-3">
-              {type}
+              {Typeconfig[type]}
               <BiChevronDown className="text-neutral-400 text-[28px]" />
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Reports">Reports</SelectItem>
-            <SelectItem value="Detailed Audit">Detailed Audit</SelectItem>
-            <SelectItem value="Quick Audit">Quick Audit</SelectItem>
-            <SelectItem value="Code Audit">Code Audit</SelectItem>
+            <SelectItem value="report">Reports</SelectItem>
+            <SelectItem value="detailed">Detailed Audit</SelectItem>
+            <SelectItem value="quick">Quick Audit</SelectItem>
+            <SelectItem value="code">Code Audit</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <Table className="p-3 border border-zinc-800 w-full">
         <TableHeader className="">
           <TableRow>
-            {tableHead.map((item, i) => (
+            {tableHeads[type as keyof typeof tableHeads]?.map((item, index) => (
               <TableHead
-                key={i}
+                key={index}
                 className="py-4 px-4 text-neutral-400 text-[11px] font-[500] uppercase text-center"
               >
                 {item}
