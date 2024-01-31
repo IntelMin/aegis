@@ -7,7 +7,7 @@ import { formatTime } from '@/utils/format-time';
 import { Skeleton } from '../ui/skeleton';
 import { toast } from '../ui/use-toast';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-import { Table } from 'lucide-react';
+import { Loader, Table } from 'lucide-react';
 import { EmptyRow } from './empty-row';
 
 type Historytype = {
@@ -32,12 +32,14 @@ export const ReportTableBody = ({ data }: Props) => {
   const [audit_data, setAuditData] = React.useState<auditDataType[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+
   const requestReport = async (address: string) => {
     setSubmitting(true);
     const response = await fetch(`/api/audit/report?address=${address}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (response.status === 404) {
       toast({
         variant: 'destructive',
@@ -87,64 +89,75 @@ export const ReportTableBody = ({ data }: Props) => {
       }
     }
   };
+
   useEffect(() => {
     async function fetchData() {
       if (data.length === 0) return;
-      setLoading(true);
-      const _audit_data: auditDataType[] = [];
-      const r = data.forEach(async item => {
-        if (item.address === null) return;
-        const res = await fetch(
-          `/api/token/info?address=${item.address}&type=meta`
-        );
-        const data = await res.json();
-        _audit_data.push({
-          address: item.address,
-          created_at: item.created_at,
 
-          symbol: data.symbol,
-          imageSmallUrl: data.imageSmallUrl,
-        });
+      console.log(`----report data: ${JSON.stringify(data)}`);
+      setLoading(true);
+
+      const fetchPromises = data
+        .filter(item => item.address !== null)
+        .map(item =>
+          fetch(`/api/token/info?address=${item.address}&type=meta`)
+            .then(res => res.json())
+            .then(fetchedData => ({
+              address: item.address as string,
+              created_at: item.created_at,
+              symbol: fetchedData.symbol,
+              imageSmallUrl: fetchedData.imageSmallUrl,
+            }))
+        );
+
+      Promise.all(fetchPromises).then(results => {
+        const sortedResults = results.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setAuditData(sortedResults as auditDataType[]);
+        setLoading(false);
       });
-      setAuditData(_audit_data);
-      setLoading(false);
     }
     fetchData();
   }, [data]);
 
+  if (loading)
+    return (
+      <TableBody>
+        <TableCell colSpan={3}>
+          <Loader className="w-full h-[30px] animate-spin" />
+        </TableCell>
+      </TableBody>
+    );
+
   return (
     <TableBody>
-      {audit_data.length == 0 ? (
-        <EmptyRow col={3} message="Reports don't appear currently" />
+      {audit_data.length === 0 ? (
+        <EmptyRow col={3} message="No reports generated yet" />
       ) : (
         audit_data.map((item, index: number) => (
           <TableRow
             className="items-center bg-zinc-900 border-b border-zinc-800 "
             key={index}
           >
-            {loading ? (
-              <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
-                <Skeleton className="w-full h-[20px]" />
-              </TableCell>
-            ) : (
-              <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
-                <Image
-                  src={
-                    item.imageSmallUrl
-                      ? `/api/token/image?q=${item.imageSmallUrl
-                          .split('/')
-                          .pop()}`
-                      : '/icons/token-default.svg'
-                  }
-                  alt="token-svg"
-                  width={24}
-                  height={24}
-                />
-                <p className="text-zinc-100 text-[12px] font-[400]">
-                  ${item.symbol ? item.symbol : 'N/A'}
-                </p>
-              </TableCell>
-            )}{' '}
+            <TableCell className="py-4 px-4 flex items-center justify-center gap-2 text-center">
+              <Image
+                src={
+                  item.imageSmallUrl
+                    ? `/api/token/image?q=${item.imageSmallUrl
+                        .split('/')
+                        .pop()}`
+                    : '/icons/token-default.svg'
+                }
+                alt="token-svg"
+                width={24}
+                height={24}
+              />
+              <p className="text-zinc-100 text-[12px] font-[400]">
+                {item.symbol ? item.symbol : 'N/A'}
+              </p>
+            </TableCell>
             <TableCell className="py-2 px-4 text-neutral-100 text-center min-w-[180px]">
               {formatDate(item.created_at) + ' ' + formatTime(item.created_at)}
             </TableCell>
