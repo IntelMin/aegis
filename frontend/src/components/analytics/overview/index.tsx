@@ -14,13 +14,27 @@ const TokenDetailOverView = ({
   liveData,
 }: any) => {
   const { explorerData, socialLinks } = tokenMetaData || {};
+
+  const processDescription = (description: string) => {
+    const questionRegex = /[^\.!\?]*\?/g;
+
+    const sanitizedDescription = description.replace(questionRegex, '');
+    const sentences = sanitizedDescription.match(/[^\.!\?]+[\.!\?]+/g) || [];
+
+    const result = sentences.slice(0, 3).join(' ');
+
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Token Description */}
       <div>
         {explorerData ? (
-          <p className="text-neutral-400 text-[12px] leading-relaxed tracking-wide">
-            {explorerData?.description || ''}
+          <p className="text-neutral-400 text-xs leading-relaxed tracking-wide">
+            {explorerData?.description
+              ? processDescription(explorerData.description)
+              : ''}
           </p>
         ) : (
           <>
