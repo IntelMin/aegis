@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, use } from 'react';
 import Link from 'next/link';
 import {
   Dialog,
@@ -40,6 +40,7 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({
   const [status, setStatus] = useState('loading'); // 'loading', 'locked', 'unlocked'
   const { balance, isFetchingBalance } = useBalance();
   const [isProcessing, setIsProcessing] = useState(false);
+
   const {
     fetchPaidStatus,
     handlePayment,
@@ -79,7 +80,12 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({
     }
 
     setStatus('loading');
-
+    if (hasPaid && status === 'loading') {
+      setStatus('unlocked');
+      setIsProcessing(false);
+      onSuccess?.();
+      return;
+    }
     const shouldProceed = await onPrep?.();
     if (!shouldProceed) {
       setIsDialogOpen(false);
@@ -100,9 +106,24 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({
       // }
     }
 
+    if (status === 'unlocked') {
+      onSuccess?.();
+    }
+
     // setStatus('unlocked');
     // onSuccess?.();
   };
+  useEffect(() => {
+    if (!hasPaid && isFetchingPaid) {
+      setStatus('locked');
+      setIsProcessing(false);
+    }
+  }, [isDialogOpen]);
+  console.log('hasPaid', hasPaid);
+  console.log('status', status);
+  console.log('isProcessing', isProcessing);
+  console.log('isFetchingPaid', isFetchingPaid);
+  console.log('isFetchingBalance', isFetchingBalance);
 
   useEffect(() => {
     if (!isProcessing) return;
@@ -119,7 +140,16 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({
       setIsProcessing(false);
     };
   }, [hasPaid, isProcessing]);
-
+  useEffect(() => {
+    if (status === 'loading') {
+      if (hasPaid && !isFetchingPaid && !isProcessing) {
+        setStatus('unlocked');
+      }
+    }
+    if (!hasPaid && !isFetchingPaid && isProcessing) {
+      setIsProcessing(false);
+    }
+  }, [status, isProcessing, isFetchingPaid, isFetchingBalance, hasPaid]);
   const renderTriggerElement = () => {
     switch (status) {
       case 'loading':
