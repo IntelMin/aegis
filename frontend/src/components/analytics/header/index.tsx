@@ -37,9 +37,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
               <Image
                 src={
                   metadata?.imageSmallUrl
-                    ? `/api/token/image?q=${metadata.imageSmallUrl
-                        .split('/')
-                        .pop()}`
+                    ? `/api/token/image?q=${metadata.imageSmallUrl}`
                     : `/icons/token-default.svg`
                 }
                 alt="token"

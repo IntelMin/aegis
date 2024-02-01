@@ -166,9 +166,7 @@ const AuditDetail: React.FC<AuditDetailProps> = ({ contractAddress }) => {
               <Image
                 src={
                   metaData.imageSmallUrl
-                    ? `/api/token/image?q=${metaData.imageSmallUrl
-                        .split('/')
-                        .pop()}`
+                    ? `/api/token/image?q=${metaData.imageSmallUrl}`
                     : `/icons/token-default.svg`
                 }
                 alt="token-icon"
