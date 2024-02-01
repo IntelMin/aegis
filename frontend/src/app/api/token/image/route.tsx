@@ -8,9 +8,11 @@ export async function GET(req: NextRequest) {
     return new Response('Image query parameter is missing', { status: 400 });
   }
 
-  const fullImageUrl = `https://token-media.defined.fi/${decodeURIComponent(
-    img
-  )}`;
+  //   const fullImageUrl = `https://token-media.defined.fi/${decodeURIComponent(
+  //     img
+  //   )}`;
+
+  const fullImageUrl = img;
 
   try {
     const imageRes = await fetch(fullImageUrl);

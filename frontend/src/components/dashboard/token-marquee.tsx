@@ -8,7 +8,7 @@ const TokenMarquee = ({ marqueeData }: any) => {
       <img
         src={
           token.imageSmallUrl
-            ? `/api/token/image?q=${token.imageSmallUrl.split('/').pop()}`
+            ? `/api/token/image?q=${token.imageSmallUrl}`
             : `/icons/token-default.svg`
         }
         alt={token.newToken}
