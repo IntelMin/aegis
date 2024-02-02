@@ -118,7 +118,7 @@ const Monitor = React.forwardRef(function MonitorComponent(
         ) {
           setLineData([
             <TerminalOutput key={key}>
-              <pre>
+              <pre className="whitespace-break-spaces break-all">
                 {formatAddressForDisplay(d.data.hash)}
                 {'\n'}
                 {'├── FROM    '}
@@ -341,6 +341,17 @@ const Monitor = React.forwardRef(function MonitorComponent(
 
   return (
     <div className="md:pl-4 md:pr-4 max-md:w-screen">
+      <div className="flex flex-row p-2 border-b border-zinc-800 bg-[#131313] h-[44px] max-md:hidden">
+        <div className="max-md:hidden text-left pl-1">
+          <h1 className="text-md font-bold text-zinc-500 mix-blend-difference font-mono">
+            Terminal
+          </h1>
+        </div>
+        <div className="w-full mr-2">
+          <div className="h-[50%] w-full border-b border-zinc-800 ml-2"></div>
+        </div>
+      </div>
+
       <Terminal
         ref={terminalRef}
         name="Watchdog Terminal"

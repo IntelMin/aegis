@@ -209,7 +209,7 @@ const Terminal = forwardRef(function TerminalComponent(
     >
       {/* Terminal Output Section */}
       <div
-        className={`react-terminal-output border h-[calc(100vh-240px)] md:h-[${height}] border-zinc-900 p-6 text-sm overflow-hidden overflow-y-scroll pb-10 text-[#aaaaaa] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900`}
+        className={`react-terminal-output border h-[calc(100vh-217px)] md:h-[${height}] border-zinc-900 p-6 text-sm overflow-hidden overflow-y-scroll pb-10 text-[#aaaaaa] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900`}
         // style={{ height }}
       >
         {displayedOutputs}

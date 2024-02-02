@@ -95,45 +95,47 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
   }, [settings.active, socket]);
 
   return (
-    <div className=" w-full">
+    <>
       <Sections
         sectionsArr={sectionsArr}
         setShowSection={setShowSection}
         showSection={showSection}
       />
-      <div className="justify-center items-center w-full">
-        <div className="max-md:hidden p-4 text-center text-2xl">
-          <h1 className="text-4xl text-zinc-500 mix-blend-difference">
-            Live{' '}
-            <span
-              style={{
-                outline: 'none',
-                background: 'url(/backgrounds/watchdog.webp)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'top center',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-              }}
-              className="text-transparent font-bold text-zinc-200"
-            >
-              Watchdog
-            </span>
-          </h1>
-        </div>
-      </div>
-      <div className={`flex justify-center items-stretch max-md:py-4 md:p-4`}>
-        <div
-          className={`${
-            showSection === 'status' ? 'flex' : 'max-md:hidden'
-          } flex-none w-full md:w-1/6 border border-zinc-800`}
-        >
-          <BlockStatus ref={statusRef} settings={settings} />
-        </div>
-        <div className="max-md:flex md:flex-grow max-md:overflow-x-hidden w-screen md:w-1/2 monitor">
+      <div className="flex flex-col h-[calc(100vh-88px)] max-w-[1530px] m-auto">
+        <div className="flex-grow flex justify-center items-stretch md:p-4 overflow-hidden">
+          <div
+            className={`${
+              showSection === 'status' ? 'flex' : 'max-md:hidden'
+            } flex-none w-full md:w-1/6 border border-zinc-800 overflow-auto`}
+          >
+            <div className="flex flex-row p-2 border-b border-zinc-800 bg-[#131313] h-[44px] max-md:hidden ">
+              <div className="text-left pl-1">
+                <h1 className="text-md text-zinc-500 mix-blend-difference font-mono">
+                  <span
+                    style={{
+                      outline: 'none',
+                      background: 'url(/backgrounds/watchdog.webp)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'top center',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                    }}
+                    className="text-transparent font-bold text-zinc-200"
+                  >
+                    Watchdog
+                  </span>
+                </h1>
+              </div>
+              <div className="w-full mr-2 ">
+                <div className="h-[50%] w-full border-b border-zinc-800 ml-2"></div>
+              </div>
+            </div>
+            <BlockStatus ref={statusRef} settings={settings} />
+          </div>
           <div
             className={` ${
               showSection === 'monitor' ? 'flex-grow' : 'max-md:hidden'
-            }`}
+            } flex-grow max-md:flex md:flex-grow max-md:overflow-x-hidden overflow-auto`}
           >
             <Monitor
               ref={monitorRef}
@@ -142,17 +144,26 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
               onClear={() => anomalyRef.current?.clear?.()}
             />
           </div>
-        </div>
-
-        <div
-          className={`${
-            showSection === 'anomalies' ? '' : 'max-md:hidden'
-          } flex-none w-full md:w-1/4 border border-zinc-800 max-md:min-h-[500px] p-2 bg-zinc-900`}
-        >
-          <Anomaly ref={anomalyRef} settings={settings} />
+          <div
+            className={`${
+              showSection === 'anomalies' ? '' : 'max-md:hidden'
+            } flex-none w-full md:w-1/4 border border-zinc-800 bg-zinc-900 overflow-auto`}
+          >
+            <div className="flex flex-row p-2 border-b border-zinc-800 bg-zinc-900 h-[44px]">
+              <div className="max-md:hidden text-left pl-1 max-md:hidden">
+                <h1 className="text-md font-bold text-zinc-500 mix-blend-difference font-mono">
+                  Anomalies
+                </h1>
+              </div>
+              <div className="w-full mr-2">
+                <div className="h-[50%] w-full border-b border-zinc-800 ml-2"></div>
+              </div>
+            </div>
+            <Anomaly ref={anomalyRef} settings={settings} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

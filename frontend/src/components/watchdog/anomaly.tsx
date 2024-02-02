@@ -237,10 +237,9 @@ const Anomaly = React.forwardRef(function AnomalyComponent(
 
   return (
     <div
-      className="flex flex-col w-full p-2 items-center h-[700px] overflow-y-auto"
+      className="flex flex-col w-full p-4 items-center h-[calc(100vh-217px)] overflow-y-auto"
       ref={viewRef}
     >
-      <pre className="w-full text-sm mb-3">Anomalies</pre>
       <div className="space-y-5 w-full">{lineData}</div>
     </div>
   );
