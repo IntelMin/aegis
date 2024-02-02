@@ -6,48 +6,14 @@ const parsec = require('../../lib/third-party/parsec');
 const type_cache = new NodeCache();
 const token_cache = new NodeCache();
 const honeypot_cache = new NodeCache();
+const risk_cache = new NodeCache();
 
-async function processTransactionsFromQueue(transactionQueue, node, io) {
-  const fetchAddress = async address => {
-    const baseUrl =
-      'https://dashboard.misttrack.io/api/v1/address_risk_analysis';
-    const coin = 'ETH';
-
-    const headers = {
-      Accept:
-        'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8',
-      'Cache-Control': 'max-age=0',
-      Cookie:
-        '_bl_uid=65lz9r1d3UjmzUjvqxC9u7Iyj72a; __cuid=bd4d84291f2f4bc39c89755df5480dc9; amp_fef1e8=72a923b6-f48d-4a19-9e16-f96701cc2fe9R...1hji7684b.1hji7hf0i.4.2.6; csrftoken=8MV6Wr2Nv1qy2OcbJtghLfXqicYkCBdZeolgN1j4iUzs6cDeQ95axrWFgbf3wfcE; sessionid=y5nsthwgcololthan7wqoro1h8cok3jk',
-    };
-
-    try {
-      const response = await fetch(
-        `${baseUrl}?coin=${coin}&address=${address}`,
-        {
-          method: 'GET',
-          headers: headers,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      console.log(data);
-
-      return data;
-    } catch (error) {
-      console.error('Error fetching address data:', error);
-      return null;
-      // throw error;
-    }
-  };
-
+async function processTransactionsFromQueue(
+  transactionQueue,
+  addressQueue,
+  node,
+  io
+) {
   const checkType = async address => {
     const cachedResult = type_cache.get(String(address));
     if (cachedResult) {
@@ -130,6 +96,44 @@ async function processTransactionsFromQueue(transactionQueue, node, io) {
     } catch (error) {
       console.error('Error checking for honeypot:', error);
       return null;
+    }
+  };
+
+  const isRisky = async address => {
+    const cachedResult = risk_cache.get(String(address));
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    const baseUrl = `https://openapi.misttrack.io/v1/risk_score?coin=ETH&address=${address}&api_key=Wu2CtDngjSy7FxRZ59OXpzbcMLP6lwB1`;
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(baseUrl, {
+        method: 'GET',
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        console.log('Error fetching risk data:', response);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        risk_cache.set(String(address), data.data);
+        console.log('Risk data:', data.data);
+        return data.data;
+      } else {
+        // console.error('Error fetching risk data:', data);
+        return null;
+      }
+    } catch (error) {
+      //   console.error('Error fetching address data:', error);
+      return null;
+      // throw error;
     }
   };
 
@@ -220,8 +224,10 @@ async function processTransactionsFromQueue(transactionQueue, node, io) {
         }
       }
     } else if (type === 'wallet') {
-      // const risk = await fetchAddress(to);
-      // console.log(risk);
+      addressQueue.push({
+        hash: hash,
+        address: to,
+      });
     }
 
     results.push({

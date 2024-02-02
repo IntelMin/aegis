@@ -3,6 +3,7 @@ const socketIO = require('socket.io');
 const http = require('http');
 const processBlockFromQueue = require('./modules/watchdog/blocks');
 const processTransactionsFromQueue = require('./modules/watchdog/transactions');
+const processAddressFromQueue = require('./modules/watchdog/addresses');
 
 const server = http.createServer();
 const io = socketIO(server, {
@@ -19,12 +20,14 @@ const node = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
 
 const Network = () => {
   const transactionQueue = [];
+  const addressQueue = [];
 
   const load = async () => {
     try {
       console.log('Network loaded. Starting block processing...');
       processBlockFromQueue(transactionQueue, node, io);
-      processTransactionsFromQueue(transactionQueue, node, io);
+      processTransactionsFromQueue(transactionQueue, addressQueue, node, io);
+      processAddressFromQueue(addressQueue, node, io);
     } catch (err) {
       console.error('Error initializing network:', err);
     }

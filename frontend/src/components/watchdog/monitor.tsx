@@ -102,12 +102,12 @@ const Monitor = React.forwardRef(function MonitorComponent(
   };
 
   const updateLog = (data: any) => {
-    console.log(data);
+    // console.log(data);
     // console.log('Updating data: ', data);
     // generate random string for key
     // const key = Math.random().toString(36).substring(7);
     data.forEach((d: any, index: number) => {
-      console.log('Updating data: ', d);
+      //   console.log('Updating data: ', d);
       const key = Math.random().toString(36).substring(7);
       if (d.type === 'tx') {
         if (
@@ -133,6 +133,8 @@ const Monitor = React.forwardRef(function MonitorComponent(
             </TerminalOutput>,
           ]);
         }
+      } else if (d.type == 'risk') {
+        // console.log(d);
       } else {
         setLineData([
           <TerminalOutput key={key}>
