@@ -51,7 +51,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
   };
 
   const updateBlock = (data: any) => {
-    console.log('Updating block');
+    // console.log('Updating block');
 
     if (data.number !== lastBlock) {
       setBlockCount(prevCount => prevCount + 1);
@@ -96,6 +96,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
               {'watchdog not started\n\n'}
               {`TOKEN               ${settings.token ? ' ON' : 'OFF'}\n`}
               {`HONEYPOT            ${settings.honeypot ? ' ON' : 'OFF'}\n`}
+              {`RISK                ${settings.honeypot ? ' ON' : 'OFF'}\n`}
               {settings.address.length > 0 && `ADDRESS              ON\n`}
               {settings.address
                 .map((addr, key) => addr.toLowerCase())

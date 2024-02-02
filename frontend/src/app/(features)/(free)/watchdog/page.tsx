@@ -72,15 +72,15 @@ const Watchdog: FC<WatchdogProps> = ({}) => {
           if (statusRef.current?.updateBlock) {
             statusRef.current.updateBlock(data);
           }
-          console.log('Received block from socket');
+          //   console.log('Received block from socket');
         });
 
         // Handle log updates
         localSocket.on('log', data => {
-          console.log('log received');
+          //   console.log('log received');
           monitorRef.current?.updateLog?.(data);
           anomalyRef.current?.update?.(data);
-          console.log('Received log from socket');
+          //   console.log('Received log from socket');
         });
       }
     } else {
