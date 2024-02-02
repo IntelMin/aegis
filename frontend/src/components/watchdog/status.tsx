@@ -74,7 +74,10 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
 
   return (
     <div className="flex flex-col bg-[#131313] w-full p-4 items-center h-full">
-      <div ref={divRef} className="min-h-[140px] w-full pl-8">
+      <div
+        ref={divRef}
+        className="min-h-[140px] w-full pl-8 mx-auto max-w-[230px] sm:max-w-none mt-5"
+      >
         {isLoaded && blockCount !== 0 ? (
           <>
             <CubeAscii
@@ -89,7 +92,7 @@ const BlockStatus = React.forwardRef(function BlockStatusComponent(
         )}
       </div>
 
-      <div className="font-thin text-sm text-zinc-600 w-full justify-center mt-5">
+      <div className="font-thin text-sm text-zinc-600 w-full justify-center mt-5 mx-auto max-w-[230px] sm:max-w-none">
         <pre className="mb-6 whitespace-pre-wrap break-all">
           {!settings.active ? (
             <>

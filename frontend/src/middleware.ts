@@ -38,9 +38,10 @@ const middleware = withAuth(
 
     if (token) {
       if (!token?.whitelisted && pathname.startsWith('/logout') === false) {
-        console.log('-- not whitelisted, redirecting to pending');
-        const pending = new URL('/pending', request.nextUrl.origin);
-        return NextResponse.redirect(pending.toString());
+        return NextResponse.next();
+        // console.log('-- not whitelisted, redirecting to pending');
+        // const pending = new URL('/pending', request.nextUrl.origin);
+        // return NextResponse.redirect(pending.toString());
       } else {
         return NextResponse.next();
       }
