@@ -30,6 +30,7 @@ import { set } from 'zod';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import dynamic from 'next/dynamic';
 import { showToast } from '@/components/toast';
+import { useTransactionStatus } from '@/hooks/useTransactionStatus';
 
 const ConnectButton = dynamic(
   () => import('@/components/payment/connect-wallet'),
@@ -82,7 +83,7 @@ const PricingCard = ({
 }: PricingCardProps) => {
   const { address, isConnected } = useAccount();
   const [dialogOpen, setDialogOpen] = useState(false);
-  console.log({ closeDialog });
+
   useEffect(() => {
     if (closeDialog) {
       console.log('close dialog');
@@ -243,9 +244,8 @@ export default function PricingPage() {
   const ETH_TO_WEI = BigInt(10 ** 18);
   const [txhash, setTxhash] = useState('0x' as `0x${string}`);
   const [submitting, setSubmitting] = useState(false);
-  const { data: txn_receipt, status } = useWaitForTransaction({
-    hash: txhash,
-  });
+
+  const { transactionData, isTransactionError: status } = useTransactionStatus(txhash);
 
   const [closeDialog, setCloseDialog] = useState(false);
 
@@ -258,7 +258,7 @@ export default function PricingPage() {
     },
   });
   useEffect(() => {
-    if (status === 'loading' || status === 'idle') {
+    if (status === 'loading' || status === 'idle' || txhash === '0x') {
       return;
     }
     async function addCredits() {
@@ -293,9 +293,8 @@ export default function PricingPage() {
       session.update({ ...session.data, credits: data?.balance });
       setSubmitting(false);
     }
-    console.log(txhash);
+
     if (submitting && status === 'success') {
-      console.log(txn_receipt);
       console.log('success');
 
       addCredits();
@@ -316,6 +315,7 @@ export default function PricingPage() {
     }
     setCloseDialog(false);
   }, [status, submitting, txhash]);
+
   useEffect(() => {
     const getBalance = async () => {
       console.log(session?.data?.user?.email);
