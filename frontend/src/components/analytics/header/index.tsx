@@ -29,7 +29,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
   };
 
   return (
-    <div className="container p-0">
+    <div className="">
       <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
         <div
           className={`${
