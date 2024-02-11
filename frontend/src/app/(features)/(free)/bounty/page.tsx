@@ -41,7 +41,7 @@ const categoryList = [
 type Props = {};
 
 const Bounty = (props: Props) => {
-  const [isPaid, setIsPaid] = useState(false);
+  const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
   const [name, setName] = useState('');
   const [platform, setPlatform] = useState<string | undefined>();
   const [language, setLanguage] = useState<string | undefined>();
@@ -145,10 +145,10 @@ const Bounty = (props: Props) => {
   return (
     <div className="flex flex-col w-full monitor">
       {/* Banner Section */}
+        <div className="absolute w-[311px] top-0 left-1/2 -translate-y-[50%] -translate-x-1/2 h-[481px] rounded-full bg-[#0E76FD] blur-[200px]" />
       <div className="flex flex-col relative py-16 text-center items-center justify-center gap-14 w-full monitor">
-        <div className="absolute w-[311px] top-0 left-1/2 -translate-y-[50%] -translate-x-1/2 h-[311px] rounded-full bg-[#0E76FD] blur-[200px]" />
         <div className="flex flex-col gap-4">
-          <h1 className="text-zinc-50 text-[40px] font-bold">Bug Bounty</h1>
+          <h1 className="text-white text-[40px] font-bold">Bug Bounty</h1>
           <p className="text-zinc-300 text-[20px] font-medium">
             Over{' '}
             <span>
@@ -196,7 +196,7 @@ const Bounty = (props: Props) => {
               onClick={() => setIsPaid(false)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
-                {!isPaid && (
+                {isPaid === false && (
                   <div className={`w-2 h-2 bg-zinc-50 rounded-full z-2`}></div>
                 )}
               </div>
@@ -207,11 +207,22 @@ const Bounty = (props: Props) => {
               onClick={() => setIsPaid(true)}
             >
               <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
-                {isPaid && (
+                {isPaid === true && (
                   <div className={`w-2 h-2 bg-zinc-50 rounded-full z-2`}></div>
                 )}
               </div>
               <p className="text-neutral-200 text-sm font-bold">Paid Bounty</p>
+            </div>
+            <div
+              className="flex max-md:w-1/2 gap-3 max-md:justify-center items-center cursor-pointer"
+              onClick={() => setIsPaid(undefined)}
+            >
+              <div className="flex items-center justify-center w-4 h-4 border bg-zinc-900 border-zinc-600 rounded-full">
+                {isPaid === undefined && (
+                  <div className={`w-2 h-2 bg-zinc-50 rounded-full z-2`}></div>
+                )}
+              </div>
+              <p className="text-neutral-200 text-sm font-bold">All Bounty</p>
             </div>
           </div>
           {/* Right Filter Section */}
@@ -236,7 +247,7 @@ const Bounty = (props: Props) => {
             <div className="grid grid-cols-4 md:max-w-[65%] max-md:w-full items-center gap-3">
               {/* Dropdown Filter */}
               <Select onValueChange={value => setPlatform(value)}>
-                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 py-2 pl-[3px] rounded-md">
+                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 py-2 pl-4 rounded-md">
                   <div className="flex gap-4 item-center justify-center font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Platform" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
@@ -286,7 +297,7 @@ const Bounty = (props: Props) => {
               </Select>
 
               <Select onValueChange={value => setLanguage(value)}>
-                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
+                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-4 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Language" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
@@ -316,7 +327,7 @@ const Bounty = (props: Props) => {
               </Select>
 
               <Select onValueChange={value => setCategory(value)}>
-                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-3 rounded-md">
+                <SelectTrigger className="col-span-2 md:col-span-1 md:w-full text-zinc-500 bg-zinc-900 p-2 pl-4 rounded-md">
                   <div className="flex gap-2 item-center justify-center  font-semibold text-sm translate-y-1">
                     <SelectValue placeholder="Category" />
                     <BiChevronDown className="text-zinc-100 text-[28px] -translate-y-1" />
