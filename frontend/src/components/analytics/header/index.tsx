@@ -9,15 +9,22 @@ import { BiBadgeCheck, BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import TokenValueContainer from './token-value-container';
 import { toast } from 'sonner';
 import { TokenPrice } from './token-price';
+import PaymentDialog from '@/components/payment/dialog';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   showTitle: boolean;
   metadata: any;
   liveData: any;
+  showQuickAudit: boolean;
+  showAddressPair: boolean;
 };
 
-const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
+const TokenHeader = ({ showTitle, metadata, liveData, showQuickAudit, showAddressPair }: Props) => {
   const [loading, setLoading] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState<boolean>(false);
+  const router = useRouter();
 
   const handleCopy = (text: string) => () => {
     copy(text);
@@ -25,7 +32,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
   };
 
   return (
-    <div className="container p-0 mx-auto">
+    <div className="">
       <div className="flex flex-wrap max-md:flex-col md:items-center justify-around gap-4">
         <div
           className={`${
@@ -76,7 +83,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
           <TokenPrice liveData={liveData} />
         </div>
 
-        <div className="flex max-md:hidden flex-end">
+        { showAddressPair && <div className="flex max-md:hidden flex-end">
           <div className="flex flex-row items-center">
             {metadata && liveData ? (
               <>
@@ -88,8 +95,8 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                     PAIR:{' '}
                   </p>
                 </div>
-                <div className="flex flex-col">
-                  {/* TODO: "Ox" the x doesn't appear in the same way for both addresses */}
+                <div className="flex flex-col" // TODO: "Ox" the x doesn't appear in the same way for both addresses 
+                >
                   <div
                     className="flex text-blue-400 cursor-pointer font-mono text-sm"
                     onClick={handleCopy(metadata.address)}
@@ -126,7 +133,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
               <Skeleton className="w-24 h-6" />
             )}
           </div>
-        </div>
+        </div>}
 
         <div className="flex flex-row max-md:flex-wrap flex-1 gap-4 md:gap-2">
           {/* <button
@@ -156,6 +163,49 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
                 name="AGE"
                 value={formatAge(liveData.pairCreatedAt, true)}
               />
+              { showQuickAudit &&
+                <div className="max-md:w-full flex flex-col items-center justify-center w-fit gap-3">
+                  <div
+                    className={`bg-[#0E76FD] border-[#0E76FD] text-zinc-50 text-[16px] border font-[400] w-full px-2 py-6 flex items-center justify-center text-center transition-all ease-in duration-200`}
+                  >
+                    <PaymentDialog
+                      service="quick"
+                      address={'0x55A8f6c6b3Aa58ad6D1f26f6AFeDEd78F32E19f4'}
+                      onPrep={async () => {
+                        return true;
+                      }}
+                      UnlockedElement={
+                        <div className="flex flex-row w-full items-center justify-center">
+                          {submitting ? (
+                            <>
+                              <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                              <p className="text-[16px] font-[600] text-zinc-50">
+                                Loading...
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-[16px] font-[600] text-zinc-50">
+                                Quick Audit
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      }
+                      LockedElement={
+                        <div className="flex flex-row items-center hover:cursor-pointer">
+                          <p className="text-[16px] font-[600] text-zinc-50">
+                            Quick Audit
+                          </p>
+                        </div>
+                      }
+                      onSuccess={() => {
+                        setSubmitting(true);
+                        router.push(`/audit/token/${'0x55A8f6c6b3Aa58ad6D1f26f6AFeDEd78F32E19f4'}/quick`);
+                      }}
+                    />
+                  </div>
+                </div>}
             </>
           ) : (
             <>
@@ -163,6 +213,7 @@ const TokenHeader = ({ showTitle, metadata, liveData }: Props) => {
               <Skeleton className="w-20 h-8" />
               <Skeleton className="w-20 h-8" />
               <Skeleton className="w-20 h-8" />
+              {showQuickAudit && <Skeleton className="w-20 h-8" />}
             </>
           )}
         </div>

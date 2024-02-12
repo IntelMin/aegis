@@ -62,6 +62,8 @@ const QuickAuditPage = ({ params }: Props) => {
           showTitle={true}
           liveData={liveData}
           metadata={tokenInfo}
+          showQuickAudit={false}
+          showAddressPair={true}
         />
 
         <AuditOverview address={contractAddress} token={tokenInfo} />

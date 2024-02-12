@@ -26,6 +26,8 @@ const OverViewReport = (props: Props) => {
         showTitle={true}
         liveData={liveData}
         metadata={props?.data.metadata}
+        showQuickAudit={false}
+        showAddressPair={true}
       />
       <div className="grid grid-cols-11 gap-5">
         <div className="flex flex-col col-span-11 md:col-span-6 gap-5">
