@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import useTokenInfo from '@/hooks/useTokenInfo';
 import useLiveData from '@/hooks/useLiveData';
 
-import TokenHeader from '@/components/analytics/header';
+import TokenHeader from '@/components/analytics/header/new-index';
 import TokenOverview from '@/components/analytics/overview';
 
 import TVChart from '@/components/analytics/tv';
