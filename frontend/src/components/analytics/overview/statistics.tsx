@@ -46,18 +46,21 @@ const TokenStatistics = ({ liveData }: any) => {
   return (
     <div className="border border-zinc-900 p-3 flex flex-col gap-3 bg-[#0C0C0C]">
       {/* Button Group */}
-      <div className="flex justify-between bg-zinc-900 rounded-[6px]">
+      <div className="flex justify-between p-2 bg-zinc-900 rounded-[6px]">
         {btnArr.map(item => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => setActive(item)}
-            className={`${
-              item === active ? 'text-white bg-zinc-800' : 'text-neutral-500'
-            } hover:text-white transition-all ease-in duration-150 p-1 px-2 w-full text-sm`}
-          >
-            {item}
-          </button>
+          <>
+            <div>
+              <button
+                key={item}
+                type="button"
+                onClick={() => setActive(item)}
+                className={`${item === active ? 'text-white bg-zinc-800' : 'text-neutral-500'
+                  } hover:text-white transition-all ease-in duration-150 p-1 px-2 w-full text-sm`}
+              >
+                {item}
+              </button>
+            </div>
+          </>
         ))}
       </div>
 

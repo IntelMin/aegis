@@ -75,6 +75,8 @@ const Analytics = ({ params }: Props) => {
           showTitle={true}
           liveData={liveData}
           metadata={tokenInfo}
+          showQuickAudit={true}
+          showAddressPair={false}
         />
 
         <div className="grid grid-cols-4 gap-4">
